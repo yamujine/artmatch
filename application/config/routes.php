@@ -54,5 +54,5 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 // Route for our service
-$route['artwork/(:num)'] = 'artwork/detail/$1';
-$route['place/(:num)'] = 'place/detail/$1';
+$route['artworks/(:num)'] = 'artworks/detail/$1';
+$route['places/(:num)'] = 'places/detail/$1';
