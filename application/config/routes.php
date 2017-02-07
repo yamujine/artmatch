@@ -55,6 +55,6 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['signup'] = 'signup/index';
 $route['login']['GET'] = 'login/index';
-$route['login']['POST'] = 'user/login';
-$route['users']['POST'] = 'user/register';
-$route['users/(:any)/invite/(:any)'] = 'user/authorize/$1/$2';
+$route['login']['POST'] = 'users/login';
+$route['users']['POST'] = 'users/register';
+$route['users/(:any)/invite/(:any)'] = 'users/authorize/$1/$2';
