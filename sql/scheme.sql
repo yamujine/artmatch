@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`artworks` (
   `description` TEXT NULL COMMENT '작품 설명',
   `image` VARCHAR(45) NOT NULL COMMENT '작품의 대표 이미지',
   `for_sale` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '판매여부 설정',
-  `use_comment` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '댓글 사용 여부',
+  `use_comment` BOOLEAN NOT NULL DEFAULT 1 COMMENT '댓글 사용 여부',
   `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '작품 업로드 시간',
   PRIMARY KEY (`id`),
   INDEX `fk_artworks_owner_id_idx` (`user_id` ASC),
@@ -67,10 +67,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`places` (
   `description` TEXT NULL COMMENT '장소 설명',
   `image` VARCHAR(45) NOT NULL COMMENT '장소 대표 이미지',
   `address` VARCHAR(250) NOT NULL COMMENT '장소의 실제 주소',
-  `artwork_count` SMALLINT UNSIGNED NOT NULL COMMENT '장소에서 모집하는 작품 수',
-  `exhibit_period` VARCHAR(10) NOT NULL COMMENT '작품 전시 기간',
-  `is_free_exhibit` TINYINT(1) NOT NULL COMMENT '무료 전시 / 비용 지불 여부',
-  `use_comment` TINYINT(1) NOT NULL COMMENT '댓글 사용 여부',
+  `use_comment` BOOLEAN NOT NULL COMMENT '댓글 사용 여부',
   `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id`),
   INDEX `fk_places_user_id_idx` (`user_id` ASC),
@@ -178,18 +175,13 @@ DROP TABLE IF EXISTS `pickartyou`.`exhibitions` ;
 
 CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibitions` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `artwork_id` INT NOT NULL COMMENT '유저의 PK',
   `place_id` INT NOT NULL COMMENT '장소의 PK',
   `start_date` DATETIME NOT NULL COMMENT '전시 시작 날짜',
   `end_date` DATETIME NOT NULL COMMENT '전시 종료 날짜',
+  `artwork_count` SMALLINT NOT NULL COMMENT '전시에서 요구하는 작품 수',
+  `is_free` BOOLEAN NOT NULL COMMENT '유무료 행사 여부',
   PRIMARY KEY (`id`),
-  INDEX `fk_exhibitions_artwork_id_idx` (`artwork_id` ASC),
   INDEX `fk_exhibitions_place_id_idx` (`place_id` ASC),
-  CONSTRAINT `fk_exhibitions_artwork_id`
-    FOREIGN KEY (`artwork_id`)
-    REFERENCES `pickartyou`.`artworks` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_exhibitions_place_id`
     FOREIGN KEY (`place_id`)
     REFERENCES `pickartyou`.`places` (`id`)
@@ -318,6 +310,31 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`user_place_picks` (
   CONSTRAINT `fk_user_place_picks_place_id`
     FOREIGN KEY (`place_id`)
     REFERENCES `pickartyou`.`places` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pickartyou`.`exhibition_artworks`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pickartyou`.`exhibition_artworks` ;
+
+CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibition_artworks` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `exhibition_id` INT NOT NULL COMMENT '전시회 PK',
+  `artwork_id` INT NOT NULL COMMENT '작품의 PK',
+  PRIMARY KEY (`id`),
+  INDEX `fk_exhibition_artworks_exhibition_id_idx` (`exhibition_id` ASC),
+  INDEX `fk_exhibition_artworks_artwork_id_idx` (`artwork_id` ASC),
+  CONSTRAINT `fk_exhibition_artworks_exhibition_id`
+    FOREIGN KEY (`exhibition_id`)
+    REFERENCES `pickartyou`.`exhibitions` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_exhibition_artworks_artwork_id`
+    FOREIGN KEY (`artwork_id`)
+    REFERENCES `pickartyou`.`artworks` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
