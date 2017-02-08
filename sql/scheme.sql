@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`places` (
   `exhibit_period` VARCHAR(10) NOT NULL COMMENT '작품 전시 기간',
   `is_free_exhibit` TINYINT(1) NOT NULL COMMENT '무료 전시 / 비용 지불 여부',
   `use_comment` TINYINT(1) NOT NULL COMMENT '댓글 사용 여부',
+  `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id`),
   INDEX `fk_places_user_id_idx` (`user_id` ASC),
   CONSTRAINT `fk_places_user_id`
