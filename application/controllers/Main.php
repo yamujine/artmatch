@@ -1,9 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Main extends CI_Controller {
+class Main extends MY_Controller {
 	public function index()
 	{
-		$this->load->view('main');
+		$data = ['test' => true];
+		$this->twig->display('welcome', $data);
 	}
 }
