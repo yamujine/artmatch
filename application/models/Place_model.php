@@ -9,7 +9,7 @@ class Place_model extends CI_Model {
     }
 
     function gets() {
-        return $this->db->query("SELECT * FROM places")->result();
+        return $this->db->get('places')->result();
     }
 
 }
