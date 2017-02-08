@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`users` (
   `type` TINYINT UNSIGNED NOT NULL COMMENT '창작자/공간소유자 구분 여부',
   `name` VARCHAR(45) NOT NULL COMMENT '유저 이름',
   `profile_image` VARCHAR(45) NOT NULL COMMENT '유저 프로필 이미지 파일 이름',
+  `registered_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '사용자 등록시간',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -126,6 +127,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`artwork_comments` (
   `user_id` INT NOT NULL COMMENT '유저 PK',
   `artwork_id` INT NOT NULL COMMENT '작품 PK',
   `comment` TEXT NOT NULL COMMENT '작품에 달린 댓글',
+  `posted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '코멘트 등록시간',
   PRIMARY KEY (`id`),
   INDEX `fk_artwork_comments_user_id_idx` (`user_id` ASC),
   INDEX `fk_artwork_comments_artwork_id_idx` (`artwork_id` ASC))
@@ -159,6 +161,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`place_comments` (
   `user_id` INT NOT NULL COMMENT '유저 PK',
   `place_id` INT NOT NULL COMMENT '장소 PK',
   `comment` TEXT NOT NULL COMMENT '장소에 달린 댓글',
+  `posted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '코멘트 등록시간',
   PRIMARY KEY (`id`),
   INDEX `fk_place_comments_user_id_idx` (`user_id` ASC),
   INDEX `fk_place_comments_place_id_idx` (`place_id` ASC))
