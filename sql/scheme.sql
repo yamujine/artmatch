@@ -11,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema pickartyou
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `pickartyou` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `pickartyou` DEFAULT CHARACTER SET utf8mb4 ;
 USE `pickartyou` ;
 
 -- -----------------------------------------------------
@@ -48,12 +48,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`artworks` (
   `tags` VARCHAR(200) NULL COMMENT '작품의 태그',
   `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '작품 업로드 시간',
   PRIMARY KEY (`id`),
-  INDEX `fk_artworks_owner_id_idx` (`user_id` ASC),
-  CONSTRAINT `fk_artworks_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `pickartyou`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_artworks_owner_id_idx` (`user_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -74,12 +69,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`places` (
   `tags` VARCHAR(200) NULL COMMENT '장소의 태그',
   `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id`),
-  INDEX `fk_places_user_id_idx` (`user_id` ASC),
-  CONSTRAINT `fk_places_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `pickartyou`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_places_user_id_idx` (`user_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -93,12 +83,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`artwork_images` (
   `artwork_id` INT NOT NULL COMMENT '작품의 PK',
   `image` VARCHAR(45) NOT NULL COMMENT '작품 이미지 파일명',
   PRIMARY KEY (`id`),
-  INDEX `fk_artwork_images_artwork_id_idx` (`artwork_id` ASC),
-  CONSTRAINT `fk_artwork_images_artwork_id`
-    FOREIGN KEY (`artwork_id`)
-    REFERENCES `pickartyou`.`artworks` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_artwork_images_artwork_id_idx` (`artwork_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -112,12 +97,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`place_images` (
   `place_id` INT NOT NULL COMMENT '장소 PK',
   `image` VARCHAR(45) NOT NULL COMMENT '장소 이미지 파일 이름',
   PRIMARY KEY (`id`),
-  INDEX `fk_place_images_place_id_idx` (`place_id` ASC),
-  CONSTRAINT `fk_place_images_place_id`
-    FOREIGN KEY (`place_id`)
-    REFERENCES `pickartyou`.`places` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_place_images_place_id_idx` (`place_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -132,17 +112,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`user_artwork_picks` (
   `artwork_id` INT NOT NULL COMMENT '작품의 PK',
   PRIMARY KEY (`id`),
   INDEX `fk_user_artwork_picks_idx` (`user_id` ASC),
-  INDEX `fk_user_artwork_picks_artwork_id_idx` (`artwork_id` ASC),
-  CONSTRAINT `fk_user_artwork_picks_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `pickartyou`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_artwork_picks_artwork_id`
-    FOREIGN KEY (`artwork_id`)
-    REFERENCES `pickartyou`.`artworks` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_user_artwork_picks_artwork_id_idx` (`artwork_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -158,17 +128,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`artwork_comments` (
   `comment` TEXT NOT NULL COMMENT '작품에 달린 댓글',
   PRIMARY KEY (`id`),
   INDEX `fk_artwork_comments_user_id_idx` (`user_id` ASC),
-  INDEX `fk_artwork_comments_artwork_id_idx` (`artwork_id` ASC),
-  CONSTRAINT `fk_artwork_comments_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `pickartyou`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_artwork_comments_artwork_id`
-    FOREIGN KEY (`artwork_id`)
-    REFERENCES `pickartyou`.`artworks` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_artwork_comments_artwork_id_idx` (`artwork_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -185,12 +145,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibitions` (
   `artwork_count` SMALLINT UNSIGNED NOT NULL,
   `is_free` TINYINT(1) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_exhibitions_place_id_idx` (`place_id` ASC),
-  CONSTRAINT `fk_exhibitions_place_id`
-    FOREIGN KEY (`place_id`)
-    REFERENCES `pickartyou`.`places` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_exhibitions_place_id_idx` (`place_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -206,17 +161,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`place_comments` (
   `comment` TEXT NOT NULL COMMENT '장소에 달린 댓글',
   PRIMARY KEY (`id`),
   INDEX `fk_place_comments_user_id_idx` (`user_id` ASC),
-  INDEX `fk_place_comments_place_id_idx` (`place_id` ASC),
-  CONSTRAINT `fk_place_comments_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `pickartyou`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_place_comments_place_id`
-    FOREIGN KEY (`place_id`)
-    REFERENCES `pickartyou`.`places` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_place_comments_place_id_idx` (`place_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -231,17 +176,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`user_place_picks` (
   `place_id` INT NOT NULL COMMENT '작품의 PK',
   PRIMARY KEY (`id`),
   INDEX `fk_user_place_picks_user_id_idx` (`user_id` ASC),
-  INDEX `fk_user_place_picks_place_id_idx` (`place_id` ASC),
-  CONSTRAINT `fk_user_place_picks_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `pickartyou`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_place_picks_place_id`
-    FOREIGN KEY (`place_id`)
-    REFERENCES `pickartyou`.`places` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_user_place_picks_place_id_idx` (`place_id` ASC))
 ENGINE = InnoDB;
 
 
@@ -256,17 +191,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibition_artworks` (
   `artwork_id` INT NOT NULL COMMENT '작품의 PK',
   PRIMARY KEY (`id`),
   INDEX `fk_exhibition_artworks_exhibition_id_idx` (`exhibition_id` ASC),
-  INDEX `fk_exhibition_artworks_artwork_id_idx` (`artwork_id` ASC),
-  CONSTRAINT `fk_exhibition_artworks_exhibition_id`
-    FOREIGN KEY (`exhibition_id`)
-    REFERENCES `pickartyou`.`exhibitions` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_exhibition_artworks_artwork_id`
-    FOREIGN KEY (`artwork_id`)
-    REFERENCES `pickartyou`.`artworks` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_exhibition_artworks_artwork_id_idx` (`artwork_id` ASC))
 ENGINE = InnoDB;
 
 
