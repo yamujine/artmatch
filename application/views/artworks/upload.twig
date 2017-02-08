@@ -1,0 +1,91 @@
+{% if error %}
+	에러 메시지: {{ error|raw }}
+	<br>
+	<br>
+{% endif %}
+
+<form class="ui form" method="POST" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="{{ id }}">
+	<div class="field">
+		<label>작품명</label>
+		<input type="text" name="title" placeholder="" value="{{ title }}">
+	</div>
+	<div class="inline fields">
+		<label for="status">작품 상태</label>
+		<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="status" value="1" {% if status == 1 or not status %}checked="checked"{% endif %} tabindex="0" class="hidden">
+				<label>공간구함</label>
+			</div>
+		</div>
+		<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="status" value="2" {% if status == 2 %}checked="checked"{% endif %}tabindex="0" class="hidden">
+				<label>전시중</label>
+			</div>
+		</div>
+		<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="status" value="3" {% if status == 3 %}checked="checked"{% endif %}tabindex="0" class="hidden">
+				<label>공간 구하지 않음</label>
+			</div>
+		</div>
+	</div>
+	<div class="inline fields">
+		<label for="status">판매 여부</label>
+		<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="for_sale" value="1" {% if for_sale is defined and for_sale == 1 %}checked="checked"{% endif %} tabindex="0" class="hidden">
+				<label>판매함</label>
+			</div>
+		</div>
+		<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="for_sale" value="0" {% if for_sale == 0 %}checked="checked"{% endif %} tabindex="0" class="hidden">
+				<label>판매 안함</label>
+			</div>
+		</div>
+	</div>
+	<div class="inline fields">
+		<label for="status">댓글허용</label>
+		<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="use_comment" value="1" {% if use_comment is not defined or use_comment == 1 %}checked="checked"{% endif %} tabindex="0" class="hidden">
+				<label>댓글 허용함</label>
+			</div>
+		</div>
+		<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="use_comment" value="0" {% if use_comment is defined and use_comment == 0 %}checked="checked"{% endif %} tabindex="0" class="hidden">
+				<label>댓글 허용 안함</label>
+			</div>
+		</div>
+	</div>
+	<div class="field">
+		<div class="ui">
+			<label>대표 이미지</label>
+			{% if image %}등록된 이미지 {{ image }}{% endif %}
+			<input type="file" name="image" tabindex="0" class="hidden">
+		</div>
+	</div>
+
+	// 추가 이미지
+	<div class="field">
+		<div class="ui">
+			<label>추가 이미지</label>
+			<input type="file" name="extra_images[]" multiple />
+		</div>
+	</div>
+
+	<div class="field">
+		<label>작품 설명</label>
+		<textarea name="description">{{ description }}</textarea>
+	</div>
+
+	<div class="field">
+		<label>태그</label>
+		<input type="text" name="tags" value="{{ tags }}">
+	</div>
+
+	<button class="ui button" type="submit">Submit</button>
+</form>
