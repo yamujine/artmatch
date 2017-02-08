@@ -6,5 +6,6 @@ class MY_Controller extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('twig');
+		$this->twig->addGlobal('GLOBAL_VAR', 'It works!');
 	}
 }
