@@ -5,13 +5,14 @@ class Places extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->database();
-        $this->load->model('places_model');
+        $this->load->model('place_model');
     }
 
     public function index() {
-//        $places = $this->places_model->gets();
+        $places = $this->place_model->gets();
 //        print("test");
-        $data = ['test' => true];
+//        var_dump($places);
+        $data = ['test' => true, 'places' => $places];
         $this->twig->display('places', $data);
     }
 
