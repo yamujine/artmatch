@@ -22,7 +22,7 @@ class User_model extends CI_Model
 
     public function get($email)
     {
-        $this->db->select('idx, type, email, is_auth, is_admin');
+        $this->db->select('id, type, email, is_auth, is_admin');
         $this->db->where('email',$email);
         $query = $this->db->get('users');
         if ($query->num_rows() == 0)
@@ -34,8 +34,8 @@ class User_model extends CI_Model
     }
 
     public function get_by_id($id){
-        $this->db->select('idx, type, email, is_auth, is_admin');
-        $this->db->where('idx',$id);
+        $this->db->select('id, type, email, is_auth, is_admin');
+        $this->db->where('id',$id);
         $query = $this->db->get('users');
         return $query->row_array();
     }
@@ -50,7 +50,7 @@ class User_model extends CI_Model
 
     public function authorize($id)
     {
-        return $this->db->update('users', array('is_auth' => 1), array('idx' => $id));
+        return $this->db->update('users', array('is_auth' => 1), array('id' => $id));
     }
 
     public function check_email($email = '')

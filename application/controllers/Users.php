@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class User extends CI_Controller
+class Users extends CI_Controller
 {
     public function __construct()
     {
@@ -61,7 +61,7 @@ class User extends CI_Controller
     public function authorize($id, $code)
     {
         $user = $this->user_model->get_by_id($id);
-        if (hash_equals($code, hash('ripemd160',$user['email'].$user['idx']))){
+        if (hash_equals($code, hash('ripemd160',$user['email'].$user['id']))){
             $result = $this->user_model->authorize($id);
             if($result)
             {
@@ -78,12 +78,12 @@ class User extends CI_Controller
     public function send_mail($user)
     {
 
-        $code = hash('ripemd160',$user['email'].$user['idx']);
+        $code = hash('ripemd160',$user['email'].$user['id']);
         $this->email->initialize(array('mailtype'=>'html'));
         $this->load->helper('url');
         $this->email->from('admin@pickartyou.com', 'pickartyou');
         $this->email->subject('pickartyou 회원가입 링크');
-        $this->email->message('<a href='.base_url().'users/'.$user['idx'].'/invite/'.$code.' style="color: white; font-weight: normal; text-decoration: none; word-break: break-word; font-size: 20px; line-height: 26px; border-top: 14px solid; border-bottom: 14px solid; border-right: 32px solid; border-left: 32px solid; background-color: #2ab27b; border-color: #2ab27b; display: inline-block; letter-spacing: 1px; min-width: 80px; text-align: center; border-radius: 4px; text-shadow: 0 1px 1px rgba(0,0,0,0.25);">
+        $this->email->message('<a href='.base_url().'users/'.$user['id'].'/invite/'.$code.' style="color: white; font-weight: normal; text-decoration: none; word-break: break-word; font-size: 20px; line-height: 26px; border-top: 14px solid; border-bottom: 14px solid; border-right: 32px solid; border-left: 32px solid; background-color: #2ab27b; border-color: #2ab27b; display: inline-block; letter-spacing: 1px; min-width: 80px; text-align: center; border-radius: 4px; text-shadow: 0 1px 1px rgba(0,0,0,0.25);">
 					Join
 				</a>');
         $this->email->to($user['email']);
@@ -92,7 +92,7 @@ class User extends CI_Controller
 
     public function remember($user)
     {
-        $refresh = $this->user_model->get_by_id($user['idx']);
+        $refresh = $this->user_model->get_by_id($user['id']);
         $this->session->set_userdata($refresh);
         $this->session->set_userdata(array('logged_in'=> true));
     }
