@@ -1,9 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Places extends CI_Controller {
+class Places extends MY_Controller {
+    function __construct() {
+        parent::__construct();
+        $this->load->database();
+        $this->load->model('places_model');
+    }
+
     public function index() {
-        echo "장소 목록 입니다.";
+//        $places = $this->places_model->gets();
+//        print("test");
+        $data = ['test' => true];
+        $this->twig->display('places', $data);
     }
 
 	public function detail($place_number)
