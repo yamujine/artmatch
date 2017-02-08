@@ -27,6 +27,15 @@ class Artwork_model extends CI_Model
 		}
 	}
 
+	public function insert_images($artwork_id, array $images)
+	{
+		foreach ($images as $image) {
+			$this->db->insert('artwork_images', ['artwork_id' => $artwork_id, 'image' => $image]);
+		}
+
+		return true;
+	}
+
 	/**
 	public function update($id, $user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags)
 	{
