@@ -1,3 +1,7 @@
+{% extends "base.twig" %}
+
+{% block contents %}
+
 {% if error %}
 	에러 메시지: {{ error|raw }}
 	<br>
@@ -89,3 +93,5 @@
 
 	<button class="ui button" type="submit">Submit</button>
 </form>
+
+{% endblock %}
