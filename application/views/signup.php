@@ -33,7 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $('#join').click(function(){
         $.ajax({
             method:"POST",
-            url:"/users",
+            url:"/api/users",
             data:{
                 type:$("#type").val(),
                 email:$("#email").val(),

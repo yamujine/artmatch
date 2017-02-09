@@ -17,15 +17,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     패스워드
     <input id="password"/>
 </div>
-<div><button id="join">로그인</button></div>
-<div><?php echo $email?> <?php echo $auth?></div>
+<div><button id="join">로그</button></div>
+<div><?php echo $email ?> <?php echo $auth?></div>
 </body>
 
 <script>
     $('#join').click(function(){
         $.ajax({
             method:"POST",
-            url:"/login",
+            url:"/api/login",
             data:{
                 email:$("#email").val(),
                 password:$("#password").val()

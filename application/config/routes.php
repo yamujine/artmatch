@@ -53,8 +53,6 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['signup'] = 'signup/index';
-$route['login']['GET'] = 'login/index';
-$route['login']['POST'] = 'users/login';
-$route['users']['POST'] = 'users/register';
-$route['users/(:any)/invite/(:any)'] = 'users/authorize/$1/$2';
+$route['api/login']['POST'] = 'usersapi/login';
+$route['api/users']['POST'] = 'usersapi/register';
+$route['api/users/(:any)/verify/(:any)'] = 'usersapi/verify/$1/$2';
