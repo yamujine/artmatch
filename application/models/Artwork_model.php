@@ -23,8 +23,10 @@ class Artwork_model extends CI_Model {
 
 	public function get_by_id($artwork_id) {
 		$artwork = $this->db
+			->select('artworks.*, count(user_artwork_picks.id) as pick_count')
 			->from(self::TABLE_NAME)
-			->where('id', $artwork_id)
+			->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
+			->where('artworks.id', $artwork_id)
 			->get()->row();
 
 		if ($artwork) {

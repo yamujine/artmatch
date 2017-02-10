@@ -23,8 +23,10 @@ class Place_model extends CI_Model {
 
     public function get_by_id($place_id) {
 		$place = $this->db
+			->select('places.*, count(user_place_picks.id) as pick_count')
 			->from(self::TABLE_NAME)
-			->where('id', $place_id)
+			->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
+			->where('places.id', $place_id)
 			->get()->row();
 
 		if ($place) {

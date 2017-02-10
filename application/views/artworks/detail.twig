@@ -5,7 +5,11 @@
 <table class="ui definition table">
 	<tr>
 		<td>작품명</td>
-		<td>{{ artwork.title }}</td>
+		<td>{{ artwork.title }} PICKS: {{ artwork.pick_count }}</td>
+	</tr>
+	<tr>
+		<td>등록일</td>
+		<td>{{ artwork.upload_date }}</td>
 	</tr>
 	<tr>
 		<td>상태</td>
