@@ -26,6 +26,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div>
         프로필사진
     </div>
+    <div>
+        이름
+        <input id="name"/>
+    </div>
     <div><button id="join">가입</button></div>
 </body>
 
@@ -33,11 +37,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $('#join').click(function(){
         $.ajax({
             method:"POST",
-            url:"/api/users",
+            url:"/api/users/register",
             data:{
                 type:$("#type").val(),
                 email:$("#email").val(),
-                password:$("#password").val()
+                password:$("#password").val(),
+                name:$("#name").val(),
+                profile_image:'test'
             }
         }).done(function(data){
             alert(data);
