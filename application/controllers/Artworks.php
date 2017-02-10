@@ -11,7 +11,7 @@ class Artworks extends MY_Controller
 	public function upload()
 	{
 		$this->load->model('artwork_model');
-		$this->load->library(['form_validation', 'upload']);
+		$this->load->library(['form_validation', 'upload', 'tag']);
 		$this->load->helper('url');
 
 		// Form validation
@@ -40,7 +40,7 @@ class Artworks extends MY_Controller
 					$uploaded_image_name,
 					$this->input->post('for_sale'),
 					$this->input->post('use_comment'),
-					$this->_refine_tags($this->input->post('tags'))
+					$this->tag->refine_tags($this->input->post('tags'))
 				);
 				if ($result_id !== NULL) {
 					// Upload extra images
@@ -126,24 +126,5 @@ class Artworks extends MY_Controller
 
 		$this->image_lib->initialize(array_merge($default_config, ['width' => 128, 'height' => 128, 'thumb_marker' => '_thumb_small']));
 		$this->image_lib->resize();
-	}
-
-	private function _refine_tags($tag_string)
-	{
-		$tags = '';
-		$tag_array = [];
-
-		$parts = preg_split('/\s+/', $tag_string);
-		foreach ($parts as $part) {
-			if ($part[0] === '#') {
-				$tag_array[] = $part;
-			}
-		}
-
-		if (count($tag_array) > 0) {
-			$tags = implode(' ', $tag_array);
-		}
-
-		return $tags;
 	}
 }
