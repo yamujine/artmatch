@@ -10,6 +10,7 @@ class UsersApi extends CI_Controller
         $this->load->library('email');
         $this->load->model('user_model');
         header('Content-Type: application/json');
+        $this->result = array('result' => false, 'errorCode' => null, 'body' => null);
     }
 
     public function register()
@@ -19,6 +20,7 @@ class UsersApi extends CI_Controller
         $id = $this->user_model->add(
             $this->input->post('email'),
             $hash,
+            $this->input->post('name'),
             $this->input->post('profile_image'),
             $this->input->post('type')
         );
@@ -28,12 +30,11 @@ class UsersApi extends CI_Controller
             $this->set_user_session($user);
             $this->send_mail($user);
             /* response 정의 필요 */
-            $this->output->set_output('signup success');
+            $this->reponse_success(array('message' => 'signup success'));
         } else {
-            $this->output->set_status_header('500');
-            $this->output->set_output($this->user_model->get_message());
-            $this->user_model->clear_message();
+            $this->reponse_fail('101', array('message' => 'duplicated email'));
         }
+        return $this->output->set_output(json_encode($this->result));
     }
 
     public function login()
@@ -42,19 +43,17 @@ class UsersApi extends CI_Controller
         $user = $this->user_model->get_by_email($email);
 
         if (!$user) {
-            $this->output->set_status_header('500');
-            $this->output->set_output($this->user_model->get_message());
-            $this->user_model->clear_message();
+            $this->reponse_fail('102', array('message' => 'email is not founded'));
         } else {
             $password = $this->user_model->get_password($email);
             if (password_verify($this->input->post('password'), $password)) {
-                $this->set_user_session($user);
-                $this->output->set_output('login success');
+                $this->reponse_success(array('message' => 'login success'));
+
             } else {
-                $this->output->set_status_header('500');
-                $this->output->set_output('password incorrect');
+                $this->reponse_fail('103', array('message' => 'password is not corrected'));
             }
         }
+        return $this->output->set_output(json_encode($this->result));
     }
 
     public function verify($id, $code)
@@ -64,13 +63,14 @@ class UsersApi extends CI_Controller
             $result = $this->user_model->authorize($id);
             if ($result) {
                 $this->set_user_session($user);
-                $this->output->set_output('auth success');
+                $this->reponse_success(array('message' => 'authorize success'));
             } else {
-                $this->output->set_output('auth fail');
+                $this->reponse_fail('104', array('message' => 'invalid access'));
             }
         } else {
-            $this->output->set_output('auth incorrect');
+            $this->reponse_fail('104', array('message' => 'invalid access'));
         }
+        return $this->output->set_output(json_encode($this->result));
     }
 
     public function send_mail($user)
@@ -93,6 +93,19 @@ class UsersApi extends CI_Controller
         $refresh = $this->user_model->get_by_id($user['id']);
         $this->session->set_userdata($refresh);
         $this->session->set_userdata(array('logged_in' => true));
+    }
+
+    public function reponse_success($body)
+    {
+        $this->result['result'] = true;
+        $this->result['body'] = $body;
+    }
+
+    public function reponse_fail($error_code, $body)
+    {
+        $this->result['result'] = false;
+        $this->result['body'] = $body;
+        $this->result['errorCode'] = $error_code;
     }
 
 }

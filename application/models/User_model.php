@@ -3,38 +3,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User_model extends CI_Model
 {
-    private $message;
 
-    public function __construct()
-    {
-        $this->load->database();
-    }
+    const TABLE_NAME = 'users';
 
-    public function add($email, $password, $profile_image, $type)
+    public function add($email, $password, $name, $profile_image, $type)
     {
         $user = array(
             'email' => $email,
             'password' => $password,
+            'name' => $name,
             'profile_image' => $profile_image,
             'type' => $type);
 
         if ($this->check_email($user['email'])) {
-            $this->set_message('duplicated email');
             return FALSE;
         }
 
-        $this->db->insert('users', $user);
+        $this->db->insert(self::TABLE_NAME, $user);
         $id = $this->db->insert_id();
         return $id;
     }
 
     public function get_by_email($email)
     {
-        $this->db->select('id, type, email, is_auth, is_admin');
+        $this->db->select('id, type, email, name, is_auth, is_admin');
         $this->db->where('email', $email);
-        $query = $this->db->get('users');
+        $query = $this->db->get(self::TABLE_NAME);
         if ($query->num_rows() == 0) {
-            $this->set_message('email is not found');
             return FALSE;
         }
         return $query->row_array();
@@ -42,9 +37,9 @@ class User_model extends CI_Model
 
     public function get_by_id($id)
     {
-        $this->db->select('id, type, email, is_auth, is_admin');
+        $this->db->select('id, type, email, name, is_auth, is_admin');
         $this->db->where('id', $id);
-        $query = $this->db->get('users');
+        $query = $this->db->get(self::TABLE_NAME);
         return $query->row_array();
     }
 
@@ -52,13 +47,13 @@ class User_model extends CI_Model
     {
         $this->db->select('password');
         $this->db->where('email', $email);
-        $query = $this->db->get('users');
+        $query = $this->db->get(self::TABLE_NAME);
         return $query->row()->password;
     }
 
     public function authorize($id)
     {
-        return $this->db->update('users', array('is_auth' => 1), array('id' => $id));
+        return $this->db->update(self::TABLE_NAME, array('is_auth' => 1), array('id' => $id));
     }
 
     public function check_email($email = '')
@@ -67,23 +62,6 @@ class User_model extends CI_Model
             return FALSE;
         }
         return $this->db->where('email', $email)
-                ->count_all_results('users') > 0;
-    }
-
-    public function clear_message()
-    {
-        $this->message = '';
-        return TRUE;
-    }
-
-    public function set_message($str)
-    {
-        $this->message = $str;
-        return TRUE;
-    }
-
-    public function get_message()
-    {
-        return $this->message;
+                ->count_all_results(self::TABLE_NAME) > 0;
     }
 }
