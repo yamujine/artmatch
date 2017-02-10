@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `pickartyou`.`users` ;
 CREATE TABLE IF NOT EXISTS `pickartyou`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(50) NOT NULL COMMENT '유저 이메일주소 / 로그인 이메일?',
-  `password` VARCHAR(40) NOT NULL COMMENT '패스워드',
+  `password` VARCHAR(255) NOT NULL COMMENT '패스워드',
   `type` TINYINT UNSIGNED NOT NULL COMMENT '창작자/공간소유자 구분 여부',
   `name` VARCHAR(45) NOT NULL COMMENT '유저 이름',
   `profile_image` VARCHAR(45) NOT NULL COMMENT '유저 프로필 이미지 파일 이름',
