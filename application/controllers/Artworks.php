@@ -3,6 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Artworks extends MY_Controller
 {
+	function __construct() {
+			parent::__construct();
+			$this->load->database();
+			$this->load->model('artwork_model');
+	}
+
+	public function index() {
+			$artworks = $this->artwork_model->gets();
+			$data = ['test' => true, 'artworks' => $artworks];
+			$this->twig->display('artworks', $data);
+	}
+
 	public function detail($artwork_number)
 	{
 		echo $artwork_number . ' artwork detail';

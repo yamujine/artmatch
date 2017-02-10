@@ -1,0 +1,34 @@
+{% extends "base.twig" %}
+
+{% block contents %}
+    <table border=1>
+        <thead>
+        <th>id</th>
+        <th>user_id</th>
+        <th>status</th>
+        <th>title</th>
+        <th>description</th>
+        <th>image</th>
+        <th>for_sale</th>
+        <th>use_comment</th>
+        <th>tags</th>
+        <th>upload_date</th>
+        </thead>
+        <tbody>
+        {% for artwork in artworks %}
+            <tr>
+                <td>{{ artwork.id }}</td>
+                <td>{{ artwork.user_id }}</td>
+                <td>{{ artwork.status }}</td>
+                <td>{{ artwork.title }}<br>
+                <td>{{ artwork.description }}<br>
+                <td>{{ artwork.image }}<br>
+                <td>{{ artwork.for_sale }}<br>
+                <td>{{ artwork.use_comment }}<br>
+                <td>{{ artwork.tags }}<br>
+                <td>{{ artwork.upload_date }}<br>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
