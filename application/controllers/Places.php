@@ -14,7 +14,14 @@ class Places extends MY_Controller {
     }
 
 	public function detail($place_number) {
-		echo $place_number . ' place detail';
+		$data = [];
+
+		$place = $this->place_model->get_by_id($place_number);
+		if ($place) {
+			$data['place'] = $place;
+		}
+
+		$this->twig->display('places/detail', $data);
 	}
 
     public function upload() {

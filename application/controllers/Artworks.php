@@ -15,7 +15,15 @@ class Artworks extends MY_Controller {
 
 	public function detail($artwork_number)
 	{
-		echo $artwork_number . ' artwork detail';
+		$this->load->model('artwork_model');
+		$data = [];
+
+		$artwork = $this->artwork_model->get_by_id($artwork_number);
+		if ($artwork) {
+			$data['artwork'] = $artwork;
+		}
+
+		$this->twig->display('artworks/detail', $data);
 	}
 
 	public function upload()
