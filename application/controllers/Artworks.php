@@ -5,13 +5,12 @@ class Artworks extends MY_Controller
 {
 	function __construct() {
 			parent::__construct();
-			$this->load->database();
 			$this->load->model('artwork_model');
 	}
 
 	public function index() {
 			$artworks = $this->artwork_model->gets();
-			$data = ['test' => true, 'artworks' => $artworks];
+			$data = ['artworks' => $artworks];
 			$this->twig->display('artworks', $data);
 	}
 

@@ -7,10 +7,6 @@ class Artwork_model extends CI_Model
 	 */
 	const TABLE_NAME = 'artworks';
 
-	function __construct() {
-			parent::__construct();
-	}
-
 	function gets() {
 			return $this->db->get('artworks')->result();
 	}
