@@ -14,8 +14,8 @@ class Tag
 
 		$parts = preg_split('/\s+/', $tag_string);
 		foreach ($parts as $part) {
-			if ($part[0] === '#') {
-				$tag_array[] = $part;
+			if (!empty($part) && $part[0] === '#') {
+				$tag_array[] = trim($part);
 			}
 		}
 

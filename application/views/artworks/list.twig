@@ -1,6 +1,7 @@
 {% extends "base.twig" %}
 
 {% block contents %}
+	<a class="ui blue button" href="/artworks/upload">추</a>
     <table border=1>
         <thead>
         <th>id</th>
@@ -17,7 +18,7 @@
         <tbody>
         {% for artwork in artworks %}
             <tr>
-                <td>{{ artwork.id }}</td>
+				<td><a href="/artworks/{{ artwork.id }}">{{ artwork.id }}</a></td>
                 <td>{{ artwork.user_id }}</td>
                 <td>{{ artwork.status }}</td>
                 <td>{{ artwork.title }}<br>
