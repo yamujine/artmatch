@@ -7,10 +7,6 @@ class Artwork_model extends CI_Model
 	 */
 	const TABLE_NAME = 'artworks';
 
-	function gets() {
-			return $this->db->get('artworks')->result();
-	}
-
 	//public $id; -- Ignore PK
 	public $user_id;
 	public $status;
@@ -20,6 +16,11 @@ class Artwork_model extends CI_Model
 	public $for_sale;
 	public $use_comment;
 	public $tags;
+
+	public function gets() {
+		$this->db->order_by('id', 'DESC');
+		return $this->db->get(self::TABLE_NAME)->result();
+	}
 
 	public function insert($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags)
 	{

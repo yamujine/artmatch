@@ -2,16 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Places extends MY_Controller {
-    function __construct() {
+    public function __construct() {
         parent::__construct();
-        $this->load->database();
         $this->load->model('place_model');
     }
 
     public function index() {
         $places = $this->place_model->gets();
-        $data = ['test' => true, 'places' => $places];
-        $this->twig->display('places', $data);
+        $data = ['places' => $places];
+        $this->twig->display('places/list', $data);
     }
 
 	public function detail($place_number) {

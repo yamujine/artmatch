@@ -6,15 +6,6 @@ class Place_model extends CI_Model {
 	 */
     const TABLE_NAME = 'places';
 
-    function __construct() {
-        parent::__construct();
-    }
-
-    function gets() {
-        $this->db->order_by('id', 'DESC');
-        return $this->db->get(self::TABLE_NAME)->result();
-    }
-
     //public $id; -- Ignore PK
     public $user_id;
     public $status;
@@ -24,6 +15,11 @@ class Place_model extends CI_Model {
     public $image;
     public $use_comment;
     public $tags;
+
+	public function gets() {
+		$this->db->order_by('id', 'DESC');
+		return $this->db->get(self::TABLE_NAME)->result();
+	}
 
     public function insert($user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
         $this->_fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags);

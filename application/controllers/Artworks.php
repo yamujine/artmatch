@@ -1,9 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Artworks extends MY_Controller
-{
-	function __construct() {
+class Artworks extends MY_Controller {
+	public function __construct() {
 			parent::__construct();
 			$this->load->model('artwork_model');
 	}
@@ -11,7 +10,7 @@ class Artworks extends MY_Controller
 	public function index() {
 			$artworks = $this->artwork_model->gets();
 			$data = ['artworks' => $artworks];
-			$this->twig->display('artworks', $data);
+			$this->twig->display('artworks/list', $data);
 	}
 
 	public function detail($artwork_number)
@@ -21,7 +20,6 @@ class Artworks extends MY_Controller
 
 	public function upload()
 	{
-		$this->load->model('artwork_model');
 		$this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
 		$this->load->helper('url');
 
