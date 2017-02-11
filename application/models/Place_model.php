@@ -16,9 +16,23 @@ class Place_model extends CI_Model {
     public $use_comment;
     public $tags;
 
-	public function gets() {
-		$this->db->order_by('id', 'DESC');
-		return $this->db->get(self::TABLE_NAME)->result();
+	public function gets($limit = null, $offset = null, $search = null) {
+		$query = $this->db
+			->from(self::TABLE_NAME)
+			->order_by('id', 'DESC');
+
+		if ($limit !== null) {
+			$query = $query->limit($limit, $offset);
+		}
+
+		if ($search !== null && !empty($search)) {
+			// 이름, 주소, tags 매치
+			$query = $query->like('name', $search)
+				->or_like('address', $search)
+				->or_like('tags', $search);
+		}
+
+		return $query->get()->result();
 	}
 
     public function get_by_id($place_id) {

@@ -17,9 +17,22 @@ class Artwork_model extends CI_Model {
 	public $use_comment;
 	public $tags;
 
-	public function gets() {
-		$this->db->order_by('id', 'DESC');
-		return $this->db->get(self::TABLE_NAME)->result();
+	public function gets($limit = null, $offset = null, $search = null) {
+		$query = $this->db
+			->from(self::TABLE_NAME)
+			->order_by('id', 'DESC');
+
+		if ($limit !== null) {
+			$query = $query->limit($limit, $offset);
+		}
+
+		if ($search !== null && !empty($search)) {
+			// 제목, tags 매치
+			$query = $query->like('title', $search)
+				->or_like('tags', $search);
+		}
+
+		return $query->get()->result();
 	}
 
 	public function get_by_id($artwork_id) {
@@ -67,8 +80,7 @@ class Artwork_model extends CI_Model {
 		return true;
 	}
 
-	public function update($id, $user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags)
-	{
+	public function update($id, $user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags) {
 		$this->_fill_class_variable_with_params($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags);
 		if ($this->db->update(self::TABLE_NAME, $this, ['id' => $id])) {
 			return $id;
