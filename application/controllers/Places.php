@@ -13,10 +13,10 @@ class Places extends MY_Controller {
         $this->twig->display('places/list', $data);
     }
 
-	public function detail($place_number) {
+	public function detail($place_id) {
 		$data = [];
 
-		$place = $this->place_model->get_by_id($place_number);
+		$place = $this->place_model->get_by_id($place_id);
 		if ($place) {
 			$data['place'] = $place;
 		}

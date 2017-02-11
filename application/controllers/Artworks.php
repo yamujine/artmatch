@@ -13,10 +13,10 @@ class Artworks extends MY_Controller {
 		$this->twig->display('artworks/list', $data);
 	}
 
-	public function detail($artwork_number) {
+	public function detail($artwork_id) {
 		$data = [];
 
-		$artwork = $this->artwork_model->get_by_id($artwork_number);
+		$artwork = $this->artwork_model->get_by_id($artwork_id);
 		if ($artwork) {
 			$data['artwork'] = $artwork;
 		}
