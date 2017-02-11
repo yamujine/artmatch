@@ -1,0 +1,48 @@
+{% extends "base.twig" %}
+
+{% block contents %}<?php
+    <div>회원종류
+    <select name="type" id="type">
+        <option value="artist">창작자</option>
+        <option value="owner">소유자?</option>
+    </select>
+    </div>
+    <div>
+        이메일
+        <input id="email"/>
+    </div>
+    <div>
+        패스워드
+        <input id="password"/>
+    </div>
+    <div>
+        프로필사진
+    </div>
+    <div>
+        이름
+        <input id="name"/>
+    </div>
+    <div>
+        <button id="join">가입</button>
+    </div>
+    </body>
+
+    <script>
+        $('#join').click(function () {
+            $.ajax({
+                method: "POST",
+                url: "/api/users/register",
+                data: {
+                    type: $("#type").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val(),
+                    name: $("#name").val(),
+                    profile_image: 'test'
+                }
+            }).done(function (data) {
+                alert(data);
+            })
+        });
+    </script>
+
+{% endblock %}

@@ -12,7 +12,6 @@ class Login extends MY_Controller
 
         if (empty($email) && empty($auth)) {
             $user = NULL;
-            echo 'empty session';
         } else {
             $user = array(
                 'email' => $email,
@@ -20,6 +19,8 @@ class Login extends MY_Controller
             );
         }
 
-        $this->load->view('login', $user);
+        $data = ['user' => $user];
+
+        $this->twig->display('login', $data);
     }
 }
