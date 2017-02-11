@@ -3,19 +3,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Artworks extends MY_Controller {
 	public function __construct() {
-			parent::__construct();
-			$this->load->model('artwork_model');
+		parent::__construct();
+		$this->load->model('artwork_model');
 	}
 
 	public function index() {
-			$artworks = $this->artwork_model->gets();
-			$data = ['artworks' => $artworks];
-			$this->twig->display('artworks/list', $data);
+		$artworks = $this->artwork_model->gets();
+		$data = ['artworks' => $artworks];
+		$this->twig->display('artworks/list', $data);
 	}
 
-	public function detail($artwork_number)
-	{
-		$this->load->model('artwork_model');
+	public function detail($artwork_number) {
 		$data = [];
 
 		$artwork = $this->artwork_model->get_by_id($artwork_number);
@@ -26,8 +24,7 @@ class Artworks extends MY_Controller {
 		$this->twig->display('artworks/detail', $data);
 	}
 
-	public function upload()
-	{
+	public function upload() {
 		$this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
 		$this->load->helper('url');
 
