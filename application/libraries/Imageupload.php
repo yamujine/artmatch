@@ -1,6 +1,6 @@
 <?php
 
-class ImageUpload {
+class Imageupload {
 	protected $CI;
 
 	const UPLOAD_PATH = './uploads/';
