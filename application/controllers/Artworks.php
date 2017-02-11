@@ -24,9 +24,11 @@ class Artworks extends MY_Controller {
 		$this->twig->display('artworks/detail', $data);
 	}
 
-	public function upload() {
+	public function edit($artwork_id = null) {
 		$this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
 		$this->load->helper('url');
+
+		$data = [];
 
 		// Form validation
 		$this->form_validation->set_rules('title', 'title', 'required|trim');
@@ -35,27 +37,73 @@ class Artworks extends MY_Controller {
 		$this->form_validation->set_rules('use_comment', 'use_comment', 'required');
 		$this->form_validation->set_rules('tags', 'tags', 'required|trim');
 
-		$data = [];
+		// TODO: Uncomment line below
+		// $user_id = $this->session->user_id;
+		// TODO: Remove line below
+		$user_id = 9282;
+
+		$status = $this->input->post('status');
+		$title = $this->input->post('title');
+		$description = $this->input->post('description');
+		$for_sale = $this->input->post('for_sale');
+		$use_comment = $this->input->post('use_comment');
+		$tags = $this->tag->refine_tags($this->input->post('tags'));
+		$delete_images = $this->input->post('delete_images');
+
+		// 기존 작품 수정인 경우 작품 정보 미리 입력
+		if (!empty($artwork_id)) {
+			$artwork = $this->artwork_model->get_by_id($artwork_id);
+			$artwork_array = json_decode(json_encode($artwork), true); // StdClass to Array conversion
+			$data = array_merge($data, $artwork_array);
+		}
 
 		if ($this->input->method() === 'post') {
 			if ($this->form_validation->run() === TRUE) {
-				// TODO: Uncomment line below
-				// $user_id = $this->session->user_id;
-				// TODO: Remove line below
-				$user_id = 9282;
-
 				// Upload representative image first
 				$uploaded_image_name = $this->imageupload->upload_images('image');
-				$result_id = $this->artwork_model->insert(
-					$user_id,
-					$this->input->post('status'),
-					$this->input->post('title'),
-					$this->input->post('description'),
-					$uploaded_image_name,
-					$this->input->post('for_sale'),
-					$this->input->post('use_comment'),
-					$this->tag->refine_tags($this->input->post('tags'))
-				);
+
+				if (!empty($artwork_id)) { // 기존 작품 수정
+					if (!empty($uploaded_image_name)) {
+						// 이미지 새로 업로드한 경우 기존의 것 삭제
+						$this->imageupload->delete_image($uploaded_image_name);
+					} else {
+						// 새로 업로드한 이미지 없는 경우 기존 이미지 사용
+						$artwork = $this->artwork_model->get_bare_by_id($artwork_id);
+						$uploaded_image_name = $artwork->image;
+					}
+
+					// 추가 이미지 중 삭제 원하는 이미 제거 및 record 삭제
+					if (!empty($delete_images)) {
+						foreach ($delete_images as $delete_image) {
+							$this->imageupload->delete_image($delete_image);
+							$this->artwork_model->delete_image($artwork_id, $delete_image);
+						}
+					}
+
+					$result_id = $this->artwork_model->update(
+						$artwork_id,
+						$user_id,
+						$status,
+						$title,
+						$description,
+						$uploaded_image_name,
+						$for_sale,
+						$use_comment,
+						$tags
+					);
+				} else { // 작품 신규 등록
+					$result_id = $this->artwork_model->insert(
+						$user_id,
+						$status,
+						$title,
+						$description,
+						$uploaded_image_name,
+						$for_sale,
+						$use_comment,
+						$tags
+					);
+				}
+
 				if ($result_id !== NULL) {
 					// Upload extra images
 					$uploaded_image_names = $this->imageupload->upload_bulk_images('extra_images');
@@ -64,16 +112,14 @@ class Artworks extends MY_Controller {
 					}
 					redirect('/artworks/' . $result_id);
 				} else {
-					$data['error'] = 'Failed to insert into DB';
+					$data['error'] = $this->db->error();
 				}
-
 			} else {
 				$data['error'] = validation_errors();
 			}
 			// Return requested values and errors
 			$data = array_merge($data, $this->input->post());
 		}
-
-		$this->twig->display('artworks/upload', $data);
+		$this->twig->display('artworks/edit', $data);
 	}
 }
