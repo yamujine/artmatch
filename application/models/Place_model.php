@@ -21,6 +21,28 @@ class Place_model extends CI_Model {
 		return $this->db->get(self::TABLE_NAME)->result();
 	}
 
+    public function get_by_id($place_id) {
+		$place = $this->db
+			->select('places.*, count(user_place_picks.id) as pick_count')
+			->from(self::TABLE_NAME)
+			->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
+			->where('places.id', $place_id)
+			->get()->row();
+
+		if ($place) {
+			$place->user = $this->db
+				->from('users')
+				->where('id', $place->user_id)
+				->get()->row();
+			$place->extra_images = $this->db
+				->from('place_images')
+				->where('place_id', $place_id)
+				->get()->result();
+		}
+
+		return $place;
+	}
+
     public function insert($user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
         $this->_fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags);
         if ($this->db->insert(self::TABLE_NAME, $this)) {
