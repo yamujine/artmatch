@@ -30,6 +30,10 @@ class Artwork_model extends CI_Model {
 			->get()->row();
 
 		if ($artwork) {
+			$artwork->user = $this->db
+				->from('users')
+				->where('id', $artwork->user_id)
+				->get()->row();
 			$artwork->extra_images = $this->db
 				->from('artwork_images')
 				->where('artwork_id', $artwork_id)

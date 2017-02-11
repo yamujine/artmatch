@@ -30,6 +30,10 @@ class Place_model extends CI_Model {
 			->get()->row();
 
 		if ($place) {
+			$place->user = $this->db
+				->from('users')
+				->where('id', $place->user_id)
+				->get()->row();
 			$place->extra_images = $this->db
 				->from('place_images')
 				->where('place_id', $place_id)
