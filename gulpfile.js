@@ -37,15 +37,9 @@ gulp.task('uglify', function () {
 
 gulp.task('sass', function () {
   return gulp.src([
-    'assets/scss/**/*.scss',
-    '!assets/scss/import/*.scss'
+    'assets/scss/**/*.scss'
   ])
       .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-      .pipe(gulp.dest('assets/css'));
-});
-
-gulp.task('css', function () {
-  return gulp.src(['assets/css/**/*.css'])
       .pipe(rename({suffix: '.min'}))
       .pipe(gulp.dest('static/dist/css'));
 });
@@ -57,12 +51,10 @@ gulp.task('build', sync.sync([
     'semantic-ui',
     'uglify',
     'sass'
-  ],
-  'css'
+  ]
 ]));
 
 gulp.task('build:watch', function () {
   gulp.watch('static/assets/scss/**/*.scss', ['sass']);
-  gulp.watch('static/assets/css/**/*.css', ['minify']);
   gulp.watch('static/assets/js/**/*.js', ['uglify']);
 });
