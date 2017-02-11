@@ -7,6 +7,10 @@ class Artwork_model extends CI_Model
 	 */
 	const TABLE_NAME = 'artworks';
 
+	function gets() {
+			return $this->db->get('artworks')->result();
+	}
+
 	//public $id; -- Ignore PK
 	public $user_id;
 	public $status;
