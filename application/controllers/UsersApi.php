@@ -39,15 +39,19 @@ class UsersApi extends API_Controller {
     }
 
     public function login() {
-
-        $email = $this->input->post('email');
-        $user = $this->user_model->get_by_email($email);
+        $email_or_username = $this->input->post('email_or_username');
+        if (strpos($email_or_username, '@') !== false) {
+			$user = $this->user_model->get_by_email($email_or_username);
+			$error_msg = '이메일을 찾을 수 없습니다.';
+		} else {
+        	$user = $this->user_model->get_by_user_name($email_or_username);
+			$error_msg = '아이디를 찾을 수 없습니다.';
+		}
 
         if (!$user) {
-            $this->set_fail_response('102', ['message' => 'email is not founded']);
+            $this->set_fail_response('102', ['message' => $error_msg]);
         } else {
-            $password = $this->user_model->get_password($email);
-            if (password_verify($this->input->post('password'), $password)) {
+            if (password_verify($this->input->post('password'), $user->password)) {
                 $this->set_success_response(['message' => 'login success']);
                 $this->_set_user_session($user);
             } else {
@@ -114,8 +118,7 @@ class UsersApi extends API_Controller {
     }
 
     private function _set_user_session($user) {
-        $refresh = (array) $this->user_model->get_by_id($user->id);
-        $this->session->set_userdata($refresh);
-        $this->session->set_userdata(['logged_in' => true]);
+        $userdata = (array) $this->user_model->get_by_id($user->id);
+        $this->session->set_userdata($userdata);
     }
 }

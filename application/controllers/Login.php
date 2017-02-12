@@ -6,20 +6,16 @@ class Login extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('twig');
+		$this->load->helper('url');
 	}
 
 	public function index() {
-        if (!$this->logincheck->is_login()) {
-            $user = NULL;
-        } else {
-            $user = [
-                'email' => $this->logincheck->get_email(),
-                'auth' => $this->logincheck->get_is_auth()
-            ];
-        }
+		// 이미 로그인된 경우 메인으로 돌리기
+		if ($this->logincheck->is_login()) {
+			redirect('/');
+		}
 
-        $data = ['user' => $user];
-        $this->twig->display('login/login', $data);
+		$this->twig->display('login/login');
     }
 
     public function logout() {
