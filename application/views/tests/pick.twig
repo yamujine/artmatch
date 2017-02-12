@@ -1,0 +1,18 @@
+{% extends "base.twig" %}
+
+{% block contents %}
+
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/pick">
+        <div class="field">
+            <label>type</label>
+            <input type="text" name="type" placeholder="" value="artwork">
+        </div>
+        <div class="field">
+            <label>place_id</label>
+            <input type="text" name="place_id" placeholder="" value="1">
+        </div>
+
+        <button class="ui button" type="submit">Submit</button>
+    </form>
+
+{% endblock %}
