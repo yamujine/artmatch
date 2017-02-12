@@ -21,4 +21,11 @@ class Login extends CI_Controller {
         $data = ['user' => $user];
         $this->twig->display('login/login', $data);
     }
+
+    public function logout() {
+		$this->session->unset_userdata(['id', 'email', 'password', 'type', 'username', 'profile_image','registered_at']);
+		$this->session->sess_destroy();
+
+		redirect('/');
+	}
 }
