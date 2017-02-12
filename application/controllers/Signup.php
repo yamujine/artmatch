@@ -5,6 +5,6 @@ class Signup extends MY_Controller
 {
     public function index()
     {
-        $this->twig->display('signup');
+        $this->twig->display('signup/signup');
     }
 }

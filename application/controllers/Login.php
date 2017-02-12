@@ -21,6 +21,6 @@ class Login extends MY_Controller
 
         $data = ['user' => $user];
 
-        $this->twig->display('login', $data);
+        $this->twig->display('login/login', $data);
     }
 }
