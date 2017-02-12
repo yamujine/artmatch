@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Signup extends CI_Controller {
-	public function index()
-	{
-		echo 'signup';
-	}
+class Signup extends MY_Controller {
+
+    public function index() {
+        $this->twig->display('signup/signup');
+    }
 }
