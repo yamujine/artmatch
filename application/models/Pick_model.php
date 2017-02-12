@@ -52,4 +52,114 @@ class Pick_model extends CI_Model {
 
 		return $picks;
 	}
+
+    public function insert_pick($type, $user_id, $place_id) {
+	    if ($type === "artwork") {
+	        return $this->insert_artwork_pick_by_user_id_and_place_id($user_id, $place_id);
+        } else if ($type === "place") {
+            return $this->insert_place_pick_by_user_id_and_place_id($user_id, $place_id);
+        } else {
+            throw new Exception("type error. type=".$type);
+        }
+    }
+
+    public function delete_pick($type, $user_id, $place_id) {
+        if ($type === "artwork") {
+            return $this->delete_artwork_pick_by_user_id_and_place_id($user_id, $place_id);
+        } else if ($type === "place") {
+            return $this->delete_place_pick_by_user_id_and_place_id($user_id, $place_id);
+        } else {
+            throw new Exception("type error. type=".$type);
+        }
+    }
+
+    public function check_pick($type, $user_id, $place_id) {
+        if ($type === "artwork") {
+            return $this->check_artwork_pick_by_user_id_and_place_id($user_id, $place_id);
+        } else if ($type === "place") {
+            return $this->check_place_pick_by_user_id_and_place_id($user_id, $place_id);
+        } else {
+            throw new Exception("type error. type=".$type);
+        }
+    }
+
+
+    public function insert_place_pick_by_user_id_and_place_id($user_id, $place_id) {
+	    $data = array(
+            'user_id' => $user_id,
+            'place_id' => $place_id
+        );
+
+        if ($this->db->insert(self::PLACE_PICKS_TABLE_NAME, $data)) {
+            return $this->db->insert_id();
+        } else {
+            return NULL;
+        }
+    }
+
+    public function delete_place_pick_by_user_id_and_place_id($user_id, $place_id) {
+        $data = array(
+            'user_id' => $user_id,
+            'place_id' => $place_id
+        );
+
+        return $this->db->delete(self::PLACE_PICKS_TABLE_NAME, $data);
+    }
+
+    public function check_place_pick_by_user_id_and_place_id($user_id, $place_id) {
+        $data = array(
+            'user_id' => $user_id,
+            'place_id' => $place_id
+        );
+
+        if ($this->db
+            ->from(self::PLACE_PICKS_TABLE_NAME)
+            ->where($data)
+            ->limit(1)
+            ->get()->result()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+	public function insert_artwork_pick_by_user_id_and_place_id($user_id, $artwork_id) {
+	    $data = array(
+            'user_id' => $user_id,
+            'artwork_id' => $artwork_id
+        );
+
+        if ($this->db->insert(self::ARTWORK_PICKS_TABLE_NAME, $data)) {
+            return $this->db->insert_id();
+        } else {
+            return NULL;
+        }
+    }
+
+    public function delete_artwork_pick_by_user_id_and_place_id($user_id, $artwork_id) {
+        $data = array(
+            'user_id' => $user_id,
+            'artwork_id' => $artwork_id
+        );
+
+        return $this->db->delete(self::ARTWORK_PICKS_TABLE_NAME, $data);
+    }
+
+    public function check_artwork_pick_by_user_id_and_place_id($user_id, $artwork_id) {
+        $data = array(
+            'user_id' => $user_id,
+            'artwork_id' => $artwork_id
+        );
+
+        if ($this->db
+            ->from(self::ARTWORK_PICKS_TABLE_NAME)
+            ->where($data)
+            ->limit(1)
+            ->get()->result()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
