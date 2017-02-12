@@ -1,0 +1,6 @@
+{% for artwork in artworks %}
+	<a href="/artworks/{{ artwork.id }}" class="ui medium image">
+		<img src="{{ artwork.image }}">
+		{{ artwork.title }}
+	</a>
+{% endfor %}

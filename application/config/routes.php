@@ -62,15 +62,18 @@ $route['places/(:num)'] = 'places/detail/$1';
 $route['places/upload'] = 'places/edit';
 $route['places/edit/(:num)'] = 'places/edit/$1';
 
-$route['api/pick'] = 'pickapi';
+$route['users/me'] = 'users/me'; // Don't change ordering
+$route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
 
 $route['api/comments'] = 'commentapi';
 $route['api/comments/delete'] = 'commentapi/delete';
 $route['api/comments/insert'] = 'commentapi/insert';
 $route['api/comments/update'] = 'commentapi/update';
 
-$route['users/me'] = 'users/me'; // Don't change ordering
-$route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
+$route['api/artworks'] = 'artworkapi';
+$route['api/places'] = 'placeapi';
+
+$route['api/pick'] = 'pickapi';
 
 $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';

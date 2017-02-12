@@ -1,0 +1,6 @@
+{% for place in places %}
+	<a href="/places/{{ place.id }}" class="ui medium image">
+		<img src="{{ place.image }}">
+		{{ place.name }}
+	</a>
+{% endfor %}
