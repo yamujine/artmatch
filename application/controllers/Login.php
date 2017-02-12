@@ -4,17 +4,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Login extends MY_Controller {
 
     public function index() {
-        $this->load->library('session');
 
-        $email = $this->session->userdata('email');
-        $auth = $this->session->userdata('is_auth');
+        $this->load->library('logincheck');
 
-        if (empty($email) && empty($auth)) {
+        if (!$this->logincheck->is_login()) {
             $user = NULL;
         } else {
             $user = array(
-                'email' => $email,
-                'auth' => $auth
+                'email' => $this->logincheck->get_email(),
+                'auth' => $this->logincheck->get_is_auth()
             );
         }
 

@@ -49,6 +49,7 @@ class UsersApi extends CI_Controller {
             $password = $this->user_model->get_password($email);
             if (password_verify($this->input->post('password'), $password)) {
                 $this->reponse_success(array('message' => 'login success'));
+                $this->set_user_session($user);
 
             } else {
                 $this->reponse_fail('103', array('message' => 'password is not corrected'));

@@ -33,13 +33,12 @@ class User_model extends CI_Model {
     }
 
     public function get_by_email($email) {
-        $this->db->select('id, type, email, username, is_auth, is_admin');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
         if ($query->num_rows() == 0) {
             return FALSE;
         }
-        return $query->row_array();
+        return $query->row();
     }
 
     public function get_password($email) {
