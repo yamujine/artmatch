@@ -7,30 +7,30 @@ class Users extends MY_Controller {
 		$this->load->model(['user_model', 'pick_model', 'artwork_model', 'place_model']);
 	}
 
-	public function detail($user_id) {
-		$data = $this->_get_user_details($user_id);
+	public function detail($user_name) {
+		$data = $this->_get_user_details($user_name);
 
 		$this->twig->display('users/mypage', $data);
 	}
 
 	public function me() {
-		// TODO: 세션에서 유저 아이디 / 타입 가져오기
-		$user_id = 1;
+		// TODO: 세션에서 유저 아이디 가져오기
+		$user_name = 'kimtree';
 		$pick_type = $this->input->get('type');
 
-		$data = $this->_get_user_details($user_id, true, $pick_type);
+		$data = $this->_get_user_details($user_name, true, $pick_type);
 
 		$this->twig->display('users/mypage', $data);
 	}
 
-	private function _get_user_details($user_id, $is_my_page = false, $pick_type = '') {
-		$user = $this->user_model->get_by_id($user_id);
+	private function _get_user_details($user_name, $is_my_page = false, $pick_type = '') {
+		$user = $this->user_model->get_by_user_name($user_name);
 
 		// 내 작품, 장소 리스트
 		if ((int) $user->type === 1) {
-			$mine = $this->artwork_model->get_by_user_id($user_id);
+			$mine = $this->artwork_model->get_by_user_id($user->id);
 		} else if ((int) $user->type === 2) {
-			$mine = $this->place_model->get_by_user_id($user_id);
+			$mine = $this->place_model->get_by_user_id($user->id);
 		}
 		foreach ($mine as $something) {
 			$type = ((int) $user->type === 1) ? 'artworks' : 'places';
@@ -40,18 +40,18 @@ class Users extends MY_Controller {
 
 		// 받은 pick 카운트
 		if ((int) $user->type === 1) {
-			$given_pick_count = $this->pick_model->get_given_artwork_pick_by_user_id($user_id);
+			$given_pick_count = $this->pick_model->get_given_artwork_pick_by_user_id($user->id);
 		} else if ((int) $user->type === 2) {
-			$given_pick_count = $this->pick_model->get_given_place_pick_by_user_id($user_id);
+			$given_pick_count = $this->pick_model->get_given_place_pick_by_user_id($user->id);
 		}
 
 		// 내가 pick한 작품 장소 리스트
 		$my_picks = [];
 		if ($is_my_page && !empty($pick_type)) {
 			if ($pick_type === 'artworks') {
-				$my_picks = $this->pick_model->get_artwork_picks_by_user_id($user_id);
+				$my_picks = $this->pick_model->get_artwork_picks_by_user_id($user->id);
 			} elseif ($pick_type === 'places') {
-				$my_picks = $this->pick_model->get_place_picks_by_user_id($user_id);
+				$my_picks = $this->pick_model->get_place_picks_by_user_id($user->id);
 			}
 		}
 		foreach ($my_picks as $my_pick) {
