@@ -1,5 +1,5 @@
 <?php
-class Logincheck {
+class Account {
 
     protected $CI;
 
