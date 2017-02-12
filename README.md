@@ -3,9 +3,9 @@
 ## Environment
 * php 5.6+
 
-## Simple run
+## Run in Development
 ```
-php -S localhost:8080
+CI_PAY_DB_PASSWORD=<password>;CI_PAY_DB_USERNAME=<username> php -d variables_order=EGPCS -S localhost:8080
 ```
 
 ## References
