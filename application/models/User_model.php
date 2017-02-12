@@ -64,10 +64,18 @@ class User_model extends CI_Model {
         return $this->db->where('email', $email)
                 ->count_all_results(self::TABLE_NAME) > 0;
     }
+
     public function get_by_id($id) {
         return $this->db
             ->from(self::TABLE_NAME)
             ->where('id', $id)
             ->get()->row();
     }
+
+    public function get_by_user_id($user_id) {
+		return $this->db
+			->from(self::TABLE_NAME)
+			->where('user_id', $user_id)
+			->get()->row();
+	}
 }
