@@ -1,18 +1,34 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Artworks extends MY_Controller
-{
-	public function detail($artwork_number)
-	{
-		echo $artwork_number . ' artwork detail';
+class Artworks extends MY_Controller {
+	public function __construct() {
+		parent::__construct();
+		$this->load->model('artwork_model');
 	}
 
-	public function upload()
-	{
-		$this->load->model('artwork_model');
-		$this->load->library(['form_validation', 'upload']);
+	public function index() {
+		$artworks = $this->artwork_model->gets();
+		$data = ['artworks' => $artworks];
+		$this->twig->display('artworks/list', $data);
+	}
+
+	public function detail($artwork_id) {
+		$data = [];
+
+		$artwork = $this->artwork_model->get_by_id($artwork_id);
+		if ($artwork) {
+			$data['artwork'] = $artwork;
+		}
+
+		$this->twig->display('artworks/detail', $data);
+	}
+
+	public function edit($artwork_id = null) {
+		$this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
 		$this->load->helper('url');
+
+		$data = [];
 
 		// Form validation
 		$this->form_validation->set_rules('title', 'title', 'required|trim');
@@ -21,129 +37,89 @@ class Artworks extends MY_Controller
 		$this->form_validation->set_rules('use_comment', 'use_comment', 'required');
 		$this->form_validation->set_rules('tags', 'tags', 'required|trim');
 
-		$data = [];
+		// TODO: Uncomment line below
+		// $user_id = $this->session->user_id;
+		// TODO: Remove line below
+		$user_id = 9282;
+
+		$status = $this->input->post('status');
+		$title = $this->input->post('title');
+		$description = $this->input->post('description');
+		$for_sale = $this->input->post('for_sale');
+		$use_comment = $this->input->post('use_comment');
+		$tags = $this->tag->refine_tags($this->input->post('tags'));
+		$delete_images = $this->input->post('delete_images');
+
+		// 기존 작품 수정인 경우 작품 정보 미리 입력
+		if (!empty($artwork_id)) {
+			$artwork = $this->artwork_model->get_by_id($artwork_id);
+			$artwork_array = json_decode(json_encode($artwork), true); // StdClass to Array conversion
+			$data = array_merge($data, $artwork_array);
+		}
 
 		if ($this->input->method() === 'post') {
 			if ($this->form_validation->run() === TRUE) {
-				// TODO: Uncomment line below
-				// $user_id = $this->session->user_id;
-				// TODO: Remove line below
-				$user_id = 9282;
-
 				// Upload representative image first
-				$uploaded_image_name = $this->_upload_images('image');
-				$result_id = $this->artwork_model->insert(
-					$user_id,
-					$this->input->post('status'),
-					$this->input->post('title'),
-					$this->input->post('description'),
-					$uploaded_image_name,
-					$this->input->post('for_sale'),
-					$this->input->post('use_comment'),
-					$this->_refine_tags($this->input->post('tags'))
-				);
-				if ($result_id !== NULL) {
-					// Upload extra images
-					$uploaded_image_names = $this->_upload_bulk_images('extra_images');
-					$this->artwork_model->insert_images($result_id, $uploaded_image_names);
+				$uploaded_image_name = $this->imageupload->upload_images('image');
 
-					redirect('/artworks/' . $result_id);
-				} else {
-					$data['error'] = 'Failed to insert into DB';
+				if (!empty($artwork_id)) { // 기존 작품 수정
+					if (!empty($uploaded_image_name)) {
+						// 이미지 새로 업로드한 경우 기존의 것 삭제
+						$this->imageupload->delete_image($uploaded_image_name);
+					} else {
+						// 새로 업로드한 이미지 없는 경우 기존 이미지 사용
+						$artwork = $this->artwork_model->get_bare_by_id($artwork_id);
+						$uploaded_image_name = $artwork->image;
+					}
+
+					// 추가 이미지 중 삭제 원하는 이미 제거 및 record 삭제
+					if (!empty($delete_images)) {
+						foreach ($delete_images as $delete_image) {
+							$this->imageupload->delete_image($delete_image);
+							$this->artwork_model->delete_image($artwork_id, $delete_image);
+						}
+					}
+
+					$result_id = $this->artwork_model->update(
+						$artwork_id,
+						$user_id,
+						$status,
+						$title,
+						$description,
+						$uploaded_image_name,
+						$for_sale,
+						$use_comment,
+						$tags
+					);
+				} else { // 작품 신규 등록
+					$result_id = $this->artwork_model->insert(
+						$user_id,
+						$status,
+						$title,
+						$description,
+						$uploaded_image_name,
+						$for_sale,
+						$use_comment,
+						$tags
+					);
 				}
 
+				if ($result_id !== NULL) {
+					// Upload extra images
+					$uploaded_image_names = $this->imageupload->upload_bulk_images('extra_images');
+					if (!empty($uploaded_image_names)) {
+						$this->artwork_model->insert_images($result_id, $uploaded_image_names);
+					}
+					redirect('/artworks/' . $result_id);
+				} else {
+					$data['error'] = $this->db->error();
+				}
 			} else {
 				$data['error'] = validation_errors();
 			}
 			// Return requested values and errors
 			$data = array_merge($data, $this->input->post());
 		}
-
-		$this->twig->display('artworks/upload', $data);
-	}
-
-	private function _upload_images($param, $generate_thumbs = true)
-	{
-		// Load upload library
-		$this->upload->initialize([
-			'upload_path' => './uploads/',
-			'allowed_types' => 'gif|jpg|png|jpeg',
-			'file_ext_tolower' => TRUE,
-			'max_size' => 2048, // 2MB
-			'encrypt_name' => TRUE
-		]);
-
-		// Upload Image
-		$this->upload->do_upload($param);
-
-		// Generate Thumbnails
-		if ($generate_thumbs) {
-			$this->_generate_thumbnails($this->upload->data('full_path'));
-		}
-
-		return $this->upload->data('file_name');
-	}
-
-	private function _upload_bulk_images($param, $generate_thumbs = true)
-	{
-		$this->upload->initialize([
-			'upload_path' => './uploads/',
-			'allowed_types' => 'gif|jpg|png|jpeg',
-			'file_ext_tolower' => TRUE,
-			'max_size' => 2048, // 2MB
-			'encrypt_name' => TRUE
-		]);
-
-		// Upload Images
-		$this->upload->do_multi_upload($param);
-
-		foreach ($this->upload->get_multi_upload_data() as $uploaded_data) {
-			if ($generate_thumbs) {
-				$this->_generate_thumbnails($uploaded_data['full_path']);
-			}
-			$uploaded_file_names[] = $uploaded_data['file_name'];
-		}
-
-		return $uploaded_file_names;
-	}
-
-	private function _generate_thumbnails($original_image_path)
-	{
-		/*
-		 * _thumb -> 512x512
-		 * _thumb_small -> 128x128
-		 */
-		$this->load->library('image_lib');
-		$default_config = [
-			'image_library' => 'gd2',
-			'source_image' => $original_image_path,
-			'create_thumb' => TRUE,
-			'maintain_ratio' => TRUE
-		];
-
-		$this->image_lib->initialize(array_merge($default_config, ['width' => 512, 'height' => 512]));
-		$this->image_lib->resize();
-
-		$this->image_lib->initialize(array_merge($default_config, ['width' => 128, 'height' => 128, 'thumb_marker' => '_thumb_small']));
-		$this->image_lib->resize();
-	}
-
-	private function _refine_tags($tag_string)
-	{
-		$tags = '';
-		$tag_array = [];
-
-		$parts = preg_split('/\s+/', $tag_string);
-		foreach ($parts as $part) {
-			if ($part[0] === '#') {
-				$tag_array[] = $part;
-			}
-		}
-
-		if (count($tag_array) > 0) {
-			$tags = implode(' ', $tag_array);
-		}
-
-		return $tags;
+		$this->twig->display('artworks/edit', $data);
 	}
 }

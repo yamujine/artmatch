@@ -1,0 +1,66 @@
+{% extends "base.twig" %}
+
+{% block contents %}
+
+<table class="ui definition table">
+	<tr>
+		<td>주인?</td>
+		<td>{{ place.user.name }}</td>
+	</tr>
+	<tr>
+		<td>장소 이름</td>
+		<td>{{ place.name }} PICKS: {{ place.pick_count }}</td>
+	</tr>
+	<tr>
+		<td>등록일</td>
+		<td>{{ place.upload_date }}</td>
+	</tr>
+	<tr>
+		<td>상태</td>
+		<td>
+			{% if place.status == 1 %}
+				작품구함
+			{% elseif place.status == 2 %}
+				전시중
+			{% elseif place.status == 3 %}
+				작품 구하지 않음
+			{% endif %}
+		</td>
+	</tr>
+	<tr>
+		<td>주소</td>
+		<td>{{ place.address }}</td>
+	</tr>
+	<tr>
+		<td>장소 설명</td>
+		<td>{{ place.description }}</td>
+	</tr>
+	<tr>
+		<td>댓글 허용여부</td>
+		<td>
+			{% if place.use_comment == 1 %}
+				댓글 가능
+			{% else %}
+				댓글 불가능
+			{% endif %}
+		</td>
+	</tr>
+	<tr>
+		<td>태그</td>
+		<td>{{ place.tags }}</td>
+	</tr>
+	<tr>
+		<td>대표이미지</td>
+		<td>{{ place.image }}</td>
+	</tr>
+	<tr>
+		<td>추가이미지</td>
+		<td>
+			{% for extra in place.extra_images %}
+				{{ extra.image }}
+			{% endfor %}
+		</td>
+	</tr>
+</table>
+
+{% endblock %}
