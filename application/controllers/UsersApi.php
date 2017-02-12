@@ -8,6 +8,7 @@ class UsersApi extends CI_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->library('email');
+        $this->load->library('encryption');
         $this->load->model('user_model');
         header('Content-Type: application/json');
         $this->result = array('result' => false, 'errorCode' => null, 'body' => null);
@@ -29,7 +30,6 @@ class UsersApi extends CI_Controller
             $user = $this->user_model->get_by_id($id);
             $this->set_user_session($user);
             $this->send_mail($user);
-            /* response 정의 필요 */
             $this->reponse_success(array('message' => 'signup success'));
         } else {
             $this->reponse_fail('101', array('message' => 'duplicated email'));
@@ -56,10 +56,14 @@ class UsersApi extends CI_Controller
         return $this->output->set_output(json_encode($this->result));
     }
 
-    public function verify($id, $code)
+    public function verify()
     {
+        $code = preg_split('#/#',$this->encryption->decrypt($this->input->get('key', FALSE)));
+        $email = $code[0];
+        $id = $code[1];
         $user = $this->user_model->get_by_id($id);
-        if (hash_equals($code, hash('ripemd160', $user['email'] . $user['id']))) {
+
+        if ($user['email'] === $email && $user['id'] === $id) {
             $result = $this->user_model->authorize($id);
             if ($result) {
                 $this->set_user_session($user);
@@ -76,12 +80,12 @@ class UsersApi extends CI_Controller
     public function send_mail($user)
     {
 
-        $code = hash('ripemd160', $user['email'] . $user['id']);
+        $code = urlencode($this->encryption->encrypt($user['email'] . '/' . $user['id']));
         $this->email->initialize(array('mailtype' => 'html'));
         $this->load->helper('url');
         $this->email->from('admin@pickartyou.com', 'pickartyou');
         $this->email->subject('pickartyou 회원가입 링크');
-        $this->email->message('<a href=' . base_url() . 'api/users/' . $user['id'] . '/verify/' . $code . ' style="color: white; font-weight: normal; text-decoration: none; word-break: break-word; font-size: 20px; line-height: 26px; border-top: 14px solid; border-bottom: 14px solid; border-right: 32px solid; border-left: 32px solid; background-color: #2ab27b; border-color: #2ab27b; display: inline-block; letter-spacing: 1px; min-width: 80px; text-align: center; border-radius: 4px; text-shadow: 0 1px 1px rgba(0,0,0,0.25);">
+        $this->email->message('<a href=' . base_url() . 'api/users/verify?key=' . $code . ' style="color: white; font-weight: normal; text-decoration: none; word-break: break-word; font-size: 20px; line-height: 26px; border-top: 14px solid; border-bottom: 14px solid; border-right: 32px solid; border-left: 32px solid; background-color: #2ab27b; border-color: #2ab27b; display: inline-block; letter-spacing: 1px; min-width: 80px; text-align: center; border-radius: 4px; text-shadow: 0 1px 1px rgba(0,0,0,0.25);">
 					Join
 				</a>');
         $this->email->to($user['email']);

@@ -61,4 +61,4 @@ $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
 
 $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';
-$route['api/users/(:any)/verify/(:any)'] = 'usersapi/verify/$1/$2';
+$route['api/users/verify'] = 'usersapi/verify';
