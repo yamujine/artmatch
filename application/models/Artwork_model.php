@@ -64,6 +64,13 @@ class Artwork_model extends CI_Model {
 			->get()->row();
 	}
 
+	public function get_by_user_id($user_id) {
+		return $this->db
+			->from(self::TABLE_NAME)
+			->where('user_id', $user_id)
+			->get()->result();
+	}
+
 	public function insert($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags) {
 		$this->_fill_class_variable_with_params($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags);
 		if ($this->db->insert(self::TABLE_NAME, $this)) {

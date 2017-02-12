@@ -57,6 +57,20 @@ class Place_model extends CI_Model {
 		return $place;
 	}
 
+	public function get_by_user_id($user_id) {
+		return $this->db
+			->from(self::TABLE_NAME)
+			->where('user_id', $user_id)
+			->get()->result();
+	}
+
+	public function get_bare_by_id($place_id) {
+		return $this->db
+			->from(self::TABLE_NAME)
+			->where('id', $place_id)
+			->get()->row();
+	}
+
     public function insert($user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
         $this->_fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags);
         if ($this->db->insert(self::TABLE_NAME, $this)) {
