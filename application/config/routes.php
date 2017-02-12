@@ -60,6 +60,8 @@ $route['artworks/edit/(:num)'] = 'artworks/edit/$1';
 $route['places/(:num)'] = 'places/detail/$1';
 
 $route['api/pick'] = 'pickapi';
+$route['api/comment'] = 'commentapi';
+$route['api/comment/delete'] = 'commentapi/delete';
 
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
