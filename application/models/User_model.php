@@ -15,11 +15,11 @@ class User_model extends CI_Model {
     public $profile_image;
     public $registered_at;
 
-    public function add($email, $password, $user_id, $profile_image, $type) {
+    public function add($email, $password, $user_name, $profile_image, $type) {
         $user = array(
             'email' => $email,
             'password' => $password,
-            'user_id' => $user_id,
+            'user_name' => $user_name,
             'profile_image' => $profile_image,
             'type' => $type);
 
@@ -33,13 +33,12 @@ class User_model extends CI_Model {
     }
 
     public function get_by_email($email) {
-        $this->db->select('id, type, email, username, is_auth, is_admin');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
         if ($query->num_rows() == 0) {
             return FALSE;
         }
-        return $query->row_array();
+        return $query->row();
     }
 
     public function get_password($email) {
