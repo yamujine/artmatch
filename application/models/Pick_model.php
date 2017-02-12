@@ -9,17 +9,19 @@ class Pick_model extends CI_Model {
 	public $artwork_id;
 	public $place_id;
 
-	public function get_artwork_pick_count_by_artwork_ids(array $artwork_ids) {
+	public function get_given_artwork_pick_by_user_id($user_id) {
 		return $this->db
 			->from(self::ARTWORK_PICKS_TABLE_NAME)
-			->where_in('artwork_id', $artwork_ids)
+			->join('artworks', 'artworks.id = user_artwork_picks.artwork_id')
+			->where('artworks.user_id', $user_id)
 			->count_all_results();
 	}
 
-	public function get_place_pick_count_by_place_ids(array $place_ids) {
+	public function get_given_place_pick_by_user_id($user_id) {
 		return $this->db
 			->from(self::PLACE_PICKS_TABLE_NAME)
-			->where_in('place_id', $place_ids)
+			->join('places', 'places.id = user_place_picks.place_id')
+			->where('places.user_id', $user_id)
 			->count_all_results();
 	}
 

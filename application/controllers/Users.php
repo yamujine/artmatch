@@ -12,11 +12,11 @@ class Users extends MY_Controller {
 	}
 
 	public function me() {
-		// TODO: 세션에서 유저 아이디 가져오기
+		// TODO: 세션에서 유저 아이디 / 타입 가져오기
 		$user_id = 1;
+		$user_type = 1;
 
 		$type = $this->input->get('type') ?: 'artworks';
-
 		$user = $this->user_model->get_by_id($user_id);
 
 		if ($type === 'artworks') {
@@ -25,30 +25,18 @@ class Users extends MY_Controller {
 			$my_picks = $this->pick_model->get_place_picks_by_user_id($user_id);
 		}
 
+		if ($user_type === 1) {
+			$given_pick_count = $this->pick_model->get_given_artwork_pick_by_user_id($user_id);
+		} else if ($user_type === 2) {
+			$given_pick_count = $this->pick_model->get_given_place_pick_by_user_id($user_id);
+		}
+
 		$data = [
 			'user' => $user,
-			'given_picks' => $this->_count_all_given_picks($user_id),
+			'given_pick_count' => $given_pick_count,
 			'my_picks' => $my_picks,
 			'type' => $type,
 		];
-		$this->twig->display('users/me', $data);
+		$this->twig->display('users/mypage', $data);
 	}
-
-	private function _count_all_given_picks($user_id) {
-		$user_artworks = $this->artwork_model->get_by_user_id($user_id);
-		$user_places = $this->place_model->get_by_user_id($user_id);
-
-		$user_artwork_ids = array_map(function($value) {
-			return $value->id;
-		}, $user_artworks);
-		$user_place_ids = array_map(function($value) {
-			return $value->id;
-		}, $user_places);
-
-		$user_artwork_picks = $this->pick_model->get_artwork_pick_count_by_artwork_ids($user_artwork_ids);
-		$user_place_picks = $this->pick_model->get_place_pick_count_by_place_ids($user_place_ids);
-
-		return ($user_artwork_picks + $user_place_picks);
-	}
-
 }
