@@ -12,16 +12,16 @@ class User_model extends CI_Model
     public $email;
     public $password;
     public $type;
-    public $name;
+    public $user_name;
     public $profile_image;
     public $registered_at;
 
-    public function add($email, $password, $name, $profile_image, $type)
+    public function add($email, $password, $user_name, $profile_image, $type)
     {
         $user = array(
             'email' => $email,
             'password' => $password,
-            'name' => $name,
+            'user_name' => $user_name,
             'profile_image' => $profile_image,
             'type' => $type);
 
@@ -36,7 +36,7 @@ class User_model extends CI_Model
 
     public function get_by_email($email)
     {
-        $this->db->select('id, type, email, name, is_auth, is_admin');
+        $this->db->select('id, type, email, user_name, is_auth, is_admin');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
         if ($query->num_rows() == 0) {

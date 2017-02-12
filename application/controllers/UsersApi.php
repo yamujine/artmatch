@@ -10,7 +10,7 @@ class UsersApi extends CI_Controller
         $this->load->library('email');
         $this->load->library('encryption');
         $this->load->model('user_model');
-        header('Content-Type: application/json');
+        $this->output->set_content_type('application/json');
         $this->result = array('result' => false, 'errorCode' => null, 'body' => null);
     }
 
@@ -21,7 +21,7 @@ class UsersApi extends CI_Controller
         $id = $this->user_model->add(
             $this->input->post('email'),
             $hash,
-            $this->input->post('name'),
+            $this->input->post('user_name'),
             $this->input->post('profile_image'),
             $this->input->post('type')
         );
