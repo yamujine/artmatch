@@ -12,6 +12,8 @@ class MY_Controller extends CI_Controller {
 
 		if ($this->accountlib->is_login() === false) {
 			redirect('/account/login');
+		} elseif ($this->accountlib->is_auth() === false) {
+			redirect('/account/not_authenticated');
 		}
 	}
 }

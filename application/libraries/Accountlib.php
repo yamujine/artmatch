@@ -5,6 +5,8 @@ class Accountlib {
 
     public function __construct() {
         $this->CI =& get_instance();
+		$this->CI->load->model(['user_model']);
+        $this->CI->load->library(['twig', 'encryption', 'email']);
     }
 
     public function is_login() {
@@ -13,6 +15,17 @@ class Accountlib {
         }
         return TRUE;
     }
+
+    public function is_auth() {
+		if ($this->_validate_session()) {
+			if ($this->CI->session->userdata('is_auth') === '0') {
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
 
     public function get_email() {
         if ($this->_validate_session()) {
@@ -35,13 +48,6 @@ class Accountlib {
         return FALSE;
     }
 
-    public function get_is_auth() {
-        if ($this->_validate_session()) {
-            return $this->CI->session->userdata('is_auth');
-        }
-        return FALSE;
-    }
-
     public function get_user() {
         if ($this->_validate_session()) {
             $user = new stdClass();
@@ -56,6 +62,23 @@ class Accountlib {
         }
         return FALSE;
     }
+
+	public function send_email_authentication($user_email, $user_id) {
+		$data['code'] = urlencode($this->CI->encryption->encrypt($user_email . '/' . $user_id));
+		$email_html = $this->CI->twig->render('email/verify', $data);
+
+		$this->CI->email->initialize(['mailtype' => 'html']);
+		$this->CI->email->from('no-reply@pickartyou.com', 'pickartyou');
+		$this->CI->email->subject('pickartyou 이메일 인증');
+		$this->CI->email->message($email_html);
+		$this->CI->email->to($user_email);
+		$this->CI->email->send();
+	}
+
+	public function generate_user_session($user_id) {
+		$userdata = (array) $this->CI->user_model->get_by_id($user_id);
+		$this->CI->session->set_userdata($userdata);
+	}
 
     private function _validate_session() {
 		$id = $this->CI->session->userdata('id');
