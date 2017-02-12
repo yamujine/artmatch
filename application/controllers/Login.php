@@ -5,8 +5,6 @@ class Login extends MY_Controller {
 
     public function index() {
 
-        $this->load->library('logincheck');
-
         if (!$this->logincheck->is_login()) {
             $user = NULL;
         } else {
