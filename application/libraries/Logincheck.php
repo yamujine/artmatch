@@ -6,7 +6,6 @@ class Logincheck {
     public function __construct() {
         $this->CI =& get_instance();
         $this->CI->load->library('session');
-        $this->CI->load->model('user_model');
     }
 
     public function is_login() {
