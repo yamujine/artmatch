@@ -62,6 +62,9 @@ $route['places/(:num)'] = 'places/detail/$1';
 $route['api/pick'] = 'pickapi';
 $route['api/comment'] = 'commentapi';
 $route['api/comment/delete'] = 'commentapi/delete';
+$route['api/comment/insert'] = 'commentapi/insert';
+$route['api/comment/update'] = 'commentapi/update';
+$route['api/comment/list'] = 'commentapi/list';
 
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering

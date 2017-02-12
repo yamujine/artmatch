@@ -2,18 +2,68 @@
 
 {% block contents %}
 
-    삭제
+    <h2>조회</h2>
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/list">
+        <div class="field">
+            <label>type</label>
+            <input type="text" name="type" placeholder="" value="place">
+        </div>
+        <div class="field">
+            <label>type_id</label>
+            <input type="text" name="type_id" placeholder="" value="1">
+        </div>
+
+        <button class="ui button" type="submit">조회</button>
+    </form>
+
+    <h2>수정</h2>
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/update">
+        <div class="field">
+            <label>type</label>
+            <input type="text" name="type" placeholder="" value="artwork">
+        </div>
+        <div class="field">
+            <label>type_comment_id</label>
+            <input type="text" name="type_comment_id" placeholder="" value="4">
+        </div>
+        <div class="field">
+            <label>comment</label>
+            <input type="text" name="comment" placeholder="" value="수정했음">
+        </div>
+
+        <button class="ui button" type="submit">수정</button>
+    </form>
+
+    <h2>삭제</h2>
     <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/delete">
         <div class="field">
             <label>type</label>
             <input type="text" name="type" placeholder="" value="place">
         </div>
         <div class="field">
-            <label>place_comment_id</label>
-            <input type="text" name="place_comment_id" placeholder="" value="1">
+            <label>type_comment_id</label>
+            <input type="text" name="type_comment_id" placeholder="" value="1">
         </div>
 
-        <button class="ui button" type="submit">Submit</button>
+        <button class="ui button" type="submit">삭제</button>
+    </form>
+
+    <h2>추가</h2>
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/insert">
+        <div class="field">
+            <label>type</label>
+            <input type="text" name="type" placeholder="" value="place">
+        </div>
+        <div class="field">
+            <label>type_id</label>
+            <input type="text" name="type_id" placeholder="" value="1">
+        </div>
+        <div class="field">
+            <label>comment</label>
+            <input type="text" name="comment" placeholder="" value="1">
+        </div>
+
+        <button class="ui button" type="submit">추가</button>
     </form>
 
 {% endblock %}
