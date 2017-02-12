@@ -11,12 +11,11 @@ class User_model extends CI_Model {
     public $email;
     public $password;
     public $type;
-    public $user_id;
+    public $username;
     public $profile_image;
     public $registered_at;
 
     public function add($email, $password, $user_id, $profile_image, $type) {
-
         $user = array(
             'email' => $email,
             'password' => $password,
@@ -34,8 +33,7 @@ class User_model extends CI_Model {
     }
 
     public function get_by_email($email) {
-
-        $this->db->select('id, type, email, user_id, is_auth, is_admin');
+        $this->db->select('id, type, email, username, is_auth, is_admin');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
         if ($query->num_rows() == 0) {
@@ -45,7 +43,6 @@ class User_model extends CI_Model {
     }
 
     public function get_password($email) {
-
         $this->db->select('password');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
@@ -57,7 +54,6 @@ class User_model extends CI_Model {
     }
 
     public function check_email($email = '') {
-
         if (empty($email)) {
             return FALSE;
         }
@@ -72,10 +68,10 @@ class User_model extends CI_Model {
             ->get()->row();
     }
 
-    public function get_by_user_id($user_id) {
+    public function get_by_user_name($user_name) {
 		return $this->db
 			->from(self::TABLE_NAME)
-			->where('user_id', $user_id)
+			->where('user_name', $user_name)
 			->get()->row();
 	}
 }
