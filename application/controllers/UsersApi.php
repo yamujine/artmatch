@@ -1,10 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class UsersApi extends CI_Controller
-{
-    public function __construct()
-    {
+class UsersApi extends CI_Controller {
+
+    public function __construct() {
         parent::__construct();
         $this->load->library('session');
         $this->load->library('email');
@@ -14,14 +13,16 @@ class UsersApi extends CI_Controller
         $this->result = array('result' => false, 'errorCode' => null, 'body' => null);
     }
 
-    public function register()
-    {
-        /* validation 체크 필요 */
+
+    public function register() {
+        /**
+         * @todo Need validation check
+         */
         $hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
         $id = $this->user_model->add(
             $this->input->post('email'),
             $hash,
-            $this->input->post('user_name'),
+            $this->input->post('user_id'),
             $this->input->post('profile_image'),
             $this->input->post('type')
         );
@@ -37,8 +38,8 @@ class UsersApi extends CI_Controller
         return $this->output->set_output(json_encode($this->result));
     }
 
-    public function login()
-    {
+    public function login() {
+
         $email = $this->input->post('email');
         $user = $this->user_model->get_by_email($email);
 
@@ -56,8 +57,8 @@ class UsersApi extends CI_Controller
         return $this->output->set_output(json_encode($this->result));
     }
 
-    public function verify()
-    {
+    public function verify() {
+
         $code = preg_split('#/#',$this->encryption->decrypt($this->input->get('key', FALSE)));
         $email = $code[0];
         $id = $code[1];
@@ -77,8 +78,7 @@ class UsersApi extends CI_Controller
         return $this->output->set_output(json_encode($this->result));
     }
 
-    public function send_mail($user)
-    {
+    public function send_mail($user) {
 
         $code = urlencode($this->encryption->encrypt($user->email . '/' . $user->id));
         $this->email->initialize(array('mailtype' => 'html'));
@@ -92,21 +92,21 @@ class UsersApi extends CI_Controller
         $this->email->send();
     }
 
-    public function set_user_session($user)
-    {
+    public function set_user_session($user) {
+
         $refresh = (array) $this->user_model->get_by_id($user->id);
         $this->session->set_userdata($refresh);
         $this->session->set_userdata(array('logged_in' => true));
     }
 
-    public function reponse_success($body)
-    {
+    public function reponse_success($body) {
+
         $this->result['result'] = true;
         $this->result['body'] = $body;
     }
 
-    public function reponse_fail($error_code, $body)
-    {
+    public function reponse_fail($error_code, $body) {
+
         $this->result['result'] = false;
         $this->result['body'] = $body;
         $this->result['errorCode'] = $error_code;

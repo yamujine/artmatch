@@ -1,10 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login extends MY_Controller
-{
-    public function index()
-    {
+class Login extends MY_Controller {
+
+    public function index() {
         $this->load->library('session');
 
         $email = $this->session->userdata('email');

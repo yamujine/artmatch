@@ -1,8 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User_model extends CI_Model
-{
+class User_model extends CI_Model {
     /**
      * table_name: users
      */
@@ -12,16 +11,16 @@ class User_model extends CI_Model
     public $email;
     public $password;
     public $type;
-    public $user_name;
+    public $user_id;
     public $profile_image;
     public $registered_at;
 
-    public function add($email, $password, $user_name, $profile_image, $type)
-    {
+    public function add($email, $password, $user_id, $profile_image, $type) {
+
         $user = array(
             'email' => $email,
             'password' => $password,
-            'user_name' => $user_name,
+            'user_id' => $user_id,
             'profile_image' => $profile_image,
             'type' => $type);
 
@@ -34,9 +33,9 @@ class User_model extends CI_Model
         return $id;
     }
 
-    public function get_by_email($email)
-    {
-        $this->db->select('id, type, email, user_name, is_auth, is_admin');
+    public function get_by_email($email) {
+
+        $this->db->select('id, type, email, user_id, is_auth, is_admin');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
         if ($query->num_rows() == 0) {
@@ -45,21 +44,20 @@ class User_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_password($email)
-    {
+    public function get_password($email) {
+
         $this->db->select('password');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
         return $query->row()->password;
     }
 
-    public function authorize($id)
-    {
+    public function authorize($id) {
         return $this->db->update(self::TABLE_NAME, array('is_auth' => 1), array('id' => $id));
     }
 
-    public function check_email($email = '')
-    {
+    public function check_email($email = '') {
+
         if (empty($email)) {
             return FALSE;
         }
