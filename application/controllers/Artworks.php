@@ -37,11 +37,7 @@ class Artworks extends MY_Controller {
 		$this->form_validation->set_rules('use_comment', 'use_comment', 'required');
 		$this->form_validation->set_rules('tags', 'tags', 'required|trim');
 
-		// TODO: Uncomment line below
-		// $user_id = $this->session->user_id;
-		// TODO: Remove line below
-		$user_id = 9282;
-
+		$user_id = $this->logincheck->get_user_id();
 		$status = $this->input->post('status');
 		$title = $this->input->post('title');
 		$description = $this->input->post('description');

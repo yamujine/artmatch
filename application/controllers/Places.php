@@ -38,10 +38,7 @@ class Places extends MY_Controller {
 
         if ($this->input->method() === 'post') {
             if ($this->form_validation->run() === TRUE) {
-                // TODO: Uncomment line below
-                // $user_id = $this->session->user_id;
-                // TODO: Remove line below
-                $user_id = 9282;
+                $user_id = $this->logincheck->get_user_id();
 
                 // Upload representative image first
                 $uploaded_image_name = $this->imageupload->upload_images('image');

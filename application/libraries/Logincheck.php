@@ -58,8 +58,7 @@ class Logincheck {
     }
 
     private function _validate_session() {
-
-        $id = $this->CI->session->userdata('id');
+		$id = $this->CI->session->userdata('id');
         $email = $this->CI->session->userdata('email');
         $type = $this->CI->session->userdata('type');
         $user_name = $this->CI->session->userdata('user_name');
@@ -68,7 +67,7 @@ class Logincheck {
         $is_admin = $this->CI->session->userdata('is_admin');
 
         if ($id == '' || $email == '' || $type == '' || $user_name == '' || $profile_image == '' || $is_auth == '' || $is_admin == '') {
-            return FALSE;
+        	return FALSE;
         }
         return TRUE;
     }

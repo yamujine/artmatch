@@ -14,8 +14,7 @@ class Users extends MY_Controller {
 	}
 
 	public function me() {
-		// TODO: 세션에서 유저 아이디 가져오기
-		$user_name = 'kimtree';
+		$user_name = $this->logincheck->get_user_name();
 		$pick_type = $this->input->get('type');
 
 		$data = $this->_get_user_details($user_name, true, $pick_type);
@@ -27,21 +26,21 @@ class Users extends MY_Controller {
 		$user = $this->user_model->get_by_user_name($user_name);
 
 		// 내 작품, 장소 리스트
-		if ((int) $user->type === 1) {
+		if ((int) $user->type === 0) {
 			$mine = $this->artwork_model->get_by_user_id($user->id);
-		} else if ((int) $user->type === 2) {
+		} else if ((int) $user->type === 1) {
 			$mine = $this->place_model->get_by_user_id($user->id);
 		}
 		foreach ($mine as $something) {
-			$type = ((int) $user->type === 1) ? 'artworks' : 'places';
+			$type = ((int) $user->type === 0) ? 'artworks' : 'places';
 			$something->url = $type . $something->id;
 			$something->subject = ($type === 'artworks') ? $something->title : $something->name;
 		}
 
 		// 받은 pick 카운트
-		if ((int) $user->type === 1) {
+		if ((int) $user->type === 0) {
 			$given_pick_count = $this->pick_model->get_given_artwork_pick_by_user_id($user->id);
-		} else if ((int) $user->type === 2) {
+		} else if ((int) $user->type === 1) {
 			$given_pick_count = $this->pick_model->get_given_place_pick_by_user_id($user->id);
 		}
 
