@@ -15,11 +15,11 @@ class Account extends CI_Controller {
 
 	public function login() {
 		// 이미 로그인된 경우 메인으로 돌리기
-		if ($this->account->is_login()) {
+		if ($this->accountlib->is_login()) {
 			redirect('/');
 		}
 
-		$this->twig->display('login/login');
+		$this->twig->display('account/login');
     }
 
     public function logout() {

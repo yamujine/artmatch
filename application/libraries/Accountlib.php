@@ -1,5 +1,5 @@
 <?php
-class Account {
+class Accountlib {
 
     protected $CI;
 

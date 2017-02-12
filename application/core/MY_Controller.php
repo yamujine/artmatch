@@ -10,7 +10,7 @@ class MY_Controller extends CI_Controller {
 		// Twig 관련 글로벌 설정은 이곳 또는 application/libraries/Twig.php 에 작성
 		$this->twig->addGlobal('session', $_SESSION);
 
-		if ($this->account->is_login() === false) {
+		if ($this->accountlib->is_login() === false) {
 			redirect('/account/login');
 		}
 	}

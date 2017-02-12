@@ -14,7 +14,7 @@ class Users extends MY_Controller {
 	}
 
 	public function me() {
-		$user_name = $this->account->get_user_name();
+		$user_name = $this->accountlib->get_user_name();
 		$pick_type = $this->input->get('type');
 
 		$data = $this->_get_user_details($user_name, true, $pick_type);
