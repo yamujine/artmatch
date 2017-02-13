@@ -1,0 +1,22 @@
+/** 노토 산스 KR **/
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 100;
+    src: local('Noto Sans Thin'), local('Noto Sans Thin'), local('Noto Sans Thin');
+    src: url(NotoSans-Thin.eot);
+    src: url(NotoSans-Thin.eot?#iefix) format('embedded-opentype'),
+    url(NotoSans-Thin.woff) format('woff'),
+    url(NotoSans-Thin.otf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Noto Sans Light'), local('Noto Sans Light'), local('Noto Sans Light');
+    src: url(NotoSans-Light.eot);
+    src: url(NotoSans-Light.eot?#iefix) format('embedded-opentype'),
+    url(NotoSans-Light.woff) format('woff'),
+    url(NotoSans-Light.otf) format('truetype');
+}
