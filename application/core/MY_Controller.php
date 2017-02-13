@@ -8,9 +8,12 @@ class MY_Controller extends CI_Controller {
 		$this->load->library('twig');
 		$this->load->helper('url');
 		// Twig 관련 글로벌 설정은 이곳 또는 application/libraries/Twig.php 에 작성
+		$this->twig->addGlobal('session', $_SESSION);
 
-		if ($this->logincheck->is_login() === false) {
-			redirect('/login');
+		if ($this->accountlib->is_login() === false) {
+			redirect('/account/login');
+		} elseif ($this->accountlib->is_auth() === false) {
+			redirect('/account/not_authenticated');
 		}
 	}
 }

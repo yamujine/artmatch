@@ -16,12 +16,13 @@ class User_model extends CI_Model {
     public $registered_at;
 
     public function add($email, $password, $user_name, $profile_image, $type) {
-        $user = array(
+        $user = [
             'email' => $email,
             'password' => $password,
             'user_name' => $user_name,
             'profile_image' => $profile_image,
-            'type' => $type);
+            'type' => $type
+		];
 
         if ($this->check_email($user['email'])) {
             return FALSE;

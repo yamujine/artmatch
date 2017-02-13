@@ -44,7 +44,7 @@ class Places extends MY_Controller {
 
         if ($this->input->method() === 'post') {
             if ($this->form_validation->run() === TRUE) {
-                $user_id = $this->logincheck->get_user_id();
+                $user_id = $this->accountlib->get_user_id();
 
                 // Upload representative image first
                 $uploaded_image_name = $this->imageupload->upload_images('image');
