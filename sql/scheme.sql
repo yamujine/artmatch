@@ -199,15 +199,32 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibition_artworks` (
   INDEX `fk_exhibition_artworks_artwork_id_idx` (`artwork_id` ASC))
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `pickartyou`.`ci_sessions`
+-- -----------------------------------------------------
 DROP TABLE IF EXISTS `pickartyou`.`ci_sessions` ;
 
 CREATE TABLE IF NOT EXISTS `ci_sessions` (
-        `id` varchar(40) NOT NULL,
-        `ip_address` varchar(45) NOT NULL,
-        `timestamp` int(10) unsigned default 0 NOT NULL,
-        `data` blob NOT NULL,
-        PRIMARY KEY (id)
+  `id` varchar(40) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` int(10) unsigned default 0 NOT NULL,
+  `data` blob NOT NULL,
+  PRIMARY KEY (id)
 )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pickartyou`.`landing`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pickartyou`.`landing` ;
+
+CREATE TABLE IF NOT EXISTS `pickartyou`.`landing` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(255) NOT NULL COMMENT '이메일 주소',
+  `registered_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
