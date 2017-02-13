@@ -6,14 +6,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class ArtworkApi extends MY_Controller {
     public function index() {
-    	$this->load->library('twig');
-		$this->load->model('artwork_model');
+        $this->load->library('twig');
+        $this->load->model('artwork_model');
 
-		$query = $this->input->get('q');
-		$offset = $this->input->get('offset');
-		$limit = $this->input->get('limit');
+        $query = $this->input->get('q');
+        $offset = $this->input->get('offset');
+        $limit = $this->input->get('limit');
 
-		$data['artworks'] = $this->artwork_model->gets($query, $offset, $limit);
+        $data['artworks'] = $this->artwork_model->gets($query, $offset, $limit);
 
         $this->twig->display('api/artworks', $data);
     }
