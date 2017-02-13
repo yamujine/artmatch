@@ -3,7 +3,7 @@
 /* 기본 설정 */
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, 'Noto Sans KR', sans-serif;
-  padding: 50px 0 20px 0;
+  padding: 50px 0 0 0;
 
   .container {
     width: 968px;
@@ -51,6 +51,42 @@ body {
   }
 
   #patFooter {
-    background: $white-five; height: 200px; margin: 50px 0 0 0;
+    background: $white-five; margin: 50px 0 0 0;
+    padding: 50px 0 45px 0; text-align: center;
+
+    .container {
+      font-family: 'Noto Sans KR'; font-size: 11px;
+
+      p {
+        &.logo {
+          img {
+            width: 150px; height: 18px;
+          }
+        }
+
+        &.slogan {
+          color: $brownish-grey;
+        }
+
+        &.copyright {
+          margin-top: 35px; color: $warm-grey-four; margin-bottom: 2px;
+        }
+      }
+    }
+    .links {
+      margin: 0; padding:0;
+
+      li {
+        list-style: none; display: inline-block; margin-left: 5px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        a {
+          text-decoration: underline; color: $warm-grey-four;
+        }
+      }
+    }
   }
 }
