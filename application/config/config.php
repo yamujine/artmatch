@@ -27,7 +27,7 @@ $protocol = "http";
 if (!empty($_SERVER['HTTPS'])) {
     $protocol = "https";
 }
-$config['base_url'] = $protocol.'://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'];
+$config['base_url'] = $protocol.'://'.$_SERVER['HTTP_HOST'];
 
 /*
 |--------------------------------------------------------------------------
