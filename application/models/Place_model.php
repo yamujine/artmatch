@@ -5,6 +5,7 @@ class Place_model extends CI_Model {
 	 * table_name: places
 	 */
     const TABLE_NAME = 'places';
+    const TABLE_NAME_IMAGES = 'places_images';
 
     //public $id; -- Ignore PK
     public $user_id;
@@ -57,18 +58,18 @@ class Place_model extends CI_Model {
 		return $place;
 	}
 
-	public function get_by_user_id($user_id) {
+    public function get_bare_by_id($place_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('id', $place_id)
+            ->get()->row();
+    }
+
+    public function get_by_user_id($user_id) {
 		return $this->db
 			->from(self::TABLE_NAME)
 			->where('user_id', $user_id)
 			->get()->result();
-	}
-
-	public function get_bare_by_id($place_id) {
-		return $this->db
-			->from(self::TABLE_NAME)
-			->where('id', $place_id)
-			->get()->row();
 	}
 
     public function insert($user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
@@ -82,10 +83,22 @@ class Place_model extends CI_Model {
 
     public function insert_images($place_id, array $images) {
         foreach ($images as $image) {
-            $this->db->insert('place_images', ['place_id' => $place_id, 'image' => $image]);
+            $this->db->insert(self::TABLE_NAME_IMAGES, ['place_id' => $place_id, 'image' => $image]);
         }
-
         return true;
+    }
+
+    public function update($id, $user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
+        $this->_fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags);
+        if ($this->db->update(self::TABLE_NAME, $this, ['id' => $id])) {
+            return $id;
+        } else {
+            return NULL;
+        }
+    }
+
+    public function delete_image($place_id, $image) {
+	    return $this->db->delete(self::TABLE_NAME_IMAGES, ['place_id' => $place_id, 'image' => $image]);
     }
 
     private function _fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
