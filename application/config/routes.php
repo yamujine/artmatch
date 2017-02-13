@@ -81,3 +81,4 @@ $route['api/users/verify'] = 'usersapi/verify';
 $route['api/users/check_username'] = 'usersapi/check_username';
 $route['api/users/check_email'] = 'usersapi/check_email';
 $route['api/users/reset_password'] = 'usersapi/reset_password';
+$route['api/landing'] = 'landingapi';
