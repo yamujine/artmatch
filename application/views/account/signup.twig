@@ -1,90 +1,83 @@
 {% extends "base.twig" %}
 
 {% block script %}
-	<script>
-		$('#signup_form').submit(function () {
-		  var typeElem = $("input[name=type]");
-		  var emailElem = $("input[name=email]");
-			var passwordElem = $("input[name=password]");
-			var usernameElem = $("input[name=user_name]");
-			var profileImageElem = $("input[name=profile_image]");
-			
-			if (!emailElem.val()) {
-		    alert('이메일을 입력해주세요.');
-		    emailElem.focus();
-		    return false;
-			}
-			if (!passwordElem.val()) {
-				alert('패스워드를 입력해주세요.');
-				passwordElem.focus();
-				return false;
-			}
-			if (!usernameElem.val()) {
-				alert('아이디를 입력해주세요.');
-				usernameElem.focus();
-				return false;
-			}
-			
-			data = {};
-			data.type = typeElem.val();
-			data.email = emailElem.val();
-			data.password = passwordElem.val();
-			data.user_name = usernameElem.val();
-			data.profile_image = profileImageElem.val();
-			
-			$.ajax({
-				method: "POST",
-				url: "/api/users/register",
-				data: data
-			}).done(function (data) {
-				alert(data.body.message);
-		    if (data.result === true) {
-			    location.href = '/';
-		    }
-			}).fail(function () {
-				alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-			});
-			
-			return false;
-		});
-	</script>
+  <script>
+    $('#signup_form').submit(function () {
+      var emailElem = $("input[name=email]");
+      var passwordElem = $("input[name=password]");
+      var usernameElem = $("input[name=user_name]");
+
+      if (!emailElem.val()) {
+        alert('이메일을 입력해주세요.');
+        emailElem.focus();
+        return false;
+      }
+      if (!passwordElem.val()) {
+        alert('패스워드를 입력해주세요.');
+        passwordElem.focus();
+        return false;
+      }
+      if (!usernameElem.val()) {
+        alert('아이디를 입력해주세요.');
+        usernameElem.focus();
+        return false;
+      }
+
+      $.ajax({
+        method: "POST",
+        url: "/api/users/register",
+        processData: false, // To send file
+        contentType: false, // To send file
+        data: new FormData($(this)[0])
+      }).done(function (data) {
+        alert(data.body.message);
+        if (data.result === true) {
+          location.href = '/';
+        }
+      }).fail(function () {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+
+      return false;
+    });
+  </script>
 {% endblock %}
 
 {% block contents %}
-	<form id="signup_form" class="ui form">
-		<div class="ui form">
-			<div class="inline fields">
-				<label>회원 구분</label>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="type" checked="checked" value="0">
-						<label>창작자</label>
-					</div>
-				</div>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="type" value="1">
-						<label>공간소유자</label>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="field">
-			<label>이메일 주소</label>
-			<input type="text" name="email" placeholder="Email">
-		</div>
-		<div class="field">
-			<label>사용할 유저 ID</label>
-			<input type="text" name="user_name" placeholder="id">
-		</div>
-		<div class="field">
-			<label>패스워드</label>
-			<input type="password" name="password" placeholder="Secret">
-		</div>
-		<div class="field">
-			<label>프로필 사진</label>
-			<input type="text" name="profile_image" placeholder="profile image something...">
-		</div>
-		<button class="ui button" type="submit">회원가입</button>
-	</form>
+  <form id="signup_form" class="ui form">
+    <div class="ui form">
+      <div class="inline fields">
+        <label>회원 구분</label>
+        <div class="field">
+          <div class="ui radio checkbox">
+            <input type="radio" name="type" checked="checked" value="0">
+            <label>창작자</label>
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui radio checkbox">
+            <input type="radio" name="type" value="1">
+            <label>공간소유자</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>이메일 주소</label>
+      <input type="text" name="email" placeholder="Email">
+    </div>
+    <div class="field">
+      <label>사용할 유저 ID</label>
+      <input type="text" name="user_name" placeholder="id">
+    </div>
+    <div class="field">
+      <label>패스워드</label>
+      <input type="password" name="password" placeholder="Secret">
+    </div>
+    <div class="field">
+      <label>프로필 사진</label>
+      <input type="file" name="profile_image">
+    </div>
+    <button class="ui button" type="submit">회원가입</button>
+  </form>
 {% endblock %}
