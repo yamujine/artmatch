@@ -8,6 +8,7 @@ var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var clean = require('gulp-clean');
+var filesExist = require('files-exist');
 
 gulp.task('dist-clean', function () {
   return gulp.src('static/dist/', {read: false})
@@ -16,11 +17,15 @@ gulp.task('dist-clean', function () {
 
 /** For Develop TASK START **/
 gulp.task('jquery', function () {
-  return gulp.src(['assets/bower_components/jquery/dist/**'])
+  filesExist(['assets/bower_components/jquery/dist']);
+
+  return gulp.src('assets/bower_components/jquery/dist/**')
     .pipe(gulp.dest('static/dist/jquery'));
 });
 
 gulp.task('bootstrap', function () {
+  filesExist(['assets/bower_components/bootstrap/dist']);
+
   return gulp.src('assets/bower_components/bootstrap/dist/**')
     .pipe(gulp.dest('static/dist/bootstrap'));
 });
