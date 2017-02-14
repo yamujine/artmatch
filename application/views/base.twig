@@ -38,17 +38,23 @@
       </a>
     </div>
     <nav class="collapse navbar-collapse">
+      {% if session.user_name is not empty %}
       <ul class="nav navbar-nav navbar-right">
         {# 마이 페이지 #}
         <li class="patUserProfile">
           <a href="/users/me">
             <img src="../../static/images/tom.jpg" class="img-circle" />
-            김남우
+            {{ session.user_name }}
           </a>
         </li>
-        <li><a href="#">작품올리기</a></li>
+        {% if session.type == 0 %}
+          <li><a href="/artworks/upload">작품올리기</a></li>
+        {% elseif session.type == 1 %}
+          <li><a href="/places/upload">장소등록하기</a></li>
+        {% endif %}
         <li><a href="#"><span class="glyphicon glyphicon-search"></span></a></li>
       </ul>
+      {% endif %}
     </nav>
   </div>
 </header>

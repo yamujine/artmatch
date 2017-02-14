@@ -93,11 +93,11 @@ class Accountlib {
         $email = $this->CI->session->userdata('email');
         $type = $this->CI->session->userdata('type');
         $user_name = $this->CI->session->userdata('user_name');
-        $profile_image = $this->CI->session->userdata('profile_image');
+        // $profile_image = $this->CI->session->userdata('profile_image');
         $is_auth = $this->CI->session->userdata('is_auth');
         $is_admin = $this->CI->session->userdata('is_admin');
 
-        if ($id == '' || $email == '' || $type == '' || $user_name == '' || $profile_image == '' || $is_auth == '' || $is_admin == '') {
+        if ($id === '' || $email === '' || $type === '' || $user_name === '' || $is_auth === '' || $is_admin === '') {
             return FALSE;
         }
 
