@@ -5,60 +5,53 @@
 {% endblock %}
 
 {% block script %}
-	<script>
-		$('#patSignUpForm').submit(function () {
-		  var typeElem = $("input[name=type]");
-		  var emailElem = $("input[name=email]");
-			var passwordElem = $("input[name=password]");
-			var usernameElem = $("input[name=user_name]");
-			var profileImageElem = $("input[name=profile_image]");
-			
-			if (!emailElem.val()) {
-		    alert('이메일을 입력해주세요.');
-		    emailElem.focus();
-		    return false;
-			}
-			if (!passwordElem.val()) {
-				alert('패스워드를 입력해주세요.');
-				passwordElem.focus();
-				return false;
-			}
-			if (!usernameElem.val()) {
-				alert('아이디를 입력해주세요.');
-				usernameElem.focus();
-				return false;
-			}
-			
-			data = {};
-			data.type = typeElem.val();
-			data.email = emailElem.val();
-			data.password = passwordElem.val();
-			data.user_name = usernameElem.val();
-			data.profile_image = profileImageElem.val();
-			
-			$.ajax({
-				method: "POST",
-				url: "/api/users/register",
-				data: data
-			}).done(function (data) {
-				alert(data.body.message);
-		    if (data.result === true) {
-			    location.href = '/';
-		    }
-			}).fail(function () {
-				alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-			});
-			
-			return false;
-		});
-	</script>
+  <script>
+    $('#patSignUpForm').submit(function () {
+      var emailElem = $("input[name=email]");
+      var passwordElem = $("input[name=password]");
+      var usernameElem = $("input[name=user_name]");
+
+      if (!emailElem.val()) {
+        alert('이메일을 입력해주세요.');
+        emailElem.focus();
+        return false;
+      }
+      if (!passwordElem.val()) {
+        alert('패스워드를 입력해주세요.');
+        passwordElem.focus();
+        return false;
+      }
+      if (!usernameElem.val()) {
+        alert('아이디를 입력해주세요.');
+        usernameElem.focus();
+        return false;
+      }
+
+      $.ajax({
+        method: "POST",
+        url: "/api/users/register",
+        processData: false, // To send file
+        contentType: false, // To send file
+        data: new FormData($(this)[0])
+      }).done(function (data) {
+        alert(data.body.message);
+        if (data.result === true) {
+          location.href = '/';
+        }
+      }).fail(function () {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+
+      return false;
+    });
+  </script>
 {% endblock %}
 
 {% block contents %}
   <div class="patSignUp">
     <div class="container">
       <div class="logo">
-        <img src="../../static/images/logo_black.png" width="268px" />
+        <img src="../../static/images/logo_black.png" width="268px"/>
       </div>
       <h2>가입하여 여러분의 작품을 전시하세요.</h2>
       <form id="patSignUpForm">
@@ -73,16 +66,16 @@
           </div>
         </fieldset>
         <fieldset>
-          <input type="text" name="email" placeholder="이메일" />
+          <input type="text" name="email" placeholder="이메일"/>
         </fieldset>
         <fieldset>
-          <input type="text" name="user_name" placeholder="아이디" />
+          <input type="text" name="user_name" placeholder="아이디"/>
         </fieldset>
         <fieldset>
-          <input type="password" name="password" placeholder="패스워드를 입력하세요." />
+          <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
         </fieldset>
         <fieldset>
-          <input type="file" name="profile_image" />
+          <input type="file" name="profile_image"/>
         </fieldset>
         <button type="submit">회원가입</button>
       </form>
