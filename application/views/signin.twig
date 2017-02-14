@@ -1,0 +1,36 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="../../static/dist/css/main/signin.min.css">
+{% endblock %}
+
+{% block contents %}
+  <div class="patLogin">
+    <div class="container">
+      <div class="leftCover">
+        <div class="background"></div>
+      </div>
+      <div class="rightForm">
+        <div class="logo">
+          <img src="../../static/images/logo_black.png" width="149px" height="18px" />
+        </div>
+        <div class="signForm">
+          <div class="signFormContainer">
+            <form method="POST">
+              <fieldset>
+                <input type="text" name="email" placeholder="이메일" />
+              </fieldset>
+              <fieldset>
+                <input type="text" name="password" placeholder="패스워드를 입력하세요." />
+              </fieldset>
+              <button type="submit">계속하기</button>
+            </form>
+            <p>또는</p>
+            {# TODO: 페이스북 연동을 위한 임시 버튼 삽입 #}
+            <button class="facebook">페이스북</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
