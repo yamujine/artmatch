@@ -57,7 +57,10 @@ $route['translate_uri_dashes'] = FALSE;
 $route['artworks/(:num)'] = 'artworks/detail/$1';
 $route['artworks/upload'] = 'artworks/edit';
 $route['artworks/edit/(:num)'] = 'artworks/edit/$1';
+
 $route['places/(:num)'] = 'places/detail/$1';
+$route['places/upload'] = 'places/edit';
+$route['places/edit/(:num)'] = 'places/edit/$1';
 
 $route['api/pick'] = 'pickapi';
 
