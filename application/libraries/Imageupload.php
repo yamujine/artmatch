@@ -12,12 +12,15 @@ class Imageupload {
         $this->CI->load->library(['upload', 'image_lib']);
     }
 
-    public function upload_images($param, $generate_thumbs = true) {
+    public function upload_images($param, $generate_thumbs = true, $image_type = '') {
         $file_name = '';
+        if (!empty($image_type)) {
+            $upload_path = self::UPLOAD_PATH . $image_type . '/';
+        }
 
         // Load upload library
         $this->CI->upload->initialize([
-            'upload_path' => self::UPLOAD_PATH,
+            'upload_path' => $upload_path,
             'allowed_types' => 'gif|jpg|png|jpeg',
             'file_ext_tolower' => TRUE,
             'max_size' => 2048, // 2MB
