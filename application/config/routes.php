@@ -71,3 +71,4 @@ $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';
 $route['api/users/verify'] = 'usersapi/verify';
 $route['api/users/check_username'] = 'usersapi/check_username';
+$route['api/users/check_email'] = 'usersapi/check_email';

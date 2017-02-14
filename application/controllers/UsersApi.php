@@ -79,6 +79,22 @@ class UsersApi extends API_Controller {
         return $this->output->set_output(json_encode($this->result));
     }
 
+    public function check_email() {
+        $email = $this->input->get('email');
+        if (empty($email)) {
+            $this->set_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
+        } else {
+            $result = $this->user_model->check_email($email);
+            if ($result) {
+                $this->set_fail_response('102', ['message' => '이미 사용중인 이메일입니다.']);
+            } else {
+                $this->set_success_response(['message' => '사용 가능한 이메일입니다.']);
+            }
+        }
+
+        return $this->output->set_output(json_encode($this->result));
+    }
+
     private function _validate_signup_form() {
         // Register validation
         $this->form_validation->set_error_delimiters('', "\r\n");
