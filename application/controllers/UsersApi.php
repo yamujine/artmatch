@@ -63,6 +63,22 @@ class UsersApi extends API_Controller {
         return $this->output->set_output(json_encode($this->result));
     }
 
+    public function check_username() {
+        $username = $this->input->get('username');
+        if (empty($username)) {
+            $this->set_fail_response('101', ['message' => '유저 아이디가 입력되지 않았습니다.']);
+        } else {
+            $result = $this->user_model->get_by_user_name($username);
+            if ($result) {
+                $this->set_fail_response('102', ['message' => '이미 사용중인 유저 아이디입니다.']);
+            } else {
+                $this->set_success_response(['message' => '사용 가능한 유저 아이디입니다.']);
+            }
+        }
+
+        return $this->output->set_output(json_encode($this->result));
+    }
+
     private function _validate_signup_form() {
         // Register validation
         $this->form_validation->set_error_delimiters('', "\r\n");

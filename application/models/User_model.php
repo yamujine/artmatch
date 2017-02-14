@@ -22,7 +22,7 @@ class User_model extends CI_Model {
             'user_name' => $user_name,
             'profile_image' => $profile_image,
             'type' => $type
-		];
+        ];
 
         if ($this->check_email($user['email'])) {
             return FALSE;
@@ -30,6 +30,7 @@ class User_model extends CI_Model {
 
         $this->db->insert(self::TABLE_NAME, $user);
         $id = $this->db->insert_id();
+
         return $id;
     }
 
@@ -39,6 +40,7 @@ class User_model extends CI_Model {
         if ($query->num_rows() == 0) {
             return FALSE;
         }
+
         return $query->row();
     }
 
@@ -46,17 +48,19 @@ class User_model extends CI_Model {
         $this->db->select('password');
         $this->db->where('email', $email);
         $query = $this->db->get(self::TABLE_NAME);
+
         return $query->row()->password;
     }
 
     public function authorize($id) {
-        return $this->db->update(self::TABLE_NAME, array('is_auth' => 1), array('id' => $id));
+        return $this->db->update(self::TABLE_NAME, ['is_auth' => 1], ['id' => $id]);
     }
 
     public function check_email($email = '') {
         if (empty($email)) {
             return FALSE;
         }
+
         return $this->db->where('email', $email)
                 ->count_all_results(self::TABLE_NAME) > 0;
     }
@@ -69,9 +73,9 @@ class User_model extends CI_Model {
     }
 
     public function get_by_user_name($user_name) {
-		return $this->db
-			->from(self::TABLE_NAME)
-			->where('user_name', $user_name)
-			->get()->row();
-	}
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('user_name', $user_name)
+            ->get()->row();
+    }
 }
