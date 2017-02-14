@@ -13,22 +13,22 @@ class Places extends MY_Controller {
         $this->twig->display('places/list', $data);
     }
 
-	public function detail($place_id) {
-		$data = [];
+    public function detail($place_id) {
+        $data = [];
 
-		$place = $this->place_model->get_by_id($place_id);
-		if ($place) {
-			$data['place'] = $place;
-			// 전시 작품 이력
-			$exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
-			foreach ($exhibitions as $exhibition) {
-				$exhibition->artwork = $this->artwork_model->get_bare_by_id($exhibition->artwork_id);
-			}
-			$data['exhibitions'] = $exhibitions;
-		}
+        $place = $this->place_model->get_by_id($place_id);
+        if ($place) {
+            $data['place'] = $place;
+            // 전시 작품 이력
+            $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
+            foreach ($exhibitions as $exhibition) {
+                $exhibition->artwork = $this->artwork_model->get_bare_by_id($exhibition->artwork_id);
+            }
+            $data['exhibitions'] = $exhibitions;
+        }
 
-		$this->twig->display('places/detail', $data);
-	}
+        $this->twig->display('places/detail', $data);
+    }
 
     public function edit($place_id = null) {
         $this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
@@ -107,8 +107,8 @@ class Places extends MY_Controller {
                     // Upload extra images
                     $uploaded_image_names = $this->imageupload->upload_bulk_images('extra_images');
                     if (!empty($uploaded_image_names)) {
-						$this->place_model->insert_images($result_id, $uploaded_image_names);
-					}
+                        $this->place_model->insert_images($result_id, $uploaded_image_names);
+                    }
                     redirect('/places/' . $result_id);
                 } else {
                     $data['error'] = $this->db->error();
