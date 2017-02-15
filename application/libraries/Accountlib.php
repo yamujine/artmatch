@@ -38,6 +38,14 @@ class Accountlib {
         return FALSE;
     }
 
+    public function get_user_type() {
+        if ($this->_validate_session()) {
+            return $this->CI->session->userdata('type');
+        }
+
+        return FALSE;
+    }
+
     public function get_user_name() {
         if ($this->_validate_session()) {
             return $this->CI->session->userdata('user_name');
