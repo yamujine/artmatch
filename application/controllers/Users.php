@@ -33,7 +33,7 @@ class Users extends MY_Controller {
 		}
 		foreach ($mine as $something) {
 			$type = ((int) $user->type === 0) ? 'artworks' : 'places';
-			$something->url = $type . $something->id;
+			$something->url = '/' . $type . '/' . $something->id;
 			$something->subject = ($type === 'artworks') ? $something->title : $something->name;
 		}
 
