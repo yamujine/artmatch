@@ -15,6 +15,7 @@
         emailOrUsernameElem.focus();
         return false;
       }
+
       if (!passwordElem.val()) {
         alert('패스워드를 입력해주세요.');
         passwordElem.focus();
@@ -51,16 +52,16 @@
       </div>
       <div class="rightForm">
         <div class="logo">
-          <img src="../../../static/images/logo_black.png" width="149px" height="18px" />
+          <img src="../../../static/images/logo_black.png" width="149px" height="18px"/>
         </div>
         <div class="loginForm">
           <div class="loginFormContainer">
             <form id="patLoginForm" method="POST">
               <fieldset>
-                <input type="text" name="email_or_username" placeholder="이메일 또는 이름" />
+                <input type="text" name="email_or_username" placeholder="이메일 또는 이름"/>
               </fieldset>
               <fieldset>
-                <input type="password" name="password" placeholder="패스워드를 입력하세요." />
+                <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
               </fieldset>
               <button type="submit">로그인하기</button>
             </form>
@@ -71,7 +72,7 @@
               <p>
                 <a href="#">비밀번호를 잊으셨나요?</a>
               </p>
-              <hr />
+              <hr/>
               <p>
                 계정이 필요하신가요?
                 <a href="/account/signup">회원가입</a>
