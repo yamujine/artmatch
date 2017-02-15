@@ -1,56 +1,87 @@
 @import "../helper/colorchips";
 
 #patContents {
-  width: 100%; margin: 0; padding: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 
   .patGallery {
-    background: $white-three; height: 470px;
+    background: $white-three;
+    height: 470px;
   }
 
   .patTypeSelect {
-    width: 100%; height: 50px; position: relative;
-    margin: 0 auto 40px auto; text-align: center;
+    width: 100%;
+    height: 50px;
+    position: relative;
+    margin: 0 auto 40px auto;
+    text-align: center;
 
     .typeSelectTab {
-      list-style: none; padding: 0; margin: 0; height: 100%;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 100%;
 
       li {
-        display: inline-block; margin: 15px 50px 0 50px;
+        display: inline-block;
+        margin: 15px 50px 0 50px;
 
         &:first-child {
           &:after {
-            position: absolute; top: 50%; bottom: 0; margin-top: -6px;
-            width: 1px; height: 12px; content:"";
-            background: $black; opacity: 0.1;
+            position: absolute;
+            top: 50%;
+            bottom: 0;
+            margin-top: -6px;
+            width: 1px;
+            height: 12px;
+            content: "";
+            background: $black;
+            opacity: 0.1;
             margin-left: 50px;
           }
         }
 
         a {
-          font-family: Arial, sans-serif; font-weight: bold; font-size: 16px;
-          color: $black; opacity: 0.4; padding: 17px 0 16px 0;
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+          font-size: 16px;
+          color: $black;
+          opacity: 0.4;
+          padding: 17px 0 16px 0;
           text-decoration: none;
 
           &.active, &:hover {
-            opacity: 1; padding: 15px 0 13px 0; border-bottom: 3px solid $black;
+            opacity: 1;
+            padding: 15px 0 13px 0;
+            border-bottom: 3px solid $black;
           }
         }
       }
     }
 
     .divider {
-      width: 100%; height: 1px; position: absolute; bottom: 0;
-      opacity: 0.2; background: $black;
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      opacity: 0.2;
+      background: $black;
     }
   }
 
   .patItemList {
     .container {
       .itemList {
-        list-style: none; padding: 0; margin: 0;
+        list-style: none;
+        padding: 0;
+        margin: 0;
 
         .item {
-          width: 288px; height: 300px; display: inline-block; margin: 0 32px 32px 0;
+          width: 288px;
+          height: 300px;
+          display: inline-block;
+          margin: 0 32px 32px 0;
 
           &.third {
             margin-right: 0;
@@ -58,6 +89,11 @@
 
           &.picked {
             a {
+              .imgThumb {
+                .pickBtn {
+                  background: url(/static/images/main_btn_pick_select.png);
+                }
+              }
               .meta {
                 .pick {
                   color: $tealish;
@@ -66,42 +102,96 @@
             }
           }
 
+          &:not(.picked) {
+            a {
+              .imgThumb {
+                .pickBtn {
+                  &:hover {
+                    width: 70px;
+                    height: 70px;
+                    padding: 10px 10px 0 0;
+                    top: -10px;
+                    right: -10px;
+                    background: url(/static/images/main_btn_pick_select_hover.png) top right no-repeat;
+                  }
+                }
+              }
+            }
+          }
+
           a {
-            text-decoration: none; letter-spacing: normal; font-style: normal; line-height: normal;
+            text-decoration: none;
+            letter-spacing: normal;
+            font-style: normal;
+            line-height: normal;
 
             .imgThumb {
-              width: 100%; height: 220px; position: relative;
+              width: 100%;
+              height: 220px;
+              position: relative;
 
               img {
-                width: 100%; height: 100%; margin: 0; padding: 0; top: 0; left: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                top: 0;
+                left: 0;
               }
 
               .dimm {
-                width: 100%; height: 100%; background: rgb(51, 51, 51); opacity: 0.6; display: none;
-                position: absolute; left: 0; top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgb(51, 51, 51);
+                opacity: 0.6;
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 0;
               }
               .preview {
-                color: $white-two; font-family: 'Noto Sans KR', sans-serif;
-                font-size: 16px; width: 100%; text-align: center;
-                position: absolute; top: 50%; margin-top: -15px; display: none;
+                color: $white-two;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 16px;
+                width: 100%;
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                margin-top: -15px;
+                display: none;
 
                 i {
-                  font-size: 8px; margin: 7px 0 0 6px;
+                  font-size: 8px;
+                  margin: 7px 0 0 6px;
                   position: absolute;
                 }
               }
-              .pick {
-                width: 60px; height: 60px; position: absolute; top: 0; right: 0;
+              .pickBtn {
+                width: 60px;
+                height: 60px;
+                position: absolute;
+                top: 0;
+                right: 0;
                 display: none;
+                // TODO: 백그라운드 이미지 URL 전부 수정 필요
+                background: url(/static/images/main_btn_pick_normal.png);
+                outline: none;
+                border: none;
               }
             }
 
             .meta {
-              position: relative; font-family: 'Noto Sans KR', sans-serif; margin: 12px 0 0 14px;
+              position: relative;
+              font-family: 'Noto Sans KR', sans-serif;
+              margin: 12px 0 0 14px;
 
               .pick {
                 font-family: "Helvetica Neue", Helvetica, sans-serif;
-                position: absolute; top: 0; right: 12px; font-size: 12px; color: $warm-grey;
+                position: absolute;
+                top: 0;
+                right: 12px;
+                font-size: 12px;
+                color: $warm-grey;
 
                 .bold {
                   font-weight: bold;
@@ -109,11 +199,14 @@
               }
 
               .title {
-                color: $black; font-size: 18px; font-weight: 500;
+                color: $black;
+                font-size: 18px;
+                font-weight: 500;
               }
 
               .name {
-                color: $warm-grey-two; font-size: 14px;
+                color: $warm-grey-two;
+                font-size: 14px;
               }
             }
           }
@@ -125,7 +218,7 @@
 
             a {
               .imgThumb {
-                .dimm, .preview, .pick {
+                .dimm, .preview, .pickBtn {
                   display: block;
                 }
               }
@@ -140,16 +233,23 @@
     text-align: center;
 
     .patItemMoreButton {
-      font-family: 'Noto Sans KR'; font-size: 14px; font-weight: 300;
-      width: 288px; height: 54px; border: 1px solid $pinkish-grey-two; margin: 0 auto;
-      text-align: center; background: $white-two; color: $brownish-grey;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      width: 288px;
+      height: 54px;
+      border: 1px solid $white-six;
+      margin: 0 auto;
+      text-align: center;
+      background: $white-two;
+      color: $brownish-grey;
 
       i {
         margin-left: 8px;
       }
 
       &:hover {
-        border: 1px solid $warm-grey-two;
+        border: 1px solid $greyish-two;
       }
     }
   }
