@@ -27,8 +27,11 @@ class Place_model extends CI_Model {
         }
 
         if ($search !== null && !empty($search)) {
+            if (is_numeric($search)) {
+                $query = $query->where('id', $search);
+            }
             // 이름, 주소, tags 매치
-            $query = $query->like('name', $search)
+            $query = $query->or_like('name', $search)
                 ->or_like('address', $search)
                 ->or_like('tags', $search);
         }
