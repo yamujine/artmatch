@@ -52,6 +52,10 @@ class Places extends MY_Controller {
 
         if (!empty($place_id)) {
             $place = $this->place_model->get_by_id($place_id);
+            if ($place->user_id !== $this->accountlib->get_user_id()) {
+                alert_and_redirect('본인의 장소만 수정할 수 있습니다.');
+            }
+
             $place_array = json_decode(json_encode($place), true); // StdClass to Array conversion
             $data = array_merge($data, $place_array);
         }
