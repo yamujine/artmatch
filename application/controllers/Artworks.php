@@ -5,7 +5,6 @@ class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['artwork_model', 'place_model', 'exhibition_model']);
-        $this->load->helper('url');
     }
 
     public function index() {
