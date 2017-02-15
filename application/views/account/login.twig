@@ -1,55 +1,86 @@
 {% extends "base.twig" %}
 
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="../../../static/dist/css/account/login.min.css">
+{% endblock %}
+
 {% block script %}
-	<script>
-		$('#login_form').submit(function () {
-			var emailOrUsernameElem = $("input[name=email_or_username]");
-			var passwordElem = $("input[name=password]");
-			
-			if (!emailOrUsernameElem.val()) {
-				alert('이메일 또는 유저 아이디를 입력해주세요.');
-				emailOrUsernameElem.focus();
-				return false;
-			}
-			if (!passwordElem.val()) {
-				alert('패스워드를 입력해주세요.');
-				passwordElem.focus();
-				return false;
-			}
-			
-			data = {};
-			data.email_or_username = emailOrUsernameElem.val();
-			data.password = passwordElem.val();
-			
-			$.ajax({
-				method: "POST",
-				url: "/api/login",
-				data: data
-			}).done(function (data) {
-				alert(data.body.message);
-				if (data.result === true) {
-					location.href = '/';
-				}
-			}).fail(function () {
-			    alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-			});
-			
-			return false;
-		});
-	</script>
+  <script type="text/javascript">
+    $('#patLoginForm').submit(function () {
+      var emailOrUsernameElem = $("input[name=email_or_username]");
+      var passwordElem = $("input[name=password]");
+
+      if (!emailOrUsernameElem.val()) {
+        alert('이메일 또는 유저 아이디를 입력해주세요.');
+        emailOrUsernameElem.focus();
+        return false;
+      }
+
+      if (!passwordElem.val()) {
+        alert('패스워드를 입력해주세요.');
+        passwordElem.focus();
+        return false;
+      }
+
+      data = {};
+      data.email_or_username = emailOrUsernameElem.val();
+      data.password = passwordElem.val();
+
+      $.ajax({
+        method: "POST",
+        url: "/api/login",
+        data: data
+      }).done(function (data) {
+        alert(data.body.message);
+        if (data.result === true) {
+          location.href = '/';
+        }
+      }).fail(function () {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+
+      return false;
+    });
+  </script>
 {% endblock %}
 
 {% block contents %}
-	<form id="login_form" class="ui form">
-		<div class="field">
-			<label>이메일 주소/유저 아이디</label>
-			<input type="text" name="email_or_username" placeholder="Email or Username">
-		</div>
-		<div class="field">
-			<label>패스워드</label>
-			<input type="password" name="password" placeholder="Secret">
-		</div>
-		<button class="ui green button" type="submit">로그인</button>
-		<a class="ui blue button" href="/account/signup">회원가입</a>
-	</form>
+  <div class="patLogin">
+    <div class="container">
+      <div class="leftCover">
+        <div class="background"></div>
+      </div>
+      <div class="rightForm">
+        <div class="logo">
+          <img src="../../../static/images/logo_black.png" width="149px" height="18px"/>
+        </div>
+        <div class="loginForm">
+          <div class="loginFormContainer">
+            <form id="patLoginForm" method="POST">
+              <fieldset>
+                <input type="text" name="email_or_username" placeholder="이메일 또는 이름"/>
+              </fieldset>
+              <fieldset>
+                <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+              </fieldset>
+              <button type="submit">로그인하기</button>
+            </form>
+            <p>또는</p>
+            {# TODO: 페이스북 연동을 위한 임시 버튼 삽입 #}
+            <button class="facebook">페이스북</button>
+            <div class="patLoginExcept">
+              <p>
+                <a href="#">비밀번호를 잊으셨나요?</a>
+              </p>
+              <hr/>
+              <p>
+                계정이 필요하신가요?
+                <a href="/account/signup">회원가입</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
