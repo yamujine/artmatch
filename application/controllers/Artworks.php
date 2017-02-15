@@ -52,8 +52,13 @@ class Artworks extends MY_Controller {
         $tags = $this->tag->refine_tags($this->input->post('tags'));
         $delete_images = $this->input->post('delete_images');
 
-        // 기존 작품 수정인 경우 작품 정보 미리 입력
-        if (!empty($artwork_id)) {
+        if (empty($artwork_id)) {
+            // 작품 신규 등록시
+            if ($this->accountlib->get_user_type() !== '0') {
+                alert_and_redirect('창작자 회원만 작품 등록이 가능합니다.');
+            }
+        } else {
+            // 기존 작품 수정시
             $artwork = $this->artwork_model->get_by_id($artwork_id);
             if ($artwork->user_id !== $this->accountlib->get_user_id()) {
                 alert_and_redirect('본인의 작품만 수정할 수 있습니다.');
