@@ -23,7 +23,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://www.pickartyou.com/';
+$protocol = "http";
+if (!empty($_SERVER['HTTPS'])) {
+    $protocol = "https";
+}
+$config['base_url'] = $protocol.'://'.$_SERVER['HTTP_HOST'];
+
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -34,7 +39,7 @@ $config['base_url'] = 'http://www.pickartyou.com/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

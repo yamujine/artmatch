@@ -67,6 +67,14 @@
 			{% endfor %}
 		</td>
 	</tr>
+	<tr>
+		<td>전시 이력</td>
+		<td>
+			{% for exhibition in exhibitions %}
+			<img src="{{ exhibition.place.image }}">{{ exhibition.place.name }}{{ exhibition.start_date|date('Y-m-d') }} ~ {{ exhibition.end_date|date('Y-m-d') }}<br>
+			{% endfor %}
+		</td>
+	</tr>
 </table>
 
 	<a class="ui green button" href="/artworks/edit/{{ artwork.id }}">수정</a>

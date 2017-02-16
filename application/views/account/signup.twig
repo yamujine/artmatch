@@ -1,0 +1,84 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="../../static/dist/css/account/signup.min.css">
+{% endblock %}
+
+{% block script %}
+  <script>
+    $('#patSignUpForm').submit(function () {
+      var emailElem = $("input[name=email]");
+      var passwordElem = $("input[name=password]");
+      var usernameElem = $("input[name=user_name]");
+
+      if (!emailElem.val()) {
+        alert('이메일을 입력해주세요.');
+        emailElem.focus();
+        return false;
+      }
+      if (!passwordElem.val()) {
+        alert('패스워드를 입력해주세요.');
+        passwordElem.focus();
+        return false;
+      }
+      if (!usernameElem.val()) {
+        alert('아이디를 입력해주세요.');
+        usernameElem.focus();
+        return false;
+      }
+
+      $.ajax({
+        method: "POST",
+        url: "/api/users/register",
+        processData: false, // To send file
+        contentType: false, // To send file
+        data: new FormData($(this)[0])
+      }).done(function (data) {
+        alert(data.body.message);
+        if (data.result === true) {
+          location.href = '/';
+        }
+      }).fail(function () {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+
+      return false;
+    });
+  </script>
+{% endblock %}
+
+{% block contents %}
+  <div class="patSignUp">
+    <div class="container">
+      <div class="logo">
+        <img src="../../static/images/logo_black.png" width="268px"/>
+      </div>
+      <h2>가입하여 여러분의 작품을 전시하세요.</h2>
+      <form id="patSignUpForm">
+        <fieldset class="patUserTypeField">
+          <div class="radio checkbox">
+            <input id="creatorType" type="radio" name="type" checked="checked" value="0">
+            <label for="creatorType">창작자</label>
+          </div>
+          <div class="radio checkbox">
+            <input id="placeType" type="radio" name="type" value="1">
+            <label for="placeType">공간소유자</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <input type="text" name="email" placeholder="이메일"/>
+        </fieldset>
+        <fieldset>
+          <input type="text" name="user_name" placeholder="아이디"/>
+        </fieldset>
+        <fieldset>
+          <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+        </fieldset>
+        <fieldset>
+          <input type="file" name="profile_image"/>
+        </fieldset>
+        <button type="submit">회원가입</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

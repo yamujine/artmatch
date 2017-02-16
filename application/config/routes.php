@@ -57,7 +57,10 @@ $route['translate_uri_dashes'] = FALSE;
 $route['artworks/(:num)'] = 'artworks/detail/$1';
 $route['artworks/upload'] = 'artworks/edit';
 $route['artworks/edit/(:num)'] = 'artworks/edit/$1';
+
 $route['places/(:num)'] = 'places/detail/$1';
+$route['places/upload'] = 'places/edit';
+$route['places/edit/(:num)'] = 'places/edit/$1';
 
 $route['api/pick'] = 'pickapi';
 $route['api/comment'] = 'commentapi';
@@ -72,3 +75,5 @@ $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
 $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';
 $route['api/users/verify'] = 'usersapi/verify';
+$route['api/users/check_username'] = 'usersapi/check_username';
+$route['api/users/check_email'] = 'usersapi/check_email';

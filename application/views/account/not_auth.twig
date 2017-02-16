@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+
+{% block contents %}
+	{% if msg %}
+		<div class="ui success message">
+			<i class="close icon"></i>
+			<div class="header">
+				{{ msg }}
+			</div>
+		</div>
+	{% endif %}
+	아직 {{ user.email }}로 보낸 메일을 못 받으셨나요?
+	<form class="ui form" method="POST">
+		<input type="hidden" name="resend" value="1">
+		<button class="ui green button" type="submit">재발송하기</button>
+	</form>
+{% endblock %}

@@ -1,0 +1,131 @@
+@import "../helper/colorchips";
+
+body {
+  background: $white-five;
+}
+
+html, body {
+  height: 100%;
+  padding: 0;
+
+  #patTop {
+    display: none;
+  }
+
+  #patContents {
+    height: 100%;
+    margin: 0 0 -180px 0;
+    padding: 0;
+    width: 100%;
+
+    .patSignUp {
+      position: absolute;
+      width: 400px;
+      min-height: 540px;
+      left: 50%;
+      top: 50%;
+      margin: -270px 0 0 -200px;
+      background: $white-two;
+      border-radius: 8px;
+
+      -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+      -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+
+      .container {
+        width: 268px;
+        height: 100%;
+        padding: 0;
+        margin: 0 auto;
+        text-align: center;
+        font-family: 'Noto Sans KR';
+
+        .logo {
+          margin: 60px 0 0 0;
+        }
+
+        h2 {
+          color: $brownish-grey;
+          margin-bottom: 30px;
+        }
+
+        #patSignUpForm {
+          fieldset {
+            position: relative;
+            margin-bottom: 8px;
+
+            &.patUserTypeField {
+              margin-bottom: 0;
+              text-align: left;
+            }
+
+            input[type=text], input[type=password], input[type=file] {
+              width: 100%;
+              height: 38px;
+              position: relative;
+              background: $pinkish-grey-two;
+              font-size: 14px;
+              outline: none;
+              font-weight: 500;
+              border: 0;
+              background: $white-five;
+              padding: 5px 5px 5px 10px;
+              color: $black-five;
+
+              -webkit-border-radius: 3px;
+              -moz-border-radius: 3px;
+              border-radius: 3px;
+              -webkit-box-shadow: none;
+              -moz-box-shadow: none;
+              box-shadow: none;
+            }
+
+            .radio.checkbox {
+              display: inline-block;
+              font-size: 16px;
+              font-weight: bold;
+
+              &:first-child {
+                padding-right: 20px;
+              }
+
+              input[type=radio] {
+                margin-left: 0;
+              }
+            }
+          }
+
+          button[type=submit] {
+            width: 100%;
+            border: 0;
+            height: 38px;
+            background: #818181;
+            color: $white-two;
+            padding: 0 18px;
+            font-size: 15px;
+            font-weight: bold;
+            outline: none;
+            vertical-align: middle;
+            text-align: center;
+            margin-top: 10px;
+
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+
+            &:hover {
+              background: #a8a8a8;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #patFooter {
+    display: none;
+  }
+}
