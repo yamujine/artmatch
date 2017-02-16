@@ -29,6 +29,13 @@ gulp.task('bootstrap', function () {
   return gulp.src('assets/bower_components/bootstrap/dist/**')
     .pipe(gulp.dest('static/dist/bootstrap'));
 });
+
+gulp.task('labelauty', function () {
+  filesExist(['assets/bower_components/jquery-labelauty/source']);
+
+  return gulp.src('assets/bower_components/jquery-labelauty/source/**')
+    .pipe(gulp.dest('static/dist/jquery-labelauty'));
+});
 /** For Develop TASK END **/
 
 gulp.task('uglify', function () {
@@ -59,6 +66,7 @@ gulp.task('build', sync.sync([
   [
     'jquery',
     'bootstrap',
+    'labelauty',
     'uglify',
     'sass',
     'font'
