@@ -53,38 +53,50 @@ class Pick_model extends CI_Model {
 		return $picks;
 	}
 
-    public function insert_pick($type, $user_id, $place_id) {
+    public function insert_pick($type, $user_id, $type_id) {
 	    if ($type === "artwork") {
-	        return $this->insert_artwork_pick_by_user_id_and_place_id($user_id, $place_id);
+            $this->load->model('artwork_model');
+
+            if ($this->artwork_model->is_exists($type_id) === false) {
+                throw new Exception("artwork is not exists");
+            }
+
+	        return $this->insert_artwork_pick($user_id, $type_id);
         } else if ($type === "place") {
-            return $this->insert_place_pick_by_user_id_and_place_id($user_id, $place_id);
+            $this->load->model('place_model');
+
+            if ($this->place_model->is_exists($type_id) === false) {
+                throw new Exception("place is not exists");
+            }
+
+            return $this->insert_place_pick($user_id, $type_id);
         } else {
             throw new Exception("type error. type=".$type);
         }
     }
 
-    public function delete_pick($type, $user_id, $place_id) {
+    public function delete_pick($type, $user_id, $type_id) {
         if ($type === "artwork") {
-            return $this->delete_artwork_pick_by_user_id_and_place_id($user_id, $place_id);
+            return $this->delete_artwork_pick($user_id, $type_id);
         } else if ($type === "place") {
-            return $this->delete_place_pick_by_user_id_and_place_id($user_id, $place_id);
+            return $this->delete_place_pick($user_id, $type_id);
         } else {
             throw new Exception("type error. type=".$type);
         }
     }
 
-    public function check_pick($type, $user_id, $place_id) {
+    public function check_pick($type, $user_id, $type_id) {
         if ($type === "artwork") {
-            return $this->check_artwork_pick_by_user_id_and_place_id($user_id, $place_id);
+            return $this->check_artwork_pick($user_id, $type_id);
         } else if ($type === "place") {
-            return $this->check_place_pick_by_user_id_and_place_id($user_id, $place_id);
+            return $this->check_place_pick($user_id, $type_id);
         } else {
             throw new Exception("type error. type=".$type);
         }
     }
 
 
-    public function insert_place_pick_by_user_id_and_place_id($user_id, $place_id) {
+    public function insert_place_pick($user_id, $place_id) {
 	    $data = array(
             'user_id' => $user_id,
             'place_id' => $place_id
@@ -97,7 +109,7 @@ class Pick_model extends CI_Model {
         }
     }
 
-    public function delete_place_pick_by_user_id_and_place_id($user_id, $place_id) {
+    public function delete_place_pick($user_id, $place_id) {
         $data = array(
             'user_id' => $user_id,
             'place_id' => $place_id
@@ -106,24 +118,26 @@ class Pick_model extends CI_Model {
         return $this->db->delete(self::PLACE_PICKS_TABLE_NAME, $data);
     }
 
-    public function check_place_pick_by_user_id_and_place_id($user_id, $place_id) {
+    public function check_place_pick($user_id, $place_id) {
         $data = array(
             'user_id' => $user_id,
             'place_id' => $place_id
         );
 
-        if ($this->db
+        $result = $this->db
             ->from(self::PLACE_PICKS_TABLE_NAME)
             ->where($data)
             ->limit(1)
-            ->get()->result()) {
+            ->get();
+
+        if ($result->num_rows() > 0) {
             return true;
         } else {
             return false;
         }
     }
 
-	public function insert_artwork_pick_by_user_id_and_place_id($user_id, $artwork_id) {
+	public function insert_artwork_pick($user_id, $artwork_id) {
 	    $data = array(
             'user_id' => $user_id,
             'artwork_id' => $artwork_id
@@ -136,7 +150,7 @@ class Pick_model extends CI_Model {
         }
     }
 
-    public function delete_artwork_pick_by_user_id_and_place_id($user_id, $artwork_id) {
+    public function delete_artwork_pick($user_id, $artwork_id) {
         $data = array(
             'user_id' => $user_id,
             'artwork_id' => $artwork_id
@@ -145,17 +159,19 @@ class Pick_model extends CI_Model {
         return $this->db->delete(self::ARTWORK_PICKS_TABLE_NAME, $data);
     }
 
-    public function check_artwork_pick_by_user_id_and_place_id($user_id, $artwork_id) {
+    public function check_artwork_pick($user_id, $artwork_id) {
         $data = array(
             'user_id' => $user_id,
             'artwork_id' => $artwork_id
         );
 
-        if ($this->db
+        $result = $this->db
             ->from(self::ARTWORK_PICKS_TABLE_NAME)
             ->where($data)
             ->limit(1)
-            ->get()->result()) {
+            ->get();
+
+        if ($result->num_rows() > 0) {
             return true;
         } else {
             return false;

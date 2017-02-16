@@ -17,6 +17,19 @@ class Artwork_model extends CI_Model {
     public $use_comment;
     public $tags;
 
+    public function is_exists($id) {
+        $result = $this->db
+            ->from(self::TABLE_NAME)
+            ->where('id', $id)
+            ->limit(1)
+            ->get();
+
+        if ($result->num_rows() > 0) {
+            return true;
+        }
+        return false;
+    }
+
     public function gets($limit = null, $offset = null, $search = null) {
         $query = $this->db
             ->from(self::TABLE_NAME)
