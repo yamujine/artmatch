@@ -29,6 +29,13 @@ gulp.task('bootstrap', function () {
   return gulp.src('assets/bower_components/bootstrap/dist/**')
     .pipe(gulp.dest('static/dist/bootstrap'));
 });
+
+gulp.task('slick', function () {
+  filesExist(['assets/bower_components/slick-carousel/slick']);
+
+  return gulp.src('assets/bower_components/slick-carousel/slick/**')
+    .pipe(gulp.dest('static/dist/slick'));
+});
 /** For Develop TASK END **/
 
 gulp.task('uglify', function () {
@@ -49,6 +56,8 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
+gulp.task('dev', ['jquery', 'bootstrap', 'slick']);
+
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')
     .pipe(gulp.dest('static/dist/fonts'));
@@ -57,8 +66,7 @@ gulp.task('font', function () {
 gulp.task('build', sync.sync([
   'dist-clean',
   [
-    'jquery',
-    'bootstrap',
+    'dev',
     'uglify',
     'sass',
     'font'
