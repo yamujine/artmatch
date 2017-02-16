@@ -10,6 +10,13 @@ class Comment_model extends CI_Model {
 	public $place_id;
 	public $comment;
 
+    public function get_count_by_place_id($place_id) {
+        return $this->db
+            ->from(self::PLACE_COMMENTS_TABLE_NAME)
+            ->where('place_id', $place_id)
+            ->count_all_results();
+    }
+
 	public function get_comments_by_type_id($type, $type_id) {
 		if ($type === "artwork") {
 			return $this->db

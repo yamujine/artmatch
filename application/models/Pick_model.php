@@ -9,6 +9,13 @@ class Pick_model extends CI_Model {
 	public $artwork_id;
 	public $place_id;
 
+    public function get_count_by_place_id($place_id) {
+        return $this->db
+            ->from(self::PLACE_PICKS_TABLE_NAME)
+            ->where('place_id', $place_id)
+            ->count_all_results();
+    }
+
 	public function get_given_artwork_pick_by_user_id($user_id) {
 		return $this->db
 			->from(self::ARTWORK_PICKS_TABLE_NAME)
