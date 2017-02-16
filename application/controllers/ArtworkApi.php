@@ -1,9 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * TODO: API 명세 설정 json or html
- */
 class ArtworkApi extends MY_Controller {
     public function index() {
         $this->load->library('twig');
@@ -13,7 +10,7 @@ class ArtworkApi extends MY_Controller {
         $offset = $this->input->get('offset');
         $limit = $this->input->get('limit');
 
-        $data['artworks'] = $this->artwork_model->gets($query, $offset, $limit);
+        $data['artworks'] = $this->artwork_model->gets($limit, $offset, $query);
 
         $this->twig->display('api/artworks', $data);
     }

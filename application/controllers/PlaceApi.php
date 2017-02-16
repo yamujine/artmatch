@@ -1,9 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * TODO: API 명세 설정 json or html
- */
 class PlaceApi extends MY_Controller {
     public function index() {
         $this->load->library('twig');
@@ -13,7 +10,7 @@ class PlaceApi extends MY_Controller {
         $offset = $this->input->get('offset');
         $limit = $this->input->get('limit');
 
-        $data['places'] = $this->place_model->gets($query, $offset, $limit);
+        $data['places'] = $this->place_model->gets($limit, $offset, $query);
 
         $this->twig->display('api/places', $data);
     }
