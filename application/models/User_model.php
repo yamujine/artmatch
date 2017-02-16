@@ -78,4 +78,13 @@ class User_model extends CI_Model {
             ->where('user_name', $user_name)
             ->get()->row();
     }
+
+    public function update_profile_image($id, $profile_image){
+        if ($this->db->update(self::TABLE_NAME, ['profile_image' => $profile_image], ['id' => $id])) {
+            return $id;
+        } else {
+            return NULL;
+        }
+    }
+
 }

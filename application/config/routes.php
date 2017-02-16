@@ -66,6 +66,7 @@ $route['api/pick'] = 'pickapi';
 
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
+$route['users/me/update']['POST'] = 'users/update';
 
 $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';
