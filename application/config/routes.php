@@ -66,10 +66,12 @@ $route['api/pick'] = 'pickapi';
 
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
-$route['users/me/update']['POST'] = 'users/update';
 
 $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';
 $route['api/users/verify'] = 'usersapi/verify';
 $route['api/users/check_username'] = 'usersapi/check_username';
 $route['api/users/check_email'] = 'usersapi/check_email';
+$route['api/users/update/image']['POST'] = 'usersapi/update_profile_image';
+$route['api/users/update/password']['POST'] = 'usersapi/update_password';
+

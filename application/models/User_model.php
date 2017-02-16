@@ -79,8 +79,16 @@ class User_model extends CI_Model {
             ->get()->row();
     }
 
-    public function update_profile_image($id, $profile_image){
+    public function update_profile_image($id, $profile_image) {
         if ($this->db->update(self::TABLE_NAME, ['profile_image' => $profile_image], ['id' => $id])) {
+            return $id;
+        } else {
+            return NULL;
+        }
+    }
+
+    public function update_password($id, $new_password) {
+        if ($this->db->update(self::TABLE_NAME, ['password' => $new_password], ['id' => $id])) {
             return $id;
         } else {
             return NULL;

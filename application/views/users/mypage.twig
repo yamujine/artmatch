@@ -2,8 +2,50 @@
 
 {% block script %}
     <script>
-        $('#submit').click(function(){
-           $('#profileChangeForm').submit();
+        $('#password_change_form').submit(function(){
+            var currentPasswordElem = $("input[name=current_password]");
+            var newPasswordElem = $("input[name=new_password]");
+
+            if (!currentPasswordElem.val()) {
+                alert('기존 비밀번호를 입력해 주세요');
+                currentPasswordElem.focus();
+                return false;
+            }
+
+            if (!newPasswordElem.val()) {
+                alert('새로운 비밀번호를 입력해 주세요');
+                newPasswordElem.focus();
+                return false;
+            }
+
+            data = {};
+            data.current_password = currentPasswordElem.val();
+            data.new_password = newPasswordElem.val();
+
+            console.log(data);
+
+            $.ajax({
+                method: "POST",
+                url: "/api/users/update/password",
+                data: data
+            }).done(function (data) {
+                if (data.result === true) {
+                    location.href = '/users/me';
+                } else {
+                    alert(data.body.message);
+                }
+            }).fail(function () {
+                alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+            });
+            return false;
+        });
+
+        $('#profile_submit').click(function(){
+           $('#profile_change_form').submit();
+        });
+
+        $('#password_submit').click(function(){
+            $('#password_change_form').submit();
         });
     </script>
 {% endblock %}
@@ -20,7 +62,7 @@
 		</p>
 		<p>받은 picks: {{ given_pick_count }}</p>
 		{% if is_my_page %}
-			<p><a class="ui button blue" data-toggle="modal" data-target="#profile_modal">프로필 사진 변경하기</a><a class="ui button blue">패스워드 변경하기</a></p>
+			<p><button class="btn btn-primary" data-toggle="modal" data-target="#profile_modal">프로필 사진 변경하기</button><button class="btn btn-primary" data-toggle="modal" data-target="#password_modal">패스워드 변경하기</button></p>
 		{% endif %}
 	</div>
 	
@@ -59,10 +101,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Modal title</h4>
+                    <h4 class="modal-title">프로필 이미지 변경</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="profileChangeForm" class="ui form" method="POST" enctype="multipart/form-data" action="me/update">
+                    <form id="profile_change_form" class="ui form" method="POST" enctype="multipart/form-data" action="/api/users/update/image">
                         <div class="field">
                             <div class="ui">
                                 <label>사진 선택</label>
@@ -75,7 +117,39 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="submit">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="profile_submit">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="password_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">비밀번호 변경</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="password_change_form" class="ui form" method="POST">
+                        <div class="field">
+                            <div class="ui">
+                                <label>기존 비밀번호 입력</label>
+                                <input type="password" name="current_password" tabindex="0">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui">
+                                <label>새로운 비밀번호 입력</label>
+                                <input type="password" name="new_password" tabindex="0">
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="password_submit">Save changes</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

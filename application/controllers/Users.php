@@ -22,30 +22,6 @@ class Users extends MY_Controller {
         $this->twig->display('users/mypage', $data);
     }
 
-    public function update() {
-        $this->load->library('imageupload', 'upload');
-        $user_id = $this->accountlib->get_user_id();
-        $current_image = $this->user_model->get_by_id($user_id)->profile_image;
-        $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
-
-        if ($this->input->method() === 'post') {
-            if (!empty($uploaded_image_name)) {
-                if (!empty($current_image)) {
-                    //현재 이미지가 기본이미지가 아니면 삭제
-                    $this->imageupload->delete_image('/profile/' . $current_image);
-                }
-            } else {
-                $uploaded_image_name = $current_image;
-            }
-
-            $this->user_model->update_profile_image(
-                $user_id,
-                $uploaded_image_name
-            );
-            redirect('/users/me');
-        }
-    }
-
     private function _get_user_details($user_name, $is_my_page = false, $pick_type = '') {
         $user = $this->user_model->get_by_user_name($user_name);
 
