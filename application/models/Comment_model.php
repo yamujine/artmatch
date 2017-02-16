@@ -57,13 +57,14 @@ class Comment_model extends CI_Model {
     }
 
     public function insert_artwork_comment($user_id, $artwork_id, $comment) {
-	    $data = array(
+	    $data = [
             'user_id' => $user_id,
             'artwork_id' => $artwork_id,
             'comment' => $comment
-        );
+        ];
 
-        if ($this->db->insert(self::ARTWORK_COMMENTS_TABLE_NAME, $data)) {
+        $result = $this->db->insert(self::ARTWORK_COMMENTS_TABLE_NAME, $data);
+        if ($result) {
             return $this->db->insert_id();
         } else {
             return NULL;
@@ -71,14 +72,16 @@ class Comment_model extends CI_Model {
     }
 
     public function delete_artwork_comment($id) {
-        $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, array('id' => $id));
+        $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['id' => $id]);
 		return $this->db->affected_rows();
     }
 
 	public function update_artwork_comment($id, $comment) {
-		if($this->db->set(array('comment' => $comment))
-			->where('id', $id)
-			->update(self::ARTWORK_COMMENTS_TABLE_NAME)) {
+        $result = $this->db->set(['comment' => $comment])
+            ->where('id', $id)
+            ->update(self::ARTWORK_COMMENTS_TABLE_NAME);
+
+        if ($result !== NULL) {
 			return $id;
 		} else {
 			return NULL;
@@ -86,13 +89,14 @@ class Comment_model extends CI_Model {
     }
 
 	public function insert_place_comment($user_id, $place_id, $comment) {
-	    $data = array(
+	    $data = [
             'user_id' => $user_id,
             'place_id' => $place_id,
 			'comment' => $comment
-        );
+        ];
 
-        if ($this->db->insert(self::PLACE_COMMENTS_TABLE_NAME, $data)) {
+        $result = $this->db->insert(self::PLACE_COMMENTS_TABLE_NAME, $data);
+        if ($result) {
             return $this->db->insert_id();
         } else {
             return NULL;
@@ -100,14 +104,16 @@ class Comment_model extends CI_Model {
     }
 
 	public function delete_place_comment($id) {
-        $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, array('id' => $id));
+        $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, ['id' => $id]);
 		return $this->db->affected_rows();
     }
 
     public function update_place_comment($id, $comment) {
-		if($this->db->set(array('comment' => $comment))
-			->where('id', $id)
-			->update(self::PLACE_COMMENTS_TABLE_NAME)) {
+        $result = $this->db->set(['comment' => $comment])
+            ->where('id', $id)
+            ->update(self::PLACE_COMMENTS_TABLE_NAME);
+
+        if ($result !== NULL) {
 			return $id;
 		} else {
 			return NULL;

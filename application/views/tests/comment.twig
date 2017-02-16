@@ -3,7 +3,7 @@
 {% block contents %}
 
     <h2>조회</h2>
-    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/list">
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comments">
         <div class="field">
             <label>type</label>
             <input type="text" name="type" placeholder="" value="place">
@@ -17,7 +17,7 @@
     </form>
 
     <h2>수정</h2>
-    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/update">
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comments/update">
         <div class="field">
             <label>type</label>
             <input type="text" name="type" placeholder="" value="artwork">
@@ -35,7 +35,7 @@
     </form>
 
     <h2>삭제</h2>
-    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/delete">
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comments/delete">
         <div class="field">
             <label>type</label>
             <input type="text" name="type" placeholder="" value="place">
@@ -49,7 +49,7 @@
     </form>
 
     <h2>추가</h2>
-    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comment/insert">
+    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/comments/insert">
         <div class="field">
             <label>type</label>
             <input type="text" name="type" placeholder="" value="place">

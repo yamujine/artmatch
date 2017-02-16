@@ -63,11 +63,11 @@ $route['places/upload'] = 'places/edit';
 $route['places/edit/(:num)'] = 'places/edit/$1';
 
 $route['api/pick'] = 'pickapi';
-$route['api/comment'] = 'commentapi';
-$route['api/comment/delete'] = 'commentapi/delete';
-$route['api/comment/insert'] = 'commentapi/insert';
-$route['api/comment/update'] = 'commentapi/update';
-$route['api/comment/list'] = 'commentapi/list';
+
+$route['api/comments'] = 'commentapi';
+$route['api/comments/delete'] = 'commentapi/delete';
+$route['api/comments/insert'] = 'commentapi/insert';
+$route['api/comments/update'] = 'commentapi/update';
 
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
