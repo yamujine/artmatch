@@ -96,6 +96,18 @@ class Accountlib {
         $this->CI->session->set_userdata($userdata);
     }
 
+    public function send_email_temp_password($email, $temp_password) {
+        $data['temp_password'] = $temp_password;
+        $email_html = $this->CI->twig->render('email/temp_password', $data);
+
+        $this->CI->email->initialize(['mailtype' => 'html']);
+        $this->CI->email->from('no-reply@pickartyou.com', 'pickartyou');
+        $this->CI->email->subject('pickartyou 임시 비밀번호');
+        $this->CI->email->message($email_html);
+        $this->CI->email->to($email);
+        $this->CI->email->send();
+    }
+
     private function _validate_session() {
         $id = $this->CI->session->userdata('id');
         $email = $this->CI->session->userdata('email');
