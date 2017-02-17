@@ -14,7 +14,12 @@ class UsersApi extends API_Controller {
         $this->_validate_signup_form();
         if ($this->form_validation->run() === TRUE) {
             $hashed_password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-            $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
+            if ($this->input->post('is_facebook') == TRUE) {
+                $url = $this->input->post('profile_image');
+                $uploaded_image_name = $this->imageupload->upload_facebook_image($url);
+            } else {
+                $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
+            }
 
             $id = $this->user_model->add(
                 $this->input->post('email'),
