@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['artwork_model', 'place_model', 'exhibition_model']);
+        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'pick_model']);
     }
 
     public function index() {
@@ -17,8 +17,10 @@ class Artworks extends MY_Controller {
         $data = [];
 
         $artwork = $this->artwork_model->get_by_id($artwork_id);
+        $picks = $this->pick_model->get_count_by_artwork_id($artwork_id);
         if ($artwork) {
             $data['artwork'] = $artwork;
+            $data['picks'] = $picks;
             // 전시 이력
             $exhibitions = $this->exhibition_model->get_exhibitions_by_artwork_id($artwork_id);
             foreach ($exhibitions as $exhibition) {
