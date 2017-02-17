@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`users` (
   `password` VARCHAR(255) NOT NULL COMMENT '패스워드',
   `type` TINYINT UNSIGNED NOT NULL COMMENT '창작자/공간소유자 구분 여부',
   `user_name` VARCHAR(45) NOT NULL COMMENT '유저 아이디',
-  `profile_image` VARCHAR(45) NOT NULL COMMENT '유저 프로필 이미지 파일 이름',
+  `profile_image` VARCHAR(90) NOT NULL COMMENT '유저 프로필 이미지 파일 이름',
   `is_auth` TINYINT UNSIGNED NOT NULL COMMENT '이메일 인증 여부',
   `is_admin` TINYINT UNSIGNED NOT NULL COMMENT '관리자 여부',
   `registered_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '사용자 등록시간',
