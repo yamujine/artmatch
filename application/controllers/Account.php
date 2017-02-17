@@ -11,7 +11,12 @@ class Account extends CI_Controller {
 	}
 
 	public function signup() {
-		$this->twig->display('account/signup');
+	    $data = [];
+	    if ($this->input->get('isFacebook')) {
+	        $data['email'] = $this->input->get('email');
+	        $data['picture'] = $this->input->get('picture');
+        }
+		$this->twig->display('account/signup', $data);
 	}
 
 	public function login() {
