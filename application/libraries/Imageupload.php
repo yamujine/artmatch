@@ -94,4 +94,12 @@ class Imageupload {
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_POSTFIX . $file_ext);
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_SMALL_POSTFIX . $file_ext);
     }
+
+    public function upload_facebook_image($url) {
+        $filename = substr($url, strrpos($url, '/') + 1);
+        $filename = substr($filename, 0, strrpos($filename, '?'));
+        file_put_contents('./uploads/profile/'.$filename, file_get_contents($url));
+        $this->_generate_thumbnails('./uploads/profile/'.$filename);
+        return $filename;
+    }
 }
