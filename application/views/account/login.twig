@@ -6,6 +6,23 @@
 
 {% block script %}
   <script type="text/javascript">
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '222831604846386',
+        xfbml      : true,
+        version    : 'v2.8'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
     $('#patLoginForm').submit(function () {
       var emailOrUsernameElem = $("input[name=email_or_username]");
       var passwordElem = $("input[name=password]");
@@ -41,6 +58,22 @@
       });
 
       return false;
+    });
+
+    $('.facebook').click(function () {
+      FB.login(function(response) {
+            // handle the response
+        console.log(response);
+        FB.api('/me', {fields: 'email,name,picture.type(large)'}, function(response) {
+          console.dir(response);
+          var params = {
+              email:response.email,
+              picture:response.picture.data.url,
+              isFacebook:true
+          };
+          return window.location = '/account/signup?' + $.param(params);
+        });
+      }, {scope: 'public_profile,email'});
     });
   </script>
 {% endblock %}
