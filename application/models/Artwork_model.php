@@ -80,6 +80,13 @@ class Artwork_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_bare_by_ids(array $artwork_ids) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where_in('id', $artwork_ids)
+            ->get()->result();
+    }
+
     public function get_by_user_id($user_id) {
         return $this->db
             ->from(self::TABLE_NAME)
