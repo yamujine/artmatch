@@ -125,13 +125,13 @@
       var type = $("#commentForm").find("input[name=type]").val();
       var type_id = $("#commentForm").find("input[name=type_id]").val();
       var comment = $("#commentForm").find("textarea[name=comment]").val();
-      
+
       var data = {
         type: type,
         type_id: type_id,
         comment: comment
       };
-      
+
       $.ajax({
         method: "POST",
         url: "/api/comments/insert",
