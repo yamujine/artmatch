@@ -15,12 +15,15 @@ class Artworks extends MY_Controller {
 
     public function detail($artwork_id) {
         $data = [];
+        $user_id = $this->accountlib->get_user_id();
+
+        $pickStatus = $this->pick_model->get_status_artwork_pick_by_user_id($user_id ,$artwork_id);
+        $data['pickStatus'] = $pickStatus;
+
 
         $artwork = $this->artwork_model->get_by_id($artwork_id);
-        $picks = $this->pick_model->get_count_by_artwork_id($artwork_id);
         if ($artwork) {
             $data['artwork'] = $artwork;
-            $data['picks'] = $picks;
             // 전시 이력
             $exhibitions = $this->exhibition_model->get_exhibitions_by_artwork_id($artwork_id);
             foreach ($exhibitions as $exhibition) {

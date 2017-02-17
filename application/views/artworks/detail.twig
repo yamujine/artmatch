@@ -1,5 +1,33 @@
 {% extends "base.twig" %}
 
+{% block script %}
+	<script type="text/javascript">
+        $('#form-pick').submit(function () {
+            var type = $("input[name=type]");
+            var type_id = $("input[name=type_id]");
+
+            data = {};
+            data.type = type.val();
+            data.type_id = type_id.val();
+
+            $.ajax({
+                method: "POST",
+                url: "/api/pick",
+                data: data
+            }).done(function (data) {
+                if (data.result === true) {
+                    location.href = '/artworks/'+type_id.val();
+                } else {
+                    alert(data.body.message);
+                }
+            }).fail(function () {
+                alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+            });
+            return false;
+        });
+	</script>
+{% endblock %}
+
 {% block contents %}
 
 <table class="ui definition table">
@@ -76,13 +104,25 @@
 		</td>
 	</tr>
 	<tr>
-		<td>pick 수</td>
+		<td>pick 여부확인</td>
 		<td>
-			{{ picks }}
+            {% if pickStatus == 2 %}
+				pick을 한 작품
+            {% else %}
+				pick하지 않은 작품
+            {% endif %}
 		</td>
 	</tr>
 </table>
-	
+
+	<form id="form-pick">
+		<div class="form-group">
+			<input type="hidden" name="type" value="artwork">
+			<input type="hidden" name="type_id" class="form-control" value="{{ artwork.id }}">
+		</div>
+		<button type="submit" class="btn btn-default">pick!!!!!!!!!!!!!</button>
+	</form>
+
 	<a class="ui green button" href="/artworks/edit/{{ artwork.id }}">수정</a>
 	<a class="ui button" href="/artworks">목록</a>
 

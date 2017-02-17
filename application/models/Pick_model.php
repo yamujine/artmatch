@@ -23,6 +23,13 @@ class Pick_model extends CI_Model {
             ->count_all_results();
     }
 
+    public function get_status_artwork_pick_by_user_id($user_id, $artwork_id) {
+        return $this->db
+            ->from(self::ARTWORK_PICKS_TABLE_NAME)
+            ->where('user_artwork_picks.user_id', $user_id, 'user_artwork_picks.artwork_id', $artwork_id)
+            ->count_all_results();
+    }
+
     public function get_given_artwork_pick_by_user_id($user_id) {
         return $this->db
             ->from(self::ARTWORK_PICKS_TABLE_NAME)

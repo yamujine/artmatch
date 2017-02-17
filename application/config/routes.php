@@ -73,7 +73,7 @@ $route['api/comments/update'] = 'commentapi/update';
 $route['api/artworks'] = 'artworkapi';
 $route['api/places'] = 'placeapi';
 
-$route['api/pick'] = 'pickapi';
+$route['api/pick']['POST'] = 'pickapi/index';
 
 $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';
