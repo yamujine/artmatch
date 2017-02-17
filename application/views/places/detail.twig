@@ -93,37 +93,6 @@
   </tbody>
 </table>
 
-{% block script %}
-<script>
-  $("#commentForm").submit(function() {
-      var type = $("#commentForm").find("input[name=type]").val();
-      var type_id = $("#commentForm").find("input[name=type_id]").val();
-      var comment = $("#commentForm").find("textarea[name=comment]").val();
-
-      var data = {
-        type: type,
-        type_id: type_id,
-        comment: comment
-      };
-
-      console.log(data);
-
-      $.ajax({
-        method: "POST",
-        url: "/api/comments/insert",
-        data: data
-      }).done(function (data) {
-        // TODO 화면에 바로 그려주기
-        console.log(data);
-      }).fail(function() {
-        alert("error");
-      });
-      console.log(type);
-      return false;
-  });
-</script>
-{% endblock %}
-
 <div>
   댓글
   <table>
@@ -145,4 +114,35 @@
 <a class="ui green button" href="/places/edit/{{ place.id }}">수정</a>
 <a class="ui button" href="/places">목록</a>
 
+{% endblock %}
+
+{% block script %}
+  <script>
+    $("#commentForm").submit(function() {
+      var type = $("#commentForm").find("input[name=type]").val();
+      var type_id = $("#commentForm").find("input[name=type_id]").val();
+      var comment = $("#commentForm").find("textarea[name=comment]").val();
+
+      var data = {
+        type: type,
+        type_id: type_id,
+        comment: comment
+      };
+
+      $.ajax({
+        method: "POST",
+        url: "/api/comments/insert",
+        data: data
+      }).done(function (data) {
+        if (data.result == false) {
+          alert("댓글 등록 실패");
+        } else {
+          // TODO 화면에 바로 그려주기
+        }
+      }).fail(function() {
+        alert("error");
+      });
+      return false;
+    });
+  </script>
 {% endblock %}

@@ -35,8 +35,20 @@ class Comment_model extends CI_Model {
 
     public function insert_comment($type, $user_id, $type_id, $comment) {
 	    if ($type === "artwork") {
-	        return $this->insert_artwork_comment($user_id, $type_id, $comment);
+            $this->load->model('artwork_model');
+
+            if ($this->artwork_model->is_exists($type_id) === false) {
+                throw new Exception("artwork is not exists");
+            }
+
+            return $this->insert_artwork_comment($user_id, $type_id, $comment);
         } else if ($type === "place") {
+            $this->load->model('place_model');
+
+            if ($this->place_model->is_exists($type_id) === false) {
+                throw new Exception("artwork is not exists");
+            }
+
             return $this->insert_place_comment($user_id, $type_id, $comment);
         } else {
             throw new Exception("type error. type=".$type);
