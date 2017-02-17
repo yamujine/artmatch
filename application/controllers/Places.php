@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Places extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['place_model', 'artwork_model', 'exhibition_model']);
+        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'comment_model']);
     }
 
     public function index() {
@@ -18,13 +18,19 @@ class Places extends MY_Controller {
 
         $place = $this->place_model->get_by_id($place_id);
         if ($place) {
+            // 장소정보
             $data['place'] = $place;
+
             // 전시 작품 이력
             $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
             foreach ($exhibitions as $exhibition) {
                 $exhibition->artwork = $this->artwork_model->get_bare_by_id($exhibition->artwork_id);
             }
             $data['exhibitions'] = $exhibitions;
+
+            // 댓글
+            $comments = $this->comment_model->get_comments_by_type_id('place', $place_id);
+            $data['comments'] = $comments;
         }
 
         $this->twig->display('places/detail', $data);
