@@ -24,7 +24,10 @@ class Places extends MY_Controller {
             // 전시 작품 이력
             $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
             foreach ($exhibitions as $exhibition) {
-                $exhibition->artwork = $this->artwork_model->get_bare_by_id($exhibition->artwork_id);
+                $exhibition_artwork_ids = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
+                if (!empty($exhibition_artwork_ids)) {
+                    $exhibition->artworks = $this->artwork_model->get_bare_by_ids($exhibition_artwork_ids);
+                }
             }
             $data['exhibitions'] = $exhibitions;
 
@@ -46,6 +49,11 @@ class Places extends MY_Controller {
         $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
         $this->form_validation->set_rules('tags', 'tags', 'required|trim');
 
+        $this->form_validation->set_rules('exhibition_start_date', 'exhibition_start_date', 'required|exact_length[8]|trim');
+        $this->form_validation->set_rules('exhibition_end_date', 'exhibition_end_date', 'required|exact_length[8]|trim');
+        $this->form_validation->set_rules('exhibition_artwork_count', 'exhibition_artwork_count', 'required|numeric|trim');
+        $this->form_validation->set_rules('exhibition_is_free', 'exhibition_is_free', 'required|trim');
+
         $user_id = $this->accountlib->get_user_id();
         $status = $this->input->post('status');
         $name = $this->input->post('name');
@@ -53,6 +61,11 @@ class Places extends MY_Controller {
         $description = $this->input->post('description');
         $use_comment = $this->input->post('use_comment');
         $tags = $this->tag->refine_tags($this->input->post('tags'));
+
+        $exhibition_start_date = $this->input->post('exhibition_start_date');
+        $exhibition_end_date = $this->input->post('exhibition_end_date');
+        $exhibition_artwork_count = $this->input->post('exhibition_artwork_count');
+        $exhibition_is_free = $this->input->post('exhibition_is_free');
 
         $data = [];
 
@@ -70,6 +83,16 @@ class Places extends MY_Controller {
 
             $place_array = json_decode(json_encode($place), true); // StdClass to Array conversion
             $data = array_merge($data, $place_array);
+
+            // 전시 데이터 수정
+            $exhibition = $this->exhibition_model->get_by_place_id($place->id);
+            $exhibition_array = json_decode(json_encode($exhibition), true);
+            $exhibition_data = [];
+            foreach (array_keys($exhibition_array) as $key) {
+                $new_key = 'exhibition_' . $key;
+                $exhibition_data[$new_key] = $exhibition_array[$key];
+            }
+            $data = array_merge($data, $exhibition_data);
         }
 
         if ($this->input->method() === 'post') {
@@ -106,6 +129,14 @@ class Places extends MY_Controller {
                         $use_comment,
                         $tags
                     );
+
+                    $result_exhibition_id = $this->exhibition_model->update_by_place_id(
+                        $result_id,
+                        $exhibition_start_date,
+                        $exhibition_end_date,
+                        $exhibition_artwork_count,
+                        $exhibition_is_free
+                    );
                 } else { // 작품 신규 등록
                     $result_id = $this->place_model->insert(
                         $user_id,
@@ -117,9 +148,17 @@ class Places extends MY_Controller {
                         $use_comment,
                         $tags
                     );
+
+                    $result_exhibition_id = $this->exhibition_model->insert(
+                        $result_id,
+                        $exhibition_start_date,
+                        $exhibition_end_date,
+                        $exhibition_artwork_count,
+                        $exhibition_is_free
+                    );
                 }
 
-                if ($result_id !== NULL) {
+                if ($result_id !== NULL && $result_exhibition_id !== NULL) {
                     // Upload extra images
                     $uploaded_image_names = $this->imageupload->upload_bulk_images('extra_images');
                     if (!empty($uploaded_image_names)) {

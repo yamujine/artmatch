@@ -27,6 +27,7 @@ class Artwork_model extends CI_Model {
         if ($result->num_rows() > 0) {
             return true;
         }
+
         return false;
     }
 
@@ -78,6 +79,17 @@ class Artwork_model extends CI_Model {
             ->from(self::TABLE_NAME)
             ->where('id', $artwork_id)
             ->get()->row();
+    }
+
+    public function get_bare_by_ids(array $artwork_ids) {
+        if (empty($artwork_ids)) {
+            return NULL;
+        }
+
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where_in('id', $artwork_ids)
+            ->get()->result();
     }
 
     public function get_by_user_id($user_id) {
