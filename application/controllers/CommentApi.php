@@ -31,7 +31,13 @@ class CommentApi extends API_Controller {
             $result_id = $this->comment_model->insert_comment($type, $user_id, $type_id, $comment);
 
             if ($result_id !== NULL) {
-                $this->set_success_response(array('type' => $type, 'type_id' => $type_id, 'comment' => $comment, 'result_type' => "insert"));
+                $this->set_success_response([
+                    'type' => $type,
+                    'type_id' => $type_id,
+                    'comment_id' => $result_id,
+                    'comment' => $comment,
+                    'result_type' => 'insert'
+                ]);
             } else {
                 $this->set_fail_response('101', array('message' => 'Failed to insert'));
             }
