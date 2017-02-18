@@ -41,7 +41,7 @@ class Places extends MY_Controller {
         }
 
         // 조회수 증가
-        $this->artwork_model->update_view_count_by_id($place_id);
+        $this->place_model->update_view_count_by_id($place_id);
 
         $this->twig->display('places/detail', $data);
     }
