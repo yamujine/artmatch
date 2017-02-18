@@ -30,11 +30,11 @@ gulp.task('bootstrap', function () {
     .pipe(gulp.dest('static/dist/bootstrap'));
 });
 
-gulp.task('slick', function () {
-  filesExist(['assets/bower_components/slick-carousel/slick']);
+gulp.task('prefixfree', function () {
+  filesExist(['assets/bower_components/prefixfree/**']);
 
-  return gulp.src('assets/bower_components/slick-carousel/slick/**')
-    .pipe(gulp.dest('static/dist/slick'));
+  return gulp.src('assets/bower_components/prefixfree/**')
+    .pipe(gulp.dest('static/dist/prefixfree'));
 });
 /** For Develop TASK END **/
 
@@ -56,7 +56,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
-gulp.task('dev', ['jquery', 'bootstrap', 'slick']);
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree']);
 
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')
