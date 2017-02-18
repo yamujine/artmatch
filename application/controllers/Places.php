@@ -50,8 +50,18 @@ class Places extends MY_Controller {
 
         $data = [];
 
-        if (!empty($place_id)) {
+        if (empty($place_id)) {
+            // 장소 신규 등록시
+            if ($this->accountlib->get_user_type() !== '1') {
+                alert_and_redirect('공간소유자 회원만 장소 등록이 가능합니다.');
+            }
+        } else {
+            // 기존 장소 수정시
             $place = $this->place_model->get_by_id($place_id);
+            if ($place->user_id !== $this->accountlib->get_user_id()) {
+                alert_and_redirect('본인의 장소만 수정할 수 있습니다.');
+            }
+
             $place_array = json_decode(json_encode($place), true); // StdClass to Array conversion
             $data = array_merge($data, $place_array);
         }
