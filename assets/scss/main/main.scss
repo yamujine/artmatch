@@ -35,10 +35,14 @@
     }
 
     .container {
-      width: 100%; height: 230px; padding: 0;
+      width: 100%;
+      height: 240px;
+      padding: 0;
+      overflow: hidden;
 
       .slider {
         padding: 0 15px;
+        margin-top: 10px;
 
         @include prefix(transform, translate3d(0, 0, 0));
 
