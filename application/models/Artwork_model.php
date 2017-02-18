@@ -56,6 +56,23 @@ class Artwork_model extends CI_Model {
         return $query->get()->result();
     }
 
+    public function get_total_count($search = null) {
+        $query = $this->db
+            ->from(self::TABLE_NAME)
+            ->order_by('id', 'DESC');
+
+        if ($search !== null && !empty($search)) {
+            if (is_numeric($search)) {
+                $query = $query->where('id', $search);
+            }
+            // 제목, tags 매치
+            $query = $query->or_like('title', $search)
+                ->or_like('tags', $search);
+        }
+
+        return $query->get()->num_rows();
+    }
+
     public function get_by_id($artwork_id) {
         $artwork = $this->db
             ->select('artworks.*, count(user_artwork_picks.id) as pick_count')

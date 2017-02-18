@@ -1,6 +1,36 @@
-{% for place in places %}
-  <a href="/places/{{ place.id }}" class="ui medium image">
-    <img src="{{ place.image }}">
-    {{ place.name }}
-  </a>
+{% for item in places %}
+  {# 픽된거면 picked 클래스 추가해야함 #}
+  <li class="item">
+    <a href="/places/{{ item.id }}">
+      <div class="imgThumb">
+        <div class="dimm"></div>
+        <div class="preview">
+          미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+        </div>
+        {# 썸네일 이미지 #}
+        <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
+        {# 모집: recruit 모집 완료: recruitFinish #}
+        {% if loop.first %}
+          <div class="placeStatusTag recruit"></div>
+        {% endif %}
+        <button class="pickBtn"></button>
+      </div>
+      <div class="meta">
+        <div class="pick">
+          {# PICK 갯수 #}
+          <span class="bold">PICK</span> 364
+        </div>
+        <div class="title">{{ item.name }}</div>
+        <div class="description">분당에서 가장 유명한 브런치 까페입니다. 회화전공한 사장이 운영하는 곳이라 다양한 작품을 매달 전시는...</div>
+        <div class="address">
+          <div class="pin"></div>
+          <div class="keyword">{{ item.address }}</div>
+        </div>
+        <div class="tags">{{ item.tags }}</div>
+        <div class="displayCount">
+          <span class="number">10</span>작품 전시중
+        </div>
+      </div>
+    </a>
+  </li>
 {% endfor %}

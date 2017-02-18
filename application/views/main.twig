@@ -53,7 +53,35 @@
         $('.sliderTrack').css({
           'transform': 'translate3d(-' + currentCoordinateX + 'px, 0, 0)'
         });
-      })
+      });
+
+      // 더 보기
+      $('.patItemMoreButton').click(function () {
+        $(this).hide();
+        // 로더 보여주기
+        $('.patLoader').show();
+
+        var type = $(this).data('type');
+        var offset = $('.patItemList li').length;
+        var totalCount = $(this).data('total-count');
+
+        $.get('/api/' + type, {offset: offset, limit: 9})
+          .done(function (data) {
+            $('.itemList').append(data);
+
+            $('.patLoader').hide();
+
+            $('.patItemList li').removeClass('third').each(function (key, value) {
+              if ((key + 1) % 3 == 0) {
+                $(value).addClass('third');
+              }
+            });
+
+            if (offset + 9 < totalCount) {
+              $('.patItemMoreButton').show();
+            }
+          });
+      });
     });
   </script>
 {% endblock %}
@@ -123,7 +151,7 @@
   <div class="patItemList">
     <div class="container">
       {# 그리드 형태의 목록 (작품, 장소) #}
-      <ul class="itemList{% if type == 'artworks' %} artworkList {% else %} placeList {% endif %}">
+      <ul class="itemList {% if type == 'artworks' %}artworkList{% else %}placeList{% endif %}">
         {% for item in items %}
           {# STATUS: PICKED (이미 PICKED된 아트웍 또는 장소) 사용자가 이미 PICK 했는지 여부 정보 필요 #}
           <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if loop.first %}picked{% endif %}">
@@ -172,10 +200,14 @@
     </div>
   </div>
 
-  {# 더 보기 버튼 #}
-  <div class="patItemMore">
-    <button class="patItemMoreButton">
-      더 보기 <i class="glyphicon glyphicon-menu-down"></i>
-    </button>
-  </div>
+  <div class="patLoader"></div>
+
+  {% if total_count > 9 %}
+    {# 더 보기 버튼 #}
+    <div class="patItemMore">
+      <button class="patItemMoreButton" data-type="{{ type }}" data-total-count="{{ total_count }}">
+        더 보기 <i class="glyphicon glyphicon-menu-down"></i>
+      </button>
+    </div>
+  {% endif %}
 {% endblock %}
