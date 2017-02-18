@@ -16,6 +16,8 @@ class Imageupload {
         $file_name = '';
         if (!empty($image_type)) {
             $upload_path = self::UPLOAD_PATH . $image_type . '/';
+        } else {
+            $upload_path = self::UPLOAD_PATH;
         }
 
         // Load upload library

@@ -36,6 +36,13 @@ gulp.task('labelauty', function () {
   return gulp.src('assets/bower_components/jquery-labelauty/source/**')
     .pipe(gulp.dest('static/dist/jquery-labelauty'));
 });
+
+gulp.task('prefixfree', function () {
+  filesExist(['assets/bower_components/prefixfree/**']);
+
+  return gulp.src('assets/bower_components/prefixfree/**')
+    .pipe(gulp.dest('static/dist/prefixfree'));
+});
 /** For Develop TASK END **/
 
 gulp.task('uglify', function () {
@@ -56,6 +63,8 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree']);
+
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')
     .pipe(gulp.dest('static/dist/fonts'));
@@ -64,8 +73,7 @@ gulp.task('font', function () {
 gulp.task('build', sync.sync([
   'dist-clean',
   [
-    'jquery',
-    'bootstrap',
+    'dev',
     'labelauty',
     'uglify',
     'sass',

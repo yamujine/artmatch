@@ -1,43 +1,178 @@
 {% extends "base.twig" %}
 
-{% block contents %}
-	<div class="row">
-		<a href="{{ BASE_URL }}/artworks" class="ui button">작품 목록</a>
-		<a href="{{ BASE_URL }}/places" class="ui button">장소 목록</a>
-		
-		<a href="{{ BASE_URL }}/artworks/upload" class="ui blue button">작품 등록</a>
-		<a href="{{ BASE_URL }}/places/upload" class="ui blue button">장소 등록</a>
-	</div>
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="../../static/dist/css/main/main.min.css">
+{% endblock %}
 
-	<div class="row">
-		<div class="ui input">
-			<form>
-				<input name="q" type="text" placeholder="Common passwords...">
-				<input type="hidden" name="type" value="{{ type }}">
-				<button class="ui button" type="submit">검색</button>
-			</form>
-			<a href="/users/me" class="ui button">마이페이지</a>
-		</div>
-	</div>
-	
-	{% if query %}{{ query }} 검색결과{% endif %}
-	<div class="ui top attached tabular menu">
-		<div class="item {% if type == 'artworks' %}active{% endif %}">
-			<a href="?type=artworks">작품</a>
-		</div>
-		<div class="item {% if type == 'places' %}active{% endif %}">
-			<a href="?type=places">장소</a>
-		</div>
-	</div>
-	<div class="ui bottom attached active tab segment">
-		<div class="ui small images">
-			{% for item in items %}
-				<a href="/{{ type }}/{{ item.id }}" class="ui medium image">
-					<img src="data:image/jpeg;base64,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">
-					{% if item.title %}{{ item.title }}{% else %}{{ item.name }}{% endif %}
-					{{ item.tags }}
-				</a>
-			{% endfor %}
-		</div>
-	</div>
+{% block script %}
+  <script type="text/javascript">
+    $(function () {
+      // Carousel Init
+      var totalWidth = 0;
+      var currentOffset = 0;
+      var currentCoordinateX = 0;
+      var totalCount = 0;
+      var $items = $('.sliderTrack .item');
+
+      totalCount = $items.length;
+
+      $items.each(function (key, value) {
+        totalWidth += $(value).outerWidth(true);
+      });
+
+      $('.sliderTrack').css({
+        'width': totalWidth,
+        'transform': 'translate3d(0, 0, 0)'
+      });
+
+      $('.sliderControl .sliderNextBtn').click(function () {
+        // 갤러리의 전체 길이와 현재 노출된 갤러리의 길이를 비교하여 오른쪽으로 더 움직일지 말지 여부 확인
+        var totalOuterWidth = parseInt($(window).width()) - 136 + currentCoordinateX;
+        if (totalOuterWidth >= totalWidth) {
+          return false;
+        }
+
+        if (currentOffset >= totalCount - 1) {
+          return false;
+        }
+
+        currentCoordinateX += $($items.get(currentOffset++)).width();
+
+        $('.sliderTrack').css({
+          'transform': 'translate3d(-' + currentCoordinateX + 'px, 0, 0)'
+        });
+      });
+
+      $('.sliderControl .sliderPrevBtn').click(function () {
+        if (currentOffset <= 0) {
+          return false;
+        }
+
+        currentCoordinateX -= $($items.get(--currentOffset)).width();
+
+        $('.sliderTrack').css({
+          'transform': 'translate3d(-' + currentCoordinateX + 'px, 0, 0)'
+        });
+      })
+    });
+  </script>
+{% endblock %}
+
+{% block contents %}
+  <div class="patGallery">
+    <div class="container">
+      <div class="slider">
+        <div class="sliderTrack">
+          <div class="item title">
+            <img src="../../static/images/main_pick_artist.png"/>
+          </div>
+          {% for item in items|slice(0, 5) %}
+            <div class="item {% if loop.first %}picked{% endif %}">
+              <a href="/artworks/{{ item.id }}">
+                <div class="imgThumb">
+                  <div class="dimm"></div>
+                  <div class="preview">
+                    미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+                  </div>
+                  {# 썸네일 이미지 #}
+                  <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
+                  <button class="pickBtn"></button>
+                  <div class="meta">
+                    <div class="title">{{ item.title }}</div>
+                    <div class="pick"><span class="">PICK</span> 360</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="sliderControl">
+      <button class="sliderPrevBtn">
+        <i class="glyphicon glyphicon-menu-left"></i>
+      </button>
+      <button class="sliderNextBtn">
+        <i class="glyphicon glyphicon-menu-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="patTypeSelect">
+    <ul class="typeSelectTab">
+      <li><a {% if type == 'artworks' %}class="active"{% endif %} href="?type=artworks">ARTIST</a></li>
+      <li><a {% if type == 'places' %}class="active"{% endif %} href="?type=places">SPACE</a></li>
+    </ul>
+    <div class="divider"></div>
+  </div>
+
+  {% if type == 'places' %}
+    <div class="patPlaceTagCloud">
+      <div class="container">
+        <div class="tagLabel"></div>
+        <ul class="tagList">
+          <li><a href="#">홍대</a></li>
+          <li><a href="#">인천</a></li>
+          <li><a href="#">아트플랫폼</a></li>
+          <li><a href="#">한남동</a></li>
+          <li><a href="#">상수</a></li>
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="patItemList">
+    <div class="container">
+      {# 그리드 형태의 목록 (작품, 장소) #}
+      <ul class="itemList{% if type == 'artworks' %} artworkList {% else %} placeList {% endif %}">
+        {% for item in items %}
+          {# STATUS: PICKED (이미 PICKED된 아트웍 또는 장소) 사용자가 이미 PICK 했는지 여부 정보 필요 #}
+          <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if loop.first %}picked{% endif %}">
+            <a href="/{{ type }}/{{ item.id }}">
+              <div class="imgThumb">
+                <div class="dimm"></div>
+                <div class="preview">
+                  미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+                </div>
+                {# 썸네일 이미지 #}
+                <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
+                {% if loop.first and type == 'places' %}
+                  <div class="placeStatusTag recruit"></div>
+                {% endif %}
+                <button class="pickBtn"></button>
+              </div>
+              <div class="meta">
+                <div class="pick">
+                  {# PICK 갯수 #}
+                  <span class="bold">PICK</span> 364
+                </div>
+                {% if type == 'artworks' %}
+                  <div class="title">{{ item.title }}</div>
+                  <div class="name">김종인</div>
+                {% else %}
+                  <div class="title">{{ item.name }}</div>
+                  <div class="description">분당에서 가장 유명한 브런치 까페입니다. 회화전공한 사장이 운영하는 곳이라 다양한 작품을 매달 전시는...</div>
+                  <div class="address">
+                    <div class="pin"></div>
+                    <div class="keyword">{{ item.address }}</div>
+                  </div>
+                  <div class="tags">{{ item.tags }}</div>
+                  <div class="displayCount">
+                    <span class="number">10</span>작품 전시중
+                  </div>
+                {% endif %}
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  {# 더 보기 버튼 #}
+  <div class="patItemMore">
+    <button class="patItemMoreButton">
+      더 보기 <i class="glyphicon glyphicon-menu-down"></i>
+    </button>
+  </div>
 {% endblock %}
