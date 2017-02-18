@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['artwork_model', 'place_model', 'exhibition_model']);
+        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'pick_model']);
     }
 
     public function index() {
@@ -15,6 +15,11 @@ class Artworks extends MY_Controller {
 
     public function detail($artwork_id) {
         $data = [];
+        $user_id = $this->accountlib->get_user_id();
+
+        $is_pick = $this->pick_model->is_pick($user_id ,$artwork_id);
+        $data['is_pick'] = $is_pick;
+
 
         $artwork = $this->artwork_model->get_by_id($artwork_id);
         if ($artwork) {
