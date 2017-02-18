@@ -69,20 +69,4 @@ class Account extends CI_Controller {
 		$data['user'] = $user;
 		$this->twig->display('account/not_auth', $data);
 	}
-
-    public function reset_password() {
-        $this->load->helper('string');
-        $data = [];
-        if ($this->input->method() === 'post') {
-            $email = $this->input->post('email');
-            $temp_password = random_string('alpha', 8);
-            $this->accountlib->send_email_temp_password($email, $temp_password);
-            $user = $this->user_model->get_by_email($email);
-            $id = $user->id;
-            $hashed_password = password_hash($temp_password, PASSWORD_BCRYPT);
-            $this->user_model->update_password($id, $hashed_password);
-            $data['email'] = $email;
-        }
-        $this->twig->display('account/reset_password', $data);
-    }
 }

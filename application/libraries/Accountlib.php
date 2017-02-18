@@ -97,8 +97,7 @@ class Accountlib {
     }
 
     public function send_email_temp_password($email, $temp_password) {
-        $data['temp_password'] = $temp_password;
-        $email_html = $this->CI->twig->render('email/temp_password', $data);
+        $email_html = $this->CI->twig->render('email/temp_password', ['temp_password' => $temp_password]);
 
         $this->CI->email->initialize(['mailtype' => 'html']);
         $this->CI->email->from('no-reply@pickartyou.com', 'pickartyou');
