@@ -81,6 +81,21 @@
   </div>
 </footer>
 <!-- ======================== 스크립트 영역 ======================== -->
+<script type="text/javascript">
+  // TODO: 정확한 동작 설명 확인 필요
+  $(function () {
+    $(window).scroll(function () {
+      var scrollOffsetTop = $(window).scrollTop();
+      console.log(scrollOffsetTop);
+
+      if (scrollOffsetTop > 0) {
+        $('body').addClass('scroll');
+      } else {
+        $('body').removeClass('scroll');
+      }
+    });
+  });
+</script>
 {% block script %}
 {% endblock %}
 </body>
