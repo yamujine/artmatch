@@ -330,10 +330,80 @@
         padding: 0;
         margin: 0;
 
+        &.artworkList {
+          .item {
+            height: 300px;
+          }
+        }
+
+        &.placeList {
+          .item {
+            height: 342px;
+
+            .meta {
+              height: 112px;
+
+              .description {
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                line-height: 1.42;
+                width: 262px;
+                height: 34px;
+                color: $warm-grey-five;
+                margin-bottom: 5px;
+              }
+
+              .address {
+                position: relative;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                color: $greyish;
+                display: inline-block;
+
+                .pin {
+                  position: absolute;
+                  display: inline-block;
+                  margin-top: 4px;
+                  width: 8px;
+                  height: 12px;
+                  background: url(/static/images/pin.png) no-repeat;
+                }
+                .keyword {
+                  display: inline-block;
+                  margin-left: 12px;
+                }
+              }
+
+              .tags {
+                display: inline-block;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                color: $greyish;
+              }
+
+              .displayCount {
+                font-size: 14px;
+                font-family: 'Noto Sans KR', sans-serif;
+                color: $greyish-brown-two;
+                position: absolute;
+                left: 0;
+                bottom: 5px;
+
+                .number {
+                  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                  color: $dusty-orange;
+                  font-weight: bold;
+                  margin-right: 5px;
+                }
+              }
+            }
+          }
+        }
+
         .item {
           width: 288px;
-          height: 300px;
           display: inline-block;
+          float: left;
           margin: 0 32px 32px 0;
 
           &.third {
