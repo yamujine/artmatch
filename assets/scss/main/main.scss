@@ -115,19 +115,6 @@
                 position: absolute;
               }
             }
-            .pickBtn {
-              z-index: 10;
-              width: 60px;
-              height: 60px;
-              position: absolute;
-              top: 0;
-              right: 0;
-              display: none;
-              // TODO: 백그라운드 이미지 URL 전부 수정 필요
-              background: url(/static/images/main_btn_pick_normal.png);
-              outline: none;
-              border: none;
-            }
             .meta {
               display: none;
               z-index: 11;
@@ -169,7 +156,7 @@
         &:hover {
           a {
             .imgThumb {
-              .dimm, .preview, .pickBtn, .meta {
+              .dimm, .preview, .meta {
                 display: block;
               }
             }
@@ -178,31 +165,9 @@
 
         &.picked {
           a {
-            .imgThumb {
-              .pickBtn {
-                background: url(/static/images/main_btn_pick_select.png);
-              }
-            }
             .meta {
               .pick {
                 color: $tealish;
-              }
-            }
-          }
-        }
-
-        &:not(.picked) {
-          a {
-            .imgThumb {
-              .pickBtn {
-                &:hover {
-                  width: 70px;
-                  height: 70px;
-                  padding: 10px 10px 0 0;
-                  top: -10px;
-                  right: -10px;
-                  background: url(/static/images/main_btn_pick_select_hover.png) top right no-repeat;
-                }
               }
             }
           }
