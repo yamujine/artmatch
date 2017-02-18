@@ -9,6 +9,6 @@ class Landing extends CI_Controller {
     }
 
     public function index() {
-        $this->twig->display('landing/landing');
+        $this->twig->display('landing/index');
     }
 }
