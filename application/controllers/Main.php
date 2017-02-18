@@ -9,10 +9,10 @@ class Main extends MY_Controller {
 
         if ($type === 'artworks') {
             $result = $this->artwork_model->gets(9, 0, $query);
-            $total_count = $this->artwork_model->get_total_count(9, 0, $query);
+            $total_count = $this->artwork_model->get_total_count($query);
         } elseif ($type === 'places') {
             $result = $this->place_model->gets(9, 0, $query);
-            $total_count = $this->place_model->get_total_count(9, 0, $query);
+            $total_count = $this->place_model->get_total_count($query);
 
             if (!empty($result)) {
                 foreach ($result as $res) {

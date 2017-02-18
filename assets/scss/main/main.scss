@@ -1,5 +1,6 @@
 @import "../helper/colorchips";
 @import "../helper/mixins";
+@import "../helper/loader";
 
 #patContents {
   width: 100%;
@@ -537,6 +538,17 @@
           }
         }
       }
+    }
+  }
+
+  .patLoader {
+    display: none;
+    width: 40px;
+    height: 40px;
+    margin: 20px auto;
+
+    &.visible {
+      display: block;
     }
   }
 

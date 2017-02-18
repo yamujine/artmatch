@@ -52,14 +52,10 @@ class Place_model extends CI_Model {
         return $query->get()->result();
     }
 
-    public function get_total_count($limit = null, $offset = null, $search = null) {
+    public function get_total_count($search = null) {
         $query = $this->db
             ->from(self::TABLE_NAME)
             ->order_by('id', 'DESC');
-
-        if ($limit !== null) {
-            $query = $query->limit($limit, $offset);
-        }
 
         if ($search !== null && !empty($search)) {
             if (is_numeric($search)) {
