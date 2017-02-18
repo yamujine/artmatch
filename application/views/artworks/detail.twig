@@ -1,14 +1,14 @@
 {% extends "base.twig" %}
 
 {% block script %}
-    <script type="text/javascript">
-        $('#form-pick').submit(function () {
-            var type = $("input[name=type]");
-            var type_id = $("input[name=type_id]");
-
-            data = {};
-            data.type = type.val();
-            data.type_id = type_id.val();
+    <script>
+        $('#pickForm').submit(function () {
+            var type = $("#pickForm").find("input[name=type]").val();
+            var type_id = $("#pickForm").find("input[name=type_id]").val();
+            var data = {
+                type: type,
+                type_id: type_id
+            };
 
             $.ajax({
                 method: "POST",
@@ -17,11 +17,13 @@
             }).done(function (data) {
                 console.log(data);
                 if (data.body.result_type === 'on') {
+                    //TODO: DOM사용
                     // pick 추가
-                    location.href = '/artworks/'+type_id.val();
+                    location.href = '/artworks/'+type_id;
                 } else if(data.body.result_type === 'off') {
+                    //TODO: DOM사용
                     // pick 제거
-                    location.href = '/artworks/'+type_id.val();
+                    location.href = '/artworks/'+type_id;
                 } else {
                     alert(data.body.message);
                 }
@@ -120,7 +122,7 @@
     </tr>
 </table>
 
-    <form id="form-pick">
+    <form id="pickForm">
         <div class="form-group">
             <input type="hidden" name="type" value="artwork">
             <input type="hidden" name="type_id" class="form-control" value="{{ artwork.id }}">

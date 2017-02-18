@@ -23,11 +23,24 @@ class Pick_model extends CI_Model {
             ->count_all_results();
     }
 
-    public function is_pick($user_id, $artwork_id) {
+    public function is_pick_artwork($user_id, $artwork_id) {
         $count = $this->db
             ->from(self::ARTWORK_PICKS_TABLE_NAME)
             ->where('user_artwork_picks.user_id', $user_id)
             ->where('user_artwork_picks.artwork_id', $artwork_id)
+            ->count_all_results();
+        if($count === 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function is_pick_place($user_id, $place_id) {
+        $count = $this->db
+            ->from(self::PLACE_PICKS_TABLE_NAME)
+            ->where('user_place_picks.user_id', $user_id)
+            ->where('user_place_picks.place_id', $place_id)
             ->count_all_results();
         if($count === 1) {
             return true;
