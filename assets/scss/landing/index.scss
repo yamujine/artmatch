@@ -1,0 +1,94 @@
+@import "../helper/colorchips";
+@import "../helper/mixins";
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: url(/static/images/landing/bg.png) center center no-repeat;
+  @include prefix(background-size, cover);
+  @include retina-image('/static/images/landing/bg@2x.png', 100%, 100%);
+
+  #patContents {
+    position: absolute;
+    width: 500px;
+    height: 229px;
+    left: 50%;
+    top: 50%;
+    margin: -164px 0 0 -250px;
+    text-align: center;
+
+    .container {
+      display: inline-block;
+
+      .logo {
+        width: 297px;
+        height: 36px;
+        margin: 0 auto 10px auto;
+        background: url(/static/images/landing/logo.png) center center no-repeat;
+        @include prefix(background-size, cover);
+        @include retina-image('/static/images/landing/logo@2x.png', 100%, 100%);
+      }
+
+      .title, .description {
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 20px;
+        text-align: center;
+        letter-spacing: normal;
+        line-height: normal;
+        font-stretch: normal;
+        color: $greyish-three;
+      }
+
+      .title {
+        font-size: 20px;
+      }
+
+      .description {
+        padding-top: 23px;
+        clear: both;
+        font-size: 11px;
+      }
+
+      .formContainer {
+        margin: 73px auto 0 auto;
+
+        #mailMeForm {
+          clear: both;
+
+          .field {
+            float: left;
+
+            input[type=text] {
+              width: 357px;
+              height: 38px;
+              padding: 0 10px;
+              background: $white-two;
+              border: 1px solid $white-three;
+              color: $black-five;
+              font-size: 16px;
+              font-family: 'Noto Sans KR', sans-serif;
+              outline: none;
+            }
+          }
+
+          button[type=submit] {
+            cursor: pointer;
+            float: left;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: #fbfbfb;
+            width: 91px;
+            height: 41px;
+            background: $brownish-grey-two;
+            border: none;
+            outline: none;
+            margin-left: 24px;
+          }
+        }
+      }
+    }
+  }
+}
