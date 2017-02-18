@@ -120,6 +120,21 @@ class Artwork_model extends CI_Model {
             ->get()->result();
     }
 
+    /**
+     * 메인 pick_artist 영역 조건: pick 카운트 높은순, 최신순
+     */
+    public function get_pick_artworks() {
+        return $this->db
+            ->select('artworks.*, count(user_artwork_picks.id) as pick_count')
+            ->from(self::TABLE_NAME)
+            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
+            ->group_by('artworks.id')
+            ->order_by('count(user_artwork_picks.id)', 'DESC')
+            ->order_by('id', 'DESC')
+            ->limit(5)
+            ->get()->result();
+    }
+
     public function insert($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags) {
         $this->_fill_class_variable_with_params($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags);
         if ($this->db->insert(self::TABLE_NAME, $this)) {
