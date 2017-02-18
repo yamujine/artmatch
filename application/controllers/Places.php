@@ -17,7 +17,7 @@ class Places extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $is_pick = $this->pick_model->is_pick_place($user_id ,$place_id);
+        $is_pick = $this->pick_model->is_place_pick($user_id ,$place_id);
         $data['is_pick'] = $is_pick;
 
         $place = $this->place_model->get_by_id($place_id);
