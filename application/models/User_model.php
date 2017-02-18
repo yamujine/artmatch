@@ -78,4 +78,12 @@ class User_model extends CI_Model {
             ->where('user_name', $user_name)
             ->get()->row();
     }
+
+    public function update_password($id, $new_password) {
+        if ($this->db->update(self::TABLE_NAME, ['password' => $new_password], ['id' => $id])) {
+            return TRUE;
+        } else {
+            return NULL;
+        }
+    }
 }
