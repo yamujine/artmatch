@@ -1,5 +1,67 @@
 {% extends "base.twig" %}
 
+{% block script %}
+    <script>
+        $("#commentForm").submit(function () {
+            var type = $("#commentForm").find("input[name=type]").val();
+            var type_id = $("#commentForm").find("input[name=type_id]").val();
+            var comment = $("#commentForm").find("textarea[name=comment]").val();
+
+            var data = {
+                type: type,
+                type_id: type_id,
+                comment: comment
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "/api/comments/insert",
+                data: data
+            }).done(function (data) {
+                if (data.result == false) {
+                    alert("댓글 등록 실패");
+                } else {
+                    //TODO: DOM사용
+                    location.href = '/places/'+type_id;
+                }
+            }).fail(function () {
+                alert("error");
+            });
+            return false;
+        });
+
+        $('#pickForm').submit(function () {
+            var type = $("#pickForm").find("input[name=type]").val();
+            var type_id = $("#pickForm").find("input[name=type_id]").val();
+            var data = {
+                type: type,
+                type_id: type_id
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "/api/pick",
+                data: data
+            }).done(function (data) {
+                if (data.body.result_type === 'on') {
+                    //TODO: DOM사용
+                    // pick 추가
+                    location.href = '/places/'+type_id;
+                } else if(data.body.result_type === 'off') {
+                    //TODO: DOM사용
+                    // pick 제거
+                    location.href = '/places/'+type_id;
+                } else {
+                    alert(data.body.message);
+                }
+            }).fail(function () {
+                alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+            });
+            return false;
+        });
+    </script>
+{% endblock %}
+
 {% block contents %}
   <table class="ui definition table">
     <tr>
@@ -73,8 +135,19 @@
         {% endfor %}
       </td>
     </tr>
+    <tr>
+      <td>pick 여부확인</td>
+      <td>
+          {% if is_pick == true %}
+            pick을 한 장소
+          {% else %}
+            pick하지 않은 장소
+          {% endif %}
+      </td>
+    </tr>
   </table>
-  
+
+
   댓글리스트
   <table class="table">
     <thead>
@@ -96,7 +169,7 @@
     {% endfor %}
     </tbody>
   </table>
-  
+
   <div>
     댓글
     <table>
@@ -114,38 +187,17 @@
       </tbody>
     </table>
   </div>
-  
+
+  <form id="pickForm">
+    <div class="form-group">
+      <input type="hidden" name="type" value="place">
+      <input type="hidden" name="type_id" class="form-control" value="{{ place.id }}">
+    </div>
+    <button type="submit" class="btn btn-default">pick!!!!!!!!!!!!!</button>
+  </form>
+
   <a class="ui green button" href="/places/edit/{{ place.id }}">수정</a>
   <a class="ui button" href="/places">목록</a>
 {% endblock %}
 
-{% block script %}
-  <script>
-    $("#commentForm").submit(function () {
-      var type = $("#commentForm").find("input[name=type]").val();
-      var type_id = $("#commentForm").find("input[name=type_id]").val();
-      var comment = $("#commentForm").find("textarea[name=comment]").val();
 
-      var data = {
-        type: type,
-        type_id: type_id,
-        comment: comment
-      };
-
-      $.ajax({
-        method: "POST",
-        url: "/api/comments/insert",
-        data: data
-      }).done(function (data) {
-        if (data.result == false) {
-          alert("댓글 등록 실패");
-        } else {
-          // TODO 화면에 바로 그려주기
-        }
-      }).fail(function () {
-        alert("error");
-      });
-      return false;
-    });
-  </script>
-{% endblock %}
