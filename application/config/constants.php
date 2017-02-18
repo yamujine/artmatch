@@ -83,3 +83,17 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+/*
+|--------------------------------------------------------------------------
+| Pick Art You Constants
+|--------------------------------------------------------------------------
+|
+| These constants are used in Pick Art You web services
+| 아래 상수들은 MY_Controller.php 내 Twig global variables와 동기화 필요
+*/
+defined('USER_TYPE_ARTIST') OR define('USER_TYPE_ARTIST', '0');
+defined('USER_TYPE_PLACE_OWNER') OR define('USER_TYPE_PLACE_OWNER', '1');
+
+defined('TYPE_ARTWORKS') OR define('TYPE_ARTWORKS', 'artworks');
+defined('TYPE_PLACES') OR define('TYPE_PLACES', 'places');

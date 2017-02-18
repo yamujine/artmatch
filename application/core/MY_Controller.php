@@ -12,6 +12,12 @@ class MY_Controller extends CI_Controller {
         // Twig 관련 글로벌 설정은 이곳 또는 application/libraries/Twig.php 에 작성
         $this->twig->addGlobal('session', $_SESSION);
 
+        // 아래 상수들은 constants.php와 동기화 필요
+        $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
+        $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
+        $this->twig->addGlobal('TYPE_ARTWORKS', TYPE_ARTWORKS);
+        $this->twig->addGlobal('TYPE_PLACES', TYPE_PLACES);
+
         if ($this->accountlib->is_login() === false) {
             redirect('/account/login');
         } elseif ($this->accountlib->is_auth() === false) {

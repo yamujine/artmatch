@@ -6,8 +6,10 @@ class Account extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('user_model');
-        $this->load->library('twig');
         $this->load->helper('url');
+        $this->load->library('twig');
+        $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
+        $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
     }
 
     public function signup() {
