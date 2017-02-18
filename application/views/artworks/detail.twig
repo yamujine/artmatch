@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block script %}
-	<script type="text/javascript">
+    <script type="text/javascript">
         $('#form-pick').submit(function () {
             var type = $("input[name=type]");
             var type_id = $("input[name=type_id]");
@@ -15,7 +15,12 @@
                 url: "/api/pick",
                 data: data
             }).done(function (data) {
-                if (data.result === true) {
+                console.log(data);
+                if (data.body.result_type === 'on') {
+                    // pick 추가
+                    location.href = '/artworks/'+type_id.val();
+                } else if(data.body.result_type === 'off') {
+                    // pick 제거
                     location.href = '/artworks/'+type_id.val();
                 } else {
                     alert(data.body.message);
@@ -25,105 +30,105 @@
             });
             return false;
         });
-	</script>
+    </script>
 {% endblock %}
 
 {% block contents %}
 
 <table class="ui definition table">
-	<tr>
-		<td>주인?</td>
-		<td>{{ artwork.user.name }}</td>
-	</tr>
-	<tr>
-		<td>작품명</td>
-		<td>{{ artwork.title }} PICKS: {{ artwork.pick_count }}</td>
-	</tr>
-	<tr>
-		<td>등록일</td>
-		<td>{{ artwork.upload_date }}</td>
-	</tr>
-	<tr>
-		<td>상태</td>
-		<td>
-			{% if artwork.status == 1 %}
-				공간구함
-			{% elseif artwork.status == 2 %}
-				전시중
-			{% elseif artwork.status == 3 %}
-				공간 구하지 않음
-			{% endif %}
-		</td>
-	</tr>
-	<tr>
-		<td>판매 여부</td>
-		<td>
-			{% if artwork.for_sale == 1 %}
-				판매함
-			{% else %}
-				판매 안함
-			{% endif %}
-		</td>
-	</tr>
-	<tr>
-		<td>작품 설명</td>
-		<td>{{ artwork.description }}</td>
-	</tr>
-	<tr>
-		<td>댓글 허용여부</td>
-		<td>
-			{% if artwork.use_comment == 1 %}
-				댓글 가능
-			{% else %}
-				댓글 불가능
-			{% endif %}
-		</td>
-	</tr>
-	<tr>
-		<td>태그</td>
-		<td>{{ artwork.tags }}</td>
-	</tr>
-	<tr>
-		<td>대표이미지</td>
-		<td>{{ artwork.image }}</td>
-	</tr>
-	<tr>
-		<td>추가이미지</td>
-		<td>
-			{% for extra in artwork.extra_images %}
-				{{ extra.image }}
-			{% endfor %}
-		</td>
-	</tr>
-	<tr>
-		<td>전시 이력</td>
-		<td>
-			{% for exhibition in exhibitions %}
-			<img src="{{ exhibition.place.image }}">{{ exhibition.place.name }}{{ exhibition.start_date|date('Y-m-d') }} ~ {{ exhibition.end_date|date('Y-m-d') }}<br>
-			{% endfor %}
-		</td>
-	</tr>
-	<tr>
-		<td>pick 여부확인</td>
-		<td>
-            {% if pickStatus == 1 %}
-				pick을 한 작품
-            {% else %}
-				pick하지 않은 작품
+    <tr>
+        <td>주인?</td>
+        <td>{{ artwork.user.name }}</td>
+    </tr>
+    <tr>
+        <td>작품명</td>
+        <td>{{ artwork.title }} PICKS: {{ artwork.pick_count }}</td>
+    </tr>
+    <tr>
+        <td>등록일</td>
+        <td>{{ artwork.upload_date }}</td>
+    </tr>
+    <tr>
+        <td>상태</td>
+        <td>
+            {% if artwork.status == 1 %}
+                공간구함
+            {% elseif artwork.status == 2 %}
+                전시중
+            {% elseif artwork.status == 3 %}
+                공간 구하지 않음
             {% endif %}
-		</td>
-	</tr>
+        </td>
+    </tr>
+    <tr>
+        <td>판매 여부</td>
+        <td>
+            {% if artwork.for_sale == 1 %}
+                판매함
+            {% else %}
+                판매 안함
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>작품 설명</td>
+        <td>{{ artwork.description }}</td>
+    </tr>
+    <tr>
+        <td>댓글 허용여부</td>
+        <td>
+            {% if artwork.use_comment == 1 %}
+                댓글 가능
+            {% else %}
+                댓글 불가능
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>태그</td>
+        <td>{{ artwork.tags }}</td>
+    </tr>
+    <tr>
+        <td>대표이미지</td>
+        <td>{{ artwork.image }}</td>
+    </tr>
+    <tr>
+        <td>추가이미지</td>
+        <td>
+            {% for extra in artwork.extra_images %}
+                {{ extra.image }}
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>전시 이력</td>
+        <td>
+            {% for exhibition in exhibitions %}
+            <img src="{{ exhibition.place.image }}">{{ exhibition.place.name }}{{ exhibition.start_date|date('Y-m-d') }} ~ {{ exhibition.end_date|date('Y-m-d') }}<br>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>pick 여부확인</td>
+        <td>
+            {% if pick_status == true %}
+                pick을 한 작품
+            {% else %}
+                pick하지 않은 작품
+            {% endif %}
+        </td>
+    </tr>
 </table>
 
-	<form id="form-pick">
-		<div class="form-group">
-			<input type="hidden" name="type" value="artwork">
-			<input type="hidden" name="type_id" class="form-control" value="{{ artwork.id }}">
-		</div>
-		<button type="submit" class="btn btn-default">pick!!!!!!!!!!!!!</button>
-	</form>
+    <form id="form-pick">
+        <div class="form-group">
+            <input type="hidden" name="type" value="artwork">
+            <input type="hidden" name="type_id" class="form-control" value="{{ artwork.id }}">
+        </div>
+        <button type="submit" class="btn btn-default">pick!!!!!!!!!!!!!</button>
+    </form>
 
-	<a class="ui green button" href="/artworks/edit/{{ artwork.id }}">수정</a>
-	<a class="ui button" href="/artworks">목록</a>
+    <a class="ui green button" href="/artworks/edit/{{ artwork.id }}">수정</a>
+    <a class="ui button" href="/artworks">목록</a>
 
 {% endblock %}
