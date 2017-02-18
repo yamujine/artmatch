@@ -7,6 +7,8 @@ class Main extends MY_Controller {
         $type = $this->input->get('type') ?: 'artworks';
         $query = $this->input->get('q');
 
+        $pick_artworks = $this->artwork_model->get_pick_artworks();
+
         if ($type === 'artworks') {
             $result = $this->artwork_model->gets(9, 0, $query);
             $total_count = $this->artwork_model->get_total_count($query);
@@ -25,6 +27,7 @@ class Main extends MY_Controller {
         $data = [
             'type' => $type,
             'query' => $query,
+            'pick_artworks' => $pick_artworks,
             'items' => $result,
             'total_count' => $total_count
         ];
