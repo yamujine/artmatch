@@ -52,6 +52,28 @@ class Place_model extends CI_Model {
         return $query->get()->result();
     }
 
+    public function get_total_count($limit = null, $offset = null, $search = null) {
+        $query = $this->db
+            ->from(self::TABLE_NAME)
+            ->order_by('id', 'DESC');
+
+        if ($limit !== null) {
+            $query = $query->limit($limit, $offset);
+        }
+
+        if ($search !== null && !empty($search)) {
+            if (is_numeric($search)) {
+                $query = $query->where('id', $search);
+            }
+            // 이름, 주소, tags 매치
+            $query = $query->or_like('name', $search)
+                ->or_like('address', $search)
+                ->or_like('tags', $search);
+        }
+
+        return $query->get()->num_rows();
+    }
+
     public function get_by_id($place_id) {
         $place = $this->db
             ->select('places.*, count(user_place_picks.id) as pick_count')

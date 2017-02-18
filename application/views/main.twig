@@ -168,10 +168,12 @@
     </div>
   </div>
 
-  {# 더 보기 버튼 #}
-  <div class="patItemMore">
-    <button class="patItemMoreButton">
-      더 보기 <i class="glyphicon glyphicon-menu-down"></i>
-    </button>
-  </div>
+  {% if total_count > 6 %}
+    {# 더 보기 버튼 #}
+    <div class="patItemMore">
+      <button class="patItemMoreButton">
+        더 보기 <i class="glyphicon glyphicon-menu-down"></i>
+      </button>
+    </div>
+  {% endif %}
 {% endblock %}

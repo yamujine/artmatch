@@ -9,8 +9,11 @@ class Main extends MY_Controller {
 
         if ($type === 'artworks') {
             $result = $this->artwork_model->gets(9, 0, $query);
+            $total_count = $this->artwork_model->get_total_count(9, 0, $query);
         } elseif ($type === 'places') {
             $result = $this->place_model->gets(9, 0, $query);
+            $total_count = $this->place_model->get_total_count(9, 0, $query);
+
             if (!empty($result)) {
                 foreach ($result as $res) {
                     $res->pick_count = $this->pick_model->get_count_by_place_id($res->id);
@@ -22,7 +25,8 @@ class Main extends MY_Controller {
         $data = [
             'type' => $type,
             'query' => $query,
-            'items' => $result
+            'items' => $result,
+            'total_count' => $total_count
         ];
         $this->twig->display('main', $data);
     }
