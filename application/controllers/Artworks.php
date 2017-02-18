@@ -32,6 +32,9 @@ class Artworks extends MY_Controller {
             $data['exhibitions'] = $exhibitions;
         }
 
+        // 조회수 증가
+        $this->artwork_model->update_view_count_by_id($artwork_id);
+
         $this->twig->display('artworks/detail', $data);
     }
 

@@ -136,6 +136,13 @@ class Place_model extends CI_Model {
         }
     }
 
+    public function update_view_count_by_id($id) {
+        return $this->db
+            ->set('views', 'views+1', FALSE)
+            ->where('id', $id)
+            ->update(self::TABLE_NAME);
+    }
+
     public function delete_image($place_id, $image) {
         return $this->db->delete(self::TABLE_NAME_IMAGES, ['place_id' => $place_id, 'image' => $image]);
     }

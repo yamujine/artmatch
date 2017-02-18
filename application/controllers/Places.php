@@ -17,7 +17,7 @@ class Places extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $is_pick = $this->pick_model->is_place_pick($user_id ,$place_id);
+        $is_pick = $this->pick_model->is_place_pick($user_id, $place_id);
         $data['is_pick'] = $is_pick;
 
         $place = $this->place_model->get_by_id($place_id);
@@ -39,6 +39,9 @@ class Places extends MY_Controller {
             $comments = $this->comment_model->get_comments_by_type_id('place', $place_id);
             $data['comments'] = $comments;
         }
+
+        // 조회수 증가
+        $this->artwork_model->update_view_count_by_id($place_id);
 
         $this->twig->display('places/detail', $data);
     }
