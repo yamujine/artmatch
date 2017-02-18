@@ -31,7 +31,7 @@ gulp.task('bootstrap', function () {
 });
 
 gulp.task('prefixfree', function () {
-  filesExist(['assets/bower_components/prefixfree/**']);
+  filesExist(['assets/bower_components/prefixfree']);
 
   return gulp.src('assets/bower_components/prefixfree/**')
     .pipe(gulp.dest('static/dist/prefixfree'));
