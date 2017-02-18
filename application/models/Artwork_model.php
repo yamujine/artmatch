@@ -33,8 +33,12 @@ class Artwork_model extends CI_Model {
 
     public function gets($limit = null, $offset = null, $search = null) {
         $query = $this->db
+            ->select('artworks.*, users.user_name, count(user_artwork_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
-            ->order_by('id', 'DESC');
+            ->join('users', 'users.id = artworks.user_id')
+            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
+            ->group_by('artworks.id')
+            ->order_by('artworks.id', 'DESC');
 
         if ($limit !== null) {
             $query = $query->limit($limit, $offset);
@@ -42,11 +46,11 @@ class Artwork_model extends CI_Model {
 
         if ($search !== null && !empty($search)) {
             if (is_numeric($search)) {
-                $query = $query->where('id', $search);
+                $query = $query->where('artworks.id', $search);
             }
             // 제목, tags 매치
-            $query = $query->or_like('title', $search)
-                ->or_like('tags', $search);
+            $query = $query->or_like('places.title', $search)
+                ->or_like('places.tags', $search);
         }
 
         return $query->get()->result();

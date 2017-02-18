@@ -32,8 +32,12 @@ class Place_model extends CI_Model {
 
     public function gets($limit = null, $offset = null, $search = null) {
         $query = $this->db
+            ->select('places.*, users.user_name, count(user_place_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
-            ->order_by('id', 'DESC');
+            ->join('users', 'users.id = places.user_id')
+            ->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
+            ->group_by('places.id')
+            ->order_by('places.id', 'DESC');
 
         if ($limit !== null) {
             $query = $query->limit($limit, $offset);
@@ -41,12 +45,12 @@ class Place_model extends CI_Model {
 
         if ($search !== null && !empty($search)) {
             if (is_numeric($search)) {
-                $query = $query->where('id', $search);
+                $query = $query->where('places.id', $search);
             }
             // 이름, 주소, tags 매치
-            $query = $query->or_like('name', $search)
-                ->or_like('address', $search)
-                ->or_like('tags', $search);
+            $query = $query->or_like('places.name', $search)
+                ->or_like('places.address', $search)
+                ->or_like('places.tags', $search);
         }
 
         return $query->get()->result();
