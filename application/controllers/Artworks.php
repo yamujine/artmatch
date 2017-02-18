@@ -17,8 +17,8 @@ class Artworks extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $pick_status = $this->pick_model->is_pick($user_id ,$artwork_id);
-        $data['pick_status'] = $pick_status;
+        $is_pick = $this->pick_model->is_pick($user_id ,$artwork_id);
+        $data['is_pick'] = $is_pick;
 
 
         $artwork = $this->artwork_model->get_by_id($artwork_id);
