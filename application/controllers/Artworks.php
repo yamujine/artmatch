@@ -63,7 +63,7 @@ class Artworks extends MY_Controller {
 
         if (empty($artwork_id)) {
             // 작품 신규 등록시
-            if ($this->accountlib->get_user_type() !== '0') {
+            if ($this->accountlib->get_user_type() !== USER_TYPE_ARTIST) {
                 alert_and_redirect('창작자 회원만 작품 등록이 가능합니다.');
             }
         } else {

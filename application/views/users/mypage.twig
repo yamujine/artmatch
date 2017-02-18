@@ -93,10 +93,10 @@
 			<a href="/users/me">내꺼</a>
 		</div>
 		{% if is_my_page %}
-		<div class="item {% if pick_type == 'artworks' %}active{% endif %}">
+		<div class="item {% if pick_type == TYPE_ARTWORKS %}active{% endif %}">
 			<a href="?type=artworks">작품 picks</a>
 		</div>
-		<div class="item {% if pick_type == 'places' %}active{% endif %}">
+		<div class="item {% if pick_type == TYPE_PLACES %}active{% endif %}">
 			<a href="?type=places">장소 picks</a>
 		</div>
 		{% endif %}

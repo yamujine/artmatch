@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Main extends MY_Controller {
     public function index() {
-        $type = $this->input->get('type') ?: 'artworks';
+        $type = $this->input->get('type') ?: TYPE_ARTWORKS;
         $data = $this->_render_content_list($type);
 
         $this->twig->display('main', $data);
@@ -29,10 +29,10 @@ class Main extends MY_Controller {
             $data['pick_artworks'] = $pick_artworks;
         }
 
-        if ($type === 'artworks') {
+        if ($type === TYPE_ARTWORKS) {
             $result = $this->artwork_model->gets($limit, $offset, $query);
             $total_count = $this->artwork_model->get_total_count($query);
-        } elseif ($type === 'places') {
+        } elseif ($type === TYPE_PLACES) {
             $result = $this->place_model->gets($limit, $offset, $query);
             $total_count = $this->place_model->get_total_count($query);
 

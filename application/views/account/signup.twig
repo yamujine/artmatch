@@ -128,11 +128,11 @@
       <form id="patSignUpForm">
         <fieldset class="patUserTypeField">
           <div class="radio checkbox">
-            <input id="creatorType" type="radio" name="type" checked="checked" value="0">
+            <input id="creatorType" type="radio" name="type" checked="checked" value="{{ USER_TYPE_ARTIST }}">
             <label for="creatorType">창작자</label>
           </div>
           <div class="radio checkbox">
-            <input id="placeType" type="radio" name="type" value="1">
+            <input id="placeType" type="radio" name="type" value="{{ USER_TYPE_PLACE_OWNER }}">
             <label for="placeType">공간소유자</label>
           </div>
         </fieldset>
