@@ -55,6 +55,21 @@
         });
       });
 
+      // 아이템 클릭
+      $('.wrap').click(function () {
+        var type = $(this).data('type');
+        var id = $(this).data('id');
+
+        location.href = '/' + type + '/' + id;
+
+        return false;
+      });
+
+      // 카드 클릭 이벤트와 안겹치도록 이벤트 버블링 방지
+      $('.wrap a').click(function (event) {
+        event.stopPropagation();
+      });
+
       // 더 보기
       $('.patItemMoreButton').click(function () {
         $(this).hide();
@@ -155,7 +170,7 @@
         {% for item in items %}
           {# STATUS: PICKED (이미 PICKED된 아트웍 또는 장소) 사용자가 이미 PICK 했는지 여부 정보 필요 #}
           <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if loop.first %}picked{% endif %}">
-            <a href="/{{ type }}/{{ item.id }}">
+            <div class="wrap" data-type="{{ type }}" data-id="{{ item.id }}">
               <div class="imgThumb">
                 <div class="dimm"></div>
                 <div class="preview">
@@ -187,13 +202,13 @@
                     <div class="pin"></div>
                     <div class="keyword">{{ item.address }}</div>
                   </div>
-                  <div class="tags">{{ item.tags_html|raw }}</div>
+                  <div class="tags">{{ item.tags_html|striptags('<a>')|raw }}</div>
                   <div class="displayCount">
                     <span class="number">{{ item.exhibit_artwork_count }}</span>작품 전시중
                   </div>
                 {% endif %}
               </div>
-            </a>
+            </div>
           </li>
         {% endfor %}
       </ul>
