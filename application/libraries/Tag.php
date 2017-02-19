@@ -34,18 +34,13 @@ class Tag {
         $truncated_string = '';
         $tag_html = '';
 
-        $attached_string = preg_replace('/\s+/', '', $tag_string);
-        if (mb_strlen($attached_string) > 10) {
-            $parts = preg_split('/\s+/', $tag_string);
-            foreach ($parts as $part) {
-                if (mb_strlen($truncated_string) + mb_strlen($part) <= 10) {
-                    $truncated_string .= ' ' . $part;
-                }
+        $parts = preg_split('/\s+/', $tag_string);
+        foreach ($parts as $part) {
+            if (mb_strlen($truncated_string) + mb_strlen($part) <= 20) {
+                $truncated_string .= ' ' . $part;
             }
-            $truncated_string = trim($truncated_string);
-        } else {
-            $truncated_string = $tag_string;
         }
+        $truncated_string = trim($truncated_string);
 
         $parts = preg_split('/\s+/', $truncated_string);
         foreach ($parts as $part) {
