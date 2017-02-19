@@ -3,41 +3,64 @@
 {% block script %}
     <script>
         $('#password_change_form').submit(function(){
-            var currentPasswordElem = $("input[name=current_password]");
-            var newPasswordElem = $("input[name=new_password]");
+          var currentPasswordElem = $("input[name=current_password]");
+          var newPasswordElem = $("input[name=new_password]");
 
-            if (!currentPasswordElem.val()) {
-                alert('기존 비밀번호를 입력해 주세요');
-                currentPasswordElem.focus();
-                return false;
-            }
-
-            if (!newPasswordElem.val()) {
-                alert('새로운 비밀번호를 입력해 주세요');
-                newPasswordElem.focus();
-                return false;
-            }
-
-            data = {};
-            data.current_password = currentPasswordElem.val();
-            data.new_password = newPasswordElem.val();
-
-            console.log(data);
-
-            $.ajax({
-                method: "POST",
-                url: "/api/users/update/password",
-                data: data
-            }).done(function (data) {
-                if (data.result === true) {
-                    location.href = '/users/me';
-                } else {
-                    alert(data.body.message);
-                }
-            }).fail(function () {
-                alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-            });
+          if (!currentPasswordElem.val()) {
+            alert('기존 비밀번호를 입력해 주세요');
+            currentPasswordElem.focus();
             return false;
+          }
+
+          if (!newPasswordElem.val()) {
+            alert('새로운 비밀번호를 입력해 주세요');
+            newPasswordElem.focus();
+            return false;
+          }
+
+          data = {};
+          data.current_password = currentPasswordElem.val();
+          data.new_password = newPasswordElem.val();
+
+          console.log(data);
+
+          $.ajax({
+            method: "POST",
+            url: "/api/users/update/password",
+            data: data
+          }).done(function (data) {
+            if (data.result === true) {
+              alert('비밀번호가 성공적으로 변경되었습니다');
+              location.href = '/users/me';
+            } else {
+              alert(data.body.message);
+            }
+          }).fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
+          return false;
+        });
+
+        $('#profile_change_form').submit(function(){
+          var profileImageElem = $("input[name=profile_image]");
+
+          $.ajax({
+            method: "POST",
+            url: "/api/users/update/image",
+            processData: false, // To send file
+            contentType: false, // To send file
+            data: new FormData($(this)[0])
+          }).done(function (data) {
+            if (data.result === true) {
+              alert('프로필사진이 성공적으로 변경되었습니다');
+              location.href = '/users/me';
+            } else {
+              alert(data.body.message);
+            }
+          }).fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
+          return false;
         });
 
         $('#profile_submit').click(function(){

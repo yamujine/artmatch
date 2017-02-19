@@ -64,7 +64,6 @@ class UsersApi extends API_Controller {
     }
 
     public function update_profile_image() {
-        $this->load->library('imageupload', 'upload');
         $user_id = $this->accountlib->get_user_id();
         $current_image = $this->user_model->get_by_id($user_id)->profile_image;
         $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
@@ -75,15 +74,18 @@ class UsersApi extends API_Controller {
                     //현재 이미지가 기본이미지가 아니면 삭제
                     $this->imageupload->delete_image('/profile/' . $current_image);
                 }
-            } else {
-                $uploaded_image_name = $current_image;
             }
-
-            $this->user_model->update_profile_image(
+            $result = $this->user_model->update_profile_image(
                 $user_id,
                 $uploaded_image_name
             );
-            redirect('/users/me');
+
+            if ($result !== NULL) {
+                $this->set_success_response(['message' => 'update success']);
+            } else {
+                $this->set_fail_response('500', ['message' => $this->db->error()]);
+            }
+            return $this->output->set_output(json_encode($this->result));
         }
     }
 
@@ -93,7 +95,8 @@ class UsersApi extends API_Controller {
 
             if (password_verify($this->input->post('current_password'), $user->password)) {
                 $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
-                if ($this->user_model->update_password($this->accountlib->get_user_id(), $hashed_password) !== NULL) {
+                $result = $this->user_model->update_password($this->accountlib->get_user_id(), $hashed_password);
+                if ($result !== NULL) {
                     $this->set_success_response(['message' => 'update success']);
                 } else {
                     $this->set_fail_response('500', ['message' => $this->db->error()]);
