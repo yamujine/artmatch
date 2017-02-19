@@ -8,6 +8,21 @@
   <script>
     function usernameCheck() {
       var username = document.getElementsByName("user_name")[0].value;
+      var checkUsername = /^[A-Za-z0-9)(-_]{1,20}$/;
+
+      if(!username) {
+        document.getElementById("checkId").innerText = "유저 아이디가 입력되지 않았습니다.";
+        $("#checkId").css("color", "red");
+        $("#checkId").attr("value", "uncheck");
+        return;
+      }
+      if(!username.match(checkUsername)) {
+        document.getElementById("checkId").innerText = "아이디는 영어, 숫자, _, -, (, ) 만 입력 가능합니다.";
+        $("#checkId").css("color", "red");
+        $("#checkId").attr("value", "uncheck");
+        return;
+      }
+
       data = {
         username: username
       }
@@ -16,14 +31,14 @@
         url: "/api/users/check_username",
         data: data,
       }).done(function (data) {
+        document.getElementById("checkId").innerText = data.body.message;
         if(data.result) {
-          $("#duplicateId").css("color", "green");
-          $("#duplicateId").attr("value", "check");
+          $("#checkId").css("color", "green");
+          $("#checkId").attr("value", "check");
         }else {
-          $("#duplicateId").css("color", "red");
-          $("#duplicateId").attr("value", "uncheck");
+          $("#checkId").css("color", "red");
+          $("#checkId").attr("value", "uncheck");
         }
-        document.getElementById("duplicateId").innerHTML=data.body.message;
       }).fail(function (data) {
         alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
       });
@@ -31,6 +46,21 @@
 
     function emailCheck() {
       var email = document.getElementsByName("email")[0].value;
+      var checkEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+      if(!email) {
+        $("#checkEmail").css("color", "red");
+        $("#checkEmail").attr("value", "uncheck");
+        document.getElementById("checkEmail").innerText = "이메일이 입력되지 않았습니다.";
+        return;
+      }
+      if(!email.match(checkEmail)) {
+        $("#checkEmail").css("color", "red");
+        $("#checkEmail").attr("value", "uncheck");
+        document.getElementById("checkEmail").innerText = "올바른 이메일 주소를 입력해주세요.";
+        return;
+      }
+
       data = {
         email: email
       }
@@ -39,14 +69,14 @@
         url: "/api/users/check_email",
         data: data,
       }).done(function (data) {
+        document.getElementById("checkEmail").innerText = data.body.message;
         if(data.result) {
-          $("#duplicateEmail").css("color", "green");
-          $("#duplicateEmail").attr("value", "check");
+          $("#checkEmail").css("color", "green");
+          $("#checkEmail").attr("value", "check");
         }else {
-          $("#duplicateEmail").css("color", "red");
-          $("#duplicateEmail").attr("value", "uncheck");
+          $("#checkEmail").css("color", "red");
+          $("#checkEmail").attr("value", "uncheck");
         }
-        document.getElementById("duplicateEmail").innerHTML=data.body.message;
       }).fail(function (data) {
         alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
       });
@@ -54,7 +84,8 @@
 
     $('#patSignUpForm').submit(function () {
 
-      if($("#duplicateEmail").attr("value") === "uncheck") {
+      if($("#checkEmail").attr("value") === "uncheck"
+        || $("#checkId").attr("value") === "uncheck") {
         alert('정보를 바르게 입력해주세요.');
         return false;
       }
@@ -109,17 +140,14 @@
         </fieldset>
         <fieldset>
           <input type="text" name="email" placeholder="이메일" onkeyup="emailCheck()"/>
-          <div id="duplicateEmail" value="uncheck">이메일 확인</div>
+          <div id="checkEmail" value="uncheck"></div>
         </fieldset>
         <fieldset>
           <input type="text" name="user_name" placeholder="아이디" onkeyup="usernameCheck()" />
-          <div id="duplicateId" value="uncheck">아이디 확인</div>
-          <div id="noticeId">
-            아이디는 영문, 숫자, (, _, -, ) 만 사용 가능합니다.
-          </div>
+          <div id="checkId" value="uncheck"></div>
         </fieldset>
         <fieldset>
-          <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+          <input type="password" name="password" placeholder="패스워드를 입력하세요." />
         </fieldset>
         <fieldset>
           <input type="file" name="profile_image"/>
