@@ -1,0 +1,484 @@
+@import "../helper/colorchips";
+@import "../helper/mixins";
+
+body {
+  #patDetail {
+    .container {
+      width: 960px;
+      margin: 46px auto 0 auto;
+
+      // 제목
+      .meta {
+        margin: 0 0 26px 0;
+        text-align: center;
+
+        // 제목
+        .title {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 24px;
+          font-weight: 500;
+          letter-spacing: -0.5px;
+          color: $black;
+          margin: 0 0 4px 0;
+        }
+        // 작가
+        .name {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 13px;
+          font-weight: normal;
+          letter-spacing: -0.3px;
+          color: $warm-grey-four;
+        }
+      }
+      // --
+      // 작품 이미지
+      .artworks {
+        margin: 0 auto;
+        text-align: center;
+
+        // 메인 이미지
+        .mainThumbnail {
+          .mainImage {
+            margin: 0 auto 37px auto;
+
+            .image {
+              img {
+                height: 462px;
+              }
+            }
+          }
+          // 저작권
+          .copyright {
+            font-family: "Helvetica Neue", Helvetica, 'Noto Sans KR', sans-serif;
+            font-size: 12px;
+            color: $greyish-four;
+            font-weight: normal;
+            letter-spacing: normal;
+          }
+          // -- 저작권
+        }
+        // -- 메인 이미지
+        // 추가 이미지
+        .additionalImages {
+
+        }
+        // -- 추가 이미지
+      }
+      // -- 작품 이미지
+
+      // 작가의 한마디
+      .artistCommentary {
+        position: relative;
+        width: 875px;
+        padding: 26px 30px;
+        margin: 48px auto 0 auto;
+        border: 1px solid $white-eight;
+        @include prefix(border-radius, 2px);
+
+        // 기본 정보
+        .meta {
+          position: relative;
+          text-align: left;
+
+          div, ul {
+            float: left;
+          }
+
+          // 프로필 이미지
+          .artistProfileImage {
+            width: 42px;
+            height: 42px;
+
+            img {
+              width: 100%;
+              height: 100%;
+              border: 1px solid $white-three;
+            }
+          }
+          // -- 프로필 이미지
+          .artistSays {
+            margin: 10px 0 0 8px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: $black;
+            letter-spacing: -0.4px;
+          }
+          // 작품 상태
+          .status {
+            margin: 12px 0 0 11px;
+            padding: 0;
+            list-style: none;
+
+            li {
+              float: left;
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 13px;
+              letter-spacing: -0.3px;
+
+              &.exhibition {
+                color: $warm-blue;
+              }
+
+              &.buy {
+                color: $bluish;
+              }
+
+              &:first-child {
+                margin-right: 25px;
+
+                &:after {
+                  position: absolute;
+                  top: 50%;
+                  margin-top: 16px;
+                  width: 1px;
+                  height: 12px;
+                  content: "";
+                  background: $black;
+                  opacity: 0.1;
+                  margin-left: 13px;
+                }
+              }
+            }
+          }
+          // -- 작품 상태
+        }
+        // -- 기본 정보
+        // 작품 설명
+        .commentary {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 14px;
+          line-height: 1.5;
+          letter-spacing: normal;
+          color: $warm-grey-six;
+          padding: 8px 139px 4px 0;
+          clear: both;
+        }
+        // -- 작품 설명
+        // 태그
+        .tags {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 12px;
+          line-height: 2.0;
+          color: $bluegrey;
+        }
+        // -- 태그
+        // 픽
+        .pick {
+          position: absolute;
+          top: 29px;
+          right: 27px;
+          width: 112px;
+          height: 112px;
+
+          .pickBtn {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            border: none;
+            color: $white-two;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            background-image: linear-gradient(135deg, #30d9ec, #69f1c7);
+          }
+        }
+        // -- 픽
+      }
+      // -- 작가의 한마디
+
+      // 댓글
+      .commentArea {
+        width: 875px;
+        margin: 46px auto 0 auto;
+
+        // 타이틀
+        .title {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 16px;
+          font-weight: bold;
+          color: $black-four;
+          margin: 0 0 9px 0;
+
+          .number {
+            font-family: Helvetica, sans-serif;
+            font-size: 18px;
+            font-weight: normal;
+            color: $warm-grey-seven;
+          }
+        }
+        // -- 타이틀
+        // 구분선
+        .divider {
+          width: 100%;
+          height: 1px;
+          margin: 0 auto;
+          background: $black;
+          color: $black;
+          opacity: 0.3;
+        }
+        // 댓글 더보기
+        .commentMore {
+          width: 100%;
+          height: 44px;
+          // TODO: 컬러칩 정리
+          border-bottom: 1px solid #E8E8E8;
+
+          .commentMoreBtn {
+            width: 100%;
+            height: 44px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 12px;
+            color: $warm-grey-four;
+            margin: 0 auto;
+            border: none;
+            background: none;
+            outline: none;
+          }
+        }
+        // -- 댓글 더보기
+        // 댓글 목록
+        .comments {
+          width: 100%;
+          margin: 0 0 28px 0;
+          padding: 0;
+          list-style: none;
+
+          li {
+            position: relative;
+            padding: 30px 0 27px 0;
+            // TODO: 컬러칩 정리
+            border-bottom: 1px solid #E8E8E8;
+
+            // 프로필 이미지
+            .profileImage {
+              position: absolute;
+              width: 36px;
+              height: 36px;
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+            // -- 프로필 이미지
+            // 내용
+            .content {
+              margin: 0 40px 0 50px;
+
+              .meta {
+                float: left;
+                margin: 0 0 3px 0;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                font-weight: bold;
+                color: $greyish-brown;
+
+                .regDate {
+                  color: $pinkish-grey-three;
+                  font-weight: normal;
+                }
+              }
+              .comment {
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 14px;
+                color: $warm-grey-six;
+                clear: both;
+              }
+            }
+            // -- 내용
+          }
+        }
+        // -- 댓글 목록
+      }
+      // -- 댓글
+
+      // 댓글 입력
+      .commentForm {
+        position: relative;
+        width: 875px;
+        height: 100px;
+        margin: 0 auto;
+
+        // 댓글 입력창
+        .commentInput {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 14px;
+          color: $warm-grey-four;
+          width: 100%;
+          height: 100%;
+          padding: 10px 15px;
+          // TODO: 컬러칩 정리
+          border: 1px solid #E8E8E8;
+          resize: none;
+          outline: none;
+        }
+        // -- 댓글 입력창
+
+        // 댓글 입력 버튼
+        button[type=submit] {
+          position: absolute;
+          bottom: 15px;
+          right: 13px;
+          width: 70px;
+          height: 35px;
+          background: none;
+          border: 1px solid #E8E8E8;
+          outline: none;
+          @include prefix(border-radius, 30px);
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 14px;
+          color: $greyish-brown;
+
+          &:hover {
+            background: $white-three;
+          }
+        }
+        // -- 댓글 입력 버튼
+      }
+      // -- 댓글 입력
+
+      // 전시 이력
+      .exhibitionArea {
+        width: 876px;
+        margin: 47px auto 0 auto;
+
+        // 타이틀
+        .titleWrap {
+          position: relative;
+          margin: 0 0 15px 0;
+
+          .title {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: $black-four;
+          }
+
+          .sliderControl {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+              display: inline-block;
+
+              &:not(:first-child) {
+                margin-left: 8px;
+              }
+
+              a {
+                font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+                font-size: 12px;
+                font-weight: bold;
+                color: $greyish-four;
+              }
+
+              &.active {
+                a {
+                  color: $black;
+                }
+              }
+            }
+          }
+        }
+        // -- 타이틀
+
+        // 전시 카드들
+        .exhibitions {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          width: 100%;
+          height: 252px;
+
+          li {
+            float: left;
+            width: 213px;
+            height: 100%;
+            background: $white-two;
+            border: 1px solid $white-nine;
+
+            &:not(:first-child) {
+              margin-left: 8px;
+            }
+
+            // 전시 카드
+            a {
+              text-decoration: none;
+
+              // 썸네일
+              .imgThumbnail {
+                width: 100%;
+                height: 182px;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+              // -- 썸네일
+              .meta {
+                text-align: left;
+                margin: 11px 0 0 14px;
+
+                .name {
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 16px;
+                  color: $black;
+                  letter-spacing: -0.4px;
+                  margin-bottom: 4px;
+                }
+                .place {
+                  position: relative;
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 12px;
+                  color: $greyish;
+                  display: inline-block;
+
+                  .pin {
+                    position: absolute;
+                    display: inline-block;
+                    margin-top: 3px;
+                    width: 8px;
+                    height: 12px;
+                    background: url(/static/images/pin.png) no-repeat;
+                  }
+                  .keyword {
+                    display: inline-block;
+                    margin-left: 12px;
+                  }
+
+                  &:after {
+                    position: absolute;
+                    top: 50%;
+                    margin-top: -6px;
+                    width: 1px;
+                    height: 10px;
+                    content: "";
+                    background: $black;
+                    opacity: 0.1;
+                    margin-left: 40px;
+                  }
+                }
+                .date {
+                  margin-left: 9px;
+                  display: inline-block;
+                  font-family: Helvetica Neue, Helvetica, Arial, 'Noto Sans KR', sans-serif;
+                  font-size: 12px;
+                  color: $greyish;
+                }
+              }
+            }
+            // -- 전시 카드
+          }
+        }
+      }
+      // -- 전시 이력
+    }
+  }
+}
