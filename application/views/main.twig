@@ -65,7 +65,7 @@
         var offset = $('.patItemList li').length;
         var totalCount = $(this).data('total-count');
 
-        $.get('/api/' + type, {offset: offset, limit: 9})
+        $.get('/api/contents/' + type, {offset: offset, limit: 9})
           .done(function (data) {
             $('.itemList').append(data);
 
@@ -189,7 +189,7 @@
                   </div>
                   <div class="tags">{{ item.tags }}</div>
                   <div class="displayCount">
-                    <span class="number">10</span>작품 전시중
+                    <span class="number">{{ item.exhibit_artwork_count }}</span>작품 전시중
                   </div>
                 {% endif %}
               </div>
