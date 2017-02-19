@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Main extends MY_Controller {
     public function index() {
         $type = $this->input->get('type') ?: 'artworks';
-        $data = $this->render_content_list($type, 9, 0, true);
+        $data = $this->_render_content_list($type);
 
         $this->twig->display('main', $data);
     }
@@ -13,12 +13,12 @@ class Main extends MY_Controller {
         $limit = $this->input->get('limit');
         $offset = $this->input->get('offset');
 
-        $data = $this->render_content_list($type, $limit, $offset, false);
+        $data = $this->_render_content_list($type, $limit, $offset, false);
 
         $this->twig->display('api/' . $type, $data);
     }
 
-    private function render_content_list($type, $limit = 9, $offset = 0, $use_pick_artists) {
+    private function _render_content_list($type, $limit = 9, $offset = 0, $use_pick_artists = true) {
         $data = [];
         $this->load->model(['artwork_model', 'place_model', 'comment_model', 'pick_model', 'exhibition_model']);
         $query = $this->input->get('q');
