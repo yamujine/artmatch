@@ -87,7 +87,7 @@ class User_model extends CI_Model {
             return FALSE;
         }
     }
-
+  
     public function update_password($id, $new_password) {
         $this->db->update(self::TABLE_NAME, ['password' => $new_password], ['id' => $id]);
         if ($this->db->affected_rows() > 0) {
@@ -96,5 +96,4 @@ class User_model extends CI_Model {
             return FALSE;
         }
     }
-
 }
