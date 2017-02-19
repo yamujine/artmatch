@@ -26,12 +26,12 @@
 
           $.ajax({
             method: "POST",
-            url: "/api/users/update/password",
+            url: "/api/users/change_password",
             data: data
           }).done(function (data) {
             if (data.result === true) {
               alert('비밀번호가 성공적으로 변경되었습니다');
-              location.href = '/users/me';
+              $('#password_modal').modal('hide');
             } else {
               alert(data.body.message);
             }
@@ -42,11 +42,10 @@
         });
 
         $('#profile_change_form').submit(function(){
-          var profileImageElem = $("input[name=profile_image]");
 
           $.ajax({
             method: "POST",
-            url: "/api/users/update/image",
+            url: "/api/users/update_image",
             processData: false, // To send file
             contentType: false, // To send file
             data: new FormData($(this)[0])

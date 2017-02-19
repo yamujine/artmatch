@@ -68,42 +68,38 @@ class UsersApi extends API_Controller {
         $current_image = $this->user_model->get_by_id($user_id)->profile_image;
         $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
 
-        if ($this->input->method() === 'post') {
-            if (!empty($uploaded_image_name)) {
-                if (!empty($current_image)) {
-                    //현재 이미지가 기본이미지가 아니면 삭제
-                    $this->imageupload->delete_image('/profile/' . $current_image);
-                }
+        if (!empty($uploaded_image_name)) {
+            if (!empty($current_image)) {
+                //현재 이미지가 기본이미지가 아니면 삭제
+                $this->imageupload->delete_image('/profile/' . $current_image);
             }
-            $result = $this->user_model->update_profile_image(
-                $user_id,
-                $uploaded_image_name
-            );
+        }
+        $result = $this->user_model->update_profile_image(
+            $user_id,
+            $uploaded_image_name
+        );
 
-            if ($result !== NULL) {
+        if ($result === TRUE) {
+            $this->set_success_response(['message' => 'update success']);
+        } else {
+            $this->set_fail_response('500', ['message' => $this->db->error()]);
+        }
+        return $this->output->set_output(json_encode($this->result));
+    }
+
+    public function update_password() {
+        $user = $this->user_model->get_by_id($this->accountlib->get_user_id());
+
+        if (password_verify($this->input->post('current_password'), $user->password)) {
+            $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
+            $result = $this->user_model->update_password($user->id, $hashed_password);
+            if ($result === TRUE) {
                 $this->set_success_response(['message' => 'update success']);
             } else {
                 $this->set_fail_response('500', ['message' => $this->db->error()]);
             }
-            return $this->output->set_output(json_encode($this->result));
-        }
-    }
-
-    public function update_password() {
-        if ($this->input->method() === 'post') {
-            $user = $this->user_model->get_by_id($this->accountlib->get_user_id());
-
-            if (password_verify($this->input->post('current_password'), $user->password)) {
-                $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
-                $result = $this->user_model->update_password($this->accountlib->get_user_id(), $hashed_password);
-                if ($result !== NULL) {
-                    $this->set_success_response(['message' => 'update success']);
-                } else {
-                    $this->set_fail_response('500', ['message' => $this->db->error()]);
-                }
-            } else {
-                $this->set_fail_response('103', ['message' => 'password is not corrected']);
-            }
+        } else {
+            $this->set_fail_response('103', ['message' => 'password is not corrected']);
         }
         return $this->output->set_output(json_encode($this->result));
     }

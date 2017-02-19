@@ -80,18 +80,20 @@ class User_model extends CI_Model {
     }
 
     public function update_profile_image($id, $profile_image) {
-        if ($this->db->update(self::TABLE_NAME, ['profile_image' => $profile_image], ['id' => $id])) {
+        $this->db->update(self::TABLE_NAME, ['profile_image' => $profile_image], ['id' => $id]);
+        if ($this->db->affected_rows() > 0) {
             return TRUE;
         } else {
-            return NULL;
+            return FALSE;
         }
     }
 
     public function update_password($id, $new_password) {
-        if ($this->db->update(self::TABLE_NAME, ['password' => $new_password], ['id' => $id])) {
+        $this->db->update(self::TABLE_NAME, ['password' => $new_password], ['id' => $id]);
+        if ($this->db->affected_rows() > 0) {
             return TRUE;
         } else {
-            return NULL;
+            return FALSE;
         }
     }
 
