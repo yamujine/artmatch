@@ -12,31 +12,30 @@ class UsersApi extends API_Controller {
     public function register() {
         // Validation
         $this->_validate_signup_form();
-        if ($this->form_validation->run() === TRUE) {
-            $hashed_password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-            $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
-
-            $id = $this->user_model->add(
-                $this->input->post('email'),
-                $hashed_password,
-                $this->input->post('user_name'),
-                $uploaded_image_name,
-                $this->input->post('type')
-            );
-
-            if ($id) {
-                $user = $this->user_model->get_by_id($id);
-                $this->accountlib->generate_user_session($user->id);
-                $this->accountlib->send_email_authentication($user->email, $user->id);
-                $this->set_success_response(['message' => 'signup success']);
-            } else {
-                $this->set_fail_response('101', ['message' => 'duplicated email']);
-            }
-        } else {
-            $this->set_fail_response('105', ['message' => $this->form_validation->error_string()]);
+        if ($this->form_validation->run() !== TRUE) {
+            $this->return_fail_response('105', ['message' => $this->form_validation->error_string()]);
         }
 
-        return $this->output->set_output(json_encode($this->result));
+        $hashed_password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+        $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
+
+        $id = $this->user_model->add(
+            $this->input->post('email'),
+            $hashed_password,
+            $this->input->post('user_name'),
+            $uploaded_image_name,
+            $this->input->post('type')
+        );
+
+        if (!$id) {
+            $this->return_fail_response('101', ['message' => 'duplicated email']);
+        }
+
+        $user = $this->user_model->get_by_id($id);
+        $this->accountlib->generate_user_session($user->id);
+        $this->accountlib->send_email_authentication($user->email, $user->id);
+
+        $this->return_success_response(['message' => 'signup success']);
     }
 
     public function login() {
@@ -50,17 +49,16 @@ class UsersApi extends API_Controller {
         }
 
         if (!$user) {
-            $this->set_fail_response('102', ['message' => $error_msg]);
-        } else {
-            if (password_verify($this->input->post('password'), $user->password)) {
-                $this->set_success_response(['message' => 'login success']);
-                $this->accountlib->generate_user_session($user->id);
-            } else {
-                $this->set_fail_response('103', ['message' => 'password is not corrected']);
-            }
+            $this->return_fail_response('102', ['message' => $error_msg]);
         }
 
-        return $this->output->set_output(json_encode($this->result));
+        if (!password_verify($this->input->post('password'), $user->password)) {
+            $this->return_fail_response('103', ['message' => 'password is not corrected']);
+        }
+
+        $this->accountlib->generate_user_session($user->id);
+
+        $this->return_success_response(['message' => 'login success']);
     }
 
     public function update_profile_image() {
@@ -107,51 +105,46 @@ class UsersApi extends API_Controller {
     public function check_username() {
         $username = $this->input->get('username');
         if (empty($username)) {
-            $this->set_fail_response('101', ['message' => '유저 아이디가 입력되지 않았습니다.']);
-        } else {
-            $result = $this->user_model->get_by_user_name($username);
-            if ($result) {
-                $this->set_fail_response('102', ['message' => '이미 사용중인 유저 아이디입니다.']);
-            } else {
-                $this->set_success_response(['message' => '사용 가능한 유저 아이디입니다.']);
-            }
+            $this->return_fail_response('101', ['message' => '유저 아이디가 입력되지 않았습니다.']);
         }
 
-        return $this->output->set_output(json_encode($this->result));
+        $result = $this->user_model->get_by_user_name($username);
+        if ($result) {
+            $this->return_fail_response('102', ['message' => '이미 사용중인 유저 아이디입니다.']);
+        }
+
+        $this->return_success_response(['message' => '사용 가능한 유저 아이디입니다.']);
     }
 
     public function check_email() {
         $email = $this->input->get('email');
         if (empty($email)) {
-            $this->set_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
-        } else {
-            $result = $this->user_model->check_email($email);
-            if ($result) {
-                $this->set_fail_response('102', ['message' => '이미 사용중인 이메일입니다.']);
-            } else {
-                $this->set_success_response(['message' => '사용 가능한 이메일입니다.']);
-            }
+            $this->return_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
         }
 
-        return $this->output->set_output(json_encode($this->result));
+        $result = $this->user_model->check_email($email);
+        if ($result) {
+            $this->return_fail_response('102', ['message' => '이미 사용중인 이메일입니다.']);
+        }
+
+        $this->return_success_response(['message' => '사용 가능한 이메일입니다.']);
     }
 
     public function reset_password() {
         $this->load->helper('string');
-        if ($this->input->method() === 'post') {
-            $email = $this->input->post('email');
-            $temp_password = random_string('alpha', 8);
-            $user = $this->user_model->get_by_email($email);
-            if ($user !== NULL) {
-                $hashed_password = password_hash($temp_password, PASSWORD_BCRYPT);
-                $this->user_model->update_password($user->id, $hashed_password);
-                $this->accountlib->send_email_temp_password($email, $temp_password);
-                $this->set_success_response(['message' => '이메일로 임시 비밀번호를 전송해 드렸습니다']);
-            } else {
-                $this->set_fail_response('500', ['message' => 'database update error']);
-            }
-            return $this->output->set_output(json_encode($this->result));
+        $email = $this->input->post('email');
+        $temp_password = random_string('alpha', 8);
+        $user = $this->user_model->get_by_email($email);
+
+        if ($user === NULL) {
+            $this->return_fail_response('500', ['message' => '해당 이메일로 가입된 유저가 없습니다.']);
         }
+
+        $hashed_password = password_hash($temp_password, PASSWORD_BCRYPT);
+        $this->user_model->update_password($user->id, $hashed_password);
+        $this->accountlib->send_email_temp_password($email, $temp_password);
+
+        $this->return_success_response(['message' => '이메일로 임시 비밀번호를 전송해 드렸습니다']);
     }
 
     private function _validate_signup_form() {
@@ -174,10 +167,5 @@ class UsersApi extends API_Controller {
             'required' => '회원 구분이 입력되지 않았습니다.',
             'in_list' => '회원 구분값이 올바르지 않습니다.'
         ]);
-    }
-
-    private function _set_user_session($user) {
-        $userdata = (array)$this->user_model->get_by_id($user->id);
-        $this->session->set_userdata($userdata);
     }
 }

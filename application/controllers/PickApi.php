@@ -36,6 +36,6 @@ class PickApi extends API_Controller {
             $this->set_fail_response('104', ['message' => $e->getMessage()]);
         }
 
-        return $this->output->set_output(json_encode($this->result));
+        $this->return_response();
     }
 }
