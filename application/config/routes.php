@@ -62,10 +62,18 @@ $route['places/(:num)'] = 'places/detail/$1';
 $route['places/upload'] = 'places/edit';
 $route['places/edit/(:num)'] = 'places/edit/$1';
 
-$route['api/pick'] = 'pickapi';
-
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
+
+$route['api/comments'] = 'commentapi';
+$route['api/comments/delete'] = 'commentapi/delete';
+$route['api/comments/insert'] = 'commentapi/insert';
+$route['api/comments/update'] = 'commentapi/update';
+
+$route['api/artworks'] = 'artworkapi';
+$route['api/places'] = 'placeapi';
+
+$route['api/pick']['POST'] = 'pickapi';
 
 $route['api/login']['POST'] = 'usersapi/login';
 $route['api/users/register']['POST'] = 'usersapi/register';
@@ -74,4 +82,5 @@ $route['api/users/check_username'] = 'usersapi/check_username';
 $route['api/users/check_email'] = 'usersapi/check_email';
 $route['api/users/update/image']['POST'] = 'usersapi/update_profile_image';
 $route['api/users/update/password']['POST'] = 'usersapi/update_password';
-
+$route['api/users/reset_password'] = 'usersapi/reset_password';
+$route['api/landing'] = 'landingapi';

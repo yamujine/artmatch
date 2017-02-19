@@ -1,0 +1,24 @@
+{% for item in artworks %}
+  {# TODO: 사용자의 PICK된 것 갱신 필요 #}
+  <li class="item">
+    <a href="/artworks/{{ item.id }}">
+      <div class="imgThumb">
+        <div class="dimm"></div>
+        <div class="preview">
+          미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+        </div>
+        {# 썸네일 이미지 #}
+        <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
+        <button class="pickBtn"></button>
+      </div>
+      <div class="meta">
+        <div class="pick">
+          {# PICK 갯수 #}
+          <span class="bold">PICK</span> 364
+        </div>
+        <div class="title">{{ item.title }}</div>
+        <div class="name">김종인</div>
+      </div>
+    </a>
+  </li>
+{% endfor %}

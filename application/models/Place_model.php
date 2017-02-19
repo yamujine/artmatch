@@ -17,10 +17,27 @@ class Place_model extends CI_Model {
     public $use_comment;
     public $tags;
 
+    public function is_exists($id) {
+        $result = $this->db
+            ->from(self::TABLE_NAME)
+            ->where('id', $id)
+            ->limit(1)
+            ->get();
+
+        if ($result->num_rows() > 0) {
+            return true;
+        }
+        return false;
+    }
+
     public function gets($limit = null, $offset = null, $search = null) {
         $query = $this->db
+            ->select('places.*, users.user_name, count(user_place_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
-            ->order_by('id', 'DESC');
+            ->join('users', 'users.id = places.user_id')
+            ->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
+            ->group_by('places.id')
+            ->order_by('places.id', 'DESC');
 
         if ($limit !== null) {
             $query = $query->limit($limit, $offset);
@@ -28,15 +45,36 @@ class Place_model extends CI_Model {
 
         if ($search !== null && !empty($search)) {
             if (is_numeric($search)) {
-                $query = $query->where('id', $search);
+                $query = $query->where('places.id', $search);
             }
             // 이름, 주소, tags 매치
-            $query = $query->or_like('name', $search)
-                ->or_like('address', $search)
-                ->or_like('tags', $search);
+            $query = $query->or_like('places.name', $search)
+                ->or_like('places.address', $search)
+                ->or_like('places.tags', $search);
         }
 
         return $query->get()->result();
+    }
+
+    public function get_total_count($search = null) {
+        $query = $this->db
+            ->select('places.*, users.user_name, count(user_place_picks.id) as pick_count')
+            ->from(self::TABLE_NAME)
+            ->join('users', 'users.id = places.user_id')
+            ->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
+            ->group_by('places.id');
+
+        if ($search !== null && !empty($search)) {
+            if (is_numeric($search)) {
+                $query = $query->where('places.id', $search);
+            }
+            // 이름, 주소, tags 매치
+            $query = $query->or_like('places.name', $search)
+                ->or_like('places.address', $search)
+                ->or_like('places.tags', $search);
+        }
+
+        return $query->get()->num_rows();
     }
 
     public function get_by_id($place_id) {
@@ -99,6 +137,13 @@ class Place_model extends CI_Model {
         } else {
             return NULL;
         }
+    }
+
+    public function update_view_count_by_id($id) {
+        return $this->db
+            ->set('views', 'views+1', FALSE)
+            ->where('id', $id)
+            ->update(self::TABLE_NAME);
     }
 
     public function delete_image($place_id, $image) {

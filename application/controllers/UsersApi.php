@@ -140,6 +140,24 @@ class UsersApi extends API_Controller {
         return $this->output->set_output(json_encode($this->result));
     }
 
+    public function reset_password() {
+        $this->load->helper('string');
+        if ($this->input->method() === 'post') {
+            $email = $this->input->post('email');
+            $temp_password = random_string('alpha', 8);
+            $user = $this->user_model->get_by_email($email);
+            if ($user !== NULL) {
+                $hashed_password = password_hash($temp_password, PASSWORD_BCRYPT);
+                $this->user_model->update_password($user->id, $hashed_password);
+                $this->accountlib->send_email_temp_password($email, $temp_password);
+                $this->set_success_response(['message' => '이메일로 임시 비밀번호를 전송해 드렸습니다']);
+            } else {
+                $this->set_fail_response('500', ['message' => 'database update error']);
+            }
+            return $this->output->set_output(json_encode($this->result));
+        }
+    }
+
     private function _validate_signup_form() {
         // Register validation
         $this->form_validation->set_error_delimiters('', "\r\n");
