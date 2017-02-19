@@ -6,24 +6,66 @@
 
 {% block script %}
   <script>
+    function usernameCheck() {
+      var username = document.getElementsByName("user_name")[0].value;
+      data = {
+        username: username
+      }
+      $.ajax({
+        method: "GET",
+        url: "/api/users/check_username",
+        data: data,
+      }).done(function (data) {
+        if(data.result) {
+          $("#duplicateId").css("color", "green");
+          $("#duplicateId").attr("value", "check");
+        }else {
+          $("#duplicateId").css("color", "red");
+          $("#duplicateId").attr("value", "uncheck");
+        }
+        document.getElementById("duplicateId").innerHTML=data.body.message;
+      }).fail(function (data) {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+    }
+
+    function emailCheck() {
+      var email = document.getElementsByName("email")[0].value;
+      data = {
+        email: email
+      }
+      $.ajax({
+        method: "GET",
+        url: "/api/users/check_email",
+        data: data,
+      }).done(function (data) {
+        if(data.result) {
+          $("#duplicateEmail").css("color", "green");
+          $("#duplicateEmail").attr("value", "check");
+        }else {
+          $("#duplicateEmail").css("color", "red");
+          $("#duplicateEmail").attr("value", "uncheck");
+        }
+        document.getElementById("duplicateEmail").innerHTML=data.body.message;
+      }).fail(function (data) {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+    }
+
     $('#patSignUpForm').submit(function () {
+
+      if($("#duplicateEmail").attr("value") === "uncheck") {
+        alert('정보를 바르게 입력해주세요.');
+        return false;
+      }
+
       var emailElem = $("input[name=email]");
       var passwordElem = $("input[name=password]");
       var usernameElem = $("input[name=user_name]");
 
-      if (!emailElem.val()) {
-        alert('이메일을 입력해주세요.');
-        emailElem.focus();
-        return false;
-      }
       if (!passwordElem.val()) {
         alert('패스워드를 입력해주세요.');
         passwordElem.focus();
-        return false;
-      }
-      if (!usernameElem.val()) {
-        alert('아이디를 입력해주세요.');
-        usernameElem.focus();
         return false;
       }
 
@@ -66,10 +108,15 @@
           </div>
         </fieldset>
         <fieldset>
-          <input type="text" name="email" placeholder="이메일"/>
+          <input type="text" name="email" placeholder="이메일" onkeyup="emailCheck()"/>
+          <div id="duplicateEmail" value="uncheck">이메일 확인</div>
         </fieldset>
         <fieldset>
-          <input type="text" name="user_name" placeholder="아이디"/>
+          <input type="text" name="user_name" placeholder="아이디" onkeyup="usernameCheck()" />
+          <div id="duplicateId" value="uncheck">아이디 확인</div>
+          <div id="noticeId">
+            아이디는 영문, 숫자, (, _, -, ) 만 사용 가능합니다.
+          </div>
         </fieldset>
         <fieldset>
           <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
