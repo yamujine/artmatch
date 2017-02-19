@@ -70,8 +70,7 @@ $route['api/comments/delete'] = 'commentapi/delete';
 $route['api/comments/insert'] = 'commentapi/insert';
 $route['api/comments/update'] = 'commentapi/update';
 
-$route['api/artworks'] = 'artworkapi';
-$route['api/places'] = 'placeapi';
+$route['api/contents/(:any)'] = 'main/api/$1';
 
 $route['api/pick']['POST'] = 'pickapi';
 

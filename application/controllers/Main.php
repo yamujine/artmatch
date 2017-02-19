@@ -3,27 +3,50 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Main extends MY_Controller {
     public function index() {
-        $this->load->model(['artwork_model', 'place_model', 'comment_model', 'pick_model']);
         $type = $this->input->get('type') ?: 'artworks';
+        $data = $this->render_content_list($type, 9, 0, true);
+
+        $this->twig->display('main', $data);
+    }
+
+    public function api($type) {
+        $limit = $this->input->get('limit');
+        $offset = $this->input->get('offset');
+
+        $data = $this->render_content_list($type, $limit, $offset, false);
+
+        $this->twig->display('api/' . $type, $data);
+    }
+
+    private function render_content_list($type, $limit = 9, $offset = 0, $use_pick_artists) {
+        $data = [];
+        $this->load->model(['artwork_model', 'place_model', 'comment_model', 'pick_model', 'exhibition_model']);
         $query = $this->input->get('q');
 
-        $pick_artworks = $this->artwork_model->get_pick_artworks();
-
-        if ($type === 'artworks') {
-            $result = $this->artwork_model->gets(9, 0, $query);
-            $total_count = $this->artwork_model->get_total_count($query);
-        } elseif ($type === 'places') {
-            $result = $this->place_model->gets(9, 0, $query);
-            $total_count = $this->place_model->get_total_count($query);
+        if ($use_pick_artists) {
+            $pick_artworks = $this->artwork_model->get_pick_artworks();
+            $data['pick_artworks'] = $pick_artworks;
         }
 
-        $data = [
+        if ($type === 'artworks') {
+            $result = $this->artwork_model->gets($limit, $offset, $query);
+            $total_count = $this->artwork_model->get_total_count($query);
+        } elseif ($type === 'places') {
+            $result = $this->place_model->gets($limit, $offset, $query);
+            $total_count = $this->place_model->get_total_count($query);
+
+            foreach ($result as $item) {
+                $item->exhibit_artwork_count = $this->exhibition_model->get_exhibit_artwork_count_by_place_id($item->id);
+            }
+        }
+
+        $data = array_merge($data, [
             'type' => $type,
             'query' => $query,
-            'pick_artworks' => $pick_artworks,
             'items' => $result,
             'total_count' => $total_count
-        ];
-        $this->twig->display('main', $data);
+        ]);
+
+        return $data;
     }
 }
