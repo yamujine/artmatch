@@ -43,14 +43,13 @@ class Main extends MY_Controller {
 
                 // 주소 앞 2개 파트만 표시하고 자름
                 $address_parts = preg_split('/\s+/', $item->address);
-                $count = 0;
-                foreach ($address_parts as $part) {
-                    if ($count > 1) {
+                $modified_address = '';
+                foreach ($address_parts as $i => $part) {
+                    if ($i > 1) {
                         break;
-                    } else {
-                        $modified_address = ' ' . $part;
+                    } else if (!empty($part)) {
+                        $modified_address .= ' ' . $part;
                     }
-                    $count++;
                 }
                 $item->address = trim($modified_address);
             }
