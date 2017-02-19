@@ -23,7 +23,9 @@ class API_Controller extends CI_Controller {
     }
 
     public function return_success_response($body) {
-        $this->set_success_response($body);
+        $this->result['result'] = true;
+        $this->result['body'] = $body;
+
         $this->return_response();
     }
 
@@ -37,7 +39,10 @@ class API_Controller extends CI_Controller {
     }
 
     public function return_fail_response($error_code, $body) {
-        $this->set_fail_response($error_code, $body);
+        $this->result['result'] = false;
+        $this->result['errorCode'] = $error_code;
+        $this->result['body'] = $body;
+
         $this->return_response();
     }
 
