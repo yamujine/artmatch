@@ -49,8 +49,8 @@ class Artwork_model extends CI_Model {
                 $query = $query->where('artworks.id', $search);
             }
             // 제목, tags 매치
-            $query = $query->or_like('places.title', $search)
-                ->or_like('places.tags', $search);
+            $query = $query->or_like('artworks.title', $search)
+                ->or_like('artworks.tags', $search);
         }
 
         return $query->get()->result();
@@ -69,8 +69,8 @@ class Artwork_model extends CI_Model {
                 $query = $query->where('artworks.id', $search);
             }
             // 제목, tags 매치
-            $query = $query->or_like('places.title', $search)
-                ->or_like('places.tags', $search);
+            $query = $query->or_like('artworks.title', $search)
+                ->or_like('artworks.tags', $search);
         }
 
         return $query->get()->num_rows();
