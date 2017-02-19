@@ -15,13 +15,6 @@ class Main extends MY_Controller {
         } elseif ($type === 'places') {
             $result = $this->place_model->gets(9, 0, $query);
             $total_count = $this->place_model->get_total_count($query);
-
-            if (!empty($result)) {
-                foreach ($result as $res) {
-                    $res->pick_count = $this->pick_model->get_count_by_place_id($res->id);
-                    $res->comment_count = $this->comment_model->get_count_by_place_id($res->id);
-                }
-            }
         }
 
         $data = [
