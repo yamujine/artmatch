@@ -31,22 +31,16 @@ class Tag {
 
         $CI =& get_instance();
         $CI->load->helper('url');
-        $truncated_string = '';
-        $tag_html = '';
+        $truncated_string = $tag_html = '';
 
         $parts = preg_split('/\s+/', $tag_string);
         foreach ($parts as $part) {
             if (mb_strlen($truncated_string) + mb_strlen($part) <= 20) {
-                $truncated_string .= ' ' . $part;
-            }
-        }
-        $truncated_string = trim($truncated_string);
-
-        $parts = preg_split('/\s+/', $truncated_string);
-        foreach ($parts as $part) {
-            if (!empty($part)) {
-                $tag_without_sharp = mb_substr($part, 1, mb_strlen($part));
-                $tag_html .= ' ' . anchor('/?type=' . $type . '&q=' . $tag_without_sharp, '#' . $tag_without_sharp);
+                $truncated_string .= ' ' . $part; // To check original character length
+                if (!empty($part)) {
+                    $tag_without_sharp = mb_substr($part, 1, mb_strlen($part));
+                    $tag_html .= ' ' . anchor('/?type=' . $type . '&q=' . $tag_without_sharp, '#' . $tag_without_sharp);
+                }
             }
         }
 
