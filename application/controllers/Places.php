@@ -30,7 +30,10 @@ class Places extends MY_Controller {
             // 전시 작품 이력
             $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
             foreach ($exhibitions as $exhibition) {
-                $exhibition_artwork_ids = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
+                $exhibition_artwork_id_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
+                $exhibition_artwork_ids = array_map(function ($value) {
+                   return $value->artwork_id;
+                }, $exhibition_artwork_id_objects);
                 if (!empty($exhibition_artwork_ids)) {
                     $exhibition->artworks = $this->artwork_model->get_bare_by_ids($exhibition_artwork_ids);
                 }
