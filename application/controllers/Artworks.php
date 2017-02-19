@@ -5,12 +5,14 @@ class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'pick_model']);
+        $this->load->helper('url');
     }
 
+    /**
+     * /artworks 주소는 메인으로 리다이렉트
+     */
     public function index() {
-        $artworks = $this->artwork_model->gets();
-        $data = ['artworks' => $artworks];
-        $this->twig->display('artworks/list', $data);
+        redirect('/');
     }
 
     public function detail($artwork_id) {
@@ -40,7 +42,6 @@ class Artworks extends MY_Controller {
 
     public function edit($artwork_id = null) {
         $this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
-        $this->load->helper('url');
 
         $data = [];
 

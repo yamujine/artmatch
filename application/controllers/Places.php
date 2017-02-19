@@ -5,12 +5,14 @@ class Places extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'comment_model', 'pick_model']);
+        $this->load->helper('url');
     }
 
+    /**
+     * /artworks 주소는 메인으로 리다이렉트
+     */
     public function index() {
-        $places = $this->place_model->gets();
-        $data = ['places' => $places];
-        $this->twig->display('places/list', $data);
+        redirect('/');
     }
 
     public function detail($place_id) {
@@ -48,7 +50,6 @@ class Places extends MY_Controller {
 
     public function edit($place_id = null) {
         $this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
-        $this->load->helper('url');
 
         // Form validation
         $this->form_validation->set_rules('name', 'name', 'required|trim');
