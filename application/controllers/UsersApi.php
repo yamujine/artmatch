@@ -79,7 +79,7 @@ class UsersApi extends API_Controller {
             $uploaded_image_name
         );
 
-        if ($result === TRUE) {
+        if ($result) {
             $this->set_success_response(['message' => 'update success']);
         } else {
             $this->set_fail_response('500', ['message' => $this->db->error()]);
@@ -87,13 +87,13 @@ class UsersApi extends API_Controller {
         return $this->output->set_output(json_encode($this->result));
     }
 
-    public function update_password() {
+    public function change_password() {
         $user = $this->user_model->get_by_id($this->accountlib->get_user_id());
 
         if (password_verify($this->input->post('current_password'), $user->password)) {
             $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
             $result = $this->user_model->update_password($user->id, $hashed_password);
-            if ($result === TRUE) {
+            if ($result) {
                 $this->set_success_response(['message' => 'update success']);
             } else {
                 $this->set_fail_response('500', ['message' => $this->db->error()]);
