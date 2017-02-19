@@ -14,14 +14,35 @@ class API_Controller extends CI_Controller {
         $this->result = ['result' => false, 'errorCode' => null, 'body' => null];
     }
 
+    /**
+     * @deprecated return_success_response 쓰는 방식으로 변경해주세요.
+     */
     public function set_success_response($body) {
         $this->result['result'] = true;
         $this->result['body'] = $body;
     }
 
+    public function return_success_response($body) {
+        $this->set_success_response($body);
+        $this->return_response();
+    }
+
+    /**
+     * @deprecated return_fail_response 쓰는 방식으로 변경해주세요.
+     */
     public function set_fail_response($error_code, $body) {
         $this->result['result'] = false;
         $this->result['errorCode'] = $error_code;
         $this->result['body'] = $body;
+    }
+
+    public function return_fail_response($error_code, $body) {
+        $this->set_fail_response($error_code, $body);
+        $this->return_response();
+    }
+
+    public function return_response() {
+        return $this->output->set_output(json_encode($this->result));
+        die;
     }
 }
