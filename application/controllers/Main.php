@@ -20,6 +20,7 @@ class Main extends MY_Controller {
 
     private function _render_content_list($type, $limit = 9, $offset = 0, $use_pick_artists = true) {
         $data = [];
+        $this->load->library('tag');
         $this->load->model(['artwork_model', 'place_model', 'comment_model', 'pick_model', 'exhibition_model']);
         $query = $this->input->get('q');
 
@@ -37,6 +38,21 @@ class Main extends MY_Controller {
 
             foreach ($result as $item) {
                 $item->exhibit_artwork_count = $this->exhibition_model->get_exhibit_artwork_count_by_place_id($item->id);
+                // Tag html 생성
+                $item->tags_html = $this->tag->render_tag_html($item->tags);
+
+                // 주소 앞 2개 파트만 표시하고 자름
+                $address_parts = preg_split('/\s+/', $item->address);
+                $count = 0;
+                foreach ($address_parts as $part) {
+                    if ($count > 1) {
+                        break;
+                    } else {
+                        $modified_address = ' ' . $part;
+                    }
+                    $count++;
+                }
+                $item->address = trim($modified_address);
             }
         }
 

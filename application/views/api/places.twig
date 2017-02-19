@@ -26,7 +26,7 @@
           <div class="pin"></div>
           <div class="keyword">{{ item.address }}</div>
         </div>
-        <div class="tags">{{ item.tags }}</div>
+        <div class="tags">{{ item.tags_html|raw }}</div>
         <div class="displayCount">
           <span class="number">{{ item.exhibit_artwork_count }}</span>작품 전시중
         </div>
