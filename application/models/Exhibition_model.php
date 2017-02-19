@@ -82,4 +82,15 @@ class Exhibition_model extends CI_Model {
             ->where('exhibitions.place_id', $place_id)
             ->get()->result();
     }
+
+    /**
+     * 해당 장소에 전시된 모든 작품 갯수
+     */
+    public function get_exhibit_artwork_count_by_place_id($place_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id', 'LEFT')
+            ->where('exhibitions.place_id', $place_id)
+            ->get()->num_rows();
+    }
 }
