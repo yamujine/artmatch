@@ -7,6 +7,11 @@ body {
       width: 960px;
       margin: 46px auto 0 auto;
 
+      // 공통 - 팝업 이미지
+      .popupImage {
+        cursor: pointer;
+      }
+
       // 제목
       .meta {
         margin: 0 0 26px 0;
@@ -60,7 +65,77 @@ body {
         // -- 메인 이미지
         // 추가 이미지
         .additionalImages {
+          position: relative;
+          width: 875px;
+          margin: 0 auto;
 
+          // 슬라이더
+          .slider {
+            width: 755px;
+            height: 120px;
+            overflow: hidden;
+            margin: 42px auto 0 auto;
+            padding: 0;
+
+            &.deactivate {
+              text-align: center;
+
+              .item {
+                display: inline-block;
+              }
+            }
+
+            :not(.deactivate) {
+              .item {
+                float: left;
+              }
+            }
+
+            .item {
+              width: 120px;
+              height: 120px;
+              outline: none;
+
+              &:not(:first-child) {
+                margin-left: 7px;
+              }
+
+              .imgThumbnail {
+                width: 120px;
+                height: 120px;
+                // TODO: 컬러칩 정리
+                border: 1px solid #E8E8E8;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  outline: none;
+                }
+              }
+            }
+          }
+          // -- 슬라이더
+
+          // 슬라이더 컨트롤
+          .sliderPrevBtn, .sliderNextBtn {
+            position: absolute;
+            top: 50%;
+            margin-top: -21px;
+            width: 22px;
+            height: 42px;
+            border: none;
+            outline: none;
+          }
+
+          .sliderPrevBtn {
+            left: 0;
+            background: url(/static/images/detail_slider_left_btn.png);
+          }
+          .sliderNextBtn {
+            right: 0;
+            background: url(/static/images/detail_slider_right_btn.png);
+          }
+          // -- 슬라이더 컨트롤
         }
         // -- 추가 이미지
       }
