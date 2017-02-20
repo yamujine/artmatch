@@ -27,12 +27,27 @@ class Main extends MY_Controller {
         if ($use_pick_artists) {
             $pick_artworks = $this->artwork_model->get_pick_artworks();
             $data['pick_artworks'] = $pick_artworks;
+
+            foreach ($pick_artworks as $item) {
+                // pick
+                $user_id = $this->accountlib->get_user_id();
+                $is_pick = $this->pick_model->is_artwork_pick($user_id ,$item->id);
+                $item->is_pick = $is_pick;
+            }
         }
 
         if ($type === TYPE_ARTWORKS) {
             $result = $this->artwork_model->gets($limit, $offset, $query);
             $total_count = $this->artwork_model->get_total_count($query);
+
+            foreach ($result as $item) {
+                // pick
+                $user_id = $this->accountlib->get_user_id();
+                $is_pick = $this->pick_model->is_artwork_pick($user_id ,$item->id);
+                $item->is_pick = $is_pick;
+            }
         } elseif ($type === TYPE_PLACES) {
+
             $result = $this->place_model->gets($limit, $offset, $query);
             $total_count = $this->place_model->get_total_count($query);
 
@@ -52,6 +67,11 @@ class Main extends MY_Controller {
                     }
                 }
                 $item->address = trim($modified_address);
+
+                // pick
+                $user_id = $this->accountlib->get_user_id();
+                $is_pick = $this->pick_model->is_place_pick($user_id ,$item->id);
+                $item->is_pick = $is_pick;
             }
         }
 
