@@ -97,13 +97,18 @@ class Imageupload {
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_SMALL_POSTFIX . $file_ext);
     }
 
-    public function upload_image_by_url($url) {
-        $file_ext = substr($url, strrpos($url, '.') + 1);
-        $file_ext = substr($file_ext, 0, strpos($file_ext, '?'));
+    public function upload_image_by_url($url, $generate_thumbs = true, $image_type = '') {
+        $file_ext = pathinfo(basename(parse_url($url)['path']), PATHINFO_EXTENSION);
         $filename = $this->CI->security->sanitize_filename(md5(uniqid(mt_rand()))) .'.'.$file_ext;
-        $profile_image_path = self::UPLOAD_PATH . 'profile/' .$filename;
-        file_put_contents($profile_image_path, file_get_contents($url));
-        $this->_generate_thumbnails($profile_image_path);
-        return $filename;
+        $image_path = self::UPLOAD_PATH.$image_type.'/'.$filename;
+        $result = file_put_contents($image_path, file_get_contents($url));
+        if ($result !== FALSE) {
+            if ($generate_thumbs) {
+                $this->_generate_thumbnails($image_path);
+            }
+            return $filename;
+        } else {
+            return '';
+        }
     }
 }
