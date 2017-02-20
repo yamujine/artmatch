@@ -68,6 +68,47 @@ class UsersApi extends API_Controller {
         return $this->output->set_output(json_encode($this->result));
     }
 
+    public function update_profile_image() {
+        $user_id = $this->accountlib->get_user_id();
+        $current_image = $this->user_model->get_by_id($user_id)->profile_image;
+        $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
+
+        if (!empty($uploaded_image_name)) {
+            if (!empty($current_image)) {
+                //현재 이미지가 기본이미지가 아니면 삭제
+                $this->imageupload->delete_image('/profile/' . $current_image);
+            }
+        }
+        $result = $this->user_model->update_profile_image(
+            $user_id,
+            $uploaded_image_name
+        );
+
+        if ($result) {
+            $this->set_success_response(['message' => 'update success']);
+        } else {
+            $this->set_fail_response('500', ['message' => $this->db->error()]);
+        }
+        return $this->output->set_output(json_encode($this->result));
+    }
+
+    public function change_password() {
+        $user = $this->user_model->get_by_id($this->accountlib->get_user_id());
+
+        if (password_verify($this->input->post('current_password'), $user->password)) {
+            $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
+            $result = $this->user_model->update_password($user->id, $hashed_password);
+            if ($result) {
+                $this->set_success_response(['message' => 'update success']);
+            } else {
+                $this->set_fail_response('500', ['message' => $this->db->error()]);
+            }
+        } else {
+            $this->set_fail_response('103', ['message' => 'password is not corrected']);
+        }
+        return $this->output->set_output(json_encode($this->result));
+    }
+
     public function check_username() {
         $username = $this->input->get('username');
         if (empty($username)) {
@@ -118,6 +159,23 @@ class UsersApi extends API_Controller {
             }
         }
         return $this->output->set_output(json_encode($this->result));
+      
+    public function reset_password() {
+        $this->load->helper('string');
+        if ($this->input->method() === 'post') {
+            $email = $this->input->post('email');
+            $temp_password = random_string('alpha', 8);
+            $user = $this->user_model->get_by_email($email);
+            if ($user !== NULL) {
+                $hashed_password = password_hash($temp_password, PASSWORD_BCRYPT);
+                $this->user_model->update_password($user->id, $hashed_password);
+                $this->accountlib->send_email_temp_password($email, $temp_password);
+                $this->set_success_response(['message' => '이메일로 임시 비밀번호를 전송해 드렸습니다']);
+            } else {
+                $this->set_fail_response('500', ['message' => 'database update error']);
+            }
+            return $this->output->set_output(json_encode($this->result));
+        }
     }
 
     private function _validate_signup_form() {

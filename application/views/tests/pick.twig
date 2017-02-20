@@ -2,17 +2,17 @@
 
 {% block contents %}
 
-    <form class="ui form" method="POST" enctype="multipart/form-data" action="/api/pick">
-        <div class="field">
+    <form method="POST" enctype="multipart/form-data" action="/api/pick">
+        <div class="form-group">
             <label>type</label>
-            <input type="text" name="type" placeholder="" value="artwork">
+            <input class="form-control" type="text" name="type" placeholder="" value="artwork">
         </div>
-        <div class="field">
-            <label>place_id</label>
-            <input type="text" name="place_id" placeholder="" value="1">
+        <div class="form-group">
+            <label>type_id</label>
+            <input class="form-control" type="text" name="type_id" placeholder="" value="1">
         </div>
 
-        <button class="ui button" type="submit">Submit</button>
+        <button class="btn btn-default" type="submit">Submit</button>
     </form>
 
 {% endblock %}

@@ -86,6 +86,39 @@
       }, {scope: 'public_profile,email'});
     });
 
+    $('#password_change_form').submit(function () {
+      var emailElem = $("input[name=email]");
+
+      if (!emailElem.val()) {
+        alert('이메일을 입력해주세요.');
+        emailElem.focus();
+        return false;
+      }
+
+      data = {};
+      data.email = emailElem.val();
+
+      $.ajax({
+        method: "POST",
+        url: "/api/users/reset_password",
+        data: data
+      }).done(function (data) {
+        if (data.result === true) {
+          alert(data.body.message);
+          $('#password_modal').modal('hide');
+        } else {
+          alert(data.body.message);
+        }
+      }).fail(function () {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+      return false;
+    });
+
+  $('#password_submit').click(function(){
+    $('#password_change_form').submit();
+  });
+
   </script>
 {% endblock %}
 
@@ -114,7 +147,7 @@
             <button class="facebook">페이스북</button>
             <div class="patLoginExcept">
               <p>
-                <a href="#">비밀번호를 잊으셨나요?</a>
+                <a data-toggle="modal" data-target="#password_modal">비밀번호를 잊으셨나요?</a>
               </p>
               <hr/>
               <p>
@@ -127,4 +160,30 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="password_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">비밀번호 찾기</h4>
+        </div>
+        <div class="modal-body">
+          <form id="password_change_form" class="ui form" method="POST" enctype="multipart/form-data" action="/api/users/reset_password">
+            <div class="field">
+              <div class="ui">
+                <label>이메일</label>
+                <input type="email" name="email" tabindex="0">
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="password_submit">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 {% endblock %}

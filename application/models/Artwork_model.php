@@ -17,10 +17,28 @@ class Artwork_model extends CI_Model {
     public $use_comment;
     public $tags;
 
+    public function is_exists($id) {
+        $result = $this->db
+            ->from(self::TABLE_NAME)
+            ->where('id', $id)
+            ->limit(1)
+            ->get();
+
+        if ($result->num_rows() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function gets($limit = null, $offset = null, $search = null) {
         $query = $this->db
+            ->select('artworks.*, users.user_name, count(user_artwork_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
-            ->order_by('id', 'DESC');
+            ->join('users', 'users.id = artworks.user_id')
+            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
+            ->group_by('artworks.id')
+            ->order_by('artworks.id', 'DESC');
 
         if ($limit !== null) {
             $query = $query->limit($limit, $offset);
@@ -28,14 +46,34 @@ class Artwork_model extends CI_Model {
 
         if ($search !== null && !empty($search)) {
             if (is_numeric($search)) {
-                $query = $query->where('id', $search);
+                $query = $query->where('artworks.id', $search);
             }
             // 제목, tags 매치
-            $query = $query->or_like('title', $search)
-                ->or_like('tags', $search);
+            $query = $query->or_like('artworks.title', $search)
+                ->or_like('artworks.tags', $search);
         }
 
         return $query->get()->result();
+    }
+
+    public function get_total_count($search = null) {
+        $query = $this->db
+            ->select('artworks.*, users.user_name, count(user_artwork_picks.id) as pick_count')
+            ->from(self::TABLE_NAME)
+            ->join('users', 'users.id = artworks.user_id')
+            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
+            ->group_by('artworks.id');
+
+        if ($search !== null && !empty($search)) {
+            if (is_numeric($search)) {
+                $query = $query->where('artworks.id', $search);
+            }
+            // 제목, tags 매치
+            $query = $query->or_like('artworks.title', $search)
+                ->or_like('artworks.tags', $search);
+        }
+
+        return $query->get()->num_rows();
     }
 
     public function get_by_id($artwork_id) {
@@ -67,10 +105,36 @@ class Artwork_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_bare_by_ids(array $artwork_ids) {
+        if (empty($artwork_ids)) {
+            return NULL;
+        }
+
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where_in('id', $artwork_ids)
+            ->get()->result();
+    }
+
     public function get_by_user_id($user_id) {
         return $this->db
             ->from(self::TABLE_NAME)
             ->where('user_id', $user_id)
+            ->get()->result();
+    }
+
+    /**
+     * 메인 pick_artist 영역 조건: pick 카운트 높은순, 최신순
+     */
+    public function get_pick_artworks() {
+        return $this->db
+            ->select('artworks.*, count(user_artwork_picks.id) as pick_count')
+            ->from(self::TABLE_NAME)
+            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
+            ->group_by('artworks.id')
+            ->order_by('count(user_artwork_picks.id)', 'DESC')
+            ->order_by('id', 'DESC')
+            ->limit(5)
             ->get()->result();
     }
 
@@ -98,6 +162,13 @@ class Artwork_model extends CI_Model {
         } else {
             return NULL;
         }
+    }
+
+    public function update_view_count_by_id($id) {
+        return $this->db
+            ->set('views', 'views+1', FALSE)
+            ->where('id', $id)
+            ->update(self::TABLE_NAME);
     }
 
     public function delete_image($artwork_id, $image) {

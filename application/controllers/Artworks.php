@@ -4,17 +4,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['artwork_model', 'place_model', 'exhibition_model']);
+        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'pick_model']);
+        $this->load->helper('url');
     }
 
+    /**
+     * /artworks 주소는 메인으로 리다이렉트
+     */
     public function index() {
-        $artworks = $this->artwork_model->gets();
-        $data = ['artworks' => $artworks];
-        $this->twig->display('artworks/list', $data);
+        redirect('/');
     }
 
     public function detail($artwork_id) {
         $data = [];
+        $user_id = $this->accountlib->get_user_id();
+
+        $is_pick = $this->pick_model->is_artwork_pick($user_id ,$artwork_id);
+        $data['is_pick'] = $is_pick;
+
 
         $artwork = $this->artwork_model->get_by_id($artwork_id);
         if ($artwork) {
@@ -27,12 +34,14 @@ class Artworks extends MY_Controller {
             $data['exhibitions'] = $exhibitions;
         }
 
+        // 조회수 증가
+        $this->artwork_model->update_view_count_by_id($artwork_id);
+
         $this->twig->display('artworks/detail', $data);
     }
 
     public function edit($artwork_id = null) {
         $this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
-        $this->load->helper('url');
 
         $data = [];
 

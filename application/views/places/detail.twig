@@ -1,77 +1,203 @@
 {% extends "base.twig" %}
 
-{% block contents %}
+{% block script %}
+    <script>
+        $("#commentForm").submit(function () {
+            var type = $("#commentForm").find("input[name=type]").val();
+            var type_id = $("#commentForm").find("input[name=type_id]").val();
+            var comment = $("#commentForm").find("textarea[name=comment]").val();
 
-<table class="ui definition table">
-	<tr>
-		<td>주인?</td>
-		<td>{{ place.user.name }}</td>
-	</tr>
-	<tr>
-		<td>장소 이름</td>
-		<td>{{ place.name }} PICKS: {{ place.pick_count }}</td>
-	</tr>
-	<tr>
-		<td>등록일</td>
-		<td>{{ place.upload_date }}</td>
-	</tr>
-	<tr>
-		<td>상태</td>
-		<td>
-			{% if place.status == 1 %}
-				작품구함
-			{% elseif place.status == 2 %}
-				전시중
-			{% elseif place.status == 3 %}
-				작품 구하지 않음
-			{% endif %}
-		</td>
-	</tr>
-	<tr>
-		<td>주소</td>
-		<td>{{ place.address }}</td>
-	</tr>
-	<tr>
-		<td>장소 설명</td>
-		<td>{{ place.description }}</td>
-	</tr>
-	<tr>
-		<td>댓글 허용여부</td>
-		<td>
-			{% if place.use_comment == 1 %}
-				댓글 가능
-			{% else %}
-				댓글 불가능
-			{% endif %}
-		</td>
-	</tr>
-	<tr>
-		<td>태그</td>
-		<td>{{ place.tags }}</td>
-	</tr>
-	<tr>
-		<td>대표이미지</td>
-		<td>{{ place.image }}</td>
-	</tr>
-	<tr>
-		<td>추가이미지</td>
-		<td>
-			{% for extra in place.extra_images %}
-				{{ extra.image }}
-			{% endfor %}
-		</td>
-	</tr>
-	<tr>
-		<td>전시 작품 이력</td>
-		<td>
-			{% for exhibition in exhibitions %}
-				<img src="{{ exhibition.artwork.image }}">{{ exhibition.artwork.title }}<br>
-			{% endfor %}
-		</td>
-	</tr>
-</table>
+            var data = {
+                type: type,
+                type_id: type_id,
+                comment: comment
+            };
 
-<a class="ui green button" href="/places/edit/{{ place.id }}">수정</a>
-<a class="ui button" href="/places">목록</a>
+            $.ajax({
+                method: "POST",
+                url: "/api/comments/insert",
+                data: data
+            }).done(function (data) {
+                if (data.result == false) {
+                    alert("댓글 등록 실패");
+                } else {
+                    //TODO: DOM사용
+                    location.href = '/places/'+type_id;
+                }
+            }).fail(function () {
+                alert("error");
+            });
+            return false;
+        });
 
+        $('#pickForm').submit(function () {
+            var type = $("#pickForm").find("input[name=type]").val();
+            var type_id = $("#pickForm").find("input[name=type_id]").val();
+            var data = {
+                type: type,
+                type_id: type_id
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "/api/pick",
+                data: data
+            }).done(function (data) {
+                if (data.body.result_type === 'on') {
+                    //TODO: DOM사용
+                    // pick 추가
+                    location.href = '/places/'+type_id;
+                } else if(data.body.result_type === 'off') {
+                    //TODO: DOM사용
+                    // pick 제거
+                    location.href = '/places/'+type_id;
+                } else {
+                    alert(data.body.message);
+                }
+            }).fail(function () {
+                alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+            });
+            return false;
+        });
+    </script>
 {% endblock %}
+
+{% block contents %}
+  <table class="ui definition table">
+    <tr>
+      <td>주인?</td>
+      <td>{{ place.user.name }}</td>
+    </tr>
+    <tr>
+      <td>장소 이름</td>
+      <td>{{ place.name }} PICKS: {{ place.pick_count }}</td>
+    </tr>
+    <tr>
+      <td>등록일</td>
+      <td>{{ place.upload_date }}</td>
+    </tr>
+    <tr>
+      <td>상태</td>
+      <td>
+        {% if place.status == 1 %}
+          작품구함
+        {% elseif place.status == 2 %}
+          전시중
+        {% elseif place.status == 3 %}
+          작품 구하지 않음
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>주소</td>
+      <td>{{ place.address }}</td>
+    </tr>
+    <tr>
+      <td>장소 설명</td>
+      <td>{{ place.description }}</td>
+    </tr>
+    <tr>
+      <td>댓글 허용여부</td>
+      <td>
+        {% if place.use_comment == 1 %}
+          댓글 가능
+        {% else %}
+          댓글 불가능
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>태그</td>
+      <td>{{ place.tags }}</td>
+    </tr>
+    <tr>
+      <td>대표이미지</td>
+      <td>{{ place.image }}</td>
+    </tr>
+    <tr>
+      <td>추가이미지</td>
+      <td>
+        {% for extra in place.extra_images %}
+          {{ extra.image }}
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <td>전시 작품 이력</td>
+      <td>
+        {% if exhibitions is not empty %}
+          {{ exhibitions[0].start_date }} ~ {{ exhibitions[0].end_date }} {{ exhibitions[0].artwork_count }}점 {{ exhibitions[0].is_free }}
+        {% endif %}
+        {% for exhibition in exhibitions %}
+          {% for artwork in exhibition.artworks %}
+            <img src="{{ artwork.image }}">{{ artwork.title }}<br>
+          {% endfor %}
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <td>pick 여부확인</td>
+      <td>
+          {% if is_pick == true %}
+            pick을 한 장소
+          {% else %}
+            pick하지 않은 장소
+          {% endif %}
+      </td>
+    </tr>
+  </table>
+
+
+  댓글리스트
+  <table class="table">
+    <thead>
+    <th>id</th>
+    <th>user_id</th>
+    <th>place_id</th>
+    <th>comment</th>
+    <th>poasted_at</th>
+    </thead>
+    <tbody>
+    {% for comment in comments %}
+      <tr>
+        <td>{{ comment.id }}</td>
+        <td>{{ comment.user_id }}</td>
+        <td>{{ comment.place_id }}</td>
+        <td>{{ comment.comment }}</td>
+        <td>{{ comment.posted_at }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div>
+    댓글
+    <table>
+      <tbody>
+      <tr>
+        <td>
+          <form id="commentForm">
+            <input type="hidden" name="type" placeholder="" value="place">
+            <input type="hidden" name="type_id" placeholder="" value="{{ place.id }}">
+            <textarea name="comment" class="form-control" rows="3" cols="56"></textarea>
+            <button type="submit" class="btn btn-default">등록</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <form id="pickForm">
+    <div class="form-group">
+      <input type="hidden" name="type" value="place">
+      <input type="hidden" name="type_id" class="form-control" value="{{ place.id }}">
+    </div>
+    <button type="submit" class="btn btn-default">pick!!!!!!!!!!!!!</button>
+  </form>
+
+  <a class="ui green button" href="/places/edit/{{ place.id }}">수정</a>
+  <a class="ui button" href="/places">목록</a>
+{% endblock %}
+
+

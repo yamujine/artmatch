@@ -1,0 +1,579 @@
+@import "../helper/colorchips";
+@import "../helper/mixins";
+@import "../helper/loader";
+
+#patContents {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  .patGallery {
+    position: relative;
+    background: $white-three;
+    padding: 100px 0 135px 0;
+
+    .sliderControl {
+      position: absolute;
+      bottom: 57px;
+      right: 133px;
+
+      button {
+        width: 34px;
+        height: 34px;
+        background: $white-three;
+        border: 1px solid $white-seven;
+        outline: none;
+
+        &:hover, &:active {
+          // TODO: 해당 색깔의 명칭 컬러칩 정리
+          border: 1px solid #7a7a7a;
+        }
+
+        &.sliderPrevBtn {
+          margin-right: 14px;
+        }
+      }
+    }
+
+    .container {
+      width: 100%;
+      height: 240px;
+      padding: 0;
+      overflow: hidden;
+
+      .slider {
+        padding: 0 15px;
+        margin-top: 10px;
+
+        @include prefix(transform, translate3d(0, 0, 0));
+
+        .sliderTrack {
+          width: 200%; // 초기 설정값
+
+          @include prefix(transform, translate3d(0, 0, 0));
+          @include prefix(transition, transform 400ms ease);
+        }
+      }
+
+      .item {
+        display: inline-block;
+        padding: 0;
+        margin-left: 15px;
+        float: left;
+
+        &:first-child {
+          margin-left: 136px;
+        }
+
+        &:not(.title) {
+          @include prefix(box-shadow, 0 3px 8px 0 rgba(0, 0, 0, 0.1));
+        }
+
+        a {
+          outline: none;
+
+          .imgThumb {
+            width: 330px;
+            height: 230px;
+            position: relative;
+
+            img {
+              z-index: 1;
+              width: 100%;
+              height: 100%;
+              margin: 0;
+              padding: 0;
+              top: 0;
+              left: 0;
+            }
+
+            .dimm {
+              z-index: 3;
+              width: 100%;
+              height: 100%;
+              background: rgb(51, 51, 51);
+              opacity: 0.6;
+              display: none;
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+            .preview {
+              z-index: 4;
+              color: $white-two;
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 16px;
+              width: 100%;
+              text-align: center;
+              position: absolute;
+              top: 50%;
+              margin-top: -15px;
+              display: none;
+
+              i {
+                font-size: 8px;
+                margin: 7px 0 0 6px;
+                position: absolute;
+              }
+            }
+            .meta {
+              display: none;
+              z-index: 11;
+              position: absolute;
+              bottom: 11px;
+              right: 10px;
+
+              .title, .pick {
+                display: inline-block;
+                color: $white-two;
+                opacity: 0.7;
+                font-size: 12px;
+              }
+              .title {
+                font-family: 'Noto Sans KR', sans-serif;
+                text-decoration: none;
+                margin-right: 20px;
+
+                &:after {
+                  position: absolute;
+                  top: 50%;
+                  bottom: 0;
+                  margin-top: -4px;
+                  width: 1px;
+                  height: 10px;
+                  content: "";
+                  background: $white-two;
+                  opacity: 0.2;
+                  margin-left: 11px;
+                }
+              }
+              .pick {
+                font-family: Arial, sans-serif;
+              }
+            }
+          }
+        }
+
+        &:hover {
+          a {
+            .imgThumb {
+              .dimm, .preview, .meta {
+                display: block;
+              }
+            }
+          }
+        }
+
+        &.picked {
+          a {
+            .meta {
+              .pick {
+                color: $tealish;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .patTypeSelect {
+    width: 100%;
+    height: 50px;
+    position: relative;
+    margin: 0 auto 30px auto;
+    text-align: center;
+
+    .typeSelectTab {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 100%;
+
+      li {
+        display: inline-block;
+        margin: 15px 50px 0 50px;
+
+        &:first-child {
+          &:after {
+            position: absolute;
+            top: 50%;
+            bottom: 0;
+            margin-top: -6px;
+            width: 1px;
+            height: 12px;
+            content: "";
+            background: $black;
+            opacity: 0.1;
+            margin-left: 50px;
+          }
+        }
+
+        a {
+          outline: none;
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+          font-size: 16px;
+          color: $black;
+          opacity: 0.4;
+          padding: 17px 0 16px 0;
+          text-decoration: none;
+
+          &.active, &:hover {
+            opacity: 1;
+            padding: 15px 0 13px 0;
+            border-bottom: 3px solid $black;
+          }
+        }
+      }
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      opacity: 0.2;
+      background: $black;
+    }
+  }
+
+  .patPlaceTagCloud {
+    margin-bottom: 30px;
+
+    .container {
+      position: relative;
+
+      .tagLabel {
+        position: absolute;
+        display: inline-block;
+        width: 76px;
+        height: 24px;
+        background: url(/static/images/ic-keyword.png) center center no-repeat;
+        background-size: 100% 100%;
+      }
+
+      .tagList {
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+        margin: 2px 0 0 74px;
+
+        li {
+          display: inline-block;
+
+          &:not(:first-child) {
+            &:before {
+              position: absolute;
+              top: 50%;
+              bottom: 0;
+              margin-top: -6px;
+              width: 1px;
+              height: 13px;
+              content: "";
+              background: $black;
+              opacity: 0.1;
+              margin-left: -2px;
+            }
+          }
+
+          a {
+            font-size: 14px;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: $brownish-grey;
+            padding: 0 18px;
+            text-decoration: none;
+
+            &:hover {
+              color: $black;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .patItemList {
+    .container {
+      .itemList {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        &.artworkList {
+          .item {
+            height: 300px;
+          }
+        }
+
+        &.placeList {
+          .item {
+            height: 366px;
+
+            .meta {
+              height: 135px;
+
+              .description {
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                line-height: 1.42;
+                width: 262px;
+                height: 34px;
+                color: $warm-grey-five;
+                margin-bottom: 5px;
+              }
+
+              .address {
+                position: relative;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                color: $greyish;
+                display: inline-block;
+
+                .pin {
+                  position: absolute;
+                  display: inline-block;
+                  margin-top: 4px;
+                  width: 8px;
+                  height: 12px;
+                  background: url(/static/images/pin.png) no-repeat;
+                }
+                .keyword {
+                  display: inline-block;
+                  margin-left: 12px;
+                }
+              }
+
+              .tags {
+                display: inline-block;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                color: $greyish;
+              }
+
+              .displayCount {
+                font-size: 14px;
+                font-family: 'Noto Sans KR', sans-serif;
+                color: $greyish-brown-two;
+                position: absolute;
+                left: 0;
+                bottom: 19px;
+
+                .number {
+                  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                  color: $dusty-orange;
+                  font-weight: bold;
+                  margin-right: 5px;
+                }
+              }
+            }
+          }
+        }
+
+        .item {
+          width: 288px;
+          display: inline-block;
+          float: left;
+          margin: 0 32px 32px 0;
+
+          &.third {
+            margin-right: 0;
+          }
+
+          &.picked {
+            a {
+              .imgThumb {
+                .pickBtn {
+                  background: url(/static/images/main_btn_pick_select.png);
+                }
+              }
+              .meta {
+                .pick {
+                  color: $tealish;
+                }
+              }
+            }
+          }
+
+          &:not(.picked) {
+            a {
+              .imgThumb {
+                .pickBtn {
+                  &:hover {
+                    width: 70px;
+                    height: 70px;
+                    padding: 10px 10px 0 0;
+                    top: -10px;
+                    right: -10px;
+                    background: url(/static/images/main_btn_pick_select_hover.png) top right no-repeat;
+                  }
+                }
+              }
+            }
+          }
+
+          a {
+            outline: none;
+            text-decoration: none;
+            letter-spacing: normal;
+            font-style: normal;
+            line-height: normal;
+
+            .imgThumb {
+              width: 100%;
+              height: 220px;
+              position: relative;
+
+              img {
+                z-index: 1;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                top: 0;
+                left: 0;
+              }
+
+              .dimm {
+                z-index: 3;
+                width: 100%;
+                height: 100%;
+                background: rgb(51, 51, 51);
+                opacity: 0.6;
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 0;
+              }
+              .preview {
+                z-index: 4;
+                color: $white-two;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 16px;
+                width: 100%;
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                margin-top: -15px;
+                display: none;
+
+                i {
+                  font-size: 8px;
+                  margin: 7px 0 0 6px;
+                  position: absolute;
+                }
+              }
+              .pickBtn {
+                z-index: 10;
+                width: 60px;
+                height: 60px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                display: none;
+                // TODO: 백그라운드 이미지 URL 전부 수정 필요
+                background: url(/static/images/main_btn_pick_normal.png);
+                outline: none;
+                border: none;
+              }
+              .placeStatusTag {
+                z-index: 2;
+                position: absolute;
+                top: 8px;
+                left: 0;
+                height: 26px;
+
+                &.recruit {
+                  width: 52px;
+                  background: url(/static/images/tag_ing.png);
+                }
+                &.recruitFinish {
+                  width: 63px;
+                  background: url(/static/images/tag_finish.png);
+                }
+              }
+            }
+
+            .meta {
+              position: relative;
+              font-family: 'Noto Sans KR', sans-serif;
+              margin: 12px 0 0 14px;
+
+              .pick {
+                font-family: "Helvetica Neue", Helvetica, sans-serif;
+                position: absolute;
+                top: 4px;
+                right: 12px;
+                font-size: 12px;
+                color: $warm-grey;
+
+                .bold {
+                  font-weight: bold;
+                }
+              }
+
+              .title {
+                color: $black;
+                font-size: 18px;
+                font-weight: 500;
+              }
+
+              .name {
+                color: $warm-grey-two;
+                font-size: 14px;
+              }
+            }
+          }
+
+          &:hover {
+            @include prefix(box-shadow, 0 8px 10px 0 rgba(0, 0, 0, 0.07));
+
+            a {
+              .imgThumb {
+                .dimm, .preview, .pickBtn {
+                  display: block;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .patLoader {
+    display: none;
+    width: 40px;
+    height: 40px;
+    margin: 20px auto;
+
+    &.visible {
+      display: block;
+    }
+  }
+
+  .patItemMore {
+    text-align: center;
+
+    .patItemMoreButton {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      width: 288px;
+      height: 54px;
+      border: 1px solid $white-six;
+      margin: 0 auto;
+      text-align: center;
+      background: $white-two;
+      color: $brownish-grey;
+
+      i {
+        margin-left: 8px;
+      }
+
+      &:hover {
+        border: 1px solid $greyish-two;
+      }
+    }
+  }
+}
