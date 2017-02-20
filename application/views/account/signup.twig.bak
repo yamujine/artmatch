@@ -17,7 +17,7 @@
         return;
       }
       if(!username.match(checkUsername)) {
-        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, ()_-. 만 1~20자 이내로 입력 가능합니다.";
+        document.getElementById("warningUsername").innerText = "아이디는 영어 + 숫자 + . + ()_- 만 1~20자 이내로 입력 가능합니다.";
         $("#warningUsername").css("color", "red");
         $("#checkUsername").attr("value", "uncheck");
         return;
