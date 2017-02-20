@@ -28,6 +28,9 @@ class Places extends MY_Controller {
             // 태그 정보
             $place->tags_html = $this->tag->render_tag_html($place->tags, TYPE_PLACES, false);
 
+            // 전시 정보
+            $place->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_by_place_id($place->id);
+
             // 장소정보
             $data['place'] = $place;
 

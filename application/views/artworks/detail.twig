@@ -258,11 +258,10 @@
           </div>
           <div class="artistSays">작가님의 한마디</div>
           <ul class="status">
-            {# TODO: 전시중 flag 추가 #}
-            {% if artwork.status == ARTWORK_STATUS_NEED_SPACE %}
-              <li class="exhibition">공간 구함</li>
-            {% elseif artwork.status == ARTWORK_STATUS_NOT_NEED_SPACE %}
+            {% if artwork.is_now_exhibiting %}
               <li class="exhibition display">전시중</li>
+            {% elseif artwork.status == ARTWORK_STATUS_NEED_SPACE %}
+              <li class="exhibition">공간 구함</li>
             {% endif %}
             {% if artwork.for_sale == ARTWORK_FOR_SALE %}
               <li class="buy">구매가능</li>
