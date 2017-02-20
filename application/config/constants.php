@@ -97,3 +97,21 @@ defined('USER_TYPE_PLACE_OWNER') OR define('USER_TYPE_PLACE_OWNER', '1');
 
 defined('TYPE_ARTWORKS') OR define('TYPE_ARTWORKS', 'artworks');
 defined('TYPE_PLACES') OR define('TYPE_PLACES', 'places');
+
+/** 작품/장소 공통 */
+defined('TYPE_USE_COMMENT') OR define('TYPE_USE_COMMENT', '1');
+defined('TYPE_NO_COMMENT') OR define('TYPE_NO_COMMENT', '0');
+
+/** 작품 */
+defined('ARTWORK_STATUS_NEED_SPACE') OR define('ARTWORK_STATUS_NEED_SPACE', '0');
+defined('ARTWORK_STATUS_NOT_NEED_SPACE') OR define('ARTWORK_STATUS_NOT_NEED_SPACE', '1');
+defined('ARTWORK_FOR_SALE') OR define('ARTWORK_FOR_SALE', '1');
+defined('ARTWORK_NOT_FOR_SALE') OR define('ARTWORK_NOT_FOR_SALE', '0');
+
+/** 장소 */
+defined('PLACE_STATUS_NEED_ARTWORK') OR define('PLACE_STATUS_NEED_ARTWORK', '0');
+defined('PLACE_STATUS_NOT_NEED_ARTWORK') OR define('PLACE_STATUS_NOT_NEED_ARTWORK', '1');
+
+/** 전시 */
+defined('EXHIBITION_FOR_FREE') OR define('EXHIBITION_FOR_FREE', '1');
+defined('EXHIBITION_PAID') OR define('EXHIBITION_PAID', '0');
