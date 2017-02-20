@@ -39,7 +39,7 @@ class Places extends MY_Controller {
             foreach ($exhibitions as $exhibition) {
                 $exhibition_artwork_id_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
                 $exhibition_artwork_ids = array_map(function ($value) {
-                   return $value->artwork_id;
+                    return $value->artwork_id;
                 }, $exhibition_artwork_id_objects);
                 if (!empty($exhibition_artwork_ids)) {
                     $exhibition->artworks = $this->artwork_model->get_bare_by_ids($exhibition_artwork_ids);
