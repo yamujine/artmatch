@@ -315,74 +315,39 @@
         </form>
         <!-- //== 댓글 입력 -->
       {% endif %}
-
-      {#{% if exhibitions|length > 0 %}#}
+      {% if exhibitions|length > 0 %}
         <!-- == 전시 이력 -->
         <div class="exhibitionArea">
           <div class="titleWrap">
-            <div class="title">전시했던 작가</div>
+            <div class="title">전시했던 작품</div>
             <ul class="sliderControl">
               <li class="active"><a href="#">01</a></li>
               <li><a href="#">02</a></li>
             </ul>
           </div>
           <ul class="exhibitions">
-            <li>
-              <a href="#">
-                <div class="imgThumbnail">
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
-                </div>
-                <div class="meta">
-                  <div class="name">이한진</div>
-                  <div class="date">
-                    2016.12.10 ~ 24
+          {% for exhibition in exhibitions %}
+            {% for artwork in exhibition.artworks %}
+              <li>
+                <a href="/artworks/{{ artwork.id }}">
+                  <div class="imgThumbnail">
+                    {# {{ artwork.image }} #}
+                    <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
                   </div>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <div class="imgThumbnail">
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
-                </div>
-                <div class="meta">
-                  <div class="name">이한진</div>
-                  <div class="date">
-                    2016.12.10 ~ 24
+                  <div class="meta">
+                    <div class="name">{{ artwork.title }}</div>
+                    <div class="date">
+                      {{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}
+                    </div>
                   </div>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <div class="imgThumbnail">
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
-                </div>
-                <div class="meta">
-                  <div class="name">이한진</div>
-                  <div class="date">
-                    2016.12.10 ~ 24
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <div class="imgThumbnail">
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
-                </div>
-                <div class="meta">
-                  <div class="name">이한진</div>
-                  <div class="date">
-                    2016.12.10 ~ 24
-                  </div>
-                </div>
-              </a>
-            </li>
+                </a>
+              </li>
+            {% endfor %}
+          {% endfor %}
           </ul>
         </div>
         <!-- //== 전시 이력 -->
-      {#{% endif %}#}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
