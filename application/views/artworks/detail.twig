@@ -231,7 +231,7 @@
           </div>
           <div class="artistSays">작가님의 한마디</div>
           <ul class="status">
-            {% if artwork.status == 3 %}
+            {% if artwork.status != 3 %}
               {% if artwork.status == 1 %}
                 <li class="exhibition">공간 구함</li>
               {% elseif artwork.status == 2 %}
