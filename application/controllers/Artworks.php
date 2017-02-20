@@ -5,7 +5,7 @@ class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'comment_model', 'pick_model', 'user_model']);
-        $this->load->library('tag');
+        $this->load->library(['tag', 'address']);
         $this->load->helper('url');
     }
 
@@ -37,7 +37,12 @@ class Artworks extends MY_Controller {
             // 전시 이력
             $exhibitions = $this->exhibition_model->get_exhibitions_by_artwork_id($artwork_id);
             foreach ($exhibitions as $exhibition) {
-                $exhibition->place = $this->place_model->get_bare_by_id($exhibition->place_id);
+                $exhibition_place = $this->place_model->get_bare_by_id($exhibition->place_id);
+
+                // 주소 앞 2개 파트만 표시하고 자름
+                $exhibition_place->address = $this->address->extract_foremost_part($exhibition_place->address);
+
+                $exhibition->place = $exhibition_place;
             }
             $data['exhibitions'] = $exhibitions;
 
