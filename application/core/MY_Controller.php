@@ -9,8 +9,10 @@ class MY_Controller extends CI_Controller {
         parent::__construct();
         $this->load->library('twig');
         $this->load->helper('url');
+        $this->config->load('facebook');
         // Twig 관련 글로벌 설정은 이곳 또는 application/libraries/Twig.php 에 작성
         $this->twig->addGlobal('session', $_SESSION);
+        $this->twig->addGlobal('facebook_app_id', $this->config->item('app_id'));
 
         if ($this->accountlib->is_login() === false) {
             redirect('/account/login');
