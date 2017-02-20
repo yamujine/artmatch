@@ -120,8 +120,8 @@ class UsersApi extends API_Controller {
             $this->return_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
         }
 
-        $result = $this->user_model->check_email($email);
-        if ($result) {
+        $is_already_used = $this->user_model->check_email($email);
+        if ($is_already_used) {
             $this->return_fail_response('102', ['message' => '이미 사용중인 이메일입니다.']);
         }
 
