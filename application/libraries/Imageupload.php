@@ -95,11 +95,13 @@ class Imageupload {
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_SMALL_POSTFIX . $file_ext);
     }
 
-    public function upload_facebook_image($url) {
-        $filename = substr($url, strrpos($url, '/') + 1);
-        $filename = substr($filename, 0, strrpos($filename, '?'));
-        file_put_contents('./uploads/profile/'.$filename, file_get_contents($url));
-        $this->_generate_thumbnails('./uploads/profile/'.$filename);
+    public function upload_image_by_url($url) {
+        $file_ext = substr($url, strrpos($url, '.') + 1);
+        $file_ext = substr($file_ext, 0, strpos($file_ext, '?'));
+        $filename = $this->CI->security->sanitize_filename(md5(uniqid(mt_rand()))) .'.'.$file_ext;
+        $profile_image_path = self::UPLOAD_PATH . 'profile/' .$filename;
+        file_put_contents($profile_image_path, file_get_contents($url));
+        $this->_generate_thumbnails($profile_image_path);
         return $filename;
     }
 }

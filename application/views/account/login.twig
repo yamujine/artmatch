@@ -63,18 +63,29 @@
     $('.facebook').click(function () {
       FB.login(function(response) {
             // handle the response
-        console.log(response);
         FB.api('/me', {fields: 'email,name,picture.type(large)'}, function(response) {
-          console.dir(response);
           var params = {
               email:response.email,
               picture:response.picture.data.url,
-              isFacebook:true
+              isFacebook:1
           };
-          return window.location = '/account/signup?' + $.param(params);
+          $.ajax({
+            method: "POST",
+            url: "/api/users/check_facebook_email",
+            data: params
+          }).done(function (data) {
+            if (data.result === true) {
+              return location.href = '/';
+            } else {
+              return window.location = '/account/signup?' + $.param(params);
+            }
+          }).fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
         });
       }, {scope: 'public_profile,email'});
     });
+
   </script>
 {% endblock %}
 
@@ -100,7 +111,6 @@
               <button type="submit">로그인하기</button>
             </form>
             <p>또는</p>
-            {# TODO: 페이스북 연동을 위한 임시 버튼 삽입 #}
             <button class="facebook">페이스북</button>
             <div class="patLoginExcept">
               <p>

@@ -14,9 +14,9 @@ class UsersApi extends API_Controller {
         $this->_validate_signup_form();
         if ($this->form_validation->run() === TRUE) {
             $hashed_password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-            if ($this->input->post('is_facebook') == TRUE) {
-                $url = $this->input->post('profile_image');
-                $uploaded_image_name = $this->imageupload->upload_facebook_image($url);
+            if ($this->input->post('is_facebook') === '1') {
+                $facebook_profile_image_url = $this->input->post('profile_image');
+                $uploaded_image_name = $this->imageupload->upload_image_by_url($facebook_profile_image_url);
             } else {
                 $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
             }
@@ -97,6 +97,26 @@ class UsersApi extends API_Controller {
             }
         }
 
+        return $this->output->set_output(json_encode($this->result));
+    }
+
+    public function check_facebook_email() {
+        $email = $this->input->post('email');
+        if (empty($email)) {
+            $this->set_fail_response('101', ['message' => 'email is empty']);
+        } else {
+            $result = $this->user_model->check_email($email);
+            if ($result) {
+                /**
+                 * @todo facebook 로그인 검증 필요
+                 */
+                $user = $this->user_model->get_by_email($email);
+                $this->accountlib->generate_user_session($user->id);
+                $this->set_success_response(['message' => 'facebook login success']);
+            } else {
+                $this->set_fail_response('102', ['message' => 'email is not founded']);
+            }
+        }
         return $this->output->set_output(json_encode($this->result));
     }
 
