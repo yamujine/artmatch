@@ -17,14 +17,14 @@
       <label for="status">작품 상태</label>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="0" {% if status == 0 or not status %}checked="checked"{% endif %}
+          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NEED_SPACE }}" {% if status == ARTWORK_STATUS_NEED_SPACE or not status %}checked="checked"{% endif %}
                  tabindex="0">
           <label>공간구함</label>
         </div>
       </div>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="1" {% if status == 1 %}checked="checked" {% endif %}tabindex="0">
+          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NOT_NEED_SPACE }}" {% if status == ARTWORK_STATUS_NOT_NEED_SPACE %}checked="checked" {% endif %}tabindex="0">
           <label>공간 구하지 않음</label>
         </div>
       </div>
@@ -33,14 +33,14 @@
       <label for="status">판매 여부</label>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="for_sale" value="1"
-                 {% if for_sale is defined and for_sale == 1 %}checked="checked"{% endif %} tabindex="0">
+          <input type="radio" name="for_sale" value="{{ ARTWORK_FOR_SALE }}"
+                 {% if for_sale is defined and for_sale == ARTWORK_FOR_SALE %}checked="checked"{% endif %} tabindex="0">
           <label>판매함</label>
         </div>
       </div>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="for_sale" value="0" {% if for_sale == 0 %}checked="checked"{% endif %} tabindex="0">
+          <input type="radio" name="for_sale" value="{{ ARTWORK_NOT_FOR_SALE }}" {% if for_sale == ARTWORK_NOT_FOR_SALE %}checked="checked"{% endif %} tabindex="0">
           <label>판매 안함</label>
         </div>
       </div>
@@ -49,15 +49,15 @@
       <label for="status">댓글허용</label>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="use_comment" value="1"
-                 {% if use_comment is not defined or use_comment == 1 %}checked="checked"{% endif %} tabindex="0">
+          <input type="radio" name="use_comment" value="{{ TYPE_USE_COMMENT }}"
+                 {% if use_comment is not defined or use_comment == TYPE_USE_COMMENT %}checked="checked"{% endif %} tabindex="0">
           <label>댓글 허용함</label>
         </div>
       </div>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="use_comment" value="0"
-                 {% if use_comment is defined and use_comment == 0 %}checked="checked"{% endif %} tabindex="0">
+          <input type="radio" name="use_comment" value="{{ TYPE_NO_COMMENT }}"
+                 {% if use_comment is defined and use_comment == TYPE_NO_COMMENT %}checked="checked"{% endif %} tabindex="0">
           <label>댓글 허용 안함</label>
         </div>
       </div>
