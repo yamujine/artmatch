@@ -12,7 +12,7 @@ class Account extends CI_Controller {
 
     public function signup() {
         $data = [];
-        if ($this->input->get('isFacebook') === '1') {
+        if ($this->input->get('is_facebook') === '1') {
             $data['email'] = $this->input->get('email');
             $data['picture'] = $this->input->get('picture');
             $data['facebook_id'] = $this->input->get('facebook_id');

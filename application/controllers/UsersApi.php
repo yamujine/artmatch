@@ -46,7 +46,7 @@ class UsersApi extends API_Controller {
     }
 
     public function login() {
-        if ($this->input->post('isFacebook') === '1'){
+        if ($this->input->post('is_facebook') === '1'){
             $email = $this->input->post('email');
             $facebook_id = $this->input->post('facebook_id');
             $this->_login_facebook($email, $facebook_id);
