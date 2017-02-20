@@ -65,7 +65,7 @@ class UsersApi extends API_Controller {
                 $this->accountlib->generate_facebook_access_token_session($accessToken);
                 $this->_login_facebook($userNode->getEmail(), $userNode->getId());
             } else {
-                $this->set_fail_response('500', ['message' => 'facebook api load error']);
+                $this->return_fail_response('500', ['message' => 'facebook api load error']);
             }
         } else {
             $email_or_username = $this->input->post('email_or_username');
@@ -177,19 +177,19 @@ class UsersApi extends API_Controller {
 
     private function _login_facebook($email, $facebook_id) {
         if (empty($email)) {
-            $this->set_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
+            $this->return_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
         } else {
             $result = $this->user_model->check_email($email);
             if ($result) {
                 $user = $this->user_model->get_by_email($email);
                 if ($user->facebook_id === $facebook_id) {
                     $this->accountlib->generate_user_session($user->id);
-                    $this->set_success_response(['message' => 'facebook login success']);
+                    $this->return_success_response(['message' => 'facebook login success']);
                 } else {
-                    $this->set_fail_response('104', ['message' => '올바르지 않은 접근입니다.']);
+                    $this->return_fail_response('104', ['message' => '올바르지 않은 접근입니다.']);
                 }
             } else {
-                $this->set_fail_response('102', ['message' => '이메일을 찾을 수 없습니다.']);
+                $this->return_fail_response('102', ['message' => '이메일을 찾을 수 없습니다.']);
             }
         }
         return $this->output->set_output(json_encode($this->result));
