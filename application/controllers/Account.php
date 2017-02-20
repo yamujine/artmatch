@@ -7,15 +7,30 @@ class Account extends CI_Controller {
         parent::__construct();
         $this->load->model('user_model');
         $this->load->library('twig');
+        $this->config->load('facebook');
+        $this->twig->addGlobal('facebook_app_id', $this->config->item('app_id'));
         $this->load->helper('url');
     }
 
     public function signup() {
         $data = [];
         if ($this->input->get('is_facebook') === '1') {
-            $data['email'] = $this->input->get('email');
-            $data['picture'] = $this->input->get('picture');
-            $data['facebook_id'] = $this->input->get('facebook_id');
+            $fb = new Facebook\Facebook([
+                'app_id' => $this->config->item('app_id'),
+                'app_secret' => $this->config->item('app_secret'),
+                'default_graph_version' => 'v2.5'
+            ]);
+
+            $accessToken = $this->accountlib->get_facebook_access_token();
+
+            if (isset($accessToken)) {
+                $fb->setDefaultAccessToken($accessToken);
+                $response = $fb->get('/me?fields=id,name,picture.type(large),email');
+                $userNode = $response->getGraphUser();
+                $data['email'] = $userNode->getEmail();
+                $data['picture'] = $userNode->getPicture()->getUrl();
+                $data['facebook_id'] = $userNode->getId();
+            }
         }
         $this->twig->display('account/signup', $data);
     }

@@ -46,10 +46,26 @@ class UsersApi extends API_Controller {
     }
 
     public function login() {
-        if ($this->input->post('is_facebook') === '1'){
-            $email = $this->input->post('email');
-            $facebook_id = $this->input->post('facebook_id');
-            $this->_login_facebook($email, $facebook_id);
+        if ($this->input->post('is_facebook') === '1') {
+            $this->config->load('facebook');
+            $fb = new Facebook\Facebook([
+                'app_id' => $this->config->item('app_id'),
+                'app_secret' => $this->config->item('app_secret'),
+                'default_graph_version' => 'v2.5'
+            ]);
+            $helper = $fb->getJavaScriptHelper();
+            $accessToken = $helper->getAccessToken();
+
+            if (isset($accessToken)) {
+                // Logged in
+                $fb->setDefaultAccessToken($accessToken);
+                $response = $fb->get('/me?fields=id,email');
+                $userNode = $response->getGraphUser();
+                $this->accountlib->generate_facebook_access_token_session($accessToken);
+                $this->_login_facebook($userNode->getEmail(), $userNode->getId());
+            } else {
+                $this->set_fail_response('500', ['message' => 'facebook api load error']);
+            }
         } else {
             $email_or_username = $this->input->post('email_or_username');
             if (strpos($email_or_username, '@') !== false) {
