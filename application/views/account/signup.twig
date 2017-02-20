@@ -155,6 +155,7 @@
         <fieldset>
           {% if picture %}
             <input type="hidden" name="profile_image" value = "{{ picture }}" />
+            <input type="hidden" name="facebook_id" value="{{ facebook_id }}" />
             <input type="hidden" name="is_facebook" value = "1" />
           {% else %}
             <input type="file" name="profile_image"/>

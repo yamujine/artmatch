@@ -15,6 +15,7 @@ class Account extends CI_Controller {
         if ($this->input->get('isFacebook') === '1') {
             $data['email'] = $this->input->get('email');
             $data['picture'] = $this->input->get('picture');
+            $data['facebook_id'] = $this->input->get('facebook_id');
         }
         $this->twig->display('account/signup', $data);
     }

@@ -67,17 +67,20 @@
           var params = {
               email:response.email,
               picture:response.picture.data.url,
+              facebook_id:response.id,
               isFacebook:1
           };
           $.ajax({
             method: "POST",
-            url: "/api/users/check_facebook_email",
+            url: "/api/login",
             data: params
           }).done(function (data) {
             if (data.result === true) {
               return location.href = '/';
-            } else {
+            } else if (data.errorCode === '102'){
               return window.location = '/account/signup?' + $.param(params);
+            } else {
+              alert(data.body.message);
             }
           }).fail(function () {
             alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');

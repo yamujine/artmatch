@@ -16,7 +16,7 @@ class UsersApi extends API_Controller {
             $hashed_password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
             if ($this->input->post('is_facebook') === '1') {
                 $facebook_profile_image_url = $this->input->post('profile_image');
-                $uploaded_image_name = $this->imageupload->upload_image_by_url($facebook_profile_image_url);
+                $uploaded_image_name = $this->imageupload->upload_image_by_url($facebook_profile_image_url, true, 'profile');
             } else {
                 $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
             }
@@ -26,7 +26,8 @@ class UsersApi extends API_Controller {
                 $hashed_password,
                 $this->input->post('user_name'),
                 $uploaded_image_name,
-                $this->input->post('type')
+                $this->input->post('type'),
+                $this->input->post('facebook_id')
             );
 
             if ($id) {
@@ -45,23 +46,29 @@ class UsersApi extends API_Controller {
     }
 
     public function login() {
-        $email_or_username = $this->input->post('email_or_username');
-        if (strpos($email_or_username, '@') !== false) {
-            $user = $this->user_model->get_by_email($email_or_username);
-            $error_msg = '이메일을 찾을 수 없습니다.';
+        if ($this->input->post('isFacebook') === '1'){
+            $email = $this->input->post('email');
+            $facebook_id = $this->input->post('facebook_id');
+            $this->_login_facebook($email, $facebook_id);
         } else {
-            $user = $this->user_model->get_by_user_name($email_or_username);
-            $error_msg = '아이디를 찾을 수 없습니다.';
-        }
-
-        if (!$user) {
-            $this->set_fail_response('102', ['message' => $error_msg]);
-        } else {
-            if (password_verify($this->input->post('password'), $user->password)) {
-                $this->set_success_response(['message' => 'login success']);
-                $this->accountlib->generate_user_session($user->id);
+            $email_or_username = $this->input->post('email_or_username');
+            if (strpos($email_or_username, '@') !== false) {
+                $user = $this->user_model->get_by_email($email_or_username);
+                $error_msg = '이메일을 찾을 수 없습니다.';
             } else {
-                $this->set_fail_response('103', ['message' => 'password is not corrected']);
+                $user = $this->user_model->get_by_user_name($email_or_username);
+                $error_msg = '아이디를 찾을 수 없습니다.';
+            }
+
+            if (!$user) {
+                $this->set_fail_response('102', ['message' => $error_msg]);
+            } else {
+                if (password_verify($this->input->post('password'), $user->password)) {
+                    $this->set_success_response(['message' => 'login success']);
+                    $this->accountlib->generate_user_session($user->id);
+                } else {
+                    $this->set_fail_response('103', ['message' => 'password is not corrected']);
+                }
             }
         }
 
@@ -141,25 +148,6 @@ class UsersApi extends API_Controller {
         return $this->output->set_output(json_encode($this->result));
     }
 
-    public function check_facebook_email() {
-        $email = $this->input->post('email');
-        if (empty($email)) {
-            $this->set_fail_response('101', ['message' => 'email is empty']);
-        } else {
-            $result = $this->user_model->check_email($email);
-            if ($result) {
-                /**
-                 * @todo facebook 로그인 검증 필요
-                 */
-                $user = $this->user_model->get_by_email($email);
-                $this->accountlib->generate_user_session($user->id);
-                $this->set_success_response(['message' => 'facebook login success']);
-            } else {
-                $this->set_fail_response('102', ['message' => 'email is not founded']);
-            }
-        }
-        return $this->output->set_output(json_encode($this->result));
-      
     public function reset_password() {
         $this->load->helper('string');
         if ($this->input->method() === 'post') {
@@ -176,6 +164,26 @@ class UsersApi extends API_Controller {
             }
             return $this->output->set_output(json_encode($this->result));
         }
+    }
+
+    private function _login_facebook($email, $facebook_id) {
+        if (empty($email)) {
+            $this->set_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
+        } else {
+            $result = $this->user_model->check_email($email);
+            if ($result) {
+                $user = $this->user_model->get_by_email($email);
+                if ($user->facebook_id === $facebook_id) {
+                    $this->accountlib->generate_user_session($user->id);
+                    $this->set_success_response(['message' => 'facebook login success']);
+                } else {
+                    $this->set_fail_response('104', ['message' => '올바르지 않은 접근입니다.']);
+                }
+            } else {
+                $this->set_fail_response('102', ['message' => '이메일을 찾을 수 없습니다.']);
+            }
+        }
+        return $this->output->set_output(json_encode($this->result));
     }
 
     private function _validate_signup_form() {
