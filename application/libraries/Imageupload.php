@@ -99,9 +99,9 @@ class Imageupload {
 
     public function upload_image_by_url($url, $generate_thumbs = true, $image_type = '') {
         $file_ext = pathinfo(basename(parse_url($url)['path']), PATHINFO_EXTENSION);
-        $filename = $this->CI->security->sanitize_filename(md5(uniqid(mt_rand()))) . '.' . $file_ext;
+        $filename = $this->CI->security->sanitize_filename(md5(uniqid(mt_rand(), true))) . '.' . $file_ext;
         $image_path = self::UPLOAD_PATH . $image_type . '/' . $filename;
-        $result = file_put_contents($image_path, file_get_contents($url));
+        $result = copy($url, $image_path);
         if ($result !== FALSE) {
             if ($generate_thumbs) {
                 $this->_generate_thumbnails($image_path);
