@@ -70,6 +70,47 @@
         event.stopPropagation();
       });
 
+      // PICK
+      $('.wrap').each(function() {
+        var wrap = $(this);
+        var li = $(this).parent();
+
+        $(this).find('.pickBtn').click(function () {
+          var number = parseInt($(wrap).find('.number').html(), 10);
+
+          var type = $(wrap).data('type');
+          if (type === "artworks") type = "artwork";
+          else if (type === "places") type = "place";
+
+          var id = $(wrap).data('id');
+
+          $.ajax({
+            method: "POST",
+            url: "/api/pick",
+            data: {
+              type: type,
+              type_id: id
+            }
+          })
+            .done(function (data) {
+              if (data.body.result_type === 'on') {
+                $(wrap).find('.number').html(number + 1);
+                $(li).addClass('picked');
+              } else if (data.body.result_type === 'off') {
+                $(wrap).find('.number').html(number - 1);
+                $(li).removeClass('picked');
+              } else {
+                alert(data.body.message);
+              }
+            })
+            .fail(function () {
+              alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+            });
+
+          return false;
+        });
+      });
+
       // 더 보기
       $('.patItemMoreButton').click(function () {
         $(this).hide();
@@ -110,7 +151,7 @@
             <img src="../../static/images/main_pick_artist.png"/>
           </div>
           {% for item in pick_artworks %}
-            <div class="item {% if loop.first %}picked{% endif %}">
+            <div class="item {% if item.is_pick %}picked{% endif %}">
               <a href="/artworks/{{ item.id }}">
                 <div class="imgThumb">
                   <div class="dimm"></div>
@@ -121,7 +162,10 @@
                   <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
                   <div class="meta">
                     <div class="title">{{ item.title }}</div>
-                    <div class="pick"><span class="">PICK</span> {{ item.pick_count }}</div>
+                    <div class="pick">
+                      <span class="">PICK</span>
+                      <span class="number">{{ item.pick_count }}</span>
+                    </div>
                   </div>
                 </div>
               </a>
@@ -169,7 +213,7 @@
       <ul class="itemList {% if type == TYPE_ARTWORKS %}artworkList{% else %}placeList{% endif %}">
         {% for item in items %}
           {# STATUS: PICKED (이미 PICKED된 아트웍 또는 장소) 사용자가 이미 PICK 했는지 여부 정보 필요 #}
-          <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if loop.first %}picked{% endif %}">
+          <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if item.is_pick %}picked{% endif %}">
             <div class="wrap" data-type="{{ type }}" data-id="{{ item.id }}">
               <div class="imgThumb">
                 <div class="dimm"></div>
@@ -186,7 +230,8 @@
               <div class="meta">
                 <div class="pick">
                   {# PICK 갯수 #}
-                  <span class="bold">PICK</span> {{ item.pick_count }}
+                  <span class="bold">PICK</span>
+                  <span class="number">{{ item.pick_count }}</span>
                 </div>
                 {% if type == TYPE_ARTWORKS %}
                   <div class="title">{{ item.title }}</div>
