@@ -8,7 +8,8 @@
   <script type="text/javascript">
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '222831604846386',
+        appId      : '{{ facebook_app_id }}',
+        cookie     : true,
         xfbml      : true,
         version    : 'v2.8'
       });
@@ -62,29 +63,23 @@
 
     $('.facebook').click(function () {
       FB.login(function(response) {
-            // handle the response
-        FB.api('/me', {fields: 'email,name,picture.type(large)'}, function(response) {
-          var params = {
-              email:response.email,
-              picture:response.picture.data.url,
-              facebook_id:response.id,
-              is_facebook:1
-          };
-          $.ajax({
-            method: "POST",
-            url: "/api/login",
-            data: params
-          }).done(function (data) {
-            if (data.result === true) {
-              return location.href = '/';
-            } else if (data.errorCode === '102'){
-              return window.location = '/account/signup?' + $.param(params);
-            } else {
-              alert(data.body.message);
-            }
-          }).fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
+        var param = {
+          is_facebook:1
+        }
+        $.ajax({
+          method: "POST",
+          url: "/api/login",
+          data: param
+        }).done(function (data) {
+          if (data.result === true) {
+            return location.href = '/';
+          } else if (data.errorCode === '102'){
+            return window.location = '/account/signup?' + $.param(param);
+          } else {
+            alert(data.body.message);
+          }
+        }).fail(function () {
+          alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
         });
       }, {scope: 'public_profile,email'});
     });
