@@ -46,8 +46,11 @@ class API_Controller extends CI_Controller {
         $this->return_response();
     }
 
+    /**
+     * 이 함수는 현재 설정된 API Response를 리턴하고 바로 종료함
+     */
     public function return_response() {
-        return $this->output->set_output(json_encode($this->result));
+        $this->output->set_output(json_encode($this->result))->_display();
         die;
     }
 }
