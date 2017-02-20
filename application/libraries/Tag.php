@@ -3,7 +3,7 @@
 class Tag {
     /**
      * 입력받은 태그 string을 규칙에 맞게 정리하는 함수
-     * @param $tag_string
+     * @param string $tag_string
      * @return string
      */
     public function refine_tags($tag_string) {
@@ -24,6 +24,12 @@ class Tag {
         return trim($tags);
     }
 
+    /**
+     * 입력 받은 태그 string을 적당한 길이로 자른 다음, anchor 태그를 만들어서 html string으로 변환하는 함수
+     * @param string $tag_string
+     * @param string $type
+     * @return string
+     */
     public function render_tag_html($tag_string, $type = 'places') {
         if (empty($tag_string)) {
             return '';
