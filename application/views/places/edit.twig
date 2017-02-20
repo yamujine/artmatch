@@ -17,20 +17,14 @@
       <label for="status">장소 상태</label>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="1" {% if status == 1 or not status %}checked="checked"{% endif %}
+          <input type="radio" name="status" value="0" {% if status == 0 or not status %}checked="checked"{% endif %}
                  tabindex="0">
           <label>작품구함</label>
         </div>
       </div>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="2" {% if status == 2 %}checked="checked" {% endif %}tabindex="0">
-          <label>전시중</label>
-        </div>
-      </div>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="status" value="3" {% if status == 3 %}checked="checked" {% endif %}tabindex="0">
+          <input type="radio" name="status" value="1" {% if status == 1 %}checked="checked" {% endif %}tabindex="0">
           <label>작품 구하지 않음</label>
         </div>
       </div>
