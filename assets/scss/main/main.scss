@@ -346,9 +346,12 @@
 
               .tags {
                 display: inline-block;
-                font-family: 'Noto Sans KR', sans-serif;
-                font-size: 12px;
-                color: $greyish;
+
+                a {
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 12px;
+                  color: $greyish;
+                }
               }
 
               .displayCount {
@@ -381,7 +384,7 @@
           }
 
           &.picked {
-            a {
+            .wrap {
               .imgThumb {
                 .pickBtn {
                   background: url(/static/images/main_btn_pick_select.png);
@@ -396,7 +399,7 @@
           }
 
           &:not(.picked) {
-            a {
+            .wrap {
               .imgThumb {
                 .pickBtn {
                   &:hover {
@@ -412,12 +415,8 @@
             }
           }
 
-          a {
-            outline: none;
-            text-decoration: none;
-            letter-spacing: normal;
-            font-style: normal;
-            line-height: normal;
+          .wrap {
+            cursor: pointer;
 
             .imgThumb {
               width: 100%;
@@ -528,7 +527,7 @@
           &:hover {
             @include prefix(box-shadow, 0 8px 10px 0 rgba(0, 0, 0, 0.07));
 
-            a {
+            .wrap {
               .imgThumb {
                 .dimm, .preview, .pickBtn {
                   display: block;

@@ -5,6 +5,7 @@ class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'pick_model']);
+        $this->load->library('tag');
         $this->load->helper('url');
     }
 
@@ -19,12 +20,15 @@ class Artworks extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $is_pick = $this->pick_model->is_artwork_pick($user_id ,$artwork_id);
+        $is_pick = $this->pick_model->is_artwork_pick($user_id, $artwork_id);
         $data['is_pick'] = $is_pick;
 
 
         $artwork = $this->artwork_model->get_by_id($artwork_id);
         if ($artwork) {
+            // 태그 정보
+            $artwork->tags_html = $this->tag->render_tag_html($artwork->tags, TYPE_ARTWORKS, false);
+
             $data['artwork'] = $artwork;
             // 전시 이력
             $exhibitions = $this->exhibition_model->get_exhibitions_by_artwork_id($artwork_id);
@@ -63,7 +67,7 @@ class Artworks extends MY_Controller {
 
         if (empty($artwork_id)) {
             // 작품 신규 등록시
-            if ($this->accountlib->get_user_type() !== '0') {
+            if ($this->accountlib->get_user_type() !== USER_TYPE_ARTIST) {
                 alert_and_redirect('창작자 회원만 작품 등록이 가능합니다.');
             }
         } else {

@@ -9,6 +9,8 @@ class Account extends CI_Controller {
         $this->load->library('twig');
         $this->config->load('facebook');
         $this->twig->addGlobal('facebook_app_id', $this->config->item('app_id'));
+        $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
+        $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
         $this->load->helper('url');
     }
 

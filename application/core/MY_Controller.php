@@ -14,6 +14,12 @@ class MY_Controller extends CI_Controller {
         $this->twig->addGlobal('session', $_SESSION);
         $this->twig->addGlobal('facebook_app_id', $this->config->item('app_id'));
 
+        // 사용자 정의 상수를 Twig global로 등록
+        $defined_constants = get_defined_constants(true)['user'];
+        foreach ($defined_constants as $constant => $value) {
+            $this->twig->addGlobal($constant, $value);
+        }
+
         if ($this->accountlib->is_login() === false) {
             redirect('/account/login');
         } elseif ($this->accountlib->is_auth() === false) {
