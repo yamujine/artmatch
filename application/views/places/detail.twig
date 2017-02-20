@@ -268,7 +268,7 @@
           {{ place.description }}
         </div>
         <div class="tags">
-          {{ place.tags }}
+          {{ place.tags_html|raw }}
         </div>
         <div class="pick">
           <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="place" data-id="{{ place.id }}">

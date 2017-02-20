@@ -28,9 +28,10 @@ class Tag {
      * 입력 받은 태그 string을 적당한 길이로 자른 다음, anchor 태그를 만들어서 html string으로 변환하는 함수
      * @param string $tag_string
      * @param string $type
+     * @param boolean $truncate
      * @return string
      */
-    public function render_tag_html($tag_string, $type = 'places') {
+    public function render_tag_html($tag_string, $type = 'places', $truncate = true) {
         if (empty($tag_string)) {
             return '';
         }
@@ -41,12 +42,16 @@ class Tag {
 
         $parts = preg_split('/\s+/', $tag_string);
         foreach ($parts as $part) {
-            if (mb_strlen($truncated_string) + mb_strlen($part) <= 20) {
-                $truncated_string .= ' ' . $part; // To check original character length
-                if (!empty($part)) {
-                    $tag_without_sharp = mb_substr($part, 1, mb_strlen($part));
-                    $tag_html .= ' ' . anchor('/?type=' . $type . '&q=' . $tag_without_sharp, '#' . $tag_without_sharp);
+            if ($truncate) {
+                if (mb_strlen($truncated_string) + mb_strlen($part) <= 20) {
+                    $truncated_string .= ' ' . $part; // To check original character length
+                } else {
+                    continue;
                 }
+            }
+            if (!empty($part)) {
+                $tag_without_sharp = mb_substr($part, 1, mb_strlen($part));
+                $tag_html .= ' ' . anchor('/?type=' . $type . '&q=' . $tag_without_sharp, '#' . $tag_without_sharp);
             }
         }
 

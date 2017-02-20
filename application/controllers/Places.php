@@ -5,6 +5,7 @@ class Places extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'comment_model', 'pick_model']);
+        $this->load->library('tag');
         $this->load->helper('url');
     }
 
@@ -24,6 +25,9 @@ class Places extends MY_Controller {
 
         $place = $this->place_model->get_by_id($place_id);
         if ($place) {
+            // 태그 정보
+            $place->tags_html = $this->tag->render_tag_html($place->tags, TYPE_PLACES, false);
+
             // 장소정보
             $data['place'] = $place;
 

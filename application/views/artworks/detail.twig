@@ -246,7 +246,7 @@
           {{ artwork.description }}
         </div>
         <div class="tags">
-          {{ artwork.tags }}
+          {{ artwork.tags_html|raw }}
         </div>
         <div class="pick">
           <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="artwork" data-id="{{ artwork.id }}">
