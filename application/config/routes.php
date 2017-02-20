@@ -79,7 +79,6 @@ $route['api/users/register']['POST'] = 'usersapi/register';
 $route['api/users/verify'] = 'usersapi/verify';
 $route['api/users/check_username'] = 'usersapi/check_username';
 $route['api/users/check_email'] = 'usersapi/check_email';
-$route['api/users/check_facebook_email'] = 'usersapi/check_facebook_email';
 $route['api/users/update_image']['POST'] = 'usersapi/update_profile_image';
 $route['api/users/change_password']['POST'] = 'usersapi/change_password';
 $route['api/users/reset_password'] = 'usersapi/reset_password';
