@@ -17,10 +17,10 @@ class LandingApi extends API_Controller {
             if (!$this->landing_model->insert($email)) {
                 $this->set_fail_response('102', ['message' => '등록도중 문제가 발생했습니다.']);
             } else {
-                $this->set_success_response('등록해주셔서 감사합니다.');
+                $this->set_success_response(['message' => '등록해주셔서 감사합니다.']);
             }
         }
 
-        return $this->output->set_output(json_encode($this->result));
+        $this->return_response();
     }
 }
