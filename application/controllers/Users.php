@@ -26,38 +26,38 @@ class Users extends MY_Controller {
         $user = $this->user_model->get_by_user_name($user_name);
 
         // 내 작품, 장소 리스트
-        if ((int)$user->type === 0) {
+        if ($user->type === USER_TYPE_ARTIST) {
             $mine = $this->artwork_model->get_by_user_id($user->id);
-        } else if ((int)$user->type === 1) {
+        } else if ($user->type === USER_TYPE_PLACE_OWNER) {
             $mine = $this->place_model->get_by_user_id($user->id);
         }
         foreach ($mine as $something) {
-            $type = ((int)$user->type === 0) ? 'artworks' : 'places';
+            $type = ($user->type === USER_TYPE_ARTIST) ? TYPE_ARTWORKS : TYPE_PLACES;
             $something->url = '/' . $type . '/' . $something->id;
-            $something->subject = ($type === 'artworks') ? $something->title : $something->name;
+            $something->subject = ($type === TYPE_ARTWORKS) ? $something->title : $something->name;
         }
 
         // 받은 pick 카운트
-        if ((int)$user->type === 0) {
+        if ($user->type === USER_TYPE_ARTIST) {
             $given_pick_count = $this->pick_model->get_given_artwork_pick_by_user_id($user->id);
-        } else if ((int)$user->type === 1) {
+        } else if ($user->type === USER_TYPE_PLACE_OWNER) {
             $given_pick_count = $this->pick_model->get_given_place_pick_by_user_id($user->id);
         }
 
         // 내가 pick한 작품 장소 리스트
         $my_picks = [];
         if ($is_my_page && !empty($pick_type)) {
-            if ($pick_type === 'artworks') {
+            if ($pick_type === TYPE_ARTWORKS) {
                 $my_picks = $this->pick_model->get_artwork_picks_by_user_id($user->id);
-            } elseif ($pick_type === 'places') {
+            } elseif ($pick_type === TYPE_PLACES) {
                 $my_picks = $this->pick_model->get_place_picks_by_user_id($user->id);
             }
         }
         foreach ($my_picks as $my_pick) {
-            if ($pick_type === 'artworks') {
+            if ($pick_type === TYPE_ARTWORKS) {
                 $my_pick->url = '/' . $pick_type . '/' . $my_pick->artwork->id;
                 $my_pick->subject = $my_pick->artwork->title;
-            } elseif ($pick_type === 'places') {
+            } elseif ($pick_type === TYPE_PLACES) {
                 $my_pick->url = '/' . $pick_type . '/' . $my_pick->place->id;
                 $my_pick->subject = $my_pick->place->name;
             }

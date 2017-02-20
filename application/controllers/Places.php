@@ -82,7 +82,7 @@ class Places extends MY_Controller {
 
         if (empty($place_id)) {
             // 장소 신규 등록시
-            if ($this->accountlib->get_user_type() !== '1') {
+            if ($this->accountlib->get_user_type() !== USER_TYPE_PLACE_OWNER) {
                 alert_and_redirect('공간소유자 회원만 장소 등록이 가능합니다.');
             }
         } else {
