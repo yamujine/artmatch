@@ -6,8 +6,8 @@ class Account extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('user_model');
+        $this->load->helper('url');
         $this->load->library('twig');
-        $this->load->helper('url'); //email verify redirect
         $this->config->load('facebook');
         $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);

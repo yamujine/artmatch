@@ -49,8 +49,7 @@ class UsersApi extends API_Controller {
         if ($this->input->post('is_facebook') === '1') {
             $this->_facebook_login();
         }
-        $email_or_username = $this->input->post('email_or_username');
-        $this->_simple_login($email_or_username);
+        $this->_simple_login();
     }
 
     public function update_profile_image() {
@@ -137,8 +136,8 @@ class UsersApi extends API_Controller {
         $this->return_success_response(['message' => '이메일로 임시 비밀번호를 전송해 드렸습니다']);
     }
 
-    private function _simple_login($email_or_username) {
-
+    private function _simple_login() {
+        $email_or_username = $this->input->post('email_or_username');
         if (strpos($email_or_username, '@') !== false) {
             $user = $this->user_model->get_by_email($email_or_username);
             $error_msg = '이메일을 찾을 수 없습니다.';
@@ -146,22 +145,17 @@ class UsersApi extends API_Controller {
             $user = $this->user_model->get_by_user_name($email_or_username);
             $error_msg = '아이디를 찾을 수 없습니다.';
         }
-
         if (!$user) {
             $this->return_fail_response('102', ['message' => $error_msg]);
         }
-
         if (!password_verify($this->input->post('password'), $user->password)) {
             $this->return_fail_response('103', ['message' => 'password is not corrected']);
         }
-
         $this->accountlib->generate_user_session($user->id);
-
         $this->return_success_response(['message' => 'login success']);
     }
 
     private function _facebook_login() {
-
         $this->config->load('facebook');
         $fb = new Facebook\Facebook([
             'app_id' => $this->config->item('app_id'),
@@ -185,7 +179,7 @@ class UsersApi extends API_Controller {
             $this->return_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
         }
 
-        $user = $this->user_model->get_email_and_fb_id($userNode->getEmail());
+        $user = $this->user_model->get_email_and_fb_id($userNode->getEmail(), $userNode->getId());
 
         if ($user === NULL) {
             $this->return_fail_response('102', ['message' => '이메일을 찾을 수 없습니다.']);
