@@ -48,8 +48,9 @@ class UsersApi extends API_Controller {
     public function login() {
         if ($this->input->post('is_facebook') === '1') {
             $this->_facebook_login();
+        } else {
+            $this->_simple_login();
         }
-        $this->_simple_login();
     }
 
     public function update_profile_image() {

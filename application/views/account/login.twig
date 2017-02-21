@@ -63,7 +63,6 @@
 
     $('.facebook').click(function () {
       FB.login(function(response) {
-        console.dir(response);
         if (response.status !== 'connected') {
           alert('페이스북 로그인을 사용할 수 없습니다.');
           $('.facebook').attr('disabled', true);
