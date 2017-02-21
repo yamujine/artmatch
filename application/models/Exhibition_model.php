@@ -67,6 +67,41 @@ class Exhibition_model extends CI_Model {
             ->get()->result();
     }
 
+    /**
+     * 해당 작품이 전시중인지 리턴하는 함수
+     * @param $artwork_id
+     * @return bool
+     */
+    public function is_now_exhibiting_artwork_by_artwork_id($artwork_id) {
+        $today = date('Y-m-d');
+        $query = $this->db
+            ->from(self::TABLE_NAME)
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id')
+            ->where('exhibition_artworks.artwork_id', $artwork_id)
+            ->where('exhibitions.start_date <=', $today)
+            ->where('exhibitions.end_date >=', $today)
+            ->get();
+
+        return $query->num_rows() > 0;
+    }
+
+    /**
+     * 해당 장소에 전시중인 전시가 있는지 리턴하는 함수
+     * @param $place_id
+     * @return bool
+     */
+    public function is_now_exhibiting_by_place_id($place_id) {
+        $today = date('Y-m-d');
+        $query = $this->db
+            ->from(self::TABLE_NAME)
+            ->where('place_id', $place_id)
+            ->where('start_date <=', $today)
+            ->where('end_date >=', $today)
+            ->get();
+
+        return $query->num_rows() > 0;
+    }
+
     public function get_exhibitions_by_artwork_id($artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)

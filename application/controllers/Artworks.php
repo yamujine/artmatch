@@ -28,6 +28,9 @@ class Artworks extends MY_Controller {
             // 태그 정보
             $artwork->tags_html = $this->tag->render_tag_html($artwork->tags, TYPE_ARTWORKS, false);
 
+            // 전시중 정보
+            $artwork->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_artwork_by_artwork_id($artwork->id);
+
             // 작품정보
             $data['artwork'] = $artwork;
 

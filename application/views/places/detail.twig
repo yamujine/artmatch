@@ -254,10 +254,10 @@
           </div>
           <div class="says">대표님의 한마디</div>
           <ul class="status">
-            {% if place.status == PLACE_STATUS_NEED_ARTWORK %}
-              <li class="exhibition">작품 모집중</li>
-            {% elseif place.status == PLACE_STATUS_NEED_ARTWORK %}
+            {% if place.is_now_exhibiting %}
               <li class="exhibition display">현재 전시중</li>
+            {% elseif place.status == PLACE_STATUS_NEED_ARTWORK %}
+              <li class="exhibition">작품 모집중</li>
             {% endif %}
             {% if place.is_free == EXHIBITION_FOR_FREE %}
               <li class="fee">대관료 없음</li>
