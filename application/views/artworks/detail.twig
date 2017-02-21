@@ -124,8 +124,7 @@
         </div>
         <!-- == 작가 -->
         <div class="name">
-          {# TODO: 작가 정보 채워야함 #}
-          염지희
+          {{ artwork.user.user_name }}
         </div>
       </div>
       <!-- //== 제목 -->
@@ -148,8 +147,7 @@
           <!-- //== -->
           <!-- == 저작권 -->
           <div class="copyright">
-            {# TODO: 작가 정보 채워야함 #}
-            Copyright &copy; 염지희 All right reserved. 작품 이미지의 도용 및 무단 재배포를 금합니다.
+            Copyright &copy; {{ artwork.user.user_name }} All right reserved. 작품 이미지의 도용 및 무단 재배포를 금합니다.
           </div>
           <!-- //== -->
         </div>
@@ -275,7 +273,7 @@
           {{ artwork.description }}
         </div>
         <div class="tags">
-          {{ artwork.tags }}
+          {{ artwork.tags_html|raw }}
         </div>
         <div class="pick">
           <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="artwork" data-id="{{ artwork.id }}">
