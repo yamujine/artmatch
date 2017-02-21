@@ -319,7 +319,7 @@
         <!-- == 전시 이력 -->
         <div class="exhibitionArea">
           <div class="titleWrap">
-            <div class="title">전시했던 작품</div>
+            <div class="title">전시했던 작가</div>
             <ul class="sliderControl">
               <li class="active"><a href="#">01</a></li>
               <li><a href="#">02</a></li>
@@ -335,7 +335,7 @@
                     <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
                   </div>
                   <div class="meta">
-                    <div class="name">{{ artwork.title }}</div>
+                    <div class="name">{{ artwork.user.user_name }}</div>
                     <div class="date">
                       {{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}
                     </div>

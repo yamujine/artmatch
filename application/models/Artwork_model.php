@@ -98,22 +98,31 @@ class Artwork_model extends CI_Model {
         return $artwork;
     }
 
+    public function get_by_ids(array $artwork_ids) {
+        if (empty($artwork_ids)) {
+            return NULL;
+        }
+
+        $artworks = $this->db
+            ->from(self::TABLE_NAME)
+            ->where_in('id', $artwork_ids)
+            ->get()->result();
+
+        foreach ($artworks as $artwork) {
+            $artwork->user = $this->db
+                ->from('users')
+                ->where('id', $artwork->user_id)
+                ->get()->row();
+        }
+
+        return $artworks;
+    }
+
     public function get_bare_by_id($artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)
             ->where('id', $artwork_id)
             ->get()->row();
-    }
-
-    public function get_bare_by_ids(array $artwork_ids) {
-        if (empty($artwork_ids)) {
-            return NULL;
-        }
-
-        return $this->db
-            ->from(self::TABLE_NAME)
-            ->where_in('id', $artwork_ids)
-            ->get()->result();
     }
 
     public function get_by_user_id($user_id) {
