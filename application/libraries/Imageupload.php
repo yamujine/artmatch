@@ -102,13 +102,13 @@ class Imageupload {
         $filename = $this->CI->security->sanitize_filename(md5(uniqid(mt_rand(), true))) . '.' . $file_ext;
         $image_path = self::UPLOAD_PATH . $image_type . '/' . $filename;
         $result = copy($url, $image_path);
-        if ($result !== FALSE) {
-            if ($generate_thumbs) {
-                $this->_generate_thumbnails($image_path);
-            }
-            return $filename;
-        } else {
+
+        if ($result === FALSE) {
             return '';
         }
+        if ($generate_thumbs) {
+            $this->_generate_thumbnails($image_type);
+        }
+        return $filename;
     }
 }

@@ -7,11 +7,11 @@ class Account extends CI_Controller {
         parent::__construct();
         $this->load->model('user_model');
         $this->load->library('twig');
+        $this->load->helper('url'); //email verify redirect
         $this->config->load('facebook');
-        $this->twig->addGlobal('facebook_app_id', $this->config->item('app_id'));
+        $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
         $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
-        $this->load->helper('url');
     }
 
     public function signup() {
@@ -25,7 +25,7 @@ class Account extends CI_Controller {
 
             $accessToken = $this->accountlib->get_facebook_access_token();
 
-            if (isset($accessToken)) {
+            if ($accessToken !== NULL) {
                 $fb->setDefaultAccessToken($accessToken);
                 $response = $fb->get('/me?fields=id,name,picture.type(large),email');
                 $userNode = $response->getGraphUser();

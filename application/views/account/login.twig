@@ -8,7 +8,7 @@
   <script type="text/javascript">
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '{{ facebook_app_id }}',
+        appId      : '{{ FACEBOOK_APP_ID }}',
         cookie     : true,
         xfbml      : true,
         version    : 'v2.8'
@@ -74,7 +74,7 @@
           if (data.result === true) {
             return location.href = '/';
           } else if (data.errorCode === '102'){
-            return window.location = '/account/signup?' + $.param(param);
+            return location.href = '/account/signup?' + $.param(param);
           } else {
             alert(data.body.message);
           }
