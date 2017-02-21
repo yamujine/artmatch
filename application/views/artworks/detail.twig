@@ -66,7 +66,7 @@
           }
         })
           .done(function (data) {
-            if (data.result == false) {
+            if (!data.result) {
               alert("댓글 등록 실패");
 
               return false;
@@ -254,7 +254,7 @@
       <div class="artistCommentary">
         <div class="meta">
           <div class="artistProfileImage">
-            <img src="/static/images/tom.jpg" class="img-circle"/>
+            <img src="/uploads/profile/{{ user.profile_image }}" class="img-circle"/>
           </div>
           <div class="artistSays">작가님의 한마디</div>
           <ul class="status">
@@ -276,14 +276,14 @@
           {{ artwork.tags_html|raw }}
         </div>
         <div class="pick">
-          <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="artwork" data-id="{{ artwork.id }}">
+          <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">
             PICK <span class="number">{{ artwork.pick_count }}</span>
           </button>
         </div>
       </div>
       <!-- //== 작가의 한마디 -->
-      {#{% if artwork.use_comment == 1 %}#}
-      {#{% if place.use_comment == 1 %}#}
+
+      {% if artwork.use_comment == 1 %}
       <!-- == 댓글 -->
       <div class="commentArea">
         <div class="title">댓글 <span class="number">3</span></div>
@@ -297,7 +297,7 @@
           {% for comment in comments %}
             <li>
               <div class="profileImage">
-                <img src="/static/images/tom.jpg" class="img-circle"/>
+                <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
               </div>
               <div class="content">
                 <div class="meta">
@@ -314,14 +314,14 @@
 
       <!-- == 댓글 입력 -->
       <form id="commentRegisterForm" class="commentForm">
-        <input type="hidden" name="type" placeholder="" value="artwork">
+        <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
         <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
         <textarea class="commentInput" name="comment" placeholder="장소에 대한 댓글을 남겨보세요."></textarea>
         <button type="submit">확인</button>
       </form>
       <!-- //== 댓글 입력 -->
+      {% endif %}
 
-      {#{% endif %}#}
       {#{% if exhibitions|length > 0 %}#}
         <!-- == 전시 이력 -->
         <div class="exhibitionArea">

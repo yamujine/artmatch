@@ -79,9 +79,6 @@
           var number = parseInt($(wrap).find('.number').html(), 10);
 
           var type = $(wrap).data('type');
-          if (type === "artworks") type = "artwork";
-          else if (type === "places") type = "place";
-
           var id = $(wrap).data('id');
 
           $.ajax({

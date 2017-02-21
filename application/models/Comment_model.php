@@ -18,12 +18,12 @@ class Comment_model extends CI_Model {
     }
 
 	public function get_comments_by_type_id($type, $type_id) {
-		if ($type === "artwork") {
+		if ($type === TYPE_ARTWORKS) {
 			return $this->db
 				->from(self::ARTWORK_COMMENTS_TABLE_NAME)
 				->where('artwork_id', $type_id)
 				->get()->result();
-		} else if ($type === "place") {
+		} else if ($type === TYPE_PLACES) {
 			return $this->db
 				->from(self::PLACE_COMMENTS_TABLE_NAME)
 				->where('place_id', $type_id)
@@ -34,7 +34,7 @@ class Comment_model extends CI_Model {
 	}
 
     public function insert_comment($type, $user_id, $type_id, $comment) {
-	    if ($type === "artwork") {
+	    if ($type === TYPE_ARTWORKS) {
             $this->load->model('artwork_model');
 
             if ($this->artwork_model->is_exists($type_id) === false) {
@@ -42,7 +42,7 @@ class Comment_model extends CI_Model {
             }
 
             return $this->insert_artwork_comment($user_id, $type_id, $comment);
-        } else if ($type === "place") {
+        } else if ($type === TYPE_PLACES) {
             $this->load->model('place_model');
 
             if ($this->place_model->is_exists($type_id) === false) {
@@ -56,9 +56,9 @@ class Comment_model extends CI_Model {
     }
 
     public function delete_comment($type, $type_comment_id) {
-        if ($type === "artwork") {
+        if ($type === TYPE_ARTWORKS) {
             return $this->delete_artwork_comment($type_comment_id);
-        } else if ($type === "place") {
+        } else if ($type === TYPE_PLACES) {
             return $this->delete_place_comment($type_comment_id);
         } else {
             throw new Exception("type error. type=".$type);
@@ -66,9 +66,9 @@ class Comment_model extends CI_Model {
     }
 
     public function update_comment($type, $type_comment_id, $comment) {
-        if ($type === "artwork") {
+        if ($type === TYPE_ARTWORKS) {
             return $this->update_artwork_comment($type_comment_id, $comment);
-        } else if ($type === "place") {
+        } else if ($type === TYPE_PLACES) {
             return $this->update_place_comment($type_comment_id, $comment);
         } else {
             throw new Exception("type error. type=".$type);

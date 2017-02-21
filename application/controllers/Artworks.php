@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'comment_model', 'pick_model']);
+        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'comment_model', 'pick_model', 'user_model']);
         $this->load->library('tag');
         $this->load->helper('url');
     }
@@ -39,8 +39,19 @@ class Artworks extends MY_Controller {
             $data['exhibitions'] = $exhibitions;
 
             // 댓글
-            $comments = $this->comment_model->get_comments_by_type_id('artwork', $artwork_id);
+            $comments = $this->comment_model->get_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
+            foreach ($comments as $comment) {
+                // TODO join 걸어서 정보 가져오도록
+                // 댓글 작성자 정보
+                $user = $this->user_model->get_by_id($comment->user_id);
+                $comment->user = $user;
+            }
             $data['comments'] = $comments;
+
+            // 작가정보
+            // TODO join 걸어서 정보 가져오도록
+            $user = $this->user_model->get_by_id($artwork->user_id);
+            $data['user'] = $user;
         }
 
         // 조회수 증가
