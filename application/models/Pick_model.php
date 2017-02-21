@@ -94,7 +94,7 @@ class Pick_model extends CI_Model {
     }
 
     public function insert_pick($type, $user_id, $type_id) {
-        if ($type === 'artwork') {
+        if ($type === TYPE_ARTWORKS) {
             $this->load->model('artwork_model');
 
             if ($this->artwork_model->is_exists($type_id) === false) {
@@ -102,7 +102,7 @@ class Pick_model extends CI_Model {
             }
 
             return $this->insert_artwork_pick($user_id, $type_id);
-        } else if ($type === 'place') {
+        } else if ($type === TYPE_PLACES) {
             $this->load->model('place_model');
 
             if ($this->place_model->is_exists($type_id) === false) {
@@ -116,9 +116,9 @@ class Pick_model extends CI_Model {
     }
 
     public function delete_pick($type, $user_id, $type_id) {
-        if ($type === 'artwork') {
+        if ($type === TYPE_ARTWORKS) {
             return $this->delete_artwork_pick($user_id, $type_id);
-        } else if ($type === 'place') {
+        } else if ($type === TYPE_PLACES) {
             return $this->delete_place_pick($user_id, $type_id);
         } else {
             throw new Exception("type error. type=".$type);
@@ -126,9 +126,9 @@ class Pick_model extends CI_Model {
     }
 
     public function check_pick($type, $user_id, $type_id) {
-        if ($type === 'artwork') {
+        if ($type === TYPE_ARTWORKS) {
             return $this->check_artwork_pick($user_id, $type_id);
-        } else if ($type === 'place') {
+        } else if ($type === TYPE_PLACES) {
             return $this->check_place_pick($user_id, $type_id);
         } else {
             throw new Exception("type error. type=".$type);

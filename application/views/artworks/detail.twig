@@ -52,6 +52,35 @@
         }
       });
 
+      // 댓글
+      $("#commentRegisterForm").submit(function () {
+        var $this = $(this);
+
+        $.ajax({
+          method: "POST",
+          url: "/api/comments/insert",
+          data: {
+            type: $this.find("input[name=type]").val(),
+            type_id: $this.find("input[name=type_id]").val(),
+            comment: $this.find("textarea[name=comment]").val()
+          }
+        })
+          .done(function (data) {
+            if (!data.result) {
+              alert("댓글 등록 실패");
+
+              return false;
+            }
+
+            location.reload(true);
+          })
+          .fail(function () {
+            alert("댓글 등록 실패");
+          });
+
+        return false;
+      });
+
       // PICK
       $('.pickBtn').click(function () {
         var $this = $(this);
@@ -225,7 +254,7 @@
       <div class="artistCommentary">
         <div class="meta">
           <div class="artistProfileImage">
-            <img src="/static/images/tom.jpg" class="img-circle"/>
+            <img src="/uploads/profile/{{ user.profile_image }}" class="img-circle"/>
           </div>
           <div class="artistSays">작가님의 한마디</div>
           <ul class="status">
@@ -247,62 +276,52 @@
           {{ artwork.tags_html|raw }}
         </div>
         <div class="pick">
-          <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="artwork" data-id="{{ artwork.id }}">
+          <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">
             PICK <span class="number">{{ artwork.pick_count }}</span>
           </button>
         </div>
       </div>
       <!-- //== 작가의 한마디 -->
-      {#{% if artwork.use_comment == 1 %}#}
-        <!-- == 댓글 -->
-        <div class="commentArea">
-          <div class="title">댓글 <span class="number">3</span></div>
-          <hr class="divider"/>
-          <div class="commentMore">
-            <button class="commentMoreBtn">
-              이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
-            </button>
-          </div>
-          <ul class="comments">
-            {#{% for comment in comments %}#}
-              <li>
-                <div class="profileImage">
-                  <img src="/static/images/tom.jpg" class="img-circle"/>
-                </div>
-                <div class="content">
-                  <div class="meta">콩보리 <span class="regDate">16.02.11</span></div>
-                  <div class="comment">작가님 세계관이 너무 좋으네요! 소장하고 싶은 작업들이 많지만 우선 전시장부터 가보고 찜콩해보기로 항상 화이팅입니다! 지켜보고 있는 사람들이 많다는 걸 기억해주세요. </div>
-                </div>
-              </li>
-              <li>
-                <div class="profileImage">
-                  <img src="/static/images/tom.jpg" class="img-circle"/>
-                </div>
-                <div class="content">
-                  <div class="meta">콩보리 <span class="regDate">16.02.11</span></div>
-                  <div class="comment">작가님 세계관이 너무 좋으네요! 소장하고 싶은 작업들이 많지만 우선 전시장부터 가보고 찜콩해보기로 항상 화이팅입니다! 지켜보고 있는 사람들이 많다는 걸 기억해주세요. </div>
-                </div>
-              </li>
-              <li>
-                <div class="profileImage">
-                  <img src="/static/images/tom.jpg" class="img-circle"/>
-                </div>
-                <div class="content">
-                  <div class="meta">콩보리 <span class="regDate">16.02.11</span></div>
-                  <div class="comment">작가님 세계관이 너무 좋으네요! 소장하고 싶은 작업들이 많지만 우선 전시장부터 가보고 찜콩해보기로 항상 화이팅입니다! 지켜보고 있는 사람들이 많다는 걸 기억해주세요. </div>
-                </div>
-              </li>
-            {#{% endfor %}#}
-          </ul>
+
+      {% if artwork.use_comment == 1 %}
+      <!-- == 댓글 -->
+      <div class="commentArea">
+        <div class="title">댓글 <span class="number">3</span></div>
+        <hr class="divider"/>
+        <div class="commentMore">
+          <button class="commentMoreBtn">
+            이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
+          </button>
         </div>
-        <!-- //== 댓글 -->
-        <!-- == 댓글 입력 -->
-        <form class="commentForm">
-          <textarea class="commentInput" name="comment" placeholder="작품에 대한 느낌을 남겨보세요."></textarea>
-          <button type="submit">확인</button>
-        </form>
-        <!-- //== 댓글 입력 -->
-      {#{% endif %}#}
+        <ul class="comments">
+          {% for comment in comments %}
+            <li>
+              <div class="profileImage">
+                <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
+              </div>
+              <div class="content">
+                <div class="meta">
+                  {# TODO: 유저의 닉네임 또는 이름으로 설정 #}
+                  {{ comment.user_id }} <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
+                </div>
+                <div class="comment">{{ comment.comment }}</div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- //== 댓글 -->
+
+      <!-- == 댓글 입력 -->
+      <form id="commentRegisterForm" class="commentForm">
+        <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
+        <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
+        <textarea class="commentInput" name="comment" placeholder="장소에 대한 댓글을 남겨보세요."></textarea>
+        <button type="submit">확인</button>
+      </form>
+      <!-- //== 댓글 입력 -->
+      {% endif %}
+
       {#{% if exhibitions|length > 0 %}#}
         <!-- == 전시 이력 -->
         <div class="exhibitionArea">
