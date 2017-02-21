@@ -30,6 +30,7 @@ class Places extends MY_Controller {
 
             // 전시 정보
             $place->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_by_place_id($place->id);
+            $place->exhibition = $this->exhibition_model->get_by_place_id($place->id);
 
             // 장소정보
             $data['place'] = $place;
