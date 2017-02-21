@@ -20,7 +20,7 @@ class Main extends MY_Controller {
 
     private function _render_content_list($type, $limit = 9, $offset = 0, $use_pick_artists = true) {
         $data = [];
-        $this->load->library('tag');
+        $this->load->library(['tag', 'address']);
         $this->load->model(['artwork_model', 'place_model', 'comment_model', 'pick_model', 'exhibition_model']);
         $query = $this->input->get('q');
 
@@ -31,7 +31,7 @@ class Main extends MY_Controller {
             foreach ($pick_artworks as $item) {
                 // pick
                 $user_id = $this->accountlib->get_user_id();
-                $is_pick = $this->pick_model->is_artwork_pick($user_id ,$item->id);
+                $is_pick = $this->pick_model->is_artwork_pick($user_id, $item->id);
                 $item->is_pick = $is_pick;
             }
         }
@@ -43,11 +43,10 @@ class Main extends MY_Controller {
             foreach ($result as $item) {
                 // pick
                 $user_id = $this->accountlib->get_user_id();
-                $is_pick = $this->pick_model->is_artwork_pick($user_id ,$item->id);
+                $is_pick = $this->pick_model->is_artwork_pick($user_id, $item->id);
                 $item->is_pick = $is_pick;
             }
         } elseif ($type === TYPE_PLACES) {
-
             $result = $this->place_model->gets($limit, $offset, $query);
             $total_count = $this->place_model->get_total_count($query);
 
@@ -57,20 +56,11 @@ class Main extends MY_Controller {
                 $item->tags_html = $this->tag->render_tag_html($item->tags);
 
                 // 주소 앞 2개 파트만 표시하고 자름
-                $address_parts = preg_split('/\s+/', $item->address);
-                $modified_address = '';
-                foreach ($address_parts as $i => $part) {
-                    if ($i > 1) {
-                        break;
-                    } else if (!empty($part)) {
-                        $modified_address .= ' ' . $part;
-                    }
-                }
-                $item->address = trim($modified_address);
+                $item->address = $this->address->extract_foremost_part($item->address);
 
                 // pick
                 $user_id = $this->accountlib->get_user_id();
-                $is_pick = $this->pick_model->is_place_pick($user_id ,$item->id);
+                $is_pick = $this->pick_model->is_place_pick($user_id, $item->id);
                 $item->is_pick = $is_pick;
             }
         }

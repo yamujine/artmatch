@@ -320,8 +320,7 @@
       </form>
       <!-- //== 댓글 입력 -->
       {% endif %}
-
-      {#{% if exhibitions|length > 0 %}#}
+      {% if exhibitions|length > 0 %}
         <!-- == 전시 이력 -->
         <div class="exhibitionArea">
           <div class="titleWrap">
@@ -332,78 +331,33 @@
             </ul>
           </div>
           <ul class="exhibitions">
+          {% for exhibition in exhibitions %}
             <li>
               <a href="#">
                 <div class="imgThumbnail">
+                  {# {{ exhibition.place.image }} #}
                   <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
                 </div>
                 <div class="meta">
-                  <div class="name">이한진</div>
+                  <div class="name">
+                    {{ exhibition.place.name|length > 12 ? exhibition.place.name|slice(0, 12) ~ '...' : exhibition.place.name  }}
+                  </div>
                   <div class="place">
                     <div class="pin"></div>
-                    <div class="keyword">홍대</div>
+                    {# TODO: keyword 대치 방안 모색 #}
+                    <div class="keyword">{{ exhibition.place.address }}</div>
                   </div>
                   <div class="date">
-                    2016.12.10 ~ 24
+                    {{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}
                   </div>
                 </div>
               </a>
             </li>
-            <li>
-              <a href="#">
-                <div class="imgThumbnail">
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
-                </div>
-                <div class="meta">
-                  <div class="name">이한진</div>
-                  <div class="place">
-                    <div class="pin"></div>
-                    <div class="keyword">홍대</div>
-                  </div>
-                  <div class="date">
-                    2016.12.10 ~ 24
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <div class="imgThumbnail">
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
-                </div>
-                <div class="meta">
-                  <div class="name">이한진</div>
-                  <div class="place">
-                    <div class="pin"></div>
-                    <div class="keyword">홍대</div>
-                  </div>
-                  <div class="date">
-                    2016.12.10 ~ 24
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <div class="imgThumbnail">
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
-                </div>
-                <div class="meta">
-                  <div class="name">이한진</div>
-                  <div class="place">
-                    <div class="pin"></div>
-                    <div class="keyword">홍대</div>
-                  </div>
-                  <div class="date">
-                    2016.12.10 ~ 24
-                  </div>
-                </div>
-              </a>
-            </li>
+          {% endfor %}
           </ul>
         </div>
         <!-- //== 전시 이력 -->
-      {#{% endif %}#}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
