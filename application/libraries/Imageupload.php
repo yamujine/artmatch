@@ -107,7 +107,7 @@ class Imageupload {
             return '';
         }
         if ($generate_thumbs) {
-            $this->_generate_thumbnails($image_type);
+            $this->_generate_thumbnails($image_path);
         }
         return $filename;
     }

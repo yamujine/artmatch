@@ -17,8 +17,7 @@ class UsersApi extends API_Controller {
         }
 
         $hashed_password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-        $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
-      
+
         if ($this->input->post('is_facebook') === '1') {
             $facebook_profile_image_url = $this->input->post('profile_image');
             $uploaded_image_name = $this->imageupload->upload_image_by_url($facebook_profile_image_url, true, 'profile');
