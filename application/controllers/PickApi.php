@@ -30,7 +30,7 @@ class PickApi extends API_Controller {
             if ($type === TYPE_ARTWORKS) {
                 $pick_count = $this->artwork_model->get_pick_count_by_id($type_id)->pick_count;
             } else if ($type === TYPE_PLACES) {
-
+                $pick_count = $this->place_model->get_pick_count_by_id($type_id)->pick_count;
             } else {
                 throw new Exception("type error. type=".$type);
             }
