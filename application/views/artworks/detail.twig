@@ -197,7 +197,11 @@
       <div class="artistCommentary">
         <div class="meta">
           <div class="artistProfileImage">
-            <img src="/uploads/profile/{{ artwork.user.profile_image }}" class="img-circle"/>
+            {% if artwork.user.profile_image is empty %}
+              <img src="/static/images/tom.jpg" class="img-circle"/>
+            {% else %}
+              <img src="/uploads/profile/{{ artwork.user.profile_image }}" class="img-circle"/>
+            {% endif %}
           </div>
           <div class="artistSays">작가님의 한마디</div>
           <ul class="status">
@@ -242,7 +246,11 @@
           {% for comment in comments %}
             <li>
               <div class="profileImage">
-                <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
+                {% if comment.user.profile_image is empty %}
+                  <img src="/static/images/tom.jpg" class="img-circle"/>
+                {% else %}
+                  <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
+                {% endif %}
               </div>
               <div class="content">
                 <div class="meta">

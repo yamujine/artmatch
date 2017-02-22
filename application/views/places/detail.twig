@@ -171,7 +171,11 @@
       <div class="placeCommentary">
         <div class="meta">
           <div class="profileImage">
-            <img src="/uploads/profile/{{ artwork.user.profile_image }}" class="img-circle"/>
+            {% if place.user.profile_image is empty %}
+              <img src="/static/images/tom.jpg" class="img-circle"/>
+            {% else %}
+              <img src="/uploads/profile/{{ place.user.profile_image }}" class="img-circle"/>
+            {% endif %}
           </div>
           <div class="says">대표님의 한마디</div>
           <ul class="status">
@@ -218,7 +222,11 @@
             {% for comment in comments %}
               <li>
                 <div class="profileImage">
-                  <img src="/static/images/tom.jpg" class="img-circle"/>
+                  {% if comment.user.profile_image is empty %}
+                    <img src="/static/images/tom.jpg" class="img-circle"/>
+                  {% else %}
+                    <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
+                  {% endif %}
                 </div>
                 <div class="content">
                   <div class="meta">
