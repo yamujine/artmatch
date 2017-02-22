@@ -45,6 +45,7 @@ class Places extends MY_Controller {
                 if (!empty($exhibition_artwork_ids)) {
                     $exhibition->artworks = $this->artwork_model->get_by_ids($exhibition_artwork_ids);
                 }
+                $data['exhibition_artwork_count'] = count($exhibition_artwork_ids);
             }
             $data['exhibitions'] = $exhibitions;
 
