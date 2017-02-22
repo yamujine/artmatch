@@ -81,6 +81,39 @@
         return false;
       });
 
+        // 댓글 수정
+        $('.commentEditBtn').click(function () {
+            var comment = $(this).closest("div").find(".comment").text();
+            var $editForm = $(this).closest("div").find(".commentEditDiv");
+            $editForm.css("display", "");
+            $editForm.find('#commentEditText').val(comment);
+
+            $('.commentEditCancel').click(function() {
+                $(this).parent().css("display", "none");
+            });
+
+            $('.commentEditSubmit').click(function() {
+                var $this = $(this);
+                var comment = $this.parent().find('#commentEditText').val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "/api/comments/update",
+                    data: {
+                        type: $(this).data('type'),
+                        type_comment_id: $(this).data('id'),
+                        comment: comment
+                    }
+                }).done(function (data) {
+                    $this.parent().parent().find(".commentEditDiv").css("display", "none");
+                    $this.parent().parent().parent().find(".comment").text(data.body.comment);
+                }).fail(function () {
+                    alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+                });
+            });
+            return false;
+        });
+
       // PICK
       $('.pickBtn').click(function () {
         var $this = $(this);
@@ -298,12 +331,22 @@
               <div class="profileImage">
                 <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
               </div>
-              <div class="content">
+              <div class="content" id=comment+"{{ comment.id }}">
                 <div class="meta">
                   {# TODO: 유저의 닉네임 또는 이름으로 설정 #}
                   {{ comment.user_id }} <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
                 </div>
                 <div class="comment">{{ comment.comment }}</div>
+                <button class="commentEditBtn">수정</button>
+                <!-- == 댓글 수정 폼 -->
+                <div class="commentEditDiv" style="display:none">
+                  <textarea id="commentEditText"></textarea>
+                  <button class="commentEditSubmit" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">
+                    저장
+                  </button>
+                  <button class="commentEditCancel">취소</button>
+                </div>
+                <!-- //== 댓글 수정 폼-->
               </div>
             </li>
           {% endfor %}
@@ -315,9 +358,10 @@
       <form id="commentRegisterForm" class="commentForm">
         <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
         <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
-        <textarea class="commentInput" name="comment" placeholder="장소에 대한 댓글을 남겨보세요."></textarea>
+        <textarea class="commentInput" name="comment" placeholder="작품에 대한 댓글을 남겨보세요."></textarea>
         <button type="submit">확인</button>
       </form>
+
       <!-- //== 댓글 입력 -->
       {% endif %}
       {% if exhibitions|length > 0 %}
