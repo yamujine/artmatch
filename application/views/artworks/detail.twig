@@ -92,7 +92,11 @@
                     type_comment_id: $this.data('id')
                 }
             }).done(function (data) {
-                $this.parent().parent().remove();
+                if(data.body.result_type === 'delete') {
+                    $this.parent().parent().remove();
+                } else {
+                    alert(data.body.message);
+                }
             }).fail(function () {
                 alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
             });
