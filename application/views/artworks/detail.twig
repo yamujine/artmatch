@@ -161,7 +161,7 @@
               <div class="preview">
                 미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
               </div>
-              <img src="/uploads/{{ artwork.image }}"/>
+              <img src="/uploads/{{ artwork.image|thumb_url() }}"/>
             </div>
           </div>
           <!-- //== -->
@@ -180,7 +180,7 @@
                 <div class="imgThumbnail popupImage" data-mfp-src="/uploads/{{ extra.image }}">
                   <div class="dimm"></div>
                   <div class="preview">미리 보기</div>
-                  <img src="/uploads/{{ extra.image }}"/>
+                  <img src="{{ extra.image|thumb_url() }}"/>
                 </div>
               </div>
               {% endfor %}
@@ -200,7 +200,7 @@
             {% if artwork.user.profile_image is empty %}
               <img src="/static/images/tom.jpg" class="img-circle"/>
             {% else %}
-              <img src="/uploads/profile/{{ artwork.user.profile_image }}" class="img-circle"/>
+              <img src="{{ artwork.user.profile_image|thumb_url('profile') }}" class="img-circle"/>
             {% endif %}
           </div>
           <div class="artistSays">작가님의 한마디</div>
@@ -249,7 +249,7 @@
                 {% if comment.user.profile_image is empty %}
                   <img src="/static/images/tom.jpg" class="img-circle"/>
                 {% else %}
-                  <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
+                  <img src="{{ comment.user.profile_image|thumb_url('profile') }}" class="img-circle"/>
                 {% endif %}
               </div>
               <div class="content">
@@ -290,8 +290,7 @@
             <li>
               <a href="/places/{{ exhibition.place_id }}">
                 <div class="imgThumbnail">
-                  {# {{ exhibition.place.image }} #}
-                  <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
+                  <img src="{{ exhibition.place.image|thumb_url() }}"/>
                 </div>
                 <div class="meta">
                   <div class="name">
