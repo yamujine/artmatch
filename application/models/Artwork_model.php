@@ -76,15 +76,6 @@ class Artwork_model extends CI_Model {
         return $query->get()->num_rows();
     }
 
-    public function get_pick_count_by_id($artwork_id) {
-        return $this->db
-            ->select('count(user_artwork_picks.id) as pick_count')
-            ->from(self::TABLE_NAME)
-            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
-            ->where('artworks.id', $artwork_id)
-            ->get()->row();
-    }
-
     public function get_by_id($artwork_id) {
         $artwork = $this->db
             ->select('artworks.*, count(user_artwork_picks.id) as pick_count')

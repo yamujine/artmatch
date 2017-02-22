@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class PickApi extends API_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['pick_model', 'artwork_model', 'place_model']);
+        $this->load->model('pick_model');
     }
 
     public function index() {
@@ -28,9 +28,9 @@ class PickApi extends API_Controller {
             }
 
             if ($type === TYPE_ARTWORKS) {
-                $pick_count = $this->artwork_model->get_pick_count_by_id($type_id)->pick_count;
+                $pick_count = $this->pick_model->get_count_by_artwork_id($type_id);
             } else if ($type === TYPE_PLACES) {
-                $pick_count = $this->place_model->get_pick_count_by_id($type_id)->pick_count;
+                $pick_count = $this->pick_model->get_count_by_place_id($type_id);
             } else {
                 throw new Exception("type error. type=".$type);
             }
