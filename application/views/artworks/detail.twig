@@ -215,7 +215,7 @@
           </ul>
         </div>
         <div class="commentary">
-          {{ artwork.description }}
+          {{ artwork.description|nl2br }}
         </div>
         <div class="tags">
           {{ artwork.tags_html|raw }}
@@ -249,7 +249,7 @@
                   {# TODO: 유저의 닉네임 또는 이름으로 설정 #}
                   {{ comment.user_id }} <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
                 </div>
-                <div class="comment">{{ comment.comment }}</div>
+                <div class="comment">{{ comment.comment|nl2br }}</div>
                 <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">삭제</button>
               </div>
             </li>
