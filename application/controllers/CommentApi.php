@@ -13,7 +13,8 @@ class CommentApi extends API_Controller {
         $type_id = $this->input->post('type_id');
         try {
             $comments = $this->comment_model->get_comments_by_type_id($type, $type_id);
-            $this->return_success_response(['comments' => $comments]);
+
+            $this->return_success_response(['comments' => $comments, 'comment_count' => count($comments)]);
         } catch (Exception $e) {
             $this->return_fail_response('101', ['message' => $e->getMessage()]);
         }
