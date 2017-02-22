@@ -129,7 +129,7 @@ class Places extends MY_Controller {
                 if (!empty($place_id)) { // 기본 작품 수정
                     if (!empty($uploaded_image_name)) {
                         // 이미지 새로 업로드한 경우 기존의 것 삭제
-                        $this->imageupload->delete_image($uploaded_image_name);
+                        $this->imageupload->delete_image($place->image);
                     } else {
                         // 새로 업로드한 이미지 없는 경우 기존 이미지 사용
                         $place = $this->place_model->get_bare_by_id($place_id);
