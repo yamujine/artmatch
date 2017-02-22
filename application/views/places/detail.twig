@@ -136,12 +136,12 @@
         <div class="mainThumbnail">
           <!-- == 메인 이미지 -->
           <div class="mainImage">
-            <div class="image popupImage" data-mfp-src="/uploads/{{ place.image }}">
+            <div class="image popupImage" data-mfp-src="{{ place.image | image_url }}">
               <div class="dimm"></div>
               <div class="preview">
                 미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
               </div>
-              <img src="/uploads/{{ place.image }}"/>
+              <img src="{{ place.image | thumb_url }}"/>
             </div>
           </div>
         </div>
@@ -151,10 +151,10 @@
               {# data-mfp-src 에 (원본 이미지 URL) 하위 img src 에는 썸네일용 이미지 src를 설정 #}
               {% for extra in place.extra_images %}
               <div class="item">
-                <div class="imgThumbnail popupImage" data-mfp-src="/uploads/{{ extra.image }}">
+                <div class="imgThumbnail popupImage" data-mfp-src="{{ extra.image | image_url }}">
                   <div class="dimm"></div>
                   <div class="preview">미리 보기</div>
-                  <img src="/uploads/{{ extra.image }}"/>
+                  <img src="{{ extra.image | thumb_url }}"/>
                 </div>
               </div>
               {% endfor %}
@@ -174,7 +174,7 @@
             {% if place.user.profile_image is empty %}
               <img src="/static/images/tom.jpg" class="img-circle"/>
             {% else %}
-              <img src="/uploads/profile/{{ place.user.profile_image }}" class="img-circle"/>
+              <img src="{{ place.user.profile_image | thumb_url('profile') }}" class="img-circle"/>
             {% endif %}
           </div>
           <div class="says">대표님의 한마디</div>
@@ -225,7 +225,7 @@
                   {% if comment.user.profile_image is empty %}
                     <img src="/static/images/tom.jpg" class="img-circle"/>
                   {% else %}
-                    <img src="/uploads/profile/{{ comment.user.profile_image }}" class="img-circle"/>
+                    <img src="{{ comment.user.profile_image | thumb_url('profile') }}" class="img-circle"/>
                   {% endif %}
                 </div>
                 <div class="content">
@@ -265,8 +265,7 @@
               <li>
                 <a href="/artworks/{{ artwork.id }}">
                   <div class="imgThumbnail">
-                    {# {{ artwork.image }} #}
-                    <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
+                    <img src="{{ artwork.image | thumb_url }}"/>
                   </div>
                   <div class="meta">
                     <div class="name">{{ artwork.user.user_name }}</div>

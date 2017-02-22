@@ -156,7 +156,7 @@
                     미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
                   </div>
                   {# 썸네일 이미지 #}
-                  <img class="img" src="/uploads/{{ item.image }}" />
+                  <img class="img" src="{{ item.image | thumb_url }}" />
                   <div class="meta">
                     <div class="title">{{ item.title }}</div>
                     <div class="pick">
