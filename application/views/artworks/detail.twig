@@ -82,6 +82,28 @@
         return false;
       });
 
+        // 댓글 삭제
+        $('.commentDeleteBtn').click(function () {
+            var $this = $(this);
+            $.ajax({
+                method: "POST",
+                url: "/api/comments/delete",
+                data: {
+                    type: $this.data('type'),
+                    type_comment_id: $this.data('id')
+                }
+            }).done(function (data) {
+                if(data.body.result_type === 'delete') {
+                    $this.parent().parent().remove();
+                } else {
+                    alert(data.body.message);
+                }
+            }).fail(function () {
+                alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+            });
+            return false;
+        });
+
       // PICK
       $('.pickBtn').click(function () {
         var $this = $(this);
@@ -308,6 +330,7 @@
                   {{ comment.user_id }} <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
                 </div>
                 <div class="comment">{{ comment.comment }}</div>
+                <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">삭제</button>
               </div>
             </li>
           {% endfor %}
@@ -319,7 +342,7 @@
       <form id="commentRegisterForm" class="commentForm">
         <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
         <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
-        <textarea class="commentInput" name="comment" placeholder="장소에 대한 댓글을 남겨보세요."></textarea>
+        <textarea class="commentInput" name="comment" placeholder="작품에 대한 댓글을 남겨보세요."></textarea>
         <button type="submit">확인</button>
       </form>
       <!-- //== 댓글 입력 -->
