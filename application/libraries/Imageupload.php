@@ -3,6 +3,7 @@
 class Imageupload {
     protected $CI;
 
+    const MAX_UPLOAD_KILOBYTE = 4096;
     const UPLOAD_PATH = './uploads/';
     const THUMBNAIL_POSTFIX = '_thumb';
     const THUMBNAIL_SMALL_POSTFIX = '_thumb_small';
@@ -25,7 +26,7 @@ class Imageupload {
             'upload_path' => $upload_path,
             'allowed_types' => 'gif|jpg|png|jpeg',
             'file_ext_tolower' => TRUE,
-            'max_size' => 2048, // 2MB
+            'max_size' => self::MAX_UPLOAD_KILOBYTE,
             'encrypt_name' => TRUE
         ]);
 
@@ -48,7 +49,7 @@ class Imageupload {
             'upload_path' => self::UPLOAD_PATH,
             'allowed_types' => 'gif|jpg|png|jpeg',
             'file_ext_tolower' => TRUE,
-            'max_size' => 2048, // 2MB
+            'max_size' => self::MAX_UPLOAD_KILOBYTE,
             'encrypt_name' => TRUE
         ]);
 
