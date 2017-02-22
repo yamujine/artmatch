@@ -12,4 +12,9 @@ insert_final_newline = true
 charset = utf-8
 
 # Tab indentation (no size specified)
-indent_style = tab
+indent_style = space
+
+# Front Indent Settings
+[*.{js,twig,scss}]
+indent_style = space
+indent_size = 2

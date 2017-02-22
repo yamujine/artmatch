@@ -1,0 +1,124 @@
+@import "helper/colorchips";
+@import "helper/mixins";
+
+/* 기본 설정 */
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, 'Noto Sans KR', sans-serif;
+  padding: 50px 0 0 0;
+
+  .container {
+    width: 968px;
+  }
+}
+
+body {
+  &.scroll {
+    #patTop {
+      opacity: 0.92;
+    }
+  }
+
+  /* 상단 메뉴 */
+  #patTop {
+    background: $black-five;
+    height: 52px;
+    border: none;
+
+    .container {
+      nav {
+        ul {
+          li {
+            &:not(:first-child) {
+              a {
+                &:before {
+                  position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  width: 1px;
+                  height: 100%;
+                  content: "";
+                  margin-left: -18px;
+                  background: $white-two;
+                  opacity: 0.1;
+                }
+              }
+            }
+
+            a {
+              font-weight: normal;
+              font-style: normal;
+              color: $white-two;
+              padding: 16px 18px;
+            }
+
+            &.patUserProfile {
+              a {
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                color: $pinkish-grey-two;
+                padding: 15px 18px;
+
+                img {
+                  width: 26px;
+                  height: 26px;
+                  margin: -5px 6px 0 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #patFooter {
+    background: $white-five;
+    margin: 50px 0 0 0;
+    height: 205px;
+    padding: 50px 0 45px 0;
+    text-align: center;
+
+    .container {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 11px;
+
+      p {
+        &.logo {
+          img {
+            width: 150px;
+            height: 18px;
+          }
+        }
+
+        &.slogan {
+          color: $brownish-grey;
+        }
+
+        &.copyright {
+          margin-top: 35px;
+          color: $warm-grey-four;
+          margin-bottom: 2px;
+        }
+      }
+    }
+    .links {
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        display: inline-block;
+        margin-left: 5px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        a {
+          text-decoration: underline;
+          color: $warm-grey-four;
+        }
+      }
+    }
+  }
+}

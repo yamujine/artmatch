@@ -1,0 +1,147 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="../../../static/dist/css/account/login.min.css">
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    $('#patLoginForm').submit(function () {
+      var emailOrUsernameElem = $("input[name=email_or_username]");
+      var passwordElem = $("input[name=password]");
+
+      if (!emailOrUsernameElem.val()) {
+        alert('이메일 또는 유저 아이디를 입력해주세요.');
+        emailOrUsernameElem.focus();
+        return false;
+      }
+
+      if (!passwordElem.val()) {
+        alert('패스워드를 입력해주세요.');
+        passwordElem.focus();
+        return false;
+      }
+
+      data = {};
+      data.email_or_username = emailOrUsernameElem.val();
+      data.password = passwordElem.val();
+
+      $.ajax({
+        method: "POST",
+        url: "/api/login",
+        data: data
+      }).done(function (data) {
+        if (data.result === true) {
+          location.href = '/';
+        } else {
+          alert(data.body.message);
+        }
+      }).fail(function () {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+
+      return false;
+    });
+
+    $('#password_change_form').submit(function () {
+      var emailElem = $("input[name=email]");
+
+      if (!emailElem.val()) {
+        alert('이메일을 입력해주세요.');
+        emailElem.focus();
+        return false;
+      }
+
+      data = {};
+      data.email = emailElem.val();
+
+      $.ajax({
+        method: "POST",
+        url: "/api/users/reset_password",
+        data: data
+      }).done(function (data) {
+        if (data.result === true) {
+          alert(data.body.message);
+          $('#password_modal').modal('hide');
+        } else {
+          alert(data.body.message);
+        }
+      }).fail(function () {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+      return false;
+    });
+
+  $('#password_submit').click(function(){
+    $('#password_change_form').submit();
+  });
+
+  </script>
+{% endblock %}
+
+{% block contents %}
+  <div class="patLogin">
+    <div class="container">
+      <div class="leftCover">
+        <div class="background"></div>
+      </div>
+      <div class="rightForm">
+        <div class="logo">
+          <img src="../../../static/images/logo_black.png" width="149px" height="18px"/>
+        </div>
+        <div class="loginForm">
+          <div class="loginFormContainer">
+            <form id="patLoginForm" method="POST">
+              <fieldset>
+                <input type="text" name="email_or_username" placeholder="이메일 또는 이름"/>
+              </fieldset>
+              <fieldset>
+                <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+              </fieldset>
+              <button type="submit">로그인하기</button>
+            </form>
+            <p>또는</p>
+            {# TODO: 페이스북 연동을 위한 임시 버튼 삽입 #}
+            <button class="facebook">페이스북</button>
+            <div class="patLoginExcept">
+              <p>
+                <a data-toggle="modal" data-target="#password_modal">비밀번호를 잊으셨나요?</a>
+              </p>
+              <hr/>
+              <p>
+                계정이 필요하신가요?
+                <a href="/account/signup">회원가입</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="password_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">비밀번호 찾기</h4>
+        </div>
+        <div class="modal-body">
+          <form id="password_change_form" class="ui form" method="POST" enctype="multipart/form-data" action="/api/users/reset_password">
+            <div class="field">
+              <div class="ui">
+                <label>이메일</label>
+                <input type="email" name="email" tabindex="0">
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="password_submit">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+{% endblock %}

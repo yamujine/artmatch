@@ -1,0 +1,229 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="../../static/dist/css/main/main.min.css">
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    $(function () {
+      // Carousel Init
+      var totalWidth = 0;
+      var currentOffset = 0;
+      var currentCoordinateX = 0;
+      var totalCount = 0;
+      var $items = $('.sliderTrack .item');
+
+      totalCount = $items.length;
+
+      $items.each(function (key, value) {
+        totalWidth += $(value).outerWidth(true);
+      });
+
+      $('.sliderTrack').css({
+        'width': totalWidth,
+        'transform': 'translate3d(0, 0, 0)'
+      });
+
+      $('.sliderControl .sliderNextBtn').click(function () {
+        // 갤러리의 전체 길이와 현재 노출된 갤러리의 길이를 비교하여 오른쪽으로 더 움직일지 말지 여부 확인
+        var totalOuterWidth = parseInt($(window).width()) - 136 + currentCoordinateX;
+        if (totalOuterWidth >= totalWidth) {
+          return false;
+        }
+
+        if (currentOffset >= totalCount - 1) {
+          return false;
+        }
+
+        currentCoordinateX += $($items.get(currentOffset++)).width();
+
+        $('.sliderTrack').css({
+          'transform': 'translate3d(-' + currentCoordinateX + 'px, 0, 0)'
+        });
+      });
+
+      $('.sliderControl .sliderPrevBtn').click(function () {
+        if (currentOffset <= 0) {
+          return false;
+        }
+
+        currentCoordinateX -= $($items.get(--currentOffset)).width();
+
+        $('.sliderTrack').css({
+          'transform': 'translate3d(-' + currentCoordinateX + 'px, 0, 0)'
+        });
+      });
+
+      // 아이템 클릭
+      $(document).on('click', '.wrap', function () {
+        var type = $(this).data('type');
+        var id = $(this).data('id');
+
+        location.href = '/' + type + '/' + id;
+
+        return false;
+      });
+
+      // 카드 클릭 이벤트와 안겹치도록 이벤트 버블링 방지
+      $('.wrap a').click(function (event) {
+        event.stopPropagation();
+      });
+
+      // PICK
+      $('.wrap').each(function() {
+        var wrap = $(this);
+        var li = $(this).parent();
+
+        $(this).find('.pickBtn').click(function () {
+          var number = parseInt($(wrap).find('.number').html(), 10);
+
+          var type = $(wrap).data('type');
+          var id = $(wrap).data('id');
+
+          $.ajax({
+            method: "POST",
+            url: "/api/pick",
+            data: {
+              type: type,
+              type_id: id
+            }
+          })
+            .done(function (data) {
+              if (data.body.result_type === 'on') {
+                $(wrap).find('.number').html(number + 1);
+                $(li).addClass('picked');
+              } else if (data.body.result_type === 'off') {
+                $(wrap).find('.number').html(number - 1);
+                $(li).removeClass('picked');
+              } else {
+                alert(data.body.message);
+              }
+            })
+            .fail(function () {
+              alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+            });
+
+          return false;
+        });
+      });
+
+      // 더 보기
+      $('.patItemMoreButton').click(function () {
+        $(this).hide();
+        // 로더 보여주기
+        $('.patLoader').show();
+
+        var type = $(this).data('type');
+        var offset = $('.patItemList li').length;
+        var totalCount = $(this).data('total-count');
+
+        $.get('/api/contents/' + type, {offset: offset, limit: 9})
+          .done(function (data) {
+            $('.itemList').append(data);
+
+            $('.patLoader').hide();
+
+            $('.patItemList li').removeClass('third').each(function (key, value) {
+              if ((key + 1) % 3 == 0) {
+                $(value).addClass('third');
+              }
+            });
+
+            if (offset + 9 < totalCount) {
+              $('.patItemMoreButton').show();
+            }
+          });
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block contents %}
+  <div class="patGallery">
+    <div class="container">
+      <div class="slider">
+        <div class="sliderTrack">
+          <div class="item title">
+            <img src="../../static/images/main_pick_artist.png"/>
+          </div>
+          {% for item in pick_artworks %}
+            <div class="item {% if item.is_pick %}picked{% endif %}">
+              <a href="/artworks/{{ item.id }}">
+                <div class="imgThumb">
+                  <div class="dimm"></div>
+                  <div class="preview">
+                    미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+                  </div>
+                  {# 썸네일 이미지 #}
+                  <img class="img" src="/uploads/{{ item.image }}" />
+                  <div class="meta">
+                    <div class="title">{{ item.title }}</div>
+                    <div class="pick">
+                      <span class="">PICK</span>
+                      <span class="number">{{ item.pick_count }}</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="sliderControl">
+      <button class="sliderPrevBtn">
+        <i class="glyphicon glyphicon-menu-left"></i>
+      </button>
+      <button class="sliderNextBtn">
+        <i class="glyphicon glyphicon-menu-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="patTypeSelect">
+    <ul class="typeSelectTab">
+      <li><a {% if type == TYPE_ARTWORKS %}class="active"{% endif %} href="?type=artworks">ARTIST</a></li>
+      <li><a {% if type == TYPE_PLACES %}class="active"{% endif %} href="?type=places">SPACE</a></li>
+    </ul>
+    <div class="divider"></div>
+  </div>
+
+  {% if type == TYPE_PLACES %}
+    <div class="patPlaceTagCloud">
+      <div class="container">
+        <div class="tagLabel"></div>
+        <ul class="tagList">
+          <li><a href="?type=places&q=홍대">홍대</a></li>
+          <li><a href="?type=places&q=인천">인천</a></li>
+          <li><a href="?type=places&q=아트플랫폼">아트플랫폼</a></li>
+          <li><a href="?type=places&q=한남동">한남동</a></li>
+          <li><a href="?type=places&q=상수">상수</a></li>
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="patItemList">
+    <div class="container">
+      {# 그리드 형태의 목록 (작품, 장소) #}
+      <ul class="itemList {% if type == TYPE_ARTWORKS %}artworkList{% else %}placeList{% endif %}">
+        {% import 'macro/main.item.twig' as main_macro %}
+        {% for item in items %}
+          {{ main_macro.render_main_item(item, type, loop.index) }}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="patLoader"></div>
+
+  {% if total_count > 9 %}
+    {# 더 보기 버튼 #}
+    <div class="patItemMore">
+      <button class="patItemMoreButton" data-type="{{ type }}" data-total-count="{{ total_count }}">
+        더 보기 <i class="glyphicon glyphicon-menu-down"></i>
+      </button>
+    </div>
+  {% endif %}
+{% endblock %}

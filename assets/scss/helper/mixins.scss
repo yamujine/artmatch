@@ -1,0 +1,17 @@
+@mixin prefix($property, $parameters...) {
+  @each $prefix in -webkit-, -moz-, -ms-, -o-, "" {
+    #{$prefix}#{$property}: $parameters;
+  }
+}
+
+@mixin retina-image($image, $width, $height) {
+  @media (-webkit-min-device-pixel-ratio: 2),
+  (min--moz-device-pixel-ratio: 2),
+  (-o-min-device-pixel-ratio: 2/1),
+  (min-device-pixel-ratio: 2),
+  (min-resolution: 192dpi),
+  (min-resolution: 2dppx) {
+    background-image: url($image);
+    @include prefix(background-size, $width $height);
+  }
+}

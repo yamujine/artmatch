@@ -49,6 +49,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'main';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+// Route for our service
+$route['artworks/(:num)'] = 'artworks/detail/$1';
+$route['artworks/upload'] = 'artworks/edit';
+$route['artworks/edit/(:num)'] = 'artworks/edit/$1';
+
+$route['places/(:num)'] = 'places/detail/$1';
+$route['places/upload'] = 'places/edit';
+$route['places/edit/(:num)'] = 'places/edit/$1';
+
+$route['users/me'] = 'users/me'; // Don't change ordering
+$route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
+
+$route['api/comments'] = 'commentapi';
+$route['api/comments/delete'] = 'commentapi/delete';
+$route['api/comments/insert'] = 'commentapi/insert';
+$route['api/comments/update'] = 'commentapi/update';
+
+$route['api/contents/(:any)'] = 'main/api/$1';
+
+$route['api/pick']['POST'] = 'pickapi';
+
+$route['api/login']['POST'] = 'usersapi/login';
+$route['api/users/register']['POST'] = 'usersapi/register';
+$route['api/users/verify'] = 'usersapi/verify';
+$route['api/users/check_username'] = 'usersapi/check_username';
+$route['api/users/check_email'] = 'usersapi/check_email';
+$route['api/users/update_image']['POST'] = 'usersapi/update_profile_image';
+$route['api/users/change_password']['POST'] = 'usersapi/change_password';
+$route['api/users/reset_password']['POST'] = 'usersapi/reset_password';
+$route['api/landing'] = 'landingapi';

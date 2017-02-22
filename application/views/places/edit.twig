@@ -1,0 +1,119 @@
+{% extends "base.twig" %}
+
+{% block contents %}
+  
+  {% if error %}
+    에러 메시지: {{ error|raw }}
+    <br>
+    <br>
+  {% endif %}
+  
+  <form class="ui form" method="POST" enctype="multipart/form-data">
+    <div class="field">
+      <label>장소명</label>
+      <input type="text" name="name" placeholder="" value="{{ name }}">
+    </div>
+    <div class="inline fields">
+      <label for="status">장소 상태</label>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" name="status" value="{{ PLACE_STATUS_NEED_ARTWORK }}" {% if status == PLACE_STATUS_NEED_ARTWORK or not status %}checked="checked"{% endif %}
+                 tabindex="0">
+          <label>작품구함</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" name="status" value="{{ PLACE_STATUS_NOT_NEED_ARTWORK }}" {% if status == PLACE_STATUS_NOT_NEED_ARTWORK %}checked="checked" {% endif %}tabindex="0">
+          <label>작품 구하지 않음</label>
+        </div>
+      </div>
+    </div>
+    <div class="inline fields">
+      <label for="status">댓글허용</label>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" name="use_comment" value="{{ TYPE_USE_COMMENT }}"
+                 {% if use_comment is not defined or use_comment == TYPE_USE_COMMENT %}checked="checked"{% endif %} tabindex="0">
+          <label>댓글 허용함</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" name="use_comment" value="{{ TYPE_NO_COMMENT }}"
+                 {% if use_comment is defined and use_comment == TYPE_NO_COMMENT %}checked="checked"{% endif %} tabindex="0">
+          <label>댓글 허용 안함</label>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui">
+        <label>대표 이미지</label>
+        {% if image %}등록된 이미지 {{ image }}{% endif %}
+        <input type="file" name="image" tabindex="0">
+      </div>
+    </div>
+    
+    <div class="field">
+      <div class="ui">
+        <label>추가 이미지</label>
+        {% for image in extra_images %}
+          <p>{{ image.image }} 삭제: <input type="checkbox" name="delete_images[]" value="{{ image.image }}"></p>
+        {% endfor %}
+        <input type="file" name="extra_images[]" multiple/>
+      </div>
+    </div>
+  
+    <div class="field">
+      <label>대표 장소</label>
+      <input type="text" name="area" value="{{ area }}">
+    </div>
+    
+    <div class="field">
+      <label>주소</label>
+      <textarea name="address">{{ address }}</textarea>
+    </div>
+    
+    <div class="field">
+      <label>장소 설명</label>
+      <textarea name="description">{{ description }}</textarea>
+    </div>
+    
+    <div class="field">
+      <label>태그</label>
+      <input type="text" name="tags" value="{{ tags }}">
+    </div>
+  
+    <div class="field">
+      <label>전시 일정</label>
+      <input type="text" name="exhibition_start_date" maxlength="8" placeholder="yyyymmdd" value="{{ exhibition_start_date|date('Ymd') }}">부터
+      <input type="text" name="exhibition_end_date" maxlength="8" placeholder="yyyymmdd" value="{{ exhibition_end_date|date('Ymd') }}">까지
+    </div>
+    
+    <div class="field">
+      <label>전시 작품 수</label>
+      <input type="text" name="exhibition_artwork_count" value="{{ exhibition_artwork_count }}">점
+    </div>
+  
+    <div class="inline fields">
+      <label for="status">전시비 지급 여부</label>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" name="exhibition_is_free" value="{{ EXHIBITION_PAID }}"
+                 {% if exhibition_is_free is defined and exhibition_is_free == EXHIBITION_PAID %}checked="checked"{% endif %} tabindex="0">
+          <label>전시비 지급</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" name="exhibition_is_free" value="{{ EXHIBITION_FOR_FREE }}"
+                 {% if exhibition_is_free is not defined or exhibition_is_free == EXHIBITION_FOR_FREE %}checked="checked"{% endif %} tabindex="0">
+          <label>전시비 미 지급</label>
+        </div>
+      </div>
+    </div>
+    
+    <button class="ui button" type="submit">Submit</button>
+  </form>
+
+{% endblock %}

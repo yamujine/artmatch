@@ -1,0 +1,25 @@
+{
+  "name": "artmatch",
+  "description": "artmatch static package manage",
+  "main": "index.js",
+  "authors": [
+    "mintplo <mintplo21@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/yamujine/artmatch",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">=3.1.0",
+    "bootstrap": "^3.3.7",
+    "prefixfree": "prefix-free#^1.0.10",
+    "slick-carousel": "^1.6.0",
+    "magnific-popup": "^1.1.0"
+  }
+}
