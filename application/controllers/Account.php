@@ -8,6 +8,20 @@ class Account extends CI_Controller {
         $this->load->model('user_model');
         $this->load->helper('url');
         $this->load->library('twig');
+        /** @var Twig_Environment $twig */
+        $twig = $this->twig->getTwig();
+        /**
+         * static URL 리턴
+         */
+        $twig->addFilter(new Twig_SimpleFilter('static_url', function ($filename) {
+            if (ENVIRONMENT === 'production') {
+                $host = 'http://static.pickartyou.com/';
+            } else {
+                $host = '../../static/';
+            }
+
+            return $host . $filename;
+        }));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
         $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
     }
