@@ -72,6 +72,7 @@
               return false;
             }
 
+            // TODO: 댓글, 댓글 수 DOM 으로 처리
             location.reload(true);
           })
           .fail(function () {
@@ -285,7 +286,7 @@
       {% if artwork.use_comment == 1 %}
       <!-- == 댓글 -->
       <div class="commentArea">
-        <div class="title">댓글 <span class="number">3</span></div>
+        <div class="title">댓글 <span class="number">{{ count }}</span></div>
         <hr class="divider"/>
         <div class="commentMore">
           <button class="commentMoreBtn">
