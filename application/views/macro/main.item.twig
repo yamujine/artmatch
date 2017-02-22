@@ -33,10 +33,10 @@
           {# 장소 타입인 경우 #}
         {% else %}
           <div class="title">
-            {{ item.name }}
+            {{ item.name|length > 12 ? item.name|slice(0, 12) ~ '...' : item.name }}
           </div>
           <div class="description">
-            {{ item.description }}
+            {{ item.description|length > 53 ? item.description|slice(0, 53) ~ '...' : item.description }}
           </div>
           <div class="address">
             <div class="pin"></div>
