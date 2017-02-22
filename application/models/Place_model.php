@@ -5,7 +5,7 @@ class Place_model extends CI_Model {
      * table_name: places
      */
     const TABLE_NAME = 'places';
-    const TABLE_NAME_IMAGES = 'places_images';
+    const TABLE_NAME_IMAGES = 'place_images';
 
     //public $id; -- Ignore PK
     public $user_id;
@@ -97,7 +97,7 @@ class Place_model extends CI_Model {
             ->where('id', $place->user_id)
             ->get()->row();
         $place->extra_images = $this->db
-            ->from('place_images')
+            ->from(self::TABLE_NAME_IMAGES)
             ->where('place_id', $place_id)
             ->get()->result();
 
