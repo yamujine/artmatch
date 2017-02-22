@@ -264,7 +264,9 @@
             {% else %}
               <li class="fee">대관료 있음</li>
             {% endif %}
-            {{ place.exhibition.start_date|date('Y.m.d') }} ~ {{ place.exhibition.end_date|date('Y.m.d') }}까지 {{ place.exhibition.real_artwork_count }}/{{ place.exhibition.artwork_count }}개의 작품 전시 가능함
+            <li class="exhibition_available_count">
+              {{ place.exhibition.start_date|date('y.m.d') }} ~ {{ place.exhibition.end_date|date('y.m.d') }}까지 {{ place.exhibition.real_artwork_count }}/{{ place.exhibition.artwork_count }}개의 작품 전시 가능함
+            </li>
           </ul>
         </div>
         <div class="commentary">
