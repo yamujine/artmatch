@@ -12,7 +12,7 @@ class Imageupload {
         $this->CI->load->library(['upload', 'image_lib']);
     }
 
-    public function upload_images($param, $generate_thumbs = true, $image_type = '') {
+    public function upload_image($param, $generate_thumbs = true, $image_type = '') {
         $file_name = '';
         if (!empty($image_type)) {
             $upload_path = self::UPLOAD_PATH . $image_type . '/';

@@ -17,7 +17,7 @@ class UsersApi extends API_Controller {
         }
 
         $hashed_password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-        $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
+        $uploaded_image_name = $this->imageupload->upload_image('profile_image', true, 'profile');
 
         $id = $this->user_model->add(
             $this->input->post('email'),
@@ -64,7 +64,7 @@ class UsersApi extends API_Controller {
     public function update_profile_image() {
         $user_id = $this->accountlib->get_user_id();
         $current_image = $this->user_model->get_by_id($user_id)->profile_image;
-        $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
+        $uploaded_image_name = $this->imageupload->upload_image('profile_image', true, 'profile');
 
         if (!empty($uploaded_image_name)) {
             if (!empty($current_image)) {

@@ -108,7 +108,7 @@ class Artworks extends MY_Controller {
         if ($this->input->method() === 'post') {
             if ($this->form_validation->run() === TRUE) {
                 // Upload representative image first
-                $uploaded_image_name = $this->imageupload->upload_images('image');
+                $uploaded_image_name = $this->imageupload->upload_image('image');
 
                 if (!empty($artwork_id)) { // 기존 작품 수정
                     if (!empty($uploaded_image_name)) {
