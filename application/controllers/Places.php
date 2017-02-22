@@ -51,6 +51,9 @@ class Places extends MY_Controller {
             // 댓글
             $comments = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id);
             $data['comments'] = $comments;
+
+            // 댓글 수
+            $data['comment_count'] = count($comments);
         }
 
         // 조회수 증가

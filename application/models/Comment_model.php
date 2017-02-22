@@ -10,10 +10,27 @@ class Comment_model extends CI_Model {
 	public $place_id;
 	public $comment;
 
+    public function get_count_by_type_id($type, $type_id) {
+        if ($type === TYPE_ARTWORKS) {
+            return get_count_by_artwork_id($type_id);
+        } else if ($type === TYPE_PLACES) {
+            return get_count_by_place_id($type_id);
+        } else {
+            throw new Exception("type error. type=".$type);
+        }
+    }
+
     public function get_count_by_place_id($place_id) {
         return $this->db
             ->from(self::PLACE_COMMENTS_TABLE_NAME)
             ->where('place_id', $place_id)
+            ->count_all_results();
+    }
+
+    public function get_count_by_artwork_id($artwork_id) {
+        return $this->db
+            ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
+            ->where('artwork_id', $artwork_id)
             ->count_all_results();
     }
 

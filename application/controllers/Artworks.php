@@ -53,6 +53,9 @@ class Artworks extends MY_Controller {
             }
             $data['comments'] = $comments;
 
+            // 댓글 수
+            $data['comment_count'] = count($comments);
+
             // 작가정보
             // TODO join 걸어서 정보 가져오도록
             $user = $this->user_model->get_by_id($artwork->user_id);
