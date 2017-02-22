@@ -75,7 +75,7 @@ class Imageupload {
             'source_image' => $original_image_path,
             'create_thumb' => TRUE,
             'maintain_ratio' => TRUE,
-            'master_dim' => 'width'
+            'master_dim' => 'height'
         ];
 
         $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 300, 'height' => 300]));
