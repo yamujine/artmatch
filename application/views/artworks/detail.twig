@@ -156,15 +156,12 @@
         <div class="mainThumbnail">
           <!-- == 메인 이미지 -->
           <div class="mainImage">
-            <div
-                class="image popupImage"
-                data-mfp-src="/uploads/{{ artwork.image }}"
-            >
+            <div class="image popupImage" data-mfp-src="/uploads/{{ artwork.image }}">
               <div class="dimm"></div>
               <div class="preview">
                 미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
               </div>
-              <img src="/uploads/{{ artwork.image }}"/>
+              <img src="/uploads/{{ artwork.image|thumbs_url('_thumb') }}"/>
             </div>
           </div>
           <!-- //== -->
@@ -174,103 +171,26 @@
           </div>
           <!-- //== -->
         </div>
-        {#{% if artwork.extra_images|length > 0 %}#}
+        {% if artwork.extra_images|length > 0 %}
           <div class="additionalImages">
-            {# TODO: 아래 주석 참고! #}
-            {# {% if artwork.extra_images|length <= 6 %} deactivate{% endif %} 아래 slider class 옆에 추가해야함. #}
-            <div class="slider">
+            <div class="slider{% if artwork.extra_images|length <= 6 %} deactivate{% endif %}">
               {# data-mfp-src 에 (원본 이미지 URL) 하위 img src 에는 썸네일용 이미지 src를 설정 #}
+              {% for extra in artwork.extra_images %}
               <div class="item">
-                <div
-                  class="imgThumbnail popupImage"
-                  data-mfp-src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13269567_189919781402885_180305573_n.jpg?ig_cache_key=MTI2MjExOTcwNzY2MTU0NDUzNg%3D%3D.2"
-                >
+                <div class="imgThumbnail popupImage" data-mfp-src="/uploads/{{ extra.image }}">
                   <div class="dimm"></div>
                   <div class="preview">미리 보기</div>
-                  <img
-                      src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13269567_189919781402885_180305573_n.jpg?ig_cache_key=MTI2MjExOTcwNzY2MTU0NDUzNg%3D%3D.2"
-                  />
+                  <img src="/uploads/{{ extra.image }}"/>
                 </div>
               </div>
-              <div class="item">
-                <div
-                  class="imgThumbnail popupImage"
-                  data-mfp-src="http://cfile28.uf.tistory.com/image/254AD139574C5C3B1459E7"
-                >
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img
-                      src="http://cfile28.uf.tistory.com/image/254AD139574C5C3B1459E7"
-                  />
-                </div>
-              </div>
-              <div class="item">
-                <div
-                  class="imgThumbnail popupImage"
-                  data-mfp-src="http://baetokki.com/data/editor/1609/1993969105_1474021834.072.jpeg"
-                >
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img
-                      src="http://baetokki.com/data/editor/1609/1993969105_1474021834.072.jpeg"
-                  />
-                </div>
-              </div>
-              <div class="item">
-                <div
-                  class="imgThumbnail popupImage"
-                  data-mfp-src="http://cfile28.uf.tistory.com/image/254AD139574C5C3B1459E7"
-                >
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img
-                      src="http://cfile28.uf.tistory.com/image/254AD139574C5C3B1459E7"
-                  />
-                </div>
-              </div>
-              <div class="item">
-                <div
-                  class="imgThumbnail popupImage"
-                  data-mfp-src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13269567_189919781402885_180305573_n.jpg?ig_cache_key=MTI2MjExOTcwNzY2MTU0NDUzNg%3D%3D.2"
-                >
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img
-                      src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13269567_189919781402885_180305573_n.jpg?ig_cache_key=MTI2MjExOTcwNzY2MTU0NDUzNg%3D%3D.2"
-                  />
-                </div>
-              </div>
-              <div class="item">
-                <div
-                  class="imgThumbnail popupImage"
-                  data-mfp-src="http://baetokki.com/data/editor/1609/1993969105_1474021834.072.jpeg"
-                >
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img
-                      src="http://baetokki.com/data/editor/1609/1993969105_1474021834.072.jpeg"
-                  />
-                </div>
-              </div>
-              <div class="item">
-                <div
-                  class="imgThumbnail popupImage"
-                  data-mfp-src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13269567_189919781402885_180305573_n.jpg?ig_cache_key=MTI2MjExOTcwNzY2MTU0NDUzNg%3D%3D.2"
-                >
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img
-                      src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13269567_189919781402885_180305573_n.jpg?ig_cache_key=MTI2MjExOTcwNzY2MTU0NDUzNg%3D%3D.2"
-                  />
-                </div>
-              </div>
+              {% endfor %}
             </div>
-            {#{% if artwork.extra_images|length > 6 %}#}
+            {% if artwork.extra_images|length > 6 %}
               <button class="sliderPrevBtn"></button>
               <button class="sliderNextBtn"></button>
-            {#{% endif %}#}
+            {% endif %}
           </div>
-        {#{% endif %}#}
+        {% endif %}
       </div>
       <!-- //== 작품 -->
       <!-- == 작가의 한마디 -->
