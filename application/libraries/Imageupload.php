@@ -68,8 +68,8 @@ class Imageupload {
 
     private function _generate_thumbnails($original_image_path) {
         /*
-         * _thumb -> 512x512
-         * _thumb_small -> 128x128
+         * _thumb -> 640x640
+         * _thumb_small -> 300x300
          */
         $default_config = [
             'image_library' => 'gd2',
@@ -78,11 +78,11 @@ class Imageupload {
             'maintain_ratio' => TRUE
         ];
 
-        $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 256, 'height' => 256]));
+        $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 640, 'height' => 640]));
         $this->CI->image_lib->resize();
         $this->CI->image_lib->clear();
 
-        $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 128, 'height' => 128, 'thumb_marker' => self::THUMBNAIL_SMALL_POSTFIX]));
+        $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 300, 'height' => 300, 'thumb_marker' => self::THUMBNAIL_SMALL_POSTFIX]));
         $this->CI->image_lib->resize();
         $this->CI->image_lib->clear();
     }
