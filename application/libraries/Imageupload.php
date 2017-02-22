@@ -68,7 +68,8 @@ class Imageupload {
 
     private function _generate_thumbnails($original_image_path) {
         /*
-         * _thumb -> 300x300
+         * _thumb -> 500x500
+         * _thumb_small -> 300x300
          */
         $default_config = [
             'image_library' => 'gd2',
@@ -78,15 +79,13 @@ class Imageupload {
             'master_dim' => 'height'
         ];
 
-        $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 300, 'height' => 300]));
+        $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 500, 'height' => 500]));
         $this->CI->image_lib->resize();
         $this->CI->image_lib->clear();
 
-        /*
         $this->CI->image_lib->initialize(array_merge($default_config, ['width' => 300, 'height' => 300, 'thumb_marker' => self::THUMBNAIL_SMALL_POSTFIX]));
         $this->CI->image_lib->resize();
         $this->CI->image_lib->clear();
-         */
     }
 
     public function delete_image($filename) {

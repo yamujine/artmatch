@@ -13,7 +13,7 @@ class MY_Controller extends CI_Controller {
         /**
          * 썸네일 이미지 URL 리턴하는 함수
          */
-        $twig->addFilter(new Twig_SimpleFilter('thumb_url', function ($filename, $type = '', $size = '_thumb') {
+        $twig->addFilter(new Twig_SimpleFilter('thumb_url', function ($filename, $type = '', $size = '_thumb_small') {
             if (empty($filename)) {
                 return ''; // Fallback error image
             }
