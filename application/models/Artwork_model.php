@@ -84,16 +84,19 @@ class Artwork_model extends CI_Model {
             ->where('artworks.id', $artwork_id)
             ->get()->row();
 
-        if ($artwork) {
-            $artwork->user = $this->db
-                ->from('users')
-                ->where('id', $artwork->user_id)
-                ->get()->row();
-            $artwork->extra_images = $this->db
-                ->from(self::TABLE_NAME_IMAGES)
-                ->where('artwork_id', $artwork_id)
-                ->get()->result();
+        // COUNT 함수가 추가되어 있어서, $artwork->id에 빈 값이 포함된 row가 리턴이 되므로 property를 직접 체크
+        if (empty($artwork->id)) {
+            return NULL;
         }
+
+        $artwork->user = $this->db
+            ->from('users')
+            ->where('id', $artwork->user_id)
+            ->get()->row();
+        $artwork->extra_images = $this->db
+            ->from(self::TABLE_NAME_IMAGES)
+            ->where('artwork_id', $artwork_id)
+            ->get()->result();
 
         return $artwork;
     }

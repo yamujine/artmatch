@@ -24,38 +24,40 @@ class Places extends MY_Controller {
         $data['is_pick'] = $is_pick;
 
         $place = $this->place_model->get_by_id($place_id);
-        if ($place) {
-            // 태그 정보
-            $place->tags_html = $this->tag->render_tag_html($place->tags, TYPE_PLACES, false);
-
-            // 전시 정보
-            $place->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_by_place_id($place->id);
-            $place->exhibition = $this->exhibition_model->get_by_place_id($place->id);
-
-            // 장소정보
-            $data['place'] = $place;
-
-            // 전시 작품 이력
-            $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
-            foreach ($exhibitions as $exhibition) {
-                $exhibition_artwork_id_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
-                $exhibition_artwork_ids = array_map(function ($value) {
-                    return $value->artwork_id;
-                }, $exhibition_artwork_id_objects);
-                if (!empty($exhibition_artwork_ids)) {
-                    $exhibition->artworks = $this->artwork_model->get_by_ids($exhibition_artwork_ids);
-                }
-                $data['exhibition_artwork_count'] = count($exhibition_artwork_ids);
-            }
-            $data['exhibitions'] = $exhibitions;
-
-            // 댓글
-            $comments = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id);
-            $data['comments'] = $comments;
-
-            // 댓글 수
-            $data['comment_count'] = count($comments);
+        if ($place === NULL) {
+            alert_and_redirect('존재하지 않는 장소입니다.');
         }
+
+        // 태그 정보
+        $place->tags_html = $this->tag->render_tag_html($place->tags, TYPE_PLACES, false);
+
+        // 전시 정보
+        $place->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_by_place_id($place->id);
+        $place->exhibition = $this->exhibition_model->get_by_place_id($place->id);
+
+        // 장소정보
+        $data['place'] = $place;
+
+        // 전시 작품 이력
+        $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
+        foreach ($exhibitions as $exhibition) {
+            $exhibition_artwork_id_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
+            $exhibition_artwork_ids = array_map(function ($value) {
+                return $value->artwork_id;
+            }, $exhibition_artwork_id_objects);
+            if (!empty($exhibition_artwork_ids)) {
+                $exhibition->artworks = $this->artwork_model->get_by_ids($exhibition_artwork_ids);
+            }
+            $data['exhibition_artwork_count'] = count($exhibition_artwork_ids);
+        }
+        $data['exhibitions'] = $exhibitions;
+
+        // 댓글
+        $comments = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id);
+        $data['comments'] = $comments;
+
+        // 댓글 수
+        $data['comment_count'] = count($comments);
 
         // 조회수 증가
         $this->place_model->update_view_count_by_id($place_id);

@@ -28,6 +28,7 @@ class Place_model extends CI_Model {
         if ($result->num_rows() > 0) {
             return true;
         }
+
         return false;
     }
 
@@ -86,16 +87,19 @@ class Place_model extends CI_Model {
             ->where('places.id', $place_id)
             ->get()->row();
 
-        if ($place) {
-            $place->user = $this->db
-                ->from('users')
-                ->where('id', $place->user_id)
-                ->get()->row();
-            $place->extra_images = $this->db
-                ->from('place_images')
-                ->where('place_id', $place_id)
-                ->get()->result();
+        // COUNT 함수가 추가되어 있어서, $place->id에 빈 값이 포함된 row가 리턴이 되므로 property를 직접 체크
+        if (empty($place->id)) {
+            return NULL;
         }
+
+        $place->user = $this->db
+            ->from('users')
+            ->where('id', $place->user_id)
+            ->get()->row();
+        $place->extra_images = $this->db
+            ->from('place_images')
+            ->where('place_id', $place_id)
+            ->get()->result();
 
         return $place;
     }
