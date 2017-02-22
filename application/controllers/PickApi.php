@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class PickApi extends API_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model('pick_model');
+        $this->load->model(['pick_model', 'artwork_model', 'place_model']);
     }
 
     public function index() {
@@ -27,8 +27,16 @@ class PickApi extends API_Controller {
                 $result_type = 'on';
             }
 
+            if ($type === TYPE_ARTWORKS) {
+                $pick_count = $this->artwork_model->get_pick_count_by_id($type_id)->pick_count;
+            } else if ($type === TYPE_PLACES) {
+
+            } else {
+                throw new Exception("type error. type=".$type);
+            }
+
             if ($result_id !== NULL) {
-                $this->set_success_response(['type_id' => $type_id, 'result_type' => $result_type, 'type' => $type]);
+                $this->set_success_response(['type_id' => $type_id, 'result_type' => $result_type, 'type' => $type, 'pick_count' => $pick_count]);
             } else {
                 $this->set_fail_response('101', ['message' => 'Failed to insert into DB']);
             }
