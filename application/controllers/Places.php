@@ -66,6 +66,8 @@ class Places extends MY_Controller {
         $this->form_validation->set_rules('name', 'name', 'required|trim');
         $this->form_validation->set_rules('status', 'status', 'required');
         $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
+        $this->form_validation->set_rules('area', 'area', 'required|trim');
+        $this->form_validation->set_rules('address', 'address', 'required|trim');
         $this->form_validation->set_rules('tags', 'tags', 'required|trim');
 
         $this->form_validation->set_rules('exhibition_start_date', 'exhibition_start_date', 'required|exact_length[8]|trim');
@@ -76,6 +78,7 @@ class Places extends MY_Controller {
         $user_id = $this->accountlib->get_user_id();
         $status = $this->input->post('status');
         $name = $this->input->post('name');
+        $area = $this->input->post('area');
         $address = $this->input->post('address');
         $description = $this->input->post('description');
         $use_comment = $this->input->post('use_comment');
@@ -142,6 +145,7 @@ class Places extends MY_Controller {
                         $user_id,
                         $status,
                         $name,
+                        $area,
                         $address,
                         $description,
                         $uploaded_image_name,
@@ -161,6 +165,7 @@ class Places extends MY_Controller {
                         $user_id,
                         $status,
                         $name,
+                        $area,
                         $address,
                         $description,
                         $uploaded_image_name,

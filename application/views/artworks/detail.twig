@@ -336,7 +336,7 @@
           <ul class="exhibitions">
           {% for exhibition in exhibitions %}
             <li>
-              <a href="#">
+              <a href="/places/{{ exhibition.place_id }}">
                 <div class="imgThumbnail">
                   {# {{ exhibition.place.image }} #}
                   <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
@@ -347,8 +347,7 @@
                   </div>
                   <div class="place">
                     <div class="pin"></div>
-                    {# TODO: keyword 대치 방안 모색 #}
-                    <div class="keyword">{{ exhibition.place.address }}</div>
+                    <div class="keyword">{{ exhibition.place.area }}</div>
                   </div>
                   <div class="date">
                     {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}

@@ -11,6 +11,7 @@ class Place_model extends CI_Model {
     public $user_id;
     public $status;
     public $name;
+    public $area;
     public $address;
     public $description;
     public $image;
@@ -113,8 +114,8 @@ class Place_model extends CI_Model {
             ->get()->result();
     }
 
-    public function insert($user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
-        $this->_fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags);
+    public function insert($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {
+        $this->_fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags);
         if ($this->db->insert(self::TABLE_NAME, $this)) {
             return $this->db->insert_id();
         } else {
@@ -130,8 +131,8 @@ class Place_model extends CI_Model {
         return true;
     }
 
-    public function update($id, $user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
-        $this->_fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags);
+    public function update($id, $user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {
+        $this->_fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags);
         if ($this->db->update(self::TABLE_NAME, $this, ['id' => $id])) {
             return $id;
         } else {
@@ -150,10 +151,11 @@ class Place_model extends CI_Model {
         return $this->db->delete(self::TABLE_NAME_IMAGES, ['place_id' => $place_id, 'image' => $image]);
     }
 
-    private function _fill_class_variable_with_params($user_id, $status, $name, $address, $description, $image, $use_comment, $tags) {
+    private function _fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {
         $this->user_id = $user_id;
         $this->status = $status;
         $this->name = $name;
+        $this->area = $area;
         $this->address = $address;
         $this->description = $description;
         $this->image = $image;
