@@ -17,6 +17,7 @@ class MY_Controller extends CI_Controller {
             if (empty($filename)) {
                 return ''; // Fallback error image
             }
+
             if (ENVIRONMENT === 'production') {
                 $host = 'http://img.pickartyou.com/';
             } else {
@@ -34,6 +35,27 @@ class MY_Controller extends CI_Controller {
             }
 
             return $host . $path_parts['filename'] . $size . '.' . $path_parts['extension'];
+        }));
+
+        /**
+         * 일반 이미지 URL 리턴
+         */
+        $twig->addFilter(new Twig_SimpleFilter('image_url', function ($filename, $type = '') {
+            if (empty($filename)) {
+                return ''; // Fallback error image
+            }
+
+            if (ENVIRONMENT === 'production') {
+                $host = 'http://img.pickartyou.com/';
+            } else {
+                $host = '/uploads/';
+            }
+
+            if (!empty($type)) {
+                $host .= $type . '/';
+            }
+
+            return $host . $filename;
         }));
 
         /**
