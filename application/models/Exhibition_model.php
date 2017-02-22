@@ -132,4 +132,34 @@ class Exhibition_model extends CI_Model {
             ->where('exhibitions.place_id', $place_id)
             ->get()->num_rows();
     }
+
+    public function delete_all_artworks_by_artwork_id($artwork_id) {
+        return $this->db->delete(self::ARTWORK_TABLE_NAME, ['artwork_id' => $artwork_id]);
+    }
+
+    public function delete_all_by_place_id($place_id) {
+        $exhibitions = $this->get_exhibitions_by_place_id($place_id);
+        $exhibition_ids = array_map(function ($value) {
+            return $value->id;
+        }, $exhibitions);
+
+        if (!empty($exhibition_ids)) {
+            return $this->db->where_in('id', $exhibition_ids)->delete(self::TABLE_NAME);
+        }
+
+        return true;
+    }
+
+    public function delete_all_artworks_by_place_id($place_id) {
+        $exhibitions = $this->get_exhibitions_by_place_id($place_id);
+        $exhibition_ids = array_map(function ($value) {
+            return $value->id;
+        }, $exhibitions);
+
+        if (!empty($exhibition_ids)) {
+            return $this->db->where_in('exhibition_id', $exhibition_ids)->delete(self::ARTWORK_TABLE_NAME);
+        }
+
+        return true;
+    }
 }

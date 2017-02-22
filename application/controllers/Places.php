@@ -212,4 +212,43 @@ class Places extends MY_Controller {
         }
         $this->twig->display('places/edit', $data);
     }
+
+    public function delete($place_id) {
+        $this->load->library('imageupload');
+
+        $place = $this->place_model->get_bare_by_id($place_id);
+        if (empty($place)) {
+            alert_and_redirect('존재하지 않는 장소입니다.');
+        }
+
+        if ($place->user_id !== $this->accountlib->get_user_id()) {
+            alert_and_redirect('본인의 장소만 삭제할 수 있습니다.');
+        }
+
+        // 장소
+        $is_deleted = $this->place_model->delete($place_id);
+
+        if ($is_deleted) {
+            // 장소 추가 이미지
+            $extra_images = $this->place_model->get_images_by_id($place_id);
+            foreach ($extra_images as $extra) {
+                $this->imageupload->delete_image($extra->image);
+                $this->place_model->delete_image($place_id, $extra->image);
+            }
+
+            // 장소 코멘트
+            $this->comment_model->delete_all_comments_by_place_id($place_id);
+
+            // 장소 Pick
+            $this->pick_model->delete_all_picks_by_place_id($place_id);
+
+            // 전시
+            $this->exhibition_model->delete_all_by_place_id($place_id);
+
+            // 장소 내 작품
+            $this->exhibition_model->delete_all_artworks_by_place_id($place_id);
+        }
+
+        alert_and_redirect('장소가 삭제되었습니다.', '/?type=' . TYPE_PLACES);
+    }
 }

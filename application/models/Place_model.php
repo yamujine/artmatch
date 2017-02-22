@@ -118,6 +118,13 @@ class Place_model extends CI_Model {
             ->get()->result();
     }
 
+    public function get_images_by_id($place_id) {
+        return $this->db
+            ->from(self::TABLE_NAME_IMAGES)
+            ->where('place_id', $place_id)
+            ->get()->result();
+    }
+
     public function insert($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {
         $this->_fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags);
         if ($this->db->insert(self::TABLE_NAME, $this)) {
@@ -149,6 +156,12 @@ class Place_model extends CI_Model {
             ->set('views', 'views+1', FALSE)
             ->where('id', $id)
             ->update(self::TABLE_NAME);
+    }
+
+    public function delete($place_id) {
+        $this->db->delete(self::TABLE_NAME, ['id' => $place_id]);
+
+        return $this->db->affected_rows() === 1;
     }
 
     public function delete_image($place_id, $image) {
