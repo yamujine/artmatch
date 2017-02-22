@@ -15,7 +15,7 @@ class Main extends MY_Controller {
 
         $data = $this->_render_content_list($type, $limit, $offset, false);
 
-        $this->twig->display('api/' . $type, $data);
+        $this->twig->display('api/items', $data);
     }
 
     private function _render_content_list($type, $limit = 9, $offset = 0, $use_pick_artists = true) {
