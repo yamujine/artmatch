@@ -7,8 +7,8 @@
         <div class="preview">
           미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
         </div>
-        {# TODO: 썸네일 이미지 주소 설정 #}
-        <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
+        {# 썸네일 이미지 TODO 썸네일 이미지 경로로 바꿔야 됨 #}
+        <img class="img" src="/uploads/{{ item.image }}"/>
         {# 장소 타입인 경우 #}
         {% if type == TYPE_PLACES %}
           {# 모집중인지 아닌지 여부 #}
@@ -30,13 +30,13 @@
         {% if type == TYPE_ARTWORKS %}
           <div class="title">{{ item.title }}</div>
           <div class="name">{{ item.user_name }}</div>
-        {# 장소 타입인 경우 #}
+          {# 장소 타입인 경우 #}
         {% else %}
           <div class="title">
-            {{ item.name|length > 12 ? item.name|slice(0, 12) ~ '...' : item.name  }}
+            {{ item.name|length > 12 ? item.name|slice(0, 12) ~ '...' : item.name }}
           </div>
           <div class="description">
-            {{ item.description|length > 53 ? item.description|slice(0, 53) ~ '...' : item.description  }}
+            {{ item.description|length > 53 ? item.description|slice(0, 53) ~ '...' : item.description }}
           </div>
           <div class="address">
             <div class="pin"></div>
