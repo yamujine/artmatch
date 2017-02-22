@@ -137,13 +137,13 @@
           <div class="mainImage">
             <div
               class="image popupImage"
-              data-mfp-src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"
+              data-mfp-src="/uploads/{{ place.image }}"
             >
               <div class="dimm"></div>
               <div class="preview">
                 미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
               </div>
-              <img src="http://www.with-art.com/files/attach/images/54/707/IM_2.jpg"/>
+              <img src="/uploads/{{ place.image }}"/>
             </div>
           </div>
         </div>
@@ -259,7 +259,7 @@
             {% elseif place.status == PLACE_STATUS_NEED_ARTWORK %}
               <li class="exhibition">작품 모집중</li>
             {% endif %}
-            {% if place.is_free == EXHIBITION_FOR_FREE %}
+            {% if place.exhibition.is_free == EXHIBITION_FOR_FREE %}
               <li class="fee">대관료 없음</li>
             {% else %}
               <li class="fee">대관료 있음</li>
