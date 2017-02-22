@@ -53,8 +53,7 @@ class Places extends MY_Controller {
             $data['comments'] = $comments;
 
             // 댓글 수
-            $count = count($comments);
-            $data['count'] = $count;
+            $data['comment_count'] = count($comments);
         }
 
         // 조회수 증가

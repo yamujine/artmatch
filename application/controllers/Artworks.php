@@ -57,8 +57,7 @@ class Artworks extends MY_Controller {
             $data['comments'] = $comments;
 
             // 댓글 수
-            $count = count($comments);
-            $data['count'] = $count;
+            $data['comment_count'] = count($comments);
 
             // 작가정보
             // TODO join 걸어서 정보 가져오도록
