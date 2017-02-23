@@ -22,7 +22,7 @@ class UsersApi extends API_Controller {
             $facebook_profile_image_url = $this->input->post('profile_image');
             $uploaded_image_name = $this->imageupload->upload_image_by_url($facebook_profile_image_url, true, 'profile');
         } else {
-            $uploaded_image_name = $this->imageupload->upload_images('profile_image', true, 'profile');
+            $uploaded_image_name = $this->imageupload->upload_image('profile_image', true, 'profile');
         }
 
         $id = $this->user_model->add(
