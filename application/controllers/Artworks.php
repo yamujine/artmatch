@@ -44,9 +44,9 @@ class Artworks extends MY_Controller {
         $data['exhibitions'] = $exhibitions;
 
         // 댓글
-        $comments = $this->comment_model->get_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
-        $data['comments'] = $comments;
-        $data['comment_count'] = count($comments);
+        // TODO: 적절한 초기 값으로 offset, limit 설정 필요
+        $data['comments'] = $this->comment_model->get_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
+        $data['comment_count'] = $this->comment_model->get_count_of_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
 
         // 조회수 증가
         $this->artwork_model->update_view_count_by_id($artwork_id);
