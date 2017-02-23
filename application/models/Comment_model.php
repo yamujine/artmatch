@@ -24,7 +24,13 @@ class Comment_model extends CI_Model {
             ->count_all_results();
     }
 
-    public function get_comments_by_type_id($type, $type_id, $limit = null, $offset = null) {
+    /**
+     * 상세페이지 코멘트 가져오기용 쿼리
+     * @param $type
+     * @param $type_id
+     * @return mixed
+     */
+    private function get_query_for_comments_by_type_id($type, $type_id) {
         if ($type === TYPE_ARTWORKS) {
             $query = $this->db
                 ->select('artwork_comments.*, users.user_name, users.profile_image')
@@ -38,6 +44,20 @@ class Comment_model extends CI_Model {
                 ->join('users', 'users.id = place_comments.user_id')
                 ->where('place_id', $type_id);
         }
+
+        return $query;
+    }
+
+    /**
+     * get_query_for_comments_by_type_id을 이용한 코멘트 리턴
+     * @param $type
+     * @param $type_id
+     * @param null $limit
+     * @param null $offset
+     * @return mixed
+     */
+    public function get_comments_by_type_id($type, $type_id, $limit = null, $offset = null) {
+        $query = $this->get_query_for_comments_by_type_id($type, $type_id);
 
         if ($limit !== null && $offset !== null) {
             $query = $query->limit($limit, $offset);
@@ -48,20 +68,14 @@ class Comment_model extends CI_Model {
         return $query->get()->result();
     }
 
+    /**
+     * get_query_for_comments_by_type_id을 이용한 코멘트 수 리턴
+     * @param $type
+     * @param $type_id
+     * @return mixed
+     */
     public function get_count_of_comments_by_type_id($type, $type_id) {
-        if ($type === TYPE_ARTWORKS) {
-            $query = $this->db
-                ->select('artwork_comments.*, users.user_name, users.profile_image')
-                ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
-                ->join('users', 'users.id = artwork_comments.user_id')
-                ->where('artwork_id', $type_id);
-        } else if ($type === TYPE_PLACES) {
-            $query = $this->db
-                ->select('place_comments.*, users.user_name, users.profile_image')
-                ->from(self::PLACE_COMMENTS_TABLE_NAME)
-                ->join('users', 'users.id = place_comments.user_id')
-                ->where('place_id', $type_id);
-        }
+        $query = $this->get_query_for_comments_by_type_id($type, $type_id);
 
         return $query->get()->num_rows();
     }
