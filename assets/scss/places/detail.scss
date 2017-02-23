@@ -312,19 +312,24 @@ body {
                 color: $bluish;
               }
 
-              &:first-child {
-                margin-right: 25px;
+              &.exhibition_available_count {
+                color: $greyish-four;
+                font-weight: 300;
+              }
 
-                &:after {
+              &:not(:first-child) {
+                margin-left: 16px;
+
+                &:before {
                   position: absolute;
                   top: 50%;
-                  margin-top: 16px;
+                  margin-top: 15px;
                   width: 1px;
                   height: 12px;
                   content: "";
                   background: $black;
                   opacity: 0.1;
-                  margin-left: 13px;
+                  margin-left: -8px;
                 }
               }
             }

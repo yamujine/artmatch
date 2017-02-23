@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="../../../static/dist/css/account/login.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/account/login.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
@@ -87,7 +87,7 @@
       </div>
       <div class="rightForm">
         <div class="logo">
-          <img src="../../../static/images/logo_black.png" width="149px" height="18px"/>
+          <img src="{{ 'images/logo_black.png' | static_url }}" width="149px" height="18px"/>
         </div>
         <div class="loginForm">
           <div class="loginFormContainer">
