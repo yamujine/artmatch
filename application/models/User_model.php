@@ -98,10 +98,10 @@ class User_model extends CI_Model {
         }
     }
 
-    public function get_email_and_fb_id($email, $facebook_id) {
+    public function get_by_fb_id($facebook_id) {
         return $this->db
             ->from(self::TABLE_NAME)
-            ->where(['email' => $email, 'facebook_id' => $facebook_id])
+            ->where(['facebook_id' => $facebook_id])
             ->get()->row();
     }
 

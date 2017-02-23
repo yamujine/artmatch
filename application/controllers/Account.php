@@ -61,7 +61,7 @@ class Account extends CI_Controller {
             $fb = new Facebook\Facebook([
                 'app_id' => $this->config->item('app_id'),
                 'app_secret' => $this->config->item('app_secret'),
-                'default_graph_version' => 'v2.5'
+                'default_graph_version' => $this->config->item('api_version')
             ]);
 
             $accessToken = $this->accountlib->get_facebook_access_token();
@@ -73,6 +73,12 @@ class Account extends CI_Controller {
                 $data['email'] = $userNode->getEmail();
                 $data['picture'] = $userNode->getPicture()->getUrl();
                 $data['facebook_id'] = $userNode->getId();
+            }
+
+            $is_already_used = $this->user_model->check_email($userNode->getEmail());
+
+            if ($is_already_used) {
+                $data['duplicated_email'] = TRUE;
             }
         }
         $this->twig->display('account/signup', $data);

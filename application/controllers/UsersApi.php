@@ -161,7 +161,7 @@ class UsersApi extends API_Controller {
         $fb = new Facebook\Facebook([
             'app_id' => $this->config->item('app_id'),
             'app_secret' => $this->config->item('app_secret'),
-            'default_graph_version' => 'v2.5'
+            'default_graph_version' => $this->config->item('api_version')
         ]);
         $helper = $fb->getJavaScriptHelper();
         $accessToken = $helper->getAccessToken();
@@ -180,24 +180,10 @@ class UsersApi extends API_Controller {
             $this->return_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
         }
 
-        $user = $this->user_model->get_email_and_fb_id($userNode->getEmail(), $userNode->getId());
+        $user = $this->user_model->get_by_fb_id($userNode->getId());
 
         if ($user === NULL) {
-            //이미 가입한 회원일 경우
-            $is_already_used = $this->user_model->check_email($userNode->getEmail());
-            if ($is_already_used) {
-                $result = $this->user_model->register_fb_id($userNode->getEmail(), $userNode->getId());
-                if ($result) {
-                    $this->return_success_response(['message' => 'facebook verify success']);
-                } else {
-                    $this->return_fila_response(['message' => 'facebook verify fail']);
-                }
-            }
             $this->return_fail_response('102', ['message' => '이메일을 찾을 수 없습니다.']);
-        }
-
-        if ($user->facebook_id !== $userNode->getId()) {
-            $this->return_fail_response('104', ['message' => '올바르지 않은 접근입니다.']);
         }
 
         $this->accountlib->generate_user_session($user->id);
