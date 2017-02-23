@@ -167,7 +167,7 @@ class Artworks extends MY_Controller {
         }
 
         if ($artwork->user_id !== $this->accountlib->get_user_id()) {
-            alert_and_redirect('본인의 장소만 작품할 수 있습니다.');
+            alert_and_redirect('본인의 작품만 삭제할 수 있습니다.');
         }
 
         // 작품
