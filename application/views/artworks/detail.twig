@@ -114,6 +114,28 @@
             return false;
         });
 
+      // 댓글 삭제
+      $('.commentDeleteBtn').click(function () {
+        var $this = $(this);
+        $.ajax({
+          method: "POST",
+          url: "/api/comments/delete",
+          data: {
+            type: $this.data('type'),
+            type_comment_id: $this.data('id')
+          }
+        }).done(function (data) {
+          if (data.body.result_type === 'delete') {
+            $this.parent().parent().remove();
+          } else {
+            alert(data.body.message);
+          }
+        }).fail(function () {
+          alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+        });
+        return false;
+      });
+
       // PICK
       $('.pickBtn').click(function () {
         var $this = $(this);
@@ -338,6 +360,7 @@
                 </div>
                 <div class="comment">{{ comment.comment }}</div>
                 <button class="commentEditBtn">수정</button>
+                <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">삭제</button>
                 <!-- == 댓글 수정 폼 -->
                 <div class="commentEditDiv" style="display:none">
                   <textarea id="commentEditText"></textarea>
