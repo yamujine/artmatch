@@ -123,11 +123,13 @@
           url: "/api/comments/delete",
           data: {
             type: $this.data('type'),
+            type_id: $this.data('type-id'),
             type_comment_id: $this.data('id')
           }
         }).done(function (data) {
           if (data.body.result_type === 'delete') {
             $this.parent().parent().remove();
+            $('.commentArea').children().find('.number').text(data.body.comment_count);
           } else {
             alert(data.body.message);
           }
@@ -292,7 +294,7 @@
                 </div>
                 <div class="comment">{{ comment.comment|nl2br }}</div>
                 <button class="commentEditBtn">수정</button>
-                <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">삭제</button>
+                <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
                 <!-- == 댓글 수정 폼 -->
                 <div class="commentEditDiv" style="display:none">
                   <textarea id="commentEditText"></textarea>

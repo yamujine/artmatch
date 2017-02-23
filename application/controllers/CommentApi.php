@@ -102,16 +102,19 @@ class CommentApi extends API_Controller {
         $user_id = $this->accountlib->get_user_id();
 
         $type = $this->input->post('type');
+        $type_id = $this->input->post('type_id');
         $type_comment_id = $this->input->post('type_comment_id');
 
         $affected_rows = $this->comment_model->delete_comment($type, $type_comment_id);
         if ($affected_rows === 0) {
             $this->return_fail_response('101', ['message' => 'Failed to delete']);
         }
+        $comments = $this->comment_model->get_comments_by_type_id($type, $type_id);
 
         $this->return_success_response([
             'type' => $type,
             'type_comment_id' => $type_comment_id,
+            'comment_count' => count($comments),
             'result_type' => 'delete'
         ]);
     }
