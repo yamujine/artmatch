@@ -152,9 +152,9 @@
         })
             .done(function (data) {
               if (data.body.result_type === 'on') {
-                $this.addClass('active').find('.number').html(number + 1);
+                $this.addClass('active').find('.number').html(data.body.pick_count);
               } else if (data.body.result_type === 'off') {
-                $this.removeClass('active').find('.number').html(number - 1);
+                $this.removeClass('active').find('.number').html(data.body.pick_count);
               } else {
                 alert(data.body.message);
               }
