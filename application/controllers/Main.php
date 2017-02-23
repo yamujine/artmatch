@@ -16,7 +16,7 @@ class Main extends MY_Controller {
         $limit = $this->input->get('limit');
         $offset = $this->input->get('offset');
 
-        $data = $this->_render_content_list($user_id, $type, $limit, $offset, $user_id, false);
+        $data = $this->_render_content_list($user_id, $type, $limit, $offset, false);
 
         $this->twig->display('api/items', $data);
     }
