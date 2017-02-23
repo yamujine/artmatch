@@ -150,6 +150,13 @@ class Artwork_model extends CI_Model {
             ->get()->result();
     }
 
+    public function get_images_by_id($artwork_id) {
+        return $this->db
+            ->from(self::TABLE_NAME_IMAGES)
+            ->where('artwork_id', $artwork_id)
+            ->get()->result();
+    }
+
     public function insert($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags) {
         $this->_fill_class_variable_with_params($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags);
         if ($this->db->insert(self::TABLE_NAME, $this)) {
@@ -181,6 +188,12 @@ class Artwork_model extends CI_Model {
             ->set('views', 'views+1', FALSE)
             ->where('id', $id)
             ->update(self::TABLE_NAME);
+    }
+
+    public function delete($artwork_id) {
+        $this->db->delete(self::TABLE_NAME, ['id' => $artwork_id]);
+
+        return $this->db->affected_rows() === 1;
     }
 
     public function delete_image($artwork_id, $image) {

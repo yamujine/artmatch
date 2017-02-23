@@ -167,4 +167,38 @@ class Artworks extends MY_Controller {
         }
         $this->twig->display('artworks/edit', $data);
     }
+
+    public function delete($artwork_id) {
+        $artwork = $this->artwork_model->get_bare_by_id($artwork_id);
+        if (empty($artwork)) {
+            alert_and_redirect('존재하지 않는 장소입니다.');
+        }
+
+        if ($artwork->user_id !== $this->accountlib->get_user_id()) {
+            alert_and_redirect('본인의 장소만 삭제할 수 있습니다.');
+        }
+
+        // 작품
+        $is_deleted = $this->artwork_model->delete($artwork_id);
+
+        if ($is_deleted) {
+            // 장소 추가 이미지
+            $extra_images = $this->artwork_model->get_images_by_id($artwork_id);
+            foreach ($extra_images as $extra) {
+                $this->imageupload->delete_image($extra->image);
+                $this->artwork_model->delete_image($artwork_id, $extra->image);
+            }
+
+            // 작품 코멘트
+            $this->comment_model->delete_all_comments_by_artwork_id($artwork_id);
+
+            // 작품 Pick
+            $this->pick_model->delete_all_picks_by_artwork_id($artwork_id);
+
+            // 전시 내 작품
+            $this->exhibition_model->delete_all_artworks_by_artwork_id($artwork_id);
+        }
+
+        alert_and_redirect('작품이 삭제되었습니다.', '/?type=' . TYPE_ARTWORKS);
+    }
 }

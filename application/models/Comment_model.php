@@ -1,14 +1,14 @@
 <?php
 
 class Comment_model extends CI_Model {
-	const ARTWORK_COMMENTS_TABLE_NAME = 'artwork_comments';
-	const PLACE_COMMENTS_TABLE_NAME = 'place_comments';
+    const ARTWORK_COMMENTS_TABLE_NAME = 'artwork_comments';
+    const PLACE_COMMENTS_TABLE_NAME = 'place_comments';
 
-	//public $id; -- Ignore PK
-	public $user_id;
-	public $artwork_id;
-	public $place_id;
-	public $comment;
+    //public $id; -- Ignore PK
+    public $user_id;
+    public $artwork_id;
+    public $place_id;
+    public $comment;
 
     public function get_count_by_type_id($type, $type_id) {
         if ($type === TYPE_ARTWORKS) {
@@ -16,7 +16,7 @@ class Comment_model extends CI_Model {
         } else if ($type === TYPE_PLACES) {
             return get_count_by_place_id($type_id);
         } else {
-            throw new Exception("type error. type=".$type);
+            throw new Exception("type error. type=" . $type);
         }
     }
 
@@ -34,24 +34,24 @@ class Comment_model extends CI_Model {
             ->count_all_results();
     }
 
-	public function get_comments_by_type_id($type, $type_id) {
-		if ($type === TYPE_ARTWORKS) {
-			return $this->db
-				->from(self::ARTWORK_COMMENTS_TABLE_NAME)
-				->where('artwork_id', $type_id)
-				->get()->result();
-		} else if ($type === TYPE_PLACES) {
-			return $this->db
-				->from(self::PLACE_COMMENTS_TABLE_NAME)
-				->where('place_id', $type_id)
-				->get()->result();
-		} else {
-			throw new Exception("type error. type=".$type);
-		}
-	}
+    public function get_comments_by_type_id($type, $type_id) {
+        if ($type === TYPE_ARTWORKS) {
+            return $this->db
+                ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
+                ->where('artwork_id', $type_id)
+                ->get()->result();
+        } else if ($type === TYPE_PLACES) {
+            return $this->db
+                ->from(self::PLACE_COMMENTS_TABLE_NAME)
+                ->where('place_id', $type_id)
+                ->get()->result();
+        } else {
+            throw new Exception("type error. type=" . $type);
+        }
+    }
 
     public function insert_comment($type, $user_id, $type_id, $comment) {
-	    if ($type === TYPE_ARTWORKS) {
+        if ($type === TYPE_ARTWORKS) {
             $this->load->model('artwork_model');
 
             if ($this->artwork_model->is_exists($type_id) === false) {
@@ -68,7 +68,7 @@ class Comment_model extends CI_Model {
 
             return $this->insert_place_comment($user_id, $type_id, $comment);
         } else {
-            throw new Exception("type error. type=".$type);
+            throw new Exception("type error. type=" . $type);
         }
     }
 
@@ -78,7 +78,7 @@ class Comment_model extends CI_Model {
         } else if ($type === TYPE_PLACES) {
             return $this->delete_place_comment($type_comment_id);
         } else {
-            throw new Exception("type error. type=".$type);
+            throw new Exception("type error. type=" . $type);
         }
     }
 
@@ -88,12 +88,12 @@ class Comment_model extends CI_Model {
         } else if ($type === TYPE_PLACES) {
             return $this->update_place_comment($type_comment_id, $comment);
         } else {
-            throw new Exception("type error. type=".$type);
+            throw new Exception("type error. type=" . $type);
         }
     }
 
     public function insert_artwork_comment($user_id, $artwork_id, $comment) {
-	    $data = [
+        $data = [
             'user_id' => $user_id,
             'artwork_id' => $artwork_id,
             'comment' => $comment
@@ -109,26 +109,27 @@ class Comment_model extends CI_Model {
 
     public function delete_artwork_comment($id) {
         $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['id' => $id]);
-		return $this->db->affected_rows();
+
+        return $this->db->affected_rows();
     }
 
-	public function update_artwork_comment($id, $comment) {
+    public function update_artwork_comment($id, $comment) {
         $result = $this->db->set(['comment' => $comment])
             ->where('id', $id)
             ->update(self::ARTWORK_COMMENTS_TABLE_NAME);
 
         if ($result !== NULL) {
-			return $id;
-		} else {
-			return NULL;
-		}
+            return $id;
+        } else {
+            return NULL;
+        }
     }
 
-	public function insert_place_comment($user_id, $place_id, $comment) {
-	    $data = [
+    public function insert_place_comment($user_id, $place_id, $comment) {
+        $data = [
             'user_id' => $user_id,
             'place_id' => $place_id,
-			'comment' => $comment
+            'comment' => $comment
         ];
 
         $result = $this->db->insert(self::PLACE_COMMENTS_TABLE_NAME, $data);
@@ -139,9 +140,10 @@ class Comment_model extends CI_Model {
         }
     }
 
-	public function delete_place_comment($id) {
+    public function delete_place_comment($id) {
         $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, ['id' => $id]);
-		return $this->db->affected_rows();
+
+        return $this->db->affected_rows();
     }
 
     public function update_place_comment($id, $comment) {
@@ -150,11 +152,17 @@ class Comment_model extends CI_Model {
             ->update(self::PLACE_COMMENTS_TABLE_NAME);
 
         if ($result !== NULL) {
-			return $id;
-		} else {
-			return NULL;
-		}
+            return $id;
+        } else {
+            return NULL;
+        }
     }
 
+    public function delete_all_comments_by_artwork_id($artwork_id) {
+        return $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['artwork_id' => $artwork_id]);
+    }
 
+    public function delete_all_comments_by_place_id($place_id) {
+        return $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, ['place_id' => $place_id]);
+    }
 }
