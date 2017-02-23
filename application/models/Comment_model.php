@@ -24,22 +24,46 @@ class Comment_model extends CI_Model {
             ->count_all_results();
     }
 
-    public function get_comments_by_type_id($type, $type_id) {
+    public function get_comments_by_type_id($type, $type_id, $limit = null, $offset = null) {
         if ($type === TYPE_ARTWORKS) {
-            return $this->db
+            $query = $this->db
                 ->select('artwork_comments.*, users.user_name, users.profile_image')
                 ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
                 ->join('users', 'users.id = artwork_comments.user_id')
-                ->where('artwork_id', $type_id)
-                ->get()->result();
+                ->where('artwork_id', $type_id);
         } else if ($type === TYPE_PLACES) {
-            return $this->db
+            $query = $this->db
                 ->select('place_comments.*, users.user_name, users.profile_image')
                 ->from(self::PLACE_COMMENTS_TABLE_NAME)
                 ->join('users', 'users.id = place_comments.user_id')
-                ->where('place_id', $type_id)
-                ->get()->result();
+                ->where('place_id', $type_id);
         }
+
+        if ($limit !== null && $offset !== null) {
+            $query = $query->limit($limit, $offset);
+        }
+
+        $query = $query->order_by('id', 'ASC');
+
+        return $query->get()->result();
+    }
+
+    public function get_count_of_comments_by_type_id($type, $type_id) {
+        if ($type === TYPE_ARTWORKS) {
+            $query = $this->db
+                ->select('artwork_comments.*, users.user_name, users.profile_image')
+                ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
+                ->join('users', 'users.id = artwork_comments.user_id')
+                ->where('artwork_id', $type_id);
+        } else if ($type === TYPE_PLACES) {
+            $query = $this->db
+                ->select('place_comments.*, users.user_name, users.profile_image')
+                ->from(self::PLACE_COMMENTS_TABLE_NAME)
+                ->join('users', 'users.id = place_comments.user_id')
+                ->where('place_id', $type_id);
+        }
+
+        return $query->get()->num_rows();
     }
 
     public function insert_comment($type, $user_id, $type_id, $comment) {
