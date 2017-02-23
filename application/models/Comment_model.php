@@ -10,6 +10,24 @@ class Comment_model extends CI_Model {
     public $place_id;
     public $comment;
 
+    public function get_by_id($type, $comment_id) {
+        if ($type === TYPE_ARTWORKS) {
+            $comment = $this->db
+                ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
+                ->where('id', $comment_id)
+                ->get()->row();
+            $comment->user = $this->db
+                ->from('users')
+                ->where('id', $comment->user_id)
+                ->get()->row();
+            return $comment;
+        } else if ($type === TYPE_PLACES) {
+
+        } else {
+            throw new Exception('type error. type='.$type);
+        }
+    }
+
     public function get_count_by_place_id($place_id) {
         return $this->db
             ->from(self::PLACE_COMMENTS_TABLE_NAME)

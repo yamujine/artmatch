@@ -66,6 +66,7 @@ class CommentApi extends API_Controller {
             $this->return_fail_response('101', ['message' => 'Failed to insert']);
         }
 
+
         $this->return_success_response([
             'type' => $type,
             'type_id' => $type_id,
