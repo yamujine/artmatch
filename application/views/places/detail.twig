@@ -91,7 +91,6 @@
           }
         })
           .done(function (data) {
-              console.log(data.body.pick_count);
             if (data.body.result_type === 'on') {
               $this.addClass('active').find('.number').html(data.body.pick_count);
             } else if (data.body.result_type === 'off') {

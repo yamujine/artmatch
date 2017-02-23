@@ -32,18 +32,16 @@ class PickApi extends API_Controller {
             } else if ($type === TYPE_PLACES) {
                 $pick_count = $this->pick_model->get_count_by_place_id($type_id);
             } else {
-                throw new Exception("type error. type=".$type);
+                throw new Exception('type error. type='.$type);
             }
 
             if ($result_id !== NULL) {
-                $this->set_success_response(['type_id' => $type_id, 'result_type' => $result_type, 'type' => $type, 'pick_count' => $pick_count]);
+                $this->return_success_response(['type_id' => $type_id, 'result_type' => $result_type, 'type' => $type, 'pick_count' => $pick_count]);
             } else {
-                $this->set_fail_response('101', ['message' => 'Failed to insert into DB']);
+                $this->return_fail_response('101', ['message' => 'Failed to insert into DB']);
             }
         } catch (Exception $e) {
-            $this->set_fail_response('104', ['message' => $e->getMessage()]);
+            $this->return_fail_response('104', ['message' => $e->getMessage()]);
         }
-
-        $this->return_response();
     }
 }
