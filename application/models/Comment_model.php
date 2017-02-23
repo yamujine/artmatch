@@ -37,12 +37,16 @@ class Comment_model extends CI_Model {
     public function get_comments_by_type_id($type, $type_id) {
         if ($type === TYPE_ARTWORKS) {
             return $this->db
+                ->select('artwork_comments.*, users.user_name, users.profile_image')
                 ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
+                ->join('users', 'users.id = artwork_comments.user_id')
                 ->where('artwork_id', $type_id)
                 ->get()->result();
         } else if ($type === TYPE_PLACES) {
             return $this->db
+                ->select('place_comments.*, users.user_name, users.profile_image')
                 ->from(self::PLACE_COMMENTS_TABLE_NAME)
+                ->join('users', 'users.id = place_comments.user_id')
                 ->where('place_id', $type_id)
                 ->get()->result();
         } else {

@@ -54,15 +54,7 @@ class Places extends MY_Controller {
 
         // 댓글
         $comments = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id);
-        foreach ($comments as $comment) {
-            // TODO join 걸어서 정보 가져오도록
-            // 댓글 작성자 정보
-            $user = $this->user_model->get_by_id($comment->user_id);
-            $comment->user = $user;
-        }
         $data['comments'] = $comments;
-
-        // 댓글 수
         $data['comment_count'] = count($comments);
 
         // 조회수 증가
