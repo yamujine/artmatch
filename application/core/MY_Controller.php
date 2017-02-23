@@ -15,7 +15,6 @@ class MY_Controller extends CI_Controller {
         $twig = $this->twig->getTwig();
         $this->load->helper('url');
         $this->config->load('facebook');
-        // Twig 관련 글로벌 설정은 이곳 또는 application/libraries/Twig.php 에 작성
         $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
         $twig->addFilter(new Twig_SimpleFilter('image_url', 'UrlGenerator::generate_original_image_url'));
         $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
