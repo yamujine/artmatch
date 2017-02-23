@@ -2,7 +2,6 @@
 
 /uploads/
 /vendor/
-/composer.phar
 
 application/cache/*
 !application/cache/index.html
