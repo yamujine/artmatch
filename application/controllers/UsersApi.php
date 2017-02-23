@@ -183,6 +183,16 @@ class UsersApi extends API_Controller {
         $user = $this->user_model->get_email_and_fb_id($userNode->getEmail(), $userNode->getId());
 
         if ($user === NULL) {
+            //이미 가입한 회원일 경우
+            $is_already_used = $this->user_model->check_email($userNode->getEmail());
+            if ($is_already_used) {
+                $result = $this->user_model->register_fb_id($userNode->getEmail(), $userNode->getId());
+                if ($result) {
+                    $this->return_success_response(['message' => 'facebook verify success']);
+                } else {
+                    $this->return_fila_response(['message' => 'facebook verify fail']);
+                }
+            }
             $this->return_fail_response('102', ['message' => '이메일을 찾을 수 없습니다.']);
         }
 
