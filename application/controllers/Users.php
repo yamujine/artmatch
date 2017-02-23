@@ -31,11 +31,6 @@ class Users extends MY_Controller {
         } else if ($user->type === USER_TYPE_PLACE_OWNER) {
             $mine = $this->place_model->get_all_by_user_id($user->id);
         }
-        foreach ($mine as $something) {
-            $type = ($user->type === USER_TYPE_ARTIST) ? TYPE_ARTWORKS : TYPE_PLACES;
-            $something->url = '/' . $type . '/' . $something->id;
-            $something->subject = ($type === TYPE_ARTWORKS) ? $something->title : $something->name;
-        }
 
         // 받은 pick 카운트
         if ($user->type === USER_TYPE_ARTIST) {
@@ -48,18 +43,9 @@ class Users extends MY_Controller {
         $my_picks = [];
         if ($is_my_page && !empty($pick_type)) {
             if ($pick_type === TYPE_ARTWORKS) {
-                $my_picks = $this->pick_model->get_artwork_picks_by_user_id($user->id);
+                $my_picks = $this->pick_model->get_artworks_by_user_id($user->id);
             } elseif ($pick_type === TYPE_PLACES) {
-                $my_picks = $this->pick_model->get_place_picks_by_user_id($user->id);
-            }
-        }
-        foreach ($my_picks as $my_pick) {
-            if ($pick_type === TYPE_ARTWORKS) {
-                $my_pick->url = '/' . $pick_type . '/' . $my_pick->artwork->id;
-                $my_pick->subject = $my_pick->artwork->title;
-            } elseif ($pick_type === TYPE_PLACES) {
-                $my_pick->url = '/' . $pick_type . '/' . $my_pick->place->id;
-                $my_pick->subject = $my_pick->place->name;
+                $my_picks = $this->pick_model->get_places_by_user_id($user->id);
             }
         }
 

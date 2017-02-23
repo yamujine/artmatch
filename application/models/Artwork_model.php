@@ -144,6 +144,8 @@ class Artwork_model extends CI_Model {
             ->from(self::TABLE_NAME)
             ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
             ->join('user_artwork_picks AS P2', "P2.artwork_id = artworks.id AND P2.user_id = '{$user_id}'", 'left')
+            ->group_by('artworks.id')
+            ->order_by('artworks.id', 'DESC')
             ->where('artworks.user_id', $user_id);
 
         return $query->get()->result();

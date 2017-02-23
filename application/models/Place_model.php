@@ -122,14 +122,24 @@ class Place_model extends CI_Model {
     }
 
     public function get_all_by_user_id($user_id) {
-        $query = $this->db
+        $places = $this->db
             ->select('places.*, count(user_place_picks.id) as pick_count, IF(P2.id IS NULL, 0, 1) AS is_picked')
             ->from(self::TABLE_NAME)
             ->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
             ->join('user_place_picks AS P2', "P2.place_id = places.id AND P2.user_id = '{$user_id}'", 'left')
-            ->where('places.user_id', $user_id);
+            ->where('places.user_id', $user_id)
+            ->group_by('places.id')
+            ->order_by('places.id', 'DESC')
+            ->get()->result();
 
-        return $query->get()->result();
+        foreach ($places as $place) {
+            $place->extra_images = $this->db
+                ->from(self::TABLE_NAME_IMAGES)
+                ->where('place_id', $place->id)
+                ->get()->result();
+        }
+
+        return $places;
     }
 
     public function get_images_by_id($place_id) {
