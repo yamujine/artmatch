@@ -5,7 +5,7 @@ class Place_model extends CI_Model {
      * table_name: places
      */
     const TABLE_NAME = 'places';
-    const TABLE_NAME_IMAGES = 'places_images';
+    const TABLE_NAME_IMAGES = 'place_images';
 
     //public $id; -- Ignore PK
     public $user_id;
@@ -97,7 +97,7 @@ class Place_model extends CI_Model {
             ->where('id', $place->user_id)
             ->get()->row();
         $place->extra_images = $this->db
-            ->from('place_images')
+            ->from(self::TABLE_NAME_IMAGES)
             ->where('place_id', $place_id)
             ->get()->result();
 
@@ -115,6 +115,13 @@ class Place_model extends CI_Model {
         return $this->db
             ->from(self::TABLE_NAME)
             ->where('user_id', $user_id)
+            ->get()->result();
+    }
+
+    public function get_images_by_id($place_id) {
+        return $this->db
+            ->from(self::TABLE_NAME_IMAGES)
+            ->where('place_id', $place_id)
             ->get()->result();
     }
 
@@ -149,6 +156,12 @@ class Place_model extends CI_Model {
             ->set('views', 'views+1', FALSE)
             ->where('id', $id)
             ->update(self::TABLE_NAME);
+    }
+
+    public function delete($place_id) {
+        $this->db->delete(self::TABLE_NAME, ['id' => $place_id]);
+
+        return $this->db->affected_rows() === 1;
     }
 
     public function delete_image($place_id, $image) {

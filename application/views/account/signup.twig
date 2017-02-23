@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="../../static/dist/css/account/signup.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/account/signup.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
@@ -122,7 +122,7 @@
   <div class="patSignUp">
     <div class="container">
       <div class="logo">
-        <img src="../../static/images/logo_black.png" width="268px"/>
+        <img src="{{ 'images/logo_black.png' | static_url }}" width="268px"/>
       </div>
       <h2>가입하여 여러분의 작품을 전시하세요.</h2>
       <form id="patSignUpForm">

@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+include_once __DIR__ . '/../classes/UrlGenerator.php';
+
 // MY_Controller가 로그인 체크를 하여 /account/login route로 redirect를 하므로, 로그인 컨트롤러는 MY_Controller을 사용하지 않음
 class Account extends CI_Controller {
     public function __construct() {
@@ -8,6 +10,10 @@ class Account extends CI_Controller {
         $this->load->model('user_model');
         $this->load->helper('url');
         $this->load->library('twig');
+        /** @var Twig_Environment $twig */
+        $twig = $this->twig->getTwig();
+        $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
+        $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
         $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
     }
