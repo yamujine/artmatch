@@ -117,11 +117,13 @@
         </div>
         <!-- //== 추가 이미지 선택 -->
         <!-- == 작품 설명 -->
-        <div class="description">
+        <div class="descriptionInput">
           <textarea name="description" title="description" maxlength="100"
-                    placeholder="작품에 대한 이야기를 입력해주세요. (최대 100자)" required>{% if description is not null %}{{ description|nl2br }}{% endif %}</textarea>
+                    placeholder="작품에 대한 이야기를 입력해주세요. (최대 100자)"
+                    required>{% if description is not null %}{{ description|nl2br }}{% endif %}</textarea>
           <div class="tags">
-            <input type="text" title="tags" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요" required/>
+            <input type="text" title="tags" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요" maxlength="60"
+                   required/>
           </div>
         </div>
         <!-- //== 작품 설명 -->
@@ -132,10 +134,12 @@
             <div class="exhibition">
               <div class="title clear">전시</div>
               <div class="radio">
-                <input id="statusNeed" class="magic-radio" type="radio" name="status" value="{{ ARTWORK_STATUS_NEED_SPACE }}"
+                <input id="statusNeed" class="magic-radio" type="radio" name="status"
+                       value="{{ ARTWORK_STATUS_NEED_SPACE }}"
                        {% if status is not defined or status == ARTWORK_STATUS_NEED_SPACE %}checked="checked"{% endif %}/>
                 <label for="statusNeed">공간구함</label>
-                <input id="statusNotNeed" class="magic-radio" type="radio" name="status" value="{{ ARTWORK_STATUS_NOT_NEED_SPACE }}"
+                <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
+                       value="{{ ARTWORK_STATUS_NOT_NEED_SPACE }}"
                        {% if status is defined and status == ARTWORK_STATUS_NOT_NEED_SPACE %}checked="checked"{% endif %}/>
                 <label for="statusNotNeed">공간 구하지 않음</label>
               </div>
@@ -143,7 +147,7 @@
             <!-- //== 공간 옵션 -->
             <!-- == 판매 옵션 -->
             <div class="forSale clear">
-              <div class="title">판매 여부</div>
+              <div class="title">판매</div>
               <div class="radio">
                 <input id="sale" class="magic-radio" type="radio" name="for_sale" value="{{ ARTWORK_FOR_SALE }}"
                        {% if for_sale is not defined or for_sale == ARTWORK_FOR_SALE %}checked="checked"{% endif %}/>
