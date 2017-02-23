@@ -82,7 +82,7 @@
           } else {
             if (data.errorCode === '101') {
               alert('email 권한이 필요합니다');
-              rerequest_fb_permissions();
+              rerequestFacebookPermissions();
             } else {
               alert(data.body.message);
             }
@@ -126,7 +126,7 @@
     $('#password_change_form').submit();
   });
 
-  function rerequest_fb_permissions() {
+  function rerequestFacebookPermissions() {
     FB.api('/me/permissions',function(response) {
       for (var i = 0; i < response.data.length; i++) {
         if (response.data[i].permission === 'email') {
