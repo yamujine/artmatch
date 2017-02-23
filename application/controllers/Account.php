@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+include_once __DIR__ . '/../classes/UrlGenerator.php';
+
 // MY_Controller가 로그인 체크를 하여 /account/login route로 redirect를 하므로, 로그인 컨트롤러는 MY_Controller을 사용하지 않음
 class Account extends CI_Controller {
     public function __construct() {
@@ -10,45 +12,8 @@ class Account extends CI_Controller {
         $this->load->library('twig');
         /** @var Twig_Environment $twig */
         $twig = $this->twig->getTwig();
-        /**
-         * 썸네일 이미지 URL 리턴하는 함수
-         */
-        $twig->addFilter(new Twig_SimpleFilter('thumb_url', function ($filename, $type = '', $size = '_thumb') {
-            if (empty($filename)) {
-                return ''; // Fallback error image
-            }
-
-            if (ENVIRONMENT === 'production') {
-                $host = 'http://img.pickartyou.com/';
-            } else {
-                $host = '/uploads/';
-            }
-
-            if (!empty($type)) {
-                $host .= $type . '/';
-            }
-
-            $path_parts = pathinfo($filename);
-
-            if (!isset($path_parts['extension'])) {
-                return ''; // Fallback error image
-            }
-
-            return $host . $path_parts['filename'] . $size . '.' . $path_parts['extension'];
-        }));
-
-        /**
-         * static URL 리턴
-         */
-        $twig->addFilter(new Twig_SimpleFilter('static_url', function ($filename) {
-            if (ENVIRONMENT === 'production') {
-                $host = 'http://static.pickartyou.com/';
-            } else {
-                $host = '../../static/';
-            }
-
-            return $host . $filename;
-        }));
+        $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
+        $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
         $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
     }
