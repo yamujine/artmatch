@@ -163,11 +163,11 @@ class Artworks extends MY_Controller {
     public function delete($artwork_id) {
         $artwork = $this->artwork_model->get_bare_by_id($artwork_id);
         if (empty($artwork)) {
-            alert_and_redirect('존재하지 않는 장소입니다.');
+            alert_and_redirect('존재하지 않는 작품입니다.');
         }
 
         if ($artwork->user_id !== $this->accountlib->get_user_id()) {
-            alert_and_redirect('본인의 장소만 삭제할 수 있습니다.');
+            alert_and_redirect('본인의 장소만 작품할 수 있습니다.');
         }
 
         // 작품
