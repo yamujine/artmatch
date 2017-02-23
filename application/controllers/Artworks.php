@@ -64,7 +64,7 @@ class Artworks extends MY_Controller {
         $this->form_validation->set_rules('status', 'status', 'required');
         $this->form_validation->set_rules('for_sale', 'for_sale', 'required');
         $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
-        $this->form_validation->set_rules('tags', 'tags', 'required|trim');
+        $this->form_validation->set_rules('tags', 'tags', 'required|trim|max_length[60]');
 
         $user_id = $this->accountlib->get_user_id();
         $status = $this->input->post('status');

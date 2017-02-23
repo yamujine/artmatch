@@ -8,16 +8,16 @@
   <script>
     function checksUsername() {
       var username = document.getElementsByName("user_name")[0].value;
-      var checkUsername = /^[A-Za-z0-9)(-_\.]{1,20}$/;
+      var checkUsername = /^[A-Za-z0-9)(-_\.]{1,15}$/;
 
-      if(!username) {
+      if (!username) {
         document.getElementById("warningUsername").innerText = "유저 아이디가 입력되지 않았습니다.";
         $("#warningUsername").css("color", "red");
         $("#checkUsername").attr("value", "uncheck");
         return;
       }
-      if(!username.match(checkUsername)) {
-        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, ()_-. 만 1~20자 이내로 입력 가능합니다.";
+      if (!username.match(checkUsername)) {
+        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, ()_-. 만 20자 이내로 입력 가능합니다.";
         $("#warningUsername").css("color", "red");
         $("#checkUsername").attr("value", "uncheck");
         return;
@@ -26,13 +26,13 @@
       $.ajax({
         method: "GET",
         url: "/api/users/check_username",
-        data: { username: username }
+        data: {username: username}
       }).done(function (data) {
         document.getElementById("warningUsername").innerText = data.body.message;
-        if(data.result) {
+        if (data.result) {
           $("#warningUsername").css("color", "green");
           $("#checkUsername").attr("value", "check");
-        }else {
+        } else {
           $("#warningUsername").css("color", "red");
           $("#checkUsername").attr("value", "uncheck");
         }
@@ -47,13 +47,13 @@
       // 정규식 출처: http://www.thewordcracker.com/jquery-examples/email-validation-javascript
       var checkEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
-      if(!email) {
+      if (!email) {
         document.getElementById("warningEmail").innerText = "이메일이 입력되지 않았습니다.";
         $("#warningEmail").css("color", "red");
         $("#checkEmail").attr("value", "uncheck");
         return;
       }
-      if(!email.match(checkEmail)) {
+      if (!email.match(checkEmail)) {
         document.getElementById("warningEmail").innerText = "올바른 이메일 주소를 입력해주세요.";
         $("#warningEmail").css("color", "red");
         $("#checkEmail").attr("value", "uncheck");
@@ -63,13 +63,13 @@
       $.ajax({
         method: "GET",
         url: "/api/users/check_email",
-        data: { email: email }
+        data: {email: email}
       }).done(function (data) {
         document.getElementById("warningEmail").innerText = data.body.message;
-        if(data.result) {
+        if (data.result) {
           $("#warningEmail").css("color", "green");
           $("#checkEmail").attr("value", "check");
-        }else {
+        } else {
           $("#warningEmail").css("color", "red");
           $("#checkEmail").attr("value", "uncheck");
         }
@@ -79,19 +79,15 @@
     }
 
     $('#patSignUpForm').submit(function () {
-
       var checkEmail = $("input[name=checkEmail]");
       var checkUsername = $("input[name=checkUsername]");
 
-      if(checkEmail === "uncheck" || checkUsername === "uncheck") {
+      if (checkEmail === "uncheck" || checkUsername === "uncheck") {
         alert('정보를 바르게 입력해주세요.');
         return false;
       }
 
-      var emailElem = $("input[name=email]");
       var passwordElem = $("input[name=password]");
-      var usernameElem = $("input[name=user_name]");
-
       if (!passwordElem.val()) {
         alert('패스워드를 입력해주세요.');
         passwordElem.focus();
@@ -142,12 +138,12 @@
           <div id="warningEmail"></div>
         </fieldset>
         <fieldset>
-          <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()" />
+          <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()"/>
           <input type="hidden" id="checkUsername" name="checkUsername" value="uncheck"/>
           <div id="warningUsername"></div>
         </fieldset>
         <fieldset>
-          <input type="password" name="password" placeholder="패스워드를 입력하세요." />
+          <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
         </fieldset>
         <fieldset>
           <input type="file" name="profile_image"/>
