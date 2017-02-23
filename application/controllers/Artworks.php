@@ -20,10 +20,7 @@ class Artworks extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $is_pick = $this->pick_model->is_artwork_pick($user_id, $artwork_id);
-        $data['is_pick'] = $is_pick;
-
-        $artwork = $this->artwork_model->get_by_id($artwork_id);
+        $artwork = $this->artwork_model->get_by_id($artwork_id, $user_id);
         if ($artwork === NULL) {
             alert_and_redirect('존재하지 않는 작품입니다.');
         }
@@ -48,15 +45,7 @@ class Artworks extends MY_Controller {
 
         // 댓글
         $comments = $this->comment_model->get_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
-        foreach ($comments as $comment) {
-            // TODO join 걸어서 정보 가져오도록
-            // 댓글 작성자 정보
-            $user = $this->user_model->get_by_id($comment->user_id);
-            $comment->user = $user;
-        }
         $data['comments'] = $comments;
-
-        // 댓글 수
         $data['comment_count'] = count($comments);
 
         // 조회수 증가

@@ -1,0 +1,71 @@
+{% macro render_mypage_grid_item(item, type, index) %}
+  <li class="item grid {% if (index % 3) == 0 %}third{% endif %}">
+    <div class="wrap" data-type="{{ type }}" data-id="{{ item.id }}">
+      <div class="imgThumb">
+        <div class="dimm"></div>
+        <div class="preview">
+          미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+        </div>
+        {# 썸네일 이미지 #}
+        <img class="img" src="{{ item.image | thumb_url }}"/>
+      </div>
+      <div class="meta">
+        <div class="pick">
+          {# PICK 갯수 #}
+          <span class="bold">PICK</span>
+          <span class="number">{{ item.pick_count }}</span>
+        </div>
+        {# 작품 타입인 경우 #}
+        {% if type == TYPE_ARTWORKS %}
+          <div class="title">{{ item.subject }}</div>
+          {# 장소 타입인 경우 #}
+        {% else %}
+          <div class="title">
+            {{ item.subject|length > 12 ? item.subject|slice(0, 12) ~ '...' : item.subject }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro render_mypage_place_item(item) %}
+  <li class="item inline">
+    <div class="wrap">
+      <div class="imgThumb">
+        <div class="dimm"></div>
+        <div class="preview">
+          미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+        </div>
+        {# 썸네일 이미지 #}
+        <img class="img" src="{{ item.image | thumb_url }}"/>
+      </div>
+      <div class="metadata">
+        <div class="title">
+          {{ item.subject|length > 12 ? item.subject|slice(0, 12) ~ '...' : item.subject }}
+        </div>
+        <div class="address">
+          <div class="pin"></div>
+          <div class="keyword">{{ item.area }}</div>
+          {{ item.address }}
+        </div>
+        <div class="description">
+          {{ item.description }}
+        </div>
+        <div class="pick">
+          PICK <span class="number">{{ item.pick_count }}</span>
+        </div>
+        <ul class="additionalImages">
+          <li><img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/></li>
+          <li><img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/></li>
+          <li><img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/></li>
+          <li class="more">
+            <div class="dimm"></div>
+            <div class="remain">+ 5</div>
+            <img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </li>
+{% endmacro %}

@@ -148,7 +148,7 @@
             <img src="{{ 'images/main_pick_artist.png' | static_url }}"/>
           </div>
           {% for item in pick_artworks %}
-            <div class="item {% if item.is_pick %}picked{% endif %}">
+            <div class="item {% if item.is_picked %}picked{% endif %}">
               <a href="/artworks/{{ item.id }}">
                 <div class="imgThumb">
                   <div class="dimm"></div>
