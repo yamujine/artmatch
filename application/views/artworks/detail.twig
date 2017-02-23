@@ -235,7 +235,7 @@
               <img src="{{ artwork.user.profile_image | thumb_url('profile') }}" class="img-circle"/>
             {% endif %}
           </div>
-          <div class="artistSays">작가님의 한마디</div>
+          <div class="artistSays"><a href="/users/{{ artwork.user.user_name }}">{{ artwork.user.user_name }}</a>님의 한마디</div>
           <ul class="status">
             {% if artwork.is_now_exhibiting %}
               <li class="exhibition display">현재 전시중</li>
