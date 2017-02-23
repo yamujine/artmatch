@@ -1,29 +1,100 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="../../static/dist/css/account/signup.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/account/signup.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
   <script>
+    function checksUsername() {
+      var username = document.getElementsByName("user_name")[0].value;
+      var checkUsername = /^[A-Za-z0-9)(-_\.]{1,20}$/;
+
+      if(!username) {
+        document.getElementById("warningUsername").innerText = "유저 아이디가 입력되지 않았습니다.";
+        $("#warningUsername").css("color", "red");
+        $("#checkUsername").attr("value", "uncheck");
+        return;
+      }
+      if(!username.match(checkUsername)) {
+        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, ()_-. 만 1~20자 이내로 입력 가능합니다.";
+        $("#warningUsername").css("color", "red");
+        $("#checkUsername").attr("value", "uncheck");
+        return;
+      }
+
+      $.ajax({
+        method: "GET",
+        url: "/api/users/check_username",
+        data: { username: username }
+      }).done(function (data) {
+        document.getElementById("warningUsername").innerText = data.body.message;
+        if(data.result) {
+          $("#warningUsername").css("color", "green");
+          $("#checkUsername").attr("value", "check");
+        }else {
+          $("#warningUsername").css("color", "red");
+          $("#checkUsername").attr("value", "uncheck");
+        }
+      }).fail(function (data) {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+    }
+
+    function checksEmail() {
+      var email = document.getElementsByName("email")[0].value;
+
+      // 정규식 출처: http://www.thewordcracker.com/jquery-examples/email-validation-javascript
+      var checkEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+      if(!email) {
+        document.getElementById("warningEmail").innerText = "이메일이 입력되지 않았습니다.";
+        $("#warningEmail").css("color", "red");
+        $("#checkEmail").attr("value", "uncheck");
+        return;
+      }
+      if(!email.match(checkEmail)) {
+        document.getElementById("warningEmail").innerText = "올바른 이메일 주소를 입력해주세요.";
+        $("#warningEmail").css("color", "red");
+        $("#checkEmail").attr("value", "uncheck");
+        return;
+      }
+
+      $.ajax({
+        method: "GET",
+        url: "/api/users/check_email",
+        data: { email: email }
+      }).done(function (data) {
+        document.getElementById("warningEmail").innerText = data.body.message;
+        if(data.result) {
+          $("#warningEmail").css("color", "green");
+          $("#checkEmail").attr("value", "check");
+        }else {
+          $("#warningEmail").css("color", "red");
+          $("#checkEmail").attr("value", "uncheck");
+        }
+      }).fail(function (data) {
+        alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+      });
+    }
+
     $('#patSignUpForm').submit(function () {
+
+      var checkEmail = $("input[name=checkEmail]");
+      var checkUsername = $("input[name=checkUsername]");
+
+      if(checkEmail === "uncheck" || checkUsername === "uncheck") {
+        alert('정보를 바르게 입력해주세요.');
+        return false;
+      }
+
       var emailElem = $("input[name=email]");
       var passwordElem = $("input[name=password]");
       var usernameElem = $("input[name=user_name]");
 
-      if (!emailElem.val()) {
-        alert('이메일을 입력해주세요.');
-        emailElem.focus();
-        return false;
-      }
       if (!passwordElem.val()) {
         alert('패스워드를 입력해주세요.');
         passwordElem.focus();
-        return false;
-      }
-      if (!usernameElem.val()) {
-        alert('아이디를 입력해주세요.');
-        usernameElem.focus();
         return false;
       }
 
@@ -51,28 +122,32 @@
   <div class="patSignUp">
     <div class="container">
       <div class="logo">
-        <img src="../../static/images/logo_black.png" width="268px"/>
+        <img src="{{ 'images/logo_black.png' | static_url }}" width="268px"/>
       </div>
       <h2>가입하여 여러분의 작품을 전시하세요.</h2>
       <form id="patSignUpForm">
         <fieldset class="patUserTypeField">
           <div class="radio checkbox">
-            <input id="creatorType" type="radio" name="type" checked="checked" value="0">
+            <input id="creatorType" type="radio" name="type" checked="checked" value="{{ USER_TYPE_ARTIST }}">
             <label for="creatorType">창작자</label>
           </div>
           <div class="radio checkbox">
-            <input id="placeType" type="radio" name="type" value="1">
+            <input id="placeType" type="radio" name="type" value="{{ USER_TYPE_PLACE_OWNER }}">
             <label for="placeType">공간소유자</label>
           </div>
         </fieldset>
         <fieldset>
-          <input type="text" name="email" placeholder="이메일"/>
+          <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()"/>
+          <input type="hidden" id="checkEmail" name="checkEmail" value="uncheck"/>
+          <div id="warningEmail"></div>
         </fieldset>
         <fieldset>
-          <input type="text" name="user_name" placeholder="아이디"/>
+          <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()" />
+          <input type="hidden" id="checkUsername" name="checkUsername" value="uncheck"/>
+          <div id="warningUsername"></div>
         </fieldset>
         <fieldset>
-          <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+          <input type="password" name="password" placeholder="패스워드를 입력하세요." />
         </fieldset>
         <fieldset>
           <input type="file" name="profile_image"/>

@@ -1,0 +1,4 @@
+{% import 'macro/main.item.twig' as main_macro %}
+{% for item in items %}
+  {{ main_macro.render_main_item(item, type, loop.index) }}
+{% endfor %}

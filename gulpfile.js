@@ -38,10 +38,24 @@ gulp.task('labelauty', function () {
 });
 
 gulp.task('prefixfree', function () {
-  filesExist(['assets/bower_components/prefixfree/**']);
+  filesExist(['assets/bower_components/prefixfree']);
 
   return gulp.src('assets/bower_components/prefixfree/**')
     .pipe(gulp.dest('static/dist/prefixfree'));
+});
+
+gulp.task('slick', function () {
+  filesExist(['assets/bower_components/slick-carousel/slick']);
+
+  return gulp.src('assets/bower_components/slick-carousel/slick/**')
+      .pipe(gulp.dest('static/dist/slick'));
+});
+
+gulp.task('magnificpopup', function () {
+  filesExist(['assets/bower_components/magnific-popup/dist']);
+
+  return gulp.src('assets/bower_components/magnific-popup/dist/**')
+      .pipe(gulp.dest('static/dist/magnific-popup'));
 });
 /** For Develop TASK END **/
 
@@ -63,7 +77,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
-gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree']);
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup']);
 
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')

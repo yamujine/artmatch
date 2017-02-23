@@ -21,9 +21,9 @@ DROP TABLE IF EXISTS `pickartyou`.`users` ;
 
 CREATE TABLE IF NOT EXISTS `pickartyou`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(50) NOT NULL COMMENT '유저 이메일주소 / 로그인 이메일?',
+  `email` VARCHAR(50) NOT NULL COMMENT '유저 이메일주소',
   `password` VARCHAR(255) NOT NULL COMMENT '패스워드',
-  `type` TINYINT UNSIGNED NOT NULL COMMENT '창작자/공간소유자 구분 여부',
+  `type` TINYINT UNSIGNED NOT NULL COMMENT '창작자/공간소유자 구분 여부 0-창작자 1-공간소유자',
   `user_name` VARCHAR(45) NOT NULL COMMENT '유저 아이디',
   `profile_image` VARCHAR(45) NOT NULL COMMENT '유저 프로필 이미지 파일 이름',
   `is_auth` TINYINT UNSIGNED NOT NULL COMMENT '이메일 인증 여부',
@@ -41,8 +41,7 @@ DROP TABLE IF EXISTS `pickartyou`.`artworks` ;
 CREATE TABLE IF NOT EXISTS `pickartyou`.`artworks` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL COMMENT '작가의 user PK',
-  `type` TINYINT UNSIGNED NOT NULL COMMENT '작품 구분 - 일러스트/회화/설치 작품 등 구분',
-  `status` TINYINT UNSIGNED NOT NULL COMMENT '작품의 상태 공간구함/전시중/공간구하지 않음',
+  `status` TINYINT UNSIGNED NOT NULL COMMENT '작품의 상태 공간구함/공간구하지 않음',
   `title` VARCHAR(100) NOT NULL COMMENT '작품 제목',
   `description` TEXT NULL COMMENT '작품 설명',
   `image` VARCHAR(45) NOT NULL COMMENT '작품의 대표 이미지',
@@ -50,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`artworks` (
   `use_comment` TINYINT(1) NOT NULL COMMENT '댓글 사용 여부',
   `tags` VARCHAR(200) NULL COMMENT '작품의 태그',
   `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '작품 업로드 시간',
+  `views` INT UNSIGNED NOT NULL COMMENT '조회수',
   PRIMARY KEY (`id`),
   INDEX `fk_artworks_owner_id_idx` (`user_id` ASC))
 ENGINE = InnoDB;
@@ -67,10 +67,12 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`places` (
   `name` VARCHAR(45) NOT NULL COMMENT '장소 이름',
   `description` TEXT NULL COMMENT '장소 설명',
   `image` VARCHAR(45) NOT NULL COMMENT '장소 대표 이미지',
+  `area` VARCHAR(20) NOT NULL COMMENT '대표 지역명',
   `address` VARCHAR(250) NOT NULL COMMENT '장소의 실제 주소',
   `use_comment` TINYINT(1) NOT NULL COMMENT '댓글 사용 여부',
   `tags` VARCHAR(200) NULL COMMENT '장소의 태그',
-  `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '장소 업로드 시간',
+  `views` INT UNSIGNED NOT NULL COMMENT '조회수',
   PRIMARY KEY (`id`),
   INDEX `fk_places_user_id_idx` (`user_id` ASC))
 ENGINE = InnoDB;
@@ -199,15 +201,32 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibition_artworks` (
   INDEX `fk_exhibition_artworks_artwork_id_idx` (`artwork_id` ASC))
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `pickartyou`.`ci_sessions`
+-- -----------------------------------------------------
 DROP TABLE IF EXISTS `pickartyou`.`ci_sessions` ;
 
 CREATE TABLE IF NOT EXISTS `ci_sessions` (
-        `id` varchar(40) NOT NULL,
-        `ip_address` varchar(45) NOT NULL,
-        `timestamp` int(10) unsigned default 0 NOT NULL,
-        `data` blob NOT NULL,
-        PRIMARY KEY (id)
+  `id` varchar(40) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` int(10) unsigned default 0 NOT NULL,
+  `data` blob NOT NULL,
+  PRIMARY KEY (id)
 )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pickartyou`.`landing`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pickartyou`.`landing` ;
+
+CREATE TABLE IF NOT EXISTS `pickartyou`.`landing` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(255) NOT NULL COMMENT '이메일 주소',
+  `registered_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '등록 시간',
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 

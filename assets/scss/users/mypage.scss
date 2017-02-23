@@ -1,0 +1,560 @@
+@import "../helper/colorchips";
+@import "../helper/mixins";
+
+#patContents {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+
+  // 프로필
+  #patProfile {
+    width: 100%;
+    background: $white-three;
+
+    // 유저 정보
+    .userInfo {
+      position: relative;
+      width: 960px;
+      padding: 60px 0;
+      margin: 0 auto;
+
+      // 유저 수정 버튼
+      .editButtons {
+        position: absolute;
+        top: 30px;
+        right: 0;
+
+        button {
+          display: inline-block;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 14px;
+          color: $warm-grey-eight;
+          background: $white-three;
+          padding: 10px 22px;
+          border: 1px solid $white-eleven;
+          @include prefix(border-radius, 30px);
+
+          &:hover {
+            background: $white-five;
+          }
+        }
+      }
+      // -- 유저 수정 버튼
+
+      // 유저 프로필 이미지
+      .profileImage {
+        margin: 0 auto;
+        width: 80px;
+        height: 80px;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      // -- 유저 프로필 이미지
+
+      // 유저 아이디
+      .name {
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 30px;
+        font-weight: 500;
+        color: $greyish-brown;
+        text-align: center;
+        margin: 20px 0 28px 0;
+      }
+      // -- 유저 아이디
+
+      // 유저 메타데이터 정보
+      .metadata {
+        padding: 0;
+        margin: 0 auto;
+        list-style: none;
+        text-align: center;
+
+        li {
+          position: relative;
+          display: inline-block;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 15px;
+          color: $warm-grey-eight;
+
+          // 페이스북 링크
+          a {
+            text-decoration: none;
+            color: $warm-grey-eight;
+
+            i {
+              font-size: 12px;
+            }
+          }
+          // -- 페이스북 링크
+
+          // 작품 또는 장소, PICK 갯수
+          .number {
+            margin-left: 6px;
+            font-weight: bold;
+          }
+
+          &:not(:first-child) {
+            margin-left: 24px;
+
+            // 구분선
+            &:before {
+              position: absolute;
+              top: 5px;
+              width: 1px;
+              height: 12px;
+              content: "";
+              background: $white-ten;
+              left: -14px;
+            }
+            // -- 구분선
+          }
+        }
+      }
+      // -- 유저 메타데이터 정보
+    }
+    // -- 유저 정보
+  }
+  // -- 프로필
+
+  // 탭
+  #patTab {
+    width: 100%;
+    height: 50px;
+    position: relative;
+    margin: 0 auto 30px auto;
+    text-align: center;
+
+    .selectTab {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 100%;
+
+      // 탭 아이템
+      li {
+        display: inline-block;
+        margin: 15px 50px 0 50px;
+
+        &:first-child {
+          // 탭 구분선
+          &:after {
+            position: absolute;
+            top: 50%;
+            bottom: 0;
+            margin-top: -6px;
+            width: 1px;
+            height: 12px;
+            content: "";
+            background: $black;
+            opacity: 0.1;
+            margin-left: 74px;
+          }
+        }
+        // -- 탭 구분선
+
+        // 아이템 링크
+        a {
+          outline: none;
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+          font-size: 16px;
+          color: $black;
+          opacity: 0.4;
+          padding: 17px 0 16px 0;
+          text-decoration: none;
+
+          &.active, &:hover {
+            opacity: 1;
+            padding: 15px 0 13px 0;
+            border-bottom: 3px solid $black;
+          }
+        }
+        // -- 아이템 링크
+      }
+      // -- 탭 아이템
+    }
+
+    // 탭 디바이더
+    .divider {
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      opacity: 0.2;
+      background: $black;
+    }
+    // -- 탭 디바이더
+  }
+  // -- 탭
+
+  // 픽 탭
+  #pickTab {
+    width: 100%;
+    margin: 50px 0 70px 0;
+    text-align: center;
+
+    .pickTypeButtons {
+      // 픽 타입 버튼
+      a {
+        padding: 9px 26px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 14px;
+        text-decoration: none;
+        color: $black;
+        opacity: 0.5;
+
+        &:first-child {
+          margin-right: 5px;
+        }
+
+        &.active {
+          font-weight: 500;
+          color: $black;
+          border: 1px solid $black-four;
+          @include prefix(border-radius, 30px);
+          opacity: 1;
+        }
+
+        &:not(.active) {
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+      // -- 픽 타입 버튼
+    }
+  }
+  // -- 픽 탭
+
+  // 등록된 장소 또는 공간이 있는 경우
+  .patItemList {
+    margin-top: 60px;
+
+    .container {
+      // 아이템 목록
+      .itemList {
+        list-style: none;
+        padding: 0;
+        margin: 0 auto;
+
+        li.item {
+          // 그리드 아이템 타입
+          &.grid {
+            width: 288px;
+            height: 300px;
+            float: left;
+            margin: 0 32px 32px 0;
+
+            &.third {
+              margin-right: 0;
+            }
+
+            // 그리드 아이템 스타일
+            .wrap {
+              cursor: pointer;
+
+              .imgThumb {
+                width: 100%;
+                height: 220px;
+                position: relative;
+
+                img {
+                  z-index: 1;
+                  width: 100%;
+                  height: 100%;
+                  margin: 0;
+                  padding: 0;
+                  top: 0;
+                  left: 0;
+                }
+
+                .dimm {
+                  z-index: 3;
+                  width: 100%;
+                  height: 100%;
+                  background: rgb(51, 51, 51);
+                  opacity: 0.6;
+                  display: none;
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                }
+                .preview {
+                  z-index: 4;
+                  color: $white-two;
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 16px;
+                  width: 100%;
+                  text-align: center;
+                  position: absolute;
+                  top: 50%;
+                  margin-top: -15px;
+                  display: none;
+
+                  i {
+                    font-size: 8px;
+                    margin: 7px 0 0 6px;
+                    position: absolute;
+                  }
+                }
+              }
+
+              .meta {
+                position: relative;
+                font-family: 'Noto Sans KR', sans-serif;
+                margin: 12px 0 0 14px;
+
+                .pick {
+                  font-family: "Helvetica Neue", Helvetica, sans-serif;
+                  position: absolute;
+                  top: 4px;
+                  right: 12px;
+                  font-size: 12px;
+                  color: $warm-grey;
+
+                  .bold {
+                    font-weight: bold;
+                  }
+                }
+
+                .title {
+                  color: $black;
+                  font-size: 18px;
+                  font-weight: 500;
+                }
+
+                .name {
+                  color: $warm-grey-two;
+                  font-size: 14px;
+                }
+              }
+            }
+            // -- 그리드 아이템 스타일
+
+            // 그리드 아이템 호버 스타일
+            &:hover {
+              @include prefix(box-shadow, 0 8px 10px 0 rgba(0, 0, 0, 0.07));
+
+              .wrap {
+                .imgThumb {
+                  .dimm, .preview {
+                    display: block;
+                  }
+                }
+              }
+            }
+            // -- 그리드 아이템 호버 스타일
+          }
+          // -- 그리드 아이템 타입
+
+          // 인라인 아이템 타입
+          &.inline {
+            min-height: 352px;
+            padding: 60px 15px;
+            border-bottom: 1px solid $white-eight;
+
+            &:first-child {
+              padding-top: 0;
+              min-height: 292px;
+            }
+
+            .wrap {
+              position: relative;
+
+              // 대표 이미지
+              .imgThumb {
+                position: absolute;
+                left: 0;
+
+                width: 288px;
+                height: 220px;
+
+                img {
+                  z-index: 2;
+                  width: 100%;
+                  height: 100%;
+                }
+                .dimm {
+                  z-index: 3;
+                  width: 100%;
+                  height: 100%;
+                  background: rgb(51, 51, 51);
+                  opacity: 0.6;
+                  display: none;
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                }
+                .preview {
+                  z-index: 4;
+                  color: $white-two;
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 16px;
+                  width: 100%;
+                  text-align: center;
+                  position: absolute;
+                  top: 50%;
+                  margin-top: -15px;
+                  display: none;
+
+                  i {
+                    font-size: 8px;
+                    margin: 7px 0 0 6px;
+                    position: absolute;
+                  }
+                }
+              }
+              // -- 대표 이미지
+
+              // 장소 정보
+              .metadata {
+                position: absolute;
+                left: 325px;
+
+                // 장소명
+                .title {
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 23px;
+                  font-weight: 500;
+                  color: $black;
+                }
+                // -- 장소명
+
+                // 주소
+                .address {
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 16px;
+                  color: $brownish-grey-three;
+
+                  .pin {
+                    position: absolute;
+                    display: inline-block;
+                    margin-top: 6px;
+                    width: 8px;
+                    height: 12px;
+                    background: url(/static/images/pin.png) no-repeat;
+                  }
+                  .keyword {
+                    display: inline-block;
+                    margin: 0 7px 0 18px;
+                  }
+                }
+                // -- 주소
+
+                // 설명
+                .description {
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 12px;
+                  color: $warm-grey;
+                  margin: 10px 0 0 0;
+                }
+                // -- 설명
+
+                // 픽
+                .pick {
+                  margin: 15px 0;
+                  font-family: Arial, sans-serif;
+                  font-size: 12px;
+                  color: $warm-grey;
+
+                  .number {
+                    font-weight: bold;
+                  }
+                }
+                // -- 픽
+
+                // 장소 추가 이미지
+                .additionalImages {
+                  list-style: none;
+                  margin: 0;
+                  padding: 0;
+
+                  li {
+                    width: 118px;
+                    height: 90px;
+                    display: inline-block;
+
+                    &:not(:first-child) {
+                      margin-left: 15px;
+                    }
+
+                    img {
+                      width: 100%;
+                      height: 100%;
+                    }
+
+                    &.more {
+                      position: relative;
+
+                      .dimm {
+                        z-index: 3;
+                        width: 100%;
+                        height: 100%;
+                        background: rgb(51, 51, 51);
+                        opacity: 0.6;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                      }
+
+                      .remain {
+                        z-index: 4;
+                        color: $white-two;
+                        font-family: 'Noto Sans KR', sans-serif;
+                        font-size: 18px;
+                        width: 100%;
+                        text-align: center;
+                        position: absolute;
+                        top: 50%;
+                        margin-top: -15px;
+                      }
+
+                      img {
+                        z-index: 2;
+                      }
+                    }
+                  }
+                }
+              }
+              // -- 장소 정보
+            }
+          }
+          // -- 인라인 아이템 타입
+        }
+      }
+      // -- 아이템 목록
+    }
+  }
+  // -- 등록된 장소 또는 공간이 있는 경우
+
+  // 등록된 장소 또는 공간이 없는 경우
+  .itemEmpty {
+    padding: 220px;
+    min-height: 500px;
+
+    .container {
+      text-align: center;
+
+      .empty {
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 18px;
+        color: $brownish-grey;
+      }
+
+      a {
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 14px;
+        text-decoration: none;
+        color: $warm-grey-four;
+
+        i {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  // --
+}
