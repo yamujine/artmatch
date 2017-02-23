@@ -20,10 +20,7 @@ class Places extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $is_pick = $this->pick_model->is_place_pick($user_id, $place_id);
-        $data['is_pick'] = $is_pick;
-
-        $place = $this->place_model->get_by_id($place_id);
+        $place = $this->place_model->get_by_id($place_id, $user_id);
         if ($place === NULL) {
             alert_and_redirect('존재하지 않는 장소입니다.');
         }

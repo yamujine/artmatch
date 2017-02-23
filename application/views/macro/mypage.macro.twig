@@ -1,21 +1,19 @@
 {% macro render_mypage_grid_item(item, type, index) %}
   <li class="item grid {% if (index % 3) == 0 %}third{% endif %}">
-    {# TODO: 아이템의 ID가 잘못 들어가있는 것 같음 한번 확인해야함. #}
     <div class="wrap" data-type="{{ type }}" data-id="{{ item.id }}">
       <div class="imgThumb">
         <div class="dimm"></div>
         <div class="preview">
           미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
         </div>
-        {# 썸네일 이미지 TODO 썸네일 이미지 경로로 바꿔야 됨 #}
-        <img class="img" src="/uploads/{{ item.image }}"/>
+        {# 썸네일 이미지 #}
+        <img class="img" src="{{ item.image | thumb_url }}"/>
       </div>
       <div class="meta">
         <div class="pick">
           {# PICK 갯수 #}
           <span class="bold">PICK</span>
-          {# TODO: PICK COUNT 설정 필요 #}
-          <span class="number">0</span>
+          <span class="number">{{ item.pick_count }}</span>
         </div>
         {# 작품 타입인 경우 #}
         {% if type == TYPE_ARTWORKS %}
@@ -39,8 +37,8 @@
         <div class="preview">
           미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
         </div>
-        {# 썸네일 이미지 TODO 썸네일 이미지 경로로 바꿔야 됨 #}
-        <img class="img" src="/uploads/{{ item.image }}"/>
+        {# 썸네일 이미지 #}
+        <img class="img" src="{{ item.image | thumb_url }}"/>
       </div>
       <div class="metadata">
         <div class="title">
@@ -48,14 +46,14 @@
         </div>
         <div class="address">
           <div class="pin"></div>
-          <div class="keyword">판교</div>
+          <div class="keyword">{{ item.area }}</div>
           {{ item.address }}
         </div>
         <div class="description">
           {{ item.description }}
         </div>
         <div class="pick">
-          PICK {# TODO: PICK COUNT 설정 필요 #}<span class="number">0</span>
+          PICK <span class="number">{{ item.pick_count }}</span>
         </div>
         <ul class="additionalImages">
           <li><img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/></li>

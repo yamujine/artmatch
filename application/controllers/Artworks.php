@@ -20,10 +20,7 @@ class Artworks extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $is_pick = $this->pick_model->is_artwork_pick($user_id, $artwork_id);
-        $data['is_pick'] = $is_pick;
-
-        $artwork = $this->artwork_model->get_by_id($artwork_id);
+        $artwork = $this->artwork_model->get_by_id($artwork_id, $user_id);
         if ($artwork === NULL) {
             alert_and_redirect('존재하지 않는 작품입니다.');
         }
