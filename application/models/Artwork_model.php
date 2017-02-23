@@ -138,11 +138,15 @@ class Artwork_model extends CI_Model {
             ->get()->row();
     }
 
-    public function get_by_user_id($user_id) {
-        return $this->db
+    public function get_all_by_user_id($user_id) {
+        $query = $this->db
+            ->select('artworks.*, count(user_artwork_picks.id) as pick_count, IF(P2.id IS NULL, 0, 1) AS is_picked')
             ->from(self::TABLE_NAME)
-            ->where('user_id', $user_id)
-            ->get()->result();
+            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
+            ->join('user_artwork_picks AS P2', "P2.artwork_id = artworks.id AND P2.user_id = '{$user_id}'", 'left')
+            ->where('artworks.user_id', $user_id);
+
+        return $query->get()->result();
     }
 
     /**

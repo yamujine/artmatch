@@ -27,9 +27,9 @@ class Users extends MY_Controller {
 
         // 내 작품, 장소 리스트
         if ($user->type === USER_TYPE_ARTIST) {
-            $mine = $this->artwork_model->get_by_user_id($user->id);
+            $mine = $this->artwork_model->get_all_by_user_id($user->id);
         } else if ($user->type === USER_TYPE_PLACE_OWNER) {
-            $mine = $this->place_model->get_by_user_id($user->id);
+            $mine = $this->place_model->get_all_by_user_id($user->id);
         }
         foreach ($mine as $something) {
             $type = ($user->type === USER_TYPE_ARTIST) ? TYPE_ARTWORKS : TYPE_PLACES;
