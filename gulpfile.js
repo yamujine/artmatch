@@ -30,13 +30,6 @@ gulp.task('bootstrap', function () {
     .pipe(gulp.dest('static/dist/bootstrap'));
 });
 
-gulp.task('labelauty', function () {
-  filesExist(['assets/bower_components/jquery-labelauty/source']);
-
-  return gulp.src('assets/bower_components/jquery-labelauty/source/**')
-    .pipe(gulp.dest('static/dist/jquery-labelauty'));
-});
-
 gulp.task('prefixfree', function () {
   filesExist(['assets/bower_components/prefixfree']);
 
@@ -88,7 +81,6 @@ gulp.task('build', sync.sync([
   'dist-clean',
   [
     'dev',
-    'labelauty',
     'uglify',
     'sass',
     'font'
