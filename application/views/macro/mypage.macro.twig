@@ -59,18 +59,14 @@
         <ul class="additionalImages">
           {% set length = item.extra_images|length %}
           {% for extra in item.extra_images|slice(0,4) %}
-            {% if not loop.last %}
-              <li><img src="{{ extra.image | thumb_url }}"></li>
+            {% if loop.last and length > 4 %}
+              <li class="more">
+                <div class="dimm"></div>
+                <div class="remain">+ {{ length - 4 }}</div>
+                <img src="{{ extra.image | thumb_url }}"/>
+              </li>
             {% else %}
-              {% if item.extra_images|length < 4 %}
-                <li><img src="{{ extra.image | thumb_url }}"></li>
-              {% else %}
-                <li class="more">
-                  <div class="dimm"></div>
-                  <div class="remain">+ {{ length - 4 }}</div>
-                  <img src="{{ extra.image | thumb_url }}"/>
-                </li>
-              {% endif %}
+              <li><img src="{{ extra.image | thumb_url }}"></li>
             {% endif %}
           {% endfor %}
         </ul>
