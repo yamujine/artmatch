@@ -65,7 +65,6 @@
       FB.login(function(response) {
         if (response.status !== 'connected') {
           alert('페이스북 로그인을 사용할 수 없습니다.');
-          $('.facebook').attr('disabled', true);
           return false;
         }
         var param = {
@@ -81,7 +80,12 @@
           } else if (data.errorCode === '102'){
             return location.href = '/account/signup?' + $.param(param);
           } else {
-            alert(data.body.message);
+            if (data.errorCode === '101') {
+              alert('email 권한이 필요합니다');
+              rerequest_fb_permissions();
+            } else {
+              alert(data.body.message);
+            }
           }
         }).fail(function () {
           alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
@@ -121,6 +125,22 @@
   $('#password_submit').click(function(){
     $('#password_change_form').submit();
   });
+
+  function rerequest_fb_permissions() {
+    FB.api('/me/permissions',function(response) {
+      for (var i = 0; i < response.data.length; i++) {
+        if (response.data[i].permission === 'email') {
+          if (response.data[i].status === 'declined') {
+            FB.login(function(response) {
+              if (response.status === 'connected') {
+                $('.facebook').click();
+              }
+            }, {scope: 'public_profile,email', auth_type: 'rerequest'});
+          }
+        }
+      }
+    });
+  }
 
   </script>
 {% endblock %}
