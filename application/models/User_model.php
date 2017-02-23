@@ -104,13 +104,4 @@ class User_model extends CI_Model {
             ->where(['facebook_id' => $facebook_id])
             ->get()->row();
     }
-
-    public function register_fb_id($email, $facebook_id) {
-        $this->db->update(self::TABLE_NAME, ['facebook_id' => $facebook_id], ['email' => $email]);
-        if ($this->db->affected_rows() > 0) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
 }
