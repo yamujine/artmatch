@@ -52,14 +52,14 @@
         }
       });
 
-      // 글 수정
+      // 작품 수정
       $('.artworkEditBtn').click(function () {
         var $this = $(this);
         location.replace("/artworks/edit/" + $this.data('id'));
         return false;
       });
 
-      // 글 삭제
+      // 작품 삭제
       $('.artworkDeleteBtn').click(function () {
         if (confirm("정말 삭제 하시겠습니까?") == false) {
           return false;
