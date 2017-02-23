@@ -9,17 +9,18 @@
 
   <!-- ======================== 리소스 영역 ======================== -->
   <!-- ======================== 스타일 ======================== -->
-  <link rel="stylesheet" type="text/css" href="../../static/dist/fonts/fonts.css">
-  <link rel="stylesheet" type="text/css" href="../../static/dist/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="../../static/dist/css/base.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/fonts/fonts.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/bootstrap/css/bootstrap.min.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/base.min.css' | static_url }}">
+
   <link href="https://maxcdn.bootstrapcdn.com/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
   {% block style %}
   {% endblock %}
 
   <!-- ======================== 스크립트 ======================== -->
-  <script src="../../static/dist/jquery/jquery.min.js"></script>
-  <script src="../../static/dist/bootstrap/js/bootstrap.min.js"></script>
-  <script src="../../static/dist/prefixfree/prefixfree.js"></script>
+  <script src="{{ 'dist/jquery/jquery.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/bootstrap/js/bootstrap.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/prefixfree/prefixfree.js' | static_url }}"></script>
   <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -35,7 +36,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="/">
         {# TODO: 로고 영역 개선 필요 #}
-        <img src="../../static/images/logo.png" width="149px" height="18px" />
+        <img src="{{ 'images/logo.png' | static_url }}" width="149px" height="18px" />
       </a>
     </div>
     <nav class="collapse navbar-collapse">
@@ -44,7 +45,11 @@
         {# 마이 페이지 #}
         <li class="patUserProfile">
           <a href="/users/me">
-            <img src="../../static/images/tom.jpg" class="img-circle" />
+            {% if session.profile_image is empty %}
+              <img src="{{ 'images/tom.jpg' | static_url }}" class="img-circle" />
+            {% else %}
+              <img src="{{ session.profile_image | thumb_url('profile') }}" class="img-circle"/>
+            {% endif %}
             {{ session.user_name }}
           </a>
         </li>
@@ -69,7 +74,7 @@
 <!-- ======================== 푸터 영역 ======================== -->
 <footer id="patFooter">
   <div class="container">
-    <p class="logo"><img src="../../static/images/logo_black.png" /></p>
+    <p class="logo"><img src="{{ 'images/logo_black.png' | static_url }}" /></p>
     <p class="slogan">Pick and share your sleeping art!</p>
     <p class="copyright">Copyright &copy; 2017 Pick Art You</p>
     <ul class="links">

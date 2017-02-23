@@ -17,14 +17,16 @@
       <label for="status">장소 상태</label>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="{{ PLACE_STATUS_NEED_ARTWORK }}" {% if status == PLACE_STATUS_NEED_ARTWORK or not status %}checked="checked"{% endif %}
+          <input type="radio" name="status" value="{{ PLACE_STATUS_NEED_ARTWORK }}"
+                 {% if status is not defined or status == PLACE_STATUS_NEED_ARTWORK %}checked="checked"{% endif %}
                  tabindex="0">
           <label>작품구함</label>
         </div>
       </div>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="{{ PLACE_STATUS_NOT_NEED_ARTWORK }}" {% if status == PLACE_STATUS_NOT_NEED_ARTWORK %}checked="checked" {% endif %}tabindex="0">
+          <input type="radio" name="status" value="{{ PLACE_STATUS_NOT_NEED_ARTWORK }}"
+                 {% if status is defined and status == PLACE_STATUS_NOT_NEED_ARTWORK %}checked="checked" {% endif %}tabindex="0">
           <label>작품 구하지 않음</label>
         </div>
       </div>
@@ -62,6 +64,11 @@
         {% endfor %}
         <input type="file" name="extra_images[]" multiple/>
       </div>
+    </div>
+  
+    <div class="field">
+      <label>대표 장소</label>
+      <input type="text" name="area" value="{{ area }}">
     </div>
     
     <div class="field">

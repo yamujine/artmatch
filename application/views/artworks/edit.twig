@@ -17,14 +17,16 @@
       <label for="status">작품 상태</label>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NEED_SPACE }}" {% if status == ARTWORK_STATUS_NEED_SPACE or not status %}checked="checked"{% endif %}
+          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NEED_SPACE }}"
+                 {% if status is not defined or status == ARTWORK_STATUS_NEED_SPACE %}checked="checked"{% endif %}
                  tabindex="0">
           <label>공간구함</label>
         </div>
       </div>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NOT_NEED_SPACE }}" {% if status == ARTWORK_STATUS_NOT_NEED_SPACE %}checked="checked" {% endif %}tabindex="0">
+          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NOT_NEED_SPACE }}"
+                 {% if status is defined and status == ARTWORK_STATUS_NOT_NEED_SPACE %}checked="checked" {% endif %}tabindex="0">
           <label>공간 구하지 않음</label>
         </div>
       </div>
@@ -40,7 +42,8 @@
       </div>
       <div class="field">
         <div class="ui radio checkbox">
-          <input type="radio" name="for_sale" value="{{ ARTWORK_NOT_FOR_SALE }}" {% if for_sale == ARTWORK_NOT_FOR_SALE %}checked="checked"{% endif %} tabindex="0">
+          <input type="radio" name="for_sale" value="{{ ARTWORK_NOT_FOR_SALE }}"
+                 {% if for_sale is not defined or for_sale == ARTWORK_NOT_FOR_SALE %}checked="checked"{% endif %} tabindex="0">
           <label>판매 안함</label>
         </div>
       </div>

@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="../../static/dist/css/main/main.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
@@ -56,7 +56,7 @@
       });
 
       // 아이템 클릭
-      $('.wrap').click(function () {
+      $(document).on('click', '.wrap', function () {
         var type = $(this).data('type');
         var id = $(this).data('id');
 
@@ -79,9 +79,6 @@
           var number = parseInt($(wrap).find('.number').html(), 10);
 
           var type = $(wrap).data('type');
-          if (type === "artworks") type = "artwork";
-          else if (type === "places") type = "place";
-
           var id = $(wrap).data('id');
 
           $.ajax({
@@ -148,7 +145,7 @@
       <div class="slider">
         <div class="sliderTrack">
           <div class="item title">
-            <img src="../../static/images/main_pick_artist.png"/>
+            <img src="{{ 'images/main_pick_artist.png' | static_url }}"/>
           </div>
           {% for item in pick_artworks %}
             <div class="item {% if item.is_pick %}picked{% endif %}">
@@ -159,7 +156,7 @@
                     미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
                   </div>
                   {# 썸네일 이미지 #}
-                  <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
+                  <img class="img" src="{{ item.image | thumb_url }}" />
                   <div class="meta">
                     <div class="title">{{ item.title }}</div>
                     <div class="pick">
@@ -211,50 +208,9 @@
     <div class="container">
       {# 그리드 형태의 목록 (작품, 장소) #}
       <ul class="itemList {% if type == TYPE_ARTWORKS %}artworkList{% else %}placeList{% endif %}">
+        {% import 'macro/main.item.twig' as main_macro %}
         {% for item in items %}
-          {# STATUS: PICKED (이미 PICKED된 아트웍 또는 장소) 사용자가 이미 PICK 했는지 여부 정보 필요 #}
-          <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if item.is_pick %}picked{% endif %}">
-            <div class="wrap" data-type="{{ type }}" data-id="{{ item.id }}">
-              <div class="imgThumb">
-                <div class="dimm"></div>
-                <div class="preview">
-                  미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
-                </div>
-                {# 썸네일 이미지 #}
-                <img class="img" src="http://cfile5.uf.tistory.com/image/2341BF3B51261D2B0685D4" />
-                {% if loop.first and type == TYPE_PLACES %}
-                  <div class="placeStatusTag recruit"></div>
-                {% endif %}
-                <button class="pickBtn"></button>
-              </div>
-              <div class="meta">
-                <div class="pick">
-                  {# PICK 갯수 #}
-                  <span class="bold">PICK</span>
-                  <span class="number">{{ item.pick_count }}</span>
-                </div>
-                {% if type == TYPE_ARTWORKS %}
-                  <div class="title">{{ item.title }}</div>
-                  <div class="name">{{ item.user_name }}</div>
-                {% else %}
-                  <div class="title">
-                    {{ item.name|length > 12 ? item.name|slice(0, 12) ~ '...' : item.name  }}
-                  </div>
-                  <div class="description">
-                    {{ item.description|length > 53 ? item.description|slice(0, 53) ~ '...' : item.description  }}
-                  </div>
-                  <div class="address">
-                    <div class="pin"></div>
-                    <div class="keyword">{{ item.address }}</div>
-                  </div>
-                  <div class="tags">{{ item.tags_html|striptags('<a>')|raw }}</div>
-                  <div class="displayCount">
-                    <span class="number">{{ item.exhibit_artwork_count }}</span>작품 전시중
-                  </div>
-                {% endif %}
-              </div>
-            </div>
-          </li>
+          {{ main_macro.render_main_item(item, type, loop.index) }}
         {% endfor %}
       </ul>
     </div>

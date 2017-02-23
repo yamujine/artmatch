@@ -84,18 +84,41 @@ class Artwork_model extends CI_Model {
             ->where('artworks.id', $artwork_id)
             ->get()->row();
 
-        if ($artwork) {
+        // COUNT 함수가 추가되어 있어서, $artwork->id에 빈 값이 포함된 row가 리턴이 되므로 property를 직접 체크
+        if (empty($artwork->id)) {
+            return NULL;
+        }
+
+        $artwork->user = $this->db
+            ->from('users')
+            ->where('id', $artwork->user_id)
+            ->get()->row();
+        $artwork->extra_images = $this->db
+            ->from(self::TABLE_NAME_IMAGES)
+            ->where('artwork_id', $artwork_id)
+            ->get()->result();
+
+        return $artwork;
+    }
+
+    public function get_by_ids(array $artwork_ids) {
+        if (empty($artwork_ids)) {
+            return NULL;
+        }
+
+        $artworks = $this->db
+            ->from(self::TABLE_NAME)
+            ->where_in('id', $artwork_ids)
+            ->get()->result();
+
+        foreach ($artworks as $artwork) {
             $artwork->user = $this->db
                 ->from('users')
                 ->where('id', $artwork->user_id)
                 ->get()->row();
-            $artwork->extra_images = $this->db
-                ->from(self::TABLE_NAME_IMAGES)
-                ->where('artwork_id', $artwork_id)
-                ->get()->result();
         }
 
-        return $artwork;
+        return $artworks;
     }
 
     public function get_bare_by_id($artwork_id) {
@@ -103,17 +126,6 @@ class Artwork_model extends CI_Model {
             ->from(self::TABLE_NAME)
             ->where('id', $artwork_id)
             ->get()->row();
-    }
-
-    public function get_bare_by_ids(array $artwork_ids) {
-        if (empty($artwork_ids)) {
-            return NULL;
-        }
-
-        return $this->db
-            ->from(self::TABLE_NAME)
-            ->where_in('id', $artwork_ids)
-            ->get()->result();
     }
 
     public function get_by_user_id($user_id) {
@@ -135,6 +147,13 @@ class Artwork_model extends CI_Model {
             ->order_by('count(user_artwork_picks.id)', 'DESC')
             ->order_by('id', 'DESC')
             ->limit(5)
+            ->get()->result();
+    }
+
+    public function get_images_by_id($artwork_id) {
+        return $this->db
+            ->from(self::TABLE_NAME_IMAGES)
+            ->where('artwork_id', $artwork_id)
             ->get()->result();
     }
 
@@ -169,6 +188,12 @@ class Artwork_model extends CI_Model {
             ->set('views', 'views+1', FALSE)
             ->where('id', $id)
             ->update(self::TABLE_NAME);
+    }
+
+    public function delete($artwork_id) {
+        $this->db->delete(self::TABLE_NAME, ['id' => $artwork_id]);
+
+        return $this->db->affected_rows() === 1;
     }
 
     public function delete_image($artwork_id, $image) {
