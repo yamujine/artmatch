@@ -31,7 +31,7 @@ class Artwork_model extends CI_Model {
         return false;
     }
 
-    public function gets($limit = null, $offset = null, $search = null) {
+    public function gets($limit = null, $offset = null, $search = null, $user_id = null) {
         $query = $this->db
             ->select('artworks.*, users.user_name, count(user_artwork_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
@@ -51,6 +51,11 @@ class Artwork_model extends CI_Model {
             // 제목, tags 매치
             $query = $query->or_like('artworks.title', $search)
                 ->or_like('artworks.tags', $search);
+        }
+
+        if ($user_id !== null) {
+            $query = $query->select('IF(P2.id IS NULL, 0, 1) AS is_picked')
+                ->join('user_artwork_picks AS P2', "P2.artwork_id = artworks.id AND P2.user_id = '{$user_id}'", 'left');
         }
 
         return $query->get()->result();
@@ -76,14 +81,19 @@ class Artwork_model extends CI_Model {
         return $query->get()->num_rows();
     }
 
-    public function get_by_id($artwork_id) {
-        $artwork = $this->db
+    public function get_by_id($artwork_id, $user_id = null) {
+        $query = $this->db
             ->select('artworks.*, count(user_artwork_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
             ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
-            ->where('artworks.id', $artwork_id)
-            ->get()->row();
+            ->where('artworks.id', $artwork_id);
 
+        if ($user_id !== null) {
+            $query = $query->select('IF(P2.id IS NULL, 0, 1) AS is_picked')
+                ->join('user_artwork_picks AS P2', "P2.artwork_id = artworks.id AND P2.user_id = '{$user_id}'", 'left');
+        }
+
+        $artwork = $query->get()->row();
         // COUNT 함수가 추가되어 있어서, $artwork->id에 빈 값이 포함된 row가 리턴이 되므로 property를 직접 체크
         if (empty($artwork->id)) {
             return NULL;
@@ -138,16 +148,22 @@ class Artwork_model extends CI_Model {
     /**
      * 메인 pick_artist 영역 조건: pick 카운트 높은순, 최신순
      */
-    public function get_pick_artworks() {
-        return $this->db
+    public function get_pick_artworks($user_id = null) {
+        $query = $this->db
             ->select('artworks.*, count(user_artwork_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
             ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
             ->group_by('artworks.id')
             ->order_by('count(user_artwork_picks.id)', 'DESC')
             ->order_by('id', 'DESC')
-            ->limit(5)
-            ->get()->result();
+            ->limit(5);
+
+        if ($user_id !== null) {
+            $query = $query->select('IF(P2.id IS NULL, 0, 1) AS is_picked')
+                ->join('user_artwork_picks AS P2', "P2.artwork_id = artworks.id AND P2.user_id = '{$user_id}'", 'left');
+        }
+
+        return $query->get()->result();
     }
 
     public function get_images_by_id($artwork_id) {

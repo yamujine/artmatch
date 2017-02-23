@@ -259,7 +259,7 @@
           {{ artwork.tags_html|raw }}
         </div>
         <div class="pick">
-          <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">
+          <button class="pickBtn{% if artwork.is_picked == 1 %} active{% endif %}" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">
             PICK <span class="number">{{ artwork.pick_count }}</span>
           </button>
         </div>

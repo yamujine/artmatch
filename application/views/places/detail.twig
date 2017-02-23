@@ -201,7 +201,7 @@
           {{ place.tags_html|raw }}
         </div>
         <div class="pick">
-          <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">
+          <button class="pickBtn{% if place.is_picked == 1 %} active{% endif %}" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">
             PICK <span class="number">{{ place.pick_count }}</span>
           </button>
         </div>
