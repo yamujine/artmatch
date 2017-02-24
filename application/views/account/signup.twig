@@ -115,12 +115,6 @@
 
       return false;
     });
-    {% if email %}
-    $(document).ready(function () {
-      checksEmail();
-    });
-    {% endif %}
-
   </script>
 {% endblock %}
 
@@ -146,9 +140,18 @@
           </div>
         </fieldset>
         <fieldset>
-          <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()" {% if email %} value = "{{ email }}" {%  if not duplicated_email %} readonly {% endif %} {% endif %}/>
+          {% if email and not duplicated_email %}
+            <input type="hidden" name="email" placeholder="이메일" onkeyup="checksEmail()" value = "{{ email }}" />
+            <div style="text-align: left"> {{ email }} </div>
+          {% else %}
+            <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()" value = "{{ email }}" />
+          {% endif %}
           <input type="hidden" id="checkEmail" name="checkEmail" value="uncheck"/>
-          <div id="warningEmail"></div>
+          {% if duplicated_email %}
+            <div id="warningEmail" style = "color: red;">중복된 이메일 입니다.</div>
+          {% else %}
+            <div id="warningEmail"></div>
+          {% endif %}
         </fieldset>
         <fieldset>
           <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()" />

@@ -14,6 +14,7 @@ class Account extends CI_Controller {
         /** @var Twig_Environment $twig */
         $twig = $this->twig->getTwig();
         $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
+        $this->twig->addGlobal('FACEBOOK_API_VERSION', $this->config->item('api_version'));
         $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
         $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);

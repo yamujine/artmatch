@@ -11,7 +11,7 @@
         appId      : '{{ FACEBOOK_APP_ID }}',
         cookie     : true,
         xfbml      : true,
-        version    : 'v2.8'
+        version    : '{{ FACEBOOK_API_VERSION }}'
       });
       FB.AppEvents.logPageView();
     };
@@ -129,14 +129,12 @@
   function rerequestFacebookPermissions() {
     FB.api('/me/permissions',function(response) {
       for (var i = 0; i < response.data.length; i++) {
-        if (response.data[i].permission === 'email') {
-          if (response.data[i].status === 'declined') {
-            FB.login(function(response) {
-              if (response.status === 'connected') {
-                $('.facebook').click();
-              }
-            }, {scope: 'public_profile,email', auth_type: 'rerequest'});
-          }
+        if (response.data[i].permission === 'email' && response.data[i].status === 'declined') {
+          FB.login(function (response) {
+            if (response.status === 'connected') {
+              $('.facebook').click();
+            }
+          }, {scope: 'public_profile,email', auth_type: 'rerequest'});
         }
       }
     });

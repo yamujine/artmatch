@@ -21,6 +21,7 @@ class MY_Controller extends CI_Controller {
         // Twig 관련 글로벌 설정은 이곳 또는 application/libraries/Twig.php 에 작성
         $this->twig->addGlobal('session', $_SESSION);
         $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
+        $this->twig->addGlobal('FACEBOOK_API_VERSION', $this->config->item('api_version'));
         // 사용자 정의 상수를 Twig global로 등록
         $defined_constants = get_defined_constants(true)['user'];
         foreach ($defined_constants as $constant => $value) {
