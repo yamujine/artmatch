@@ -21,7 +21,7 @@
           event.stopPropagation();
         });
 
-      // 비밀번호 및 프로필 이미지 변경
+      // 비밀번호 변경
       $('#password_change_form').submit(function () {
         var currentPasswordElem = $("input[name=current_password]");
         var newPasswordElem = $("input[name=new_password]");
@@ -59,34 +59,55 @@
         return false;
       });
 
-      $('#profile_change_form').submit(function () {
+      // 프로필 이미지 등록 변경
+      $('input[type=file]').change(function () {
+        if (!confirm('프로필 이미지를 변경하시겠습니까?')) {
+          return false;
+        }
+
+        var $this = $(this);
+        var imageElement = $this.closest('.profileImage').find('img');
+
+        // 이미지 파일 업로드를 위한 FormData 생성
+        var formData = new FormData();
+        formData.append("profile_image", $this[0].files[0]);
 
         $.ajax({
           method: "POST",
           url: "/api/users/update_image",
           processData: false, // To send file
           contentType: false, // To send file
-          data: new FormData($(this)[0])
-        }).done(function (data) {
-          if (data.result === true) {
-            alert('프로필사진이 성공적으로 변경되었습니다');
-            location.href = '/users/me';
-          } else {
-            alert(data.body.message);
-          }
-        }).fail(function () {
-          alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-        });
-        return false;
+          data: formData
+        })
+          .done(function (data) {
+            if (!data.result) {
+              alert(data.body.message.message);
+
+              return false;
+            }
+
+            updateProfileImage($this[0].files[0], imageElement);
+          })
+          .fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
       });
 
-      $('#profile_submit').click(function () {
-        $('#profile_change_form').submit();
-      });
+      function updateProfileImage(file, imageElement) {
+        // FileReader 객체가 있는 경우
+        if (window.FileReader) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var src = e.target.result;
+            imageElement.attr('src', src);
+          };
 
-      $('#password_submit').click(function () {
-        $('#password_change_form').submit();
-      });
+          reader.readAsDataURL(file);
+        } else {
+          var src = document.selection.createRange().text;
+          imageElement.attr('src', src);
+        }
+      }
     });
   </script>
 {% endblock %}
@@ -100,26 +121,28 @@
       {% if is_my_page %}
         <!-- == 유저 수정 버튼 -->
         <div class="editButtons">
-          {# TODO: 수정 버튼 자체가 현재 기능상 필요 없어서 비밀번호, 프로필 이미지 변경 버튼 두개를 두는 것으로 디자이너님과 협의중 #}
-          <button class="editBtn">비밀번호 변경</button>
-          <button class="profileImageEditBtn">프로필 이미지 변경</button>
+          <button class="passwordEditBtn">비밀번호 변경</button>
         </div>
         <!-- //== 유저 수정 버튼 -->
       {% endif %}
       <!-- == 프로필 이미지 -->
       <div class="profileImage">
+        {% if is_my_page %}
+          <div class="dimm"></div>
+          <div class="editBtn">
+            <input type="file" name="profileImage"/>
+          </div>
+        {% endif %}
         {% if user.profile_image is empty %}
           <img src="{{ 'images/avatar@2x.png' | static_url }}" class="img-circle"/>
         {% else %}
-          <img src="{{ user.profile_image }}" class="img-circle"/>
+          <img src="{{ user.profile_image | thumb_url('profile') }}" class="img-circle"/>
         {% endif %}
       </div>
       <!-- //== 프로필 이미지 -->
       <!-- == 유저 이름 -->
       <div class="name">{{ user.user_name }}</div>
       <!-- // == 유저 이름 -->
-      {# TODO: 유저의 자기소개 설명란은 DB에 존재하지 않아 디자이너님에게 확인 요청 드렸습니다. #}
-      {#<div class="description">{{ user.description }}</div>#}
       <!-- == 유저 메타 정보 -->
       <ul class="metadata">
         {% if user.type == USER_TYPE_ARTIST %}
