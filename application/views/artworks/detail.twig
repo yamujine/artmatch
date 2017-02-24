@@ -52,6 +52,23 @@
         }
       });
 
+      // 작품 수정
+      $('.artworkEditBtn').click(function () {
+        var $this = $(this);
+        location.replace("/artworks/edit/" + $this.data('id'));
+        return false;
+      });
+
+      // 작품 삭제
+      $('.artworkDeleteBtn').click(function () {
+        if (confirm("정말 삭제 하시겠습니까?") === false) {
+          return false;
+        }
+        var $this = $(this);
+        location.replace("/artworks/delete/" + $this.data('id'));
+        return false;
+      });
+
       // 댓글
       $("#commentRegisterForm").submit(function () {
         var $this = $(this);
@@ -239,6 +256,12 @@
             {% endif %}
           </div>
         {% endif %}
+        {% if session.id == artwork.user_id %}
+        <div>
+          <button class="artworkEditBtn" data-id="{{ artwork.id }}">수정</button>
+          <button class="artworkDeleteBtn" data-id="{{ artwork.id }}">삭제</button>
+        </div>
+        {% endif %}
       </div>
       <!-- //== 작품 -->
       <!-- == 작가의 한마디 -->
@@ -246,12 +269,12 @@
         <div class="meta">
           <div class="artistProfileImage">
             {% if artwork.user.profile_image is empty %}
-              <img src="/static/images/tom.jpg" class="img-circle"/>
+              <img src="{{ 'images/avatar.png' | static_url }}" class="img-circle"/>
             {% else %}
               <img src="{{ artwork.user.profile_image | thumb_url('profile') }}" class="img-circle"/>
             {% endif %}
           </div>
-          <div class="artistSays">작가님의 한마디</div>
+          <div class="artistSays"><a href="/users/{{ artwork.user.user_name }}">{{ artwork.user.user_name }}</a>님의 한마디</div>
           <ul class="status">
             {% if artwork.is_now_exhibiting %}
               <li class="exhibition display">현재 전시중</li>
@@ -275,7 +298,7 @@
           {{ artwork.tags_html|raw }}
         </div>
         <div class="pick">
-          <button class="pickBtn{% if is_pick %} active{% endif %}" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">
+          <button class="pickBtn{% if artwork.is_picked == 1 %} active{% endif %}" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">
             PICK <span class="number">{{ artwork.pick_count }}</span>
           </button>
         </div>
@@ -299,6 +322,7 @@
           </ul>
         </div>
         <!-- //== 댓글 -->
+
 
         <!-- == 댓글 입력 -->
         <form id="commentRegisterForm" class="commentForm">

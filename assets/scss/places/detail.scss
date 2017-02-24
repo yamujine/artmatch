@@ -257,6 +257,7 @@ body {
         padding: 26px 30px 43px 30px;
         margin: 48px auto 0 auto;
         border: 1px solid $white-eight;
+        min-height: 168px;
         @include prefix(border-radius, 2px);
 
         // 기본 정보

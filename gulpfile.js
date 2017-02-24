@@ -41,14 +41,45 @@ gulp.task('slick', function () {
   filesExist(['assets/bower_components/slick-carousel/slick']);
 
   return gulp.src('assets/bower_components/slick-carousel/slick/**')
-      .pipe(gulp.dest('static/dist/slick'));
+    .pipe(gulp.dest('static/dist/slick'));
 });
 
 gulp.task('magnificpopup', function () {
   filesExist(['assets/bower_components/magnific-popup/dist']);
 
   return gulp.src('assets/bower_components/magnific-popup/dist/**')
-      .pipe(gulp.dest('static/dist/magnific-popup'));
+    .pipe(gulp.dest('static/dist/magnific-popup'));
+});
+
+gulp.task('magiccheck', function () {
+  filesExist(['assets/bower_components/magic-check']);
+
+  return gulp.src('assets/bower_components/magic-check/css/**')
+    .pipe(gulp.dest('static/dist/magic-check'));
+});
+
+gulp.task('vex', function () {
+  filesExist(['assets/bower_components/vex']);
+
+  return gulp.src('assets/bower_components/vex/dist/**')
+    .pipe(gulp.dest('static/dist/vex'));
+});
+
+gulp.task('jquery-validation', function () {
+  filesExist(['assets/bower_components/jquery-validation']);
+
+  return gulp.src('assets/bower_components/jquery-validation/dist/**')
+    .pipe(gulp.dest('static/dist/jquery-validation'));
+});
+
+gulp.task('extra-assets-js', function () {
+  return gulp.src('assets/js/**')
+    .pipe(gulp.dest('static/dist/js'));
+});
+
+gulp.task('extra-assets-css', function () {
+  return gulp.src('assets/css/**')
+    .pipe(gulp.dest('static/dist/css'));
 });
 /** For Develop TASK END **/
 
@@ -70,7 +101,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
-gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup']);
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck', 'jquery-validation', 'vex', 'extra-assets-js', 'extra-assets-css']);
 
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')

@@ -32,7 +32,7 @@ class Place_model extends CI_Model {
         return false;
     }
 
-    public function gets($limit = null, $offset = null, $search = null) {
+    public function gets($limit = null, $offset = null, $search = null, $user_id = null) {
         $query = $this->db
             ->select('places.*, users.user_name, count(user_place_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
@@ -53,6 +53,11 @@ class Place_model extends CI_Model {
             $query = $query->or_like('places.name', $search)
                 ->or_like('places.address', $search)
                 ->or_like('places.tags', $search);
+        }
+
+        if ($user_id !== null) {
+            $query = $query->select('IF(P2.id IS NULL, 0, 1) AS is_picked')
+                ->join('user_place_picks AS P2', "P2.place_id = places.id AND P2.user_id = '{$user_id}'", 'left');
         }
 
         return $query->get()->result();
@@ -79,14 +84,19 @@ class Place_model extends CI_Model {
         return $query->get()->num_rows();
     }
 
-    public function get_by_id($place_id) {
-        $place = $this->db
+    public function get_by_id($place_id, $user_id = null) {
+        $query = $this->db
             ->select('places.*, count(user_place_picks.id) as pick_count')
             ->from(self::TABLE_NAME)
             ->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
-            ->where('places.id', $place_id)
-            ->get()->row();
+            ->where('places.id', $place_id);
 
+        if ($user_id !== null) {
+            $query = $query->select('IF(P2.id IS NULL, 0, 1) AS is_picked')
+                ->join('user_place_picks AS P2', "P2.place_id = places.id AND P2.user_id = '{$user_id}'", 'left');
+        }
+
+        $place = $query->get()->row();
         // COUNT 함수가 추가되어 있어서, $place->id에 빈 값이 포함된 row가 리턴이 되므로 property를 직접 체크
         if (empty($place->id)) {
             return NULL;
@@ -111,11 +121,39 @@ class Place_model extends CI_Model {
             ->get()->row();
     }
 
-    public function get_by_user_id($user_id) {
-        return $this->db
+    public function get_all_by_user_id($user_id) {
+        $places = $this->db
+            ->select('places.*, count(user_place_picks.id) as pick_count, IF(P2.id IS NULL, 0, 1) AS is_picked')
             ->from(self::TABLE_NAME)
-            ->where('user_id', $user_id)
+            ->join('user_place_picks', 'user_place_picks.place_id = places.id', 'left')
+            ->join('user_place_picks AS P2', "P2.place_id = places.id AND P2.user_id = '{$user_id}'", 'left')
+            ->where('places.user_id', $user_id)
+            ->group_by('places.id')
+            ->order_by('places.id', 'DESC')
             ->get()->result();
+
+        foreach ($places as $place) {
+            $place->extra_images = $this->db
+                ->from(self::TABLE_NAME_IMAGES)
+                ->where('place_id', $place->id)
+                ->get()->result();
+        }
+
+        return $places;
+    }
+
+    public function get_picked_by_user_id($user_id) {
+        $picks = $this->db
+            ->select('places.*, count(P2.id) as pick_count')
+            ->from(self::TABLE_NAME)
+            ->join('user_place_picks AS P2', 'P2.place_id = places.id', 'left')
+            ->join('user_place_picks', 'user_place_picks.place_id = places.id')
+            ->where('user_place_picks.user_id', $user_id)
+            ->group_by('places.id')
+            ->order_by('user_place_picks.id', 'DESC')
+            ->get()->result();
+
+        return $picks;
     }
 
     public function get_images_by_id($place_id) {

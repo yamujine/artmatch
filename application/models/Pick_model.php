@@ -23,32 +23,6 @@ class Pick_model extends CI_Model {
             ->count_all_results();
     }
 
-    public function is_artwork_pick($user_id, $artwork_id) {
-        $count = $this->db
-            ->from(self::ARTWORK_PICKS_TABLE_NAME)
-            ->where('user_artwork_picks.user_id', $user_id)
-            ->where('user_artwork_picks.artwork_id', $artwork_id)
-            ->count_all_results();
-        if ($count === 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function is_place_pick($user_id, $place_id) {
-        $count = $this->db
-            ->from(self::PLACE_PICKS_TABLE_NAME)
-            ->where('user_place_picks.user_id', $user_id)
-            ->where('user_place_picks.place_id', $place_id)
-            ->count_all_results();
-        if ($count === 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function get_given_artwork_pick_by_user_id($user_id) {
         return $this->db
             ->from(self::ARTWORK_PICKS_TABLE_NAME)
@@ -63,34 +37,6 @@ class Pick_model extends CI_Model {
             ->join('places', 'places.id = user_place_picks.place_id')
             ->where('places.user_id', $user_id)
             ->count_all_results();
-    }
-
-    public function get_artwork_picks_by_user_id($user_id) {
-        $this->load->model('artwork_model');
-        $picks = $this->db
-            ->from(self::ARTWORK_PICKS_TABLE_NAME)
-            ->where('user_id', $user_id)
-            ->get()->result();
-
-        foreach ($picks as $pick) {
-            $pick->artwork = $this->artwork_model->get_bare_by_id($pick->artwork_id);
-        }
-
-        return $picks;
-    }
-
-    public function get_place_picks_by_user_id($user_id) {
-        $this->load->model('place_model');
-        $picks = $this->db
-            ->from(self::PLACE_PICKS_TABLE_NAME)
-            ->where('user_id', $user_id)
-            ->get()->result();
-
-        foreach ($picks as $pick) {
-            $pick->place = $this->place_model->get_bare_by_id($pick->place_id);
-        }
-
-        return $picks;
     }
 
     public function insert_pick($type, $user_id, $type_id) {

@@ -20,10 +20,7 @@ class Artworks extends MY_Controller {
         $data = [];
         $user_id = $this->accountlib->get_user_id();
 
-        $is_pick = $this->pick_model->is_artwork_pick($user_id, $artwork_id);
-        $data['is_pick'] = $is_pick;
-
-        $artwork = $this->artwork_model->get_by_id($artwork_id);
+        $artwork = $this->artwork_model->get_by_id($artwork_id, $user_id);
         if ($artwork === NULL) {
             alert_and_redirect('존재하지 않는 작품입니다.');
         }
@@ -47,9 +44,9 @@ class Artworks extends MY_Controller {
         $data['exhibitions'] = $exhibitions;
 
         // 댓글
-        $comments = $this->comment_model->get_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
-        $data['comments'] = $comments;
-        $data['comment_count'] = count($comments);
+        // TODO: 적절한 초기 값으로 offset, limit 설정 필요
+        $data['comments'] = $this->comment_model->get_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
+        $data['comment_count'] = $this->comment_model->get_count_of_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
 
         // 조회수 증가
         $this->artwork_model->update_view_count_by_id($artwork_id);
@@ -67,7 +64,7 @@ class Artworks extends MY_Controller {
         $this->form_validation->set_rules('status', 'status', 'required');
         $this->form_validation->set_rules('for_sale', 'for_sale', 'required');
         $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
-        $this->form_validation->set_rules('tags', 'tags', 'required|trim');
+        $this->form_validation->set_rules('tags', 'tags', 'required|trim|max_length[60]');
 
         $user_id = $this->accountlib->get_user_id();
         $status = $this->input->post('status');
@@ -163,11 +160,11 @@ class Artworks extends MY_Controller {
     public function delete($artwork_id) {
         $artwork = $this->artwork_model->get_bare_by_id($artwork_id);
         if (empty($artwork)) {
-            alert_and_redirect('존재하지 않는 장소입니다.');
+            alert_and_redirect('존재하지 않는 작품입니다.');
         }
 
         if ($artwork->user_id !== $this->accountlib->get_user_id()) {
-            alert_and_redirect('본인의 장소만 삭제할 수 있습니다.');
+            alert_and_redirect('본인의 작품만 삭제할 수 있습니다.');
         }
 
         // 작품

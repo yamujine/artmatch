@@ -53,14 +53,13 @@ class Imageupload {
             'encrypt_name' => TRUE
         ]);
 
-        // Upload Images
-        if ($this->CI->upload->do_multi_upload($param)) {
-            foreach ($this->CI->upload->get_multi_upload_data() as $uploaded_data) {
-                if ($generate_thumbs) {
-                    $this->_generate_thumbnails($uploaded_data['full_path']);
-                }
-                $uploaded_file_names[] = $uploaded_data['file_name'];
+        // 업로드 한 순서대로 loop 돌아서 중간에 오류가 생기면 error 리턴하므로 일단 결과는 무시하고 업로드 된 애들 파일만 가져온다
+        $this->CI->upload->do_multi_upload($param);
+        foreach ($this->CI->upload->get_multi_upload_data() as $uploaded_data) {
+            if ($generate_thumbs) {
+                $this->_generate_thumbnails($uploaded_data['full_path']);
             }
+            $uploaded_file_names[] = $uploaded_data['file_name'];
         }
 
         return $uploaded_file_names;
@@ -97,5 +96,20 @@ class Imageupload {
 
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_POSTFIX . $file_ext);
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_SMALL_POSTFIX . $file_ext);
+    }
+
+    public function upload_image_by_url($url, $generate_thumbs = true, $image_type = '') {
+        $file_ext = pathinfo(basename(parse_url($url)['path']), PATHINFO_EXTENSION);
+        $filename = $this->CI->security->sanitize_filename(md5(uniqid(mt_rand(), true))) . '.' . $file_ext;
+        $image_path = self::UPLOAD_PATH . $image_type . '/' . $filename;
+        $result = copy($url, $image_path);
+
+        if ($result === FALSE) {
+            return '';
+        }
+        if ($generate_thumbs) {
+            $this->_generate_thumbnails($image_path);
+        }
+        return $filename;
     }
 }

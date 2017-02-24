@@ -1,0 +1,76 @@
+{% macro render_mypage_grid_item(item, type, index) %}
+  <li class="item grid {% if (index % 3) == 0 %}third{% endif %}">
+    {% if type == TYPE_ARTWORKS %}
+      {% set item_id = item.id %}
+      {% set subject = item.title %}
+    {% elseif type == TYPE_PLACES %}
+      {% set item_id = item.id %}
+      {% set subject = item.name %}
+    {% endif %}
+    <div class="wrap" data-type="{{ type }}" data-id="{{ item_id }}">
+      <div class="imgThumb">
+        <div class="dimm"></div>
+        <div class="preview">
+          미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+        </div>
+        {# 썸네일 이미지 #}
+        <img class="img" src="{{ item.image | thumb_url }}"/>
+      </div>
+      <div class="meta">
+        <div class="pick">
+          {# PICK 갯수 #}
+          <span class="bold">PICK</span>
+          <span class="number">{{ item.pick_count }}</span>
+        </div>
+        <div class="title">
+          {{ subject|length > 12 ? subject|slice(0, 12) ~ '...' : subject }}
+        </div>
+      </div>
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro render_mypage_place_item(item) %}
+  <li class="item inline">
+    <div class="wrap" data-type="places" data-id="{{ item.id }}">
+      <div class="imgThumb">
+        <div class="dimm"></div>
+        <div class="preview">
+          미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+        </div>
+        {# 썸네일 이미지 #}
+        <img class="img" src="{{ item.image | thumb_url }}"/>
+      </div>
+      <div class="metadata">
+        <div class="title">
+          {{ item.subject|length > 12 ? item.subject|slice(0, 12) ~ '...' : item.subject }}
+        </div>
+        <div class="address">
+          <div class="pin"></div>
+          <div class="keyword">{{ item.area }}</div>
+          {{ item.address }}
+        </div>
+        <div class="description">
+          {{ item.description }}
+        </div>
+        <div class="pick">
+          PICK <span class="number">{{ item.pick_count }}</span>
+        </div>
+        <ul class="additionalImages">
+          {% set length = item.extra_images|length %}
+          {% for extra in item.extra_images|slice(0,4) %}
+            {% if loop.last and length > 4 %}
+              <li class="more">
+                <div class="dimm"></div>
+                <div class="remain">+ {{ length - 4 }}</div>
+                <img src="{{ extra.image | thumb_url }}"/>
+              </li>
+            {% else %}
+              <li><img src="{{ extra.image | thumb_url }}"></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </li>
+{% endmacro %}

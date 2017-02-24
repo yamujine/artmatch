@@ -1,6 +1,6 @@
 {% macro render_main_item(item, type, index) %}
   {# STATUS: PICKED (이미 PICKED된 아트웍 또는 장소) 사용자가 이미 PICK 했는지 여부 #}
-  <li class="item {% if (index % 3) == 0 %}third{% endif %} {% if item.is_pick %}picked{% endif %}">
+  <li class="item {% if (index % 3) == 0 %}third{% endif %} {% if item.is_picked %}picked{% endif %}">
     <div class="wrap" data-type="{{ type }}" data-id="{{ item.id }}">
       <div class="imgThumb">
         <div class="dimm"></div>
