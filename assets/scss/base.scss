@@ -80,8 +80,9 @@ body {
               width: 62px;
               height: 26px;
               border-radius: 30px;
-              border: 1px solid $white-two;
+              border: 1px solid $brownish-grey;
               margin: 13px 18px 13px 0;
+              cursor: pointer;
 
               a {
                 display: inline;
@@ -89,10 +90,10 @@ body {
                 font-family: ArialMT, Arial, sans-serif;
                 font-size: 12px;
                 color: $white-thirteen;
+              }
 
-                &:before {
-
-                }
+              &:hover {
+                border-color: $warm-grey-four;
               }
             }
 
