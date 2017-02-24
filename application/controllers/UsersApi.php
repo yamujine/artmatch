@@ -40,8 +40,9 @@ class UsersApi extends API_Controller {
 
         $user = $this->user_model->get_by_id($id);
         $this->accountlib->generate_user_session($user->id);
-        $this->accountlib->send_email_authentication($user->email, $user->id);
-
+        if ($this->input->post('is_facebook') !== '1') {
+            $this->accountlib->send_email_authentication($user->email, $user->id);
+        }
         $this->return_success_response(['message' => 'signup success']);
     }
 
