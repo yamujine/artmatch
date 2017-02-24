@@ -231,6 +231,21 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`landing` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `pickartyou`.`apply`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pickartyou_dev`.`apply` ;
+
+CREATE TABLE IF NOT EXISTS `pickartyou_dev`.`apply` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `place_id` INT NOT NULL,
+  `artwork_id` INT NOT NULL,
+  `status` TINYINT NOT NULL,
+  `registered_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
