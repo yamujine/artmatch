@@ -87,8 +87,9 @@
               .end().find('.comment').html(data.body.comment.comment)
               .end().find('.commentEditBtn').attr('data-id', data.body.comment.id)
               .end().find('.commentDeleteBtn').attr({'data-type': data.body.type, 'data-type-id': data.body.type_id, 'data-id': data.body.comment.id })
-              .end().find('.commentEditDiv').attr("class", "commentEditDiv_"+data.body.comment.id)
+              .end().find('#commentEditDiv').attr('id', 'commentEditDiv_'+data.body.comment.id)
               .find('.commentEditSubmit').attr({'data-type': data.body.type, 'data-id': data.body.comment.id });
+            $this.find('textarea[name=comment]').val('');
           })
           .fail(function (data) {
             alert(data.body.message);
@@ -97,8 +98,7 @@
       });
 
       // 댓글 수정
-      $(document).on("click", ".commentEditBtn", function () {
-        console.log('수정이벤트시작');
+      $(document).on('click', '.commentEditBtn', function () {
         var comment_id = $(this).data("id");
         var comment = $(this).closest("div").find(".comment").text();
         $('#commentEditDiv_' + comment_id).css("display", "");
@@ -114,7 +114,7 @@
           $(this).css('display', 'none');
         });
 
-        $('.commentEditSubmit').click(function () {
+        $(document).on('click', '.commentEditSubmit', function () {
           var comment = $('#commentEditDiv_' + comment_id).find('#commentEditText').val();
 
           $.ajax({
@@ -126,8 +126,14 @@
               comment: comment
             }
           }).done(function (data) {
-            $('#commentEditDiv_' + comment_id).css("display", "none");
-            $('#comment_' + comment_id).find('.comment').text(data.body.comment);
+            if (data.body.result_type === 'update') {
+              $('#commentEditDiv_' + comment_id).css("display", "none");
+              $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', 'none');
+              $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
+              $('#comment_' + comment_id).find('.comment').text(data.body.comment);
+            } else {
+              alert(data.body.message);
+            }
           }).fail(function () {
             alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
           });
@@ -137,7 +143,7 @@
 
 
       // 댓글 삭제
-      $('.commentDeleteBtn').click(function () {
+      $(document).on('click', '.commentDeleteBtn', function () {
         var $this = $(this);
         $.ajax({
           method: "POST",
