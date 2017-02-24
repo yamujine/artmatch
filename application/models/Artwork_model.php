@@ -226,6 +226,12 @@ class Artwork_model extends CI_Model {
             ->update(self::TABLE_NAME);
     }
 
+    public function change_use_of_comments($artwork_id, $is_use_comment) {
+        $this->db->update(self::TABLE_NAME, ['use_comment' => $is_use_comment], ['id' => $artwork_id]);
+
+        return $this->db->affected_rows() === 1;
+    }
+
     public function delete($artwork_id) {
         $this->db->delete(self::TABLE_NAME, ['id' => $artwork_id]);
 

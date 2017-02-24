@@ -123,6 +123,30 @@
 
         return false;
       });
+      $(document).on('click', '.placeCommentToggleBtn', function() {
+        var $this = $(this);
+        $.ajax({
+          method: "POST",
+          url: "/api/contents/change_use_of_comment",
+          data: {
+            type: $this.data('type'),
+            type_id: $this.data('type-id')
+          }
+        })
+          .done(function (data) {
+            $('.dropdown-toggle').dropdown('toggle');
+            if (data.body.comment_status == {{ TYPE_NO_COMMENT }}) {
+              alert('댓글이 비허용 처리 되었습니다.');
+            } else if (data.body.comment_status == {{ TYPE_USE_COMMENT }}) {
+              alert('댓글이 허용 처리 되었습니다.');
+            }
+            location.reload(true);
+          })
+          .fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
+        return false;
+      });
     });
   </script>
 {% endblock %}
@@ -158,7 +182,7 @@
           <ul class="dropdown-menu dropdown-menu-right">
             <li><a class="placeEditBtn" data-id="{{ place.id }}">글 수정하기</a></li>
             <li><a class="placeDeleteBtn" data-id="{{ place.id }}">글 삭제하기</a></li>
-            <li><a class="placeCommentToggleBtn">댓글 허용</a></li>
+            <li><a class="placeCommentToggleBtn" data-type="{{ TYPE_PLACES }}" data-type-id="{{ place.id }}">댓글 {% if place.use_comment == TYPE_NO_COMMENT %}허용{% else %}비허용{% endif %}</a></li>
           </ul>
         </div>
         <!-- //== 나의 글 관련 옵션 드랍다운 메뉴 -->
