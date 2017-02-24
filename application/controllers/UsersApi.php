@@ -77,6 +77,7 @@ class UsersApi extends API_Controller
             $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러. 관리자에게 문의하세요.']);
         }
 
+        $this->accountlib->set_profile_image($uploaded_image_name);
         $this->return_success_response();
     }
 
