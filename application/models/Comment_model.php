@@ -17,14 +17,14 @@ class Comment_model extends CI_Model {
                 ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
                 ->join('users', 'users.id = artwork_comments.user_id')
                 ->where('artwork_comments.id', $comment_id)
-                ->get()->result();
+                ->get()->row();
         } else if ($type === TYPE_PLACES) {
             return $this->db
                 ->select('place_comments.*, users.user_name, users.profile_image')
                 ->from(self::PLACE_COMMENTS_TABLE_NAME)
                 ->join('users', 'users.id = place_comments.user_id')
                 ->where('place_comments.id', $comment_id)
-                ->get()->result();
+                ->get()->row();
         }
     }
 

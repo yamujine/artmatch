@@ -70,44 +70,52 @@
               alert("댓글 등록 실패");
               return false;
             }
-            console.log(data.body.comment);
-            var $comment = $('.comments');
+
+            var user_img = "";
             if(data.body.comment.profile_image) {
-              var user_image = '{{ user_image | thumb_url("profile") }}'
-              $comment = $comment.append($('<li>')
-                .html($('<div class="profileImage">').html('<img src="'+user_image+'" class="img-circle"/>')));
+              user_img = "{{ user_img | thumb_url("profile") }}";
             } else {
-              $comment = $comment.append($('<li>')
-                .html($('<div class="profileImage">').html('<img src="/static/images/tom.jpg" class="img-circle"/>')));
+              user_img = "/static/images/tom.jpg";
             }
 
+            $('#comment_sample').clone().appendTo($('.comments'));
+            $('.comments').find('#comment_sample').attr('id', 'comment_'+data.body.comment.id).css('display', '')
+              .find('img').attr('src', user_img)
+              .end().find('a').attr('href', '/users/'+data.body.comment.user_name).text(data.body.comment.user_name)
+              .end().find('.regDate').html(" {{ user_date | date('y.m.d') }}")
+            //TODO: twig 함수 처리 .end().find('.comment').html("{{ user_comment | nl2br }}");
+              .end().find('.comment').html(data.body.comment.comment)
+              .end().find('.commentEditBtn').attr('data-id', data.body.comment.id)
+              .end().find('.commentDeleteBtn').attr({'data-type': data.body.type, 'data-type-id': data.body.type_id, 'data-id': data.body.comment.id })
+              .end().find('.commentEditDiv').attr("class", "commentEditDiv_"+data.body.comment.id)
+              .find('.commentEditSubmit').attr({'data-type': data.body.type, 'data-id': data.body.comment.id });
           })
           .fail(function (data) {
             alert(data.body.message);
           });
-
         return false;
       });
 
       // 댓글 수정
-      $('.commentEditBtn').click(function () {
+      $(document).on("click", ".commentEditBtn", function () {
+        console.log('수정이벤트시작');
         var comment_id = $(this).data("id");
         var comment = $(this).closest("div").find(".comment").text();
-        $('#commentEditDiv_'+comment_id).css("display", "");
-        $('#commentEditDiv_'+comment_id).find('#commentEditText').val(comment);
-        $('#comment_'+comment_id).find('.comment').text('');
-        $('#comment_'+comment_id).find('.commentEditBtnCancel').css('display', '');
+        $('#commentEditDiv_' + comment_id).css("display", "");
+        $('#commentEditDiv_' + comment_id).find('#commentEditText').val(comment);
+        $('#comment_' + comment_id).find('.comment').text('');
+        $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', '');
         $(this).css('display', 'none');
 
-        $('#comment_'+comment_id).find('.commentEditBtnCancel').click(function() {
-          $('#commentEditDiv_'+comment_id).css("display", "none");
-          $('#comment_'+comment_id).find('.comment').text(comment);
-          $('#comment_'+comment_id).find('.commentEditBtn').css('display', '');
+        $('#comment_' + comment_id).find('.commentEditBtnCancel').click(function () {
+          $('#commentEditDiv_' + comment_id).css("display", "none");
+          $('#comment_' + comment_id).find('.comment').text(comment);
+          $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
           $(this).css('display', 'none');
         });
 
-        $('.commentEditSubmit').click(function() {
-          var comment = $('#commentEditDiv_'+comment_id).find('#commentEditText').val();
+        $('.commentEditSubmit').click(function () {
+          var comment = $('#commentEditDiv_' + comment_id).find('#commentEditText').val();
 
           $.ajax({
             method: "POST",
@@ -118,14 +126,15 @@
               comment: comment
             }
           }).done(function (data) {
-            $('#commentEditDiv_'+comment_id).css("display", "none");
-            $('#comment_'+comment_id).find('.comment').text(data.body.comment);
+            $('#commentEditDiv_' + comment_id).css("display", "none");
+            $('#comment_' + comment_id).find('.comment').text(data.body.comment);
           }).fail(function () {
             alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
           });
         });
         return false;
       });
+
 
       // 댓글 삭제
       $('.commentDeleteBtn').click(function () {
@@ -322,6 +331,29 @@
           </ul>
         </div>
         <!-- //== 댓글 -->
+
+        <!-- == 댓글 샘플 -->
+        <li id="comment_sample" style="display:none">
+          <div class="profileImage">
+            <img src="" class="img-circle"/>
+          </div>
+          <div class="content">
+            <div class="meta">
+              <a href=""></a> <span class="regDate"></span>
+            </div>
+            <div class="comment"></div>
+            <button class="commentEditBtn" data-id="">수정</button>
+            <button class="commentEditBtnCancel" style="display:none">수정취소</button>
+            <button class="commentDeleteBtn" data-type="" data-type-id="" data-id="">삭제</button>
+            <div id="commentEditDiv" style="display:none">
+              <textarea id="commentEditText"></textarea>
+              <button class="commentEditSubmit" data-type="" data-id="">
+                저장
+              </button>
+            </div>
+          </div>
+        </li>
+        <!-- //== 댓글 샘플 끝-->
 
         <!-- == 댓글 입력 -->
         <form id="commentRegisterForm" class="commentForm">

@@ -77,6 +77,12 @@ class CommentApi extends API_Controller {
             'comment' => $comment,
             'result_type' => 'insert'
         ]);
+
+        $data['user_img'] = $comment->profile_image;
+        $data['user_date'] = $comment->posted_at;
+        $data['user_comment'] = $comment->comment;
+
+        $this->twig->display('artworks/detail', $data);
     }
 
     public function update() {
@@ -99,7 +105,6 @@ class CommentApi extends API_Controller {
             'comment' => $comment,
             'result_type' => 'update'
         ]);
-        $this->twig->display('artworks/detail', ['user_img' => $comment->profile_image]);
     }
 
     public function delete() {
