@@ -221,6 +221,9 @@
             {% else %}
               <li class="fee">대관료 있음</li>
             {% endif %}
+            {% if place.status == PLACE_STATUS_NEED_ARTWORK %}
+              <a href="mailto:{{ place.user.email }}" class="btn btn-default">contact</a>
+            {% endif %}
             <li class="exhibition_available_count">
               {{ place.exhibition.start_date|date('Y.m.d') }} ~ {{ place.exhibition.end_date|date('Y.m.d') }}까지
               {% if place.is_now_exhibiting %}
