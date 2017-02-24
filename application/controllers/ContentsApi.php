@@ -57,8 +57,7 @@ class ContentsApi extends API_Controller {
         $this->return_success_response(['comment_status' => $is_use_comment]);
     }
 
-    public function delete_extra_images()
-    {
+    public function delete_extra_images() {
         if ($this->input->method() === 'post') {
             $type = $this->input->post('type') ?: TYPE_ARTWORKS;
             $type_id = $this->input->post('type_id');
