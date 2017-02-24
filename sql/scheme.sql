@@ -147,6 +147,8 @@ DROP TABLE IF EXISTS `pickartyou`.`exhibitions` ;
 CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibitions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `place_id` INT NOT NULL COMMENT '장소의 PK',
+  `title` VARCHAR(45) NOT NULL COMMENT '전시의 제목',
+  `description` TEXT NULL COMMENT '전시의 설명',
   `start_date` DATETIME NOT NULL COMMENT '전시 시작 날짜',
   `end_date` DATETIME NOT NULL COMMENT '전시 종료 날짜',
   `artwork_count` SMALLINT UNSIGNED NOT NULL,

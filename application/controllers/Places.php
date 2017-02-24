@@ -71,6 +71,7 @@ class Places extends MY_Controller {
         $this->form_validation->set_rules('address', 'address', 'required|trim');
         $this->form_validation->set_rules('tags', 'tags', 'required|trim|max_length[60]');
 
+        $this->form_validation->set_rules('exhibition_title', 'exhibition_title', 'required|trim');
         $this->form_validation->set_rules('exhibition_start_date', 'exhibition_start_date', 'required|exact_length[8]|trim');
         $this->form_validation->set_rules('exhibition_end_date', 'exhibition_end_date', 'required|exact_length[8]|trim');
         $this->form_validation->set_rules('exhibition_artwork_count', 'exhibition_artwork_count', 'required|numeric|trim');
@@ -85,6 +86,8 @@ class Places extends MY_Controller {
         $use_comment = $this->input->post('use_comment');
         $tags = $this->tag->refine_tags($this->input->post('tags'));
 
+        $exhibition_title = $this->input->post('exhibition_title');
+        $exhibition_description = $this->input->post('exhibition_description');
         $exhibition_start_date = $this->input->post('exhibition_start_date');
         $exhibition_end_date = $this->input->post('exhibition_end_date');
         $exhibition_artwork_count = $this->input->post('exhibition_artwork_count');
@@ -158,6 +161,8 @@ class Places extends MY_Controller {
 
                     $result_exhibition_id = $this->exhibition_model->update_by_place_id(
                         $result_id,
+                        $exhibition_title,
+                        $exhibition_description,
                         $exhibition_start_date,
                         $exhibition_end_date,
                         $exhibition_artwork_count,
@@ -178,6 +183,8 @@ class Places extends MY_Controller {
 
                     $result_exhibition_id = $this->exhibition_model->insert(
                         $result_id,
+                        $exhibition_title,
+                        $exhibition_description,
                         $exhibition_start_date,
                         $exhibition_end_date,
                         $exhibition_artwork_count,
