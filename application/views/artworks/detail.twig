@@ -75,7 +75,7 @@
             if(data.body.comment.profile_image) {
               var user_image = '{{ user_image | thumb_url("profile") }}'
               $comment = $comment.append($('<li>')
-                  .html($('<div class="profileImage">').html('<img src="'+user_image+'" class="img-circle"/>')));
+                .html($('<div class="profileImage">').html('<img src="'+user_image+'" class="img-circle"/>')));
             } else {
               $comment = $comment.append($('<li>')
                 .html($('<div class="profileImage">').html('<img src="/static/images/tom.jpg" class="img-circle"/>')));
@@ -89,38 +89,41 @@
         return false;
       });
 
-        // 댓글 수정
-        $('.commentEditBtn').click(function () {
-            var comment = $(this).closest("div").find(".comment").text();
-            var $editForm = $(this).closest("div").find(".commentEditDiv");
-            $editForm.css("display", "");
-            $editForm.find('#commentEditText').val(comment);
+      // 댓글 수정
+      $('.commentEditBtn').click(function () {
+        var comment_id = $(this).data("id");
+        var comment = $(this).closest("div").find(".comment").text();
+        $('#commentEditDiv_'+comment_id).css("display", "");
+        $('#commentEditDiv_'+comment_id).find('#commentEditText').val(comment);
+        $(this).text("수정취소");
 
-            $('.commentEditCancel').click(function() {
-                $(this).parent().css("display", "none");
-            });
-
-            $('.commentEditSubmit').click(function() {
-                var $this = $(this);
-                var comment = $this.parent().find('#commentEditText').val();
-
-                $.ajax({
-                    method: "POST",
-                    url: "/api/comments/update",
-                    data: {
-                        type: $(this).data('type'),
-                        type_comment_id: $(this).data('id'),
-                        comment: comment
-                    }
-                }).done(function (data) {
-                    $this.parent().parent().find(".commentEditDiv").css("display", "none");
-                    $this.parent().parent().parent().find(".comment").text(data.body.comment);
-                }).fail(function () {
-                    alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-                });
-            });
-            return false;
+        $(this).click(function() {
+          $(this).text("수정");
+          $('#commentEditDiv_'+comment_id).css("display", "none");
+          return;
         });
+
+//        $('.commentEditSubmit').click(function() {
+//          var $this = $(this);
+//          var comment = $this.parent().find('#commentEditText').val();
+//
+//          $.ajax({
+//            method: "POST",
+//            url: "/api/comments/update",
+//            data: {
+//              type: $(this).data('type'),
+//              type_comment_id: comment_id,
+//              comment: comment
+//            }
+//          }).done(function (data) {
+//            $this.parent().parent().find(".commentEditDiv").css("display", "none");
+//            $this.parent().parent().parent().find(".comment").text(data.body.comment);
+//          }).fail(function () {
+//            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+//          });
+//        });
+        return false;
+      });
 
       // 댓글 삭제
       $('.commentDeleteBtn').click(function () {
@@ -145,7 +148,7 @@
         });
         return false;
       });
-      
+
       // PICK
       $('.pickBtn').click(function () {
         var $this = $(this);
@@ -159,18 +162,18 @@
             type_id: $this.data('id')
           }
         })
-            .done(function (data) {
-              if (data.body.result_type === 'on') {
-                $this.addClass('active').find('.number').html(data.body.pick_count);
-              } else if (data.body.result_type === 'off') {
-                $this.removeClass('active').find('.number').html(data.body.pick_count);
-              } else {
-                alert(data.body.message);
-              }
-            })
-            .fail(function () {
-              alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-            });
+          .done(function (data) {
+            if (data.body.result_type === 'on') {
+              $this.addClass('active').find('.number').html(data.body.pick_count);
+            } else if (data.body.result_type === 'off') {
+              $this.removeClass('active').find('.number').html(data.body.pick_count);
+            } else {
+              alert(data.body.message);
+            }
+          })
+          .fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
         return false;
       });
     });
@@ -217,13 +220,13 @@
             <div class="slider{% if artwork.extra_images|length <= 6 %} deactivate{% endif %}">
               {# data-mfp-src 에 (원본 이미지 URL) 하위 img src 에는 썸네일용 이미지 src를 설정 #}
               {% for extra in artwork.extra_images %}
-              <div class="item">
-                <div class="imgThumbnail popupImage" data-mfp-src="{{ extra.image | image_url }}">
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img src="{{ extra.image | thumb_url }}"/>
+                <div class="item">
+                  <div class="imgThumbnail popupImage" data-mfp-src="{{ extra.image | image_url }}">
+                    <div class="dimm"></div>
+                    <div class="preview">미리 보기</div>
+                    <img src="{{ extra.image | thumb_url }}"/>
+                  </div>
                 </div>
-              </div>
               {% endfor %}
             </div>
             {% if artwork.extra_images|length > 6 %}
@@ -276,56 +279,56 @@
       <!-- //== 작가의 한마디 -->
 
       {% if artwork.use_comment == 1 %}
-      <!-- == 댓글 -->
-      <div class="commentArea">
-        <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
-        <hr class="divider"/>
-        <div class="commentMore">
-          <button class="commentMoreBtn">
-            이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
-          </button>
+        <!-- == 댓글 -->
+        <div class="commentArea">
+          <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
+          <hr class="divider"/>
+          <div class="commentMore">
+            <button class="commentMoreBtn">
+              이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
+            </button>
+          </div>
+          <ul class="comments">
+            {% for comment in comments %}
+              <li id="comment_{{ comment.id }}">
+                <div class="profileImage">
+                  {% if comment.profile_image is empty %}
+                    <img src="/static/images/tom.jpg" class="img-circle"/>
+                  {% else %}
+                    <img src="{{ comment.profile_image | thumb_url('profile') }}" class="img-circle"/>
+                  {% endif %}
+                </div>
+                <div class="content">
+                  <div class="meta">
+                    <a href="/users/{{ comment.user_name }}">{{ comment.user_name }}</a> <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
+                  </div>
+                  <div class="comment">{{ comment.comment|nl2br }}</div>
+                  <button class="commentEditBtn" data-id="{{ comment.id }}">수정</button>
+                  <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
+                  <!-- == 댓글 수정 폼 -->
+                  <div id="commentEditDiv_{{ comment.id }}" style="display:none">
+                    <textarea id="commentEditText"></textarea>
+                    <button class="commentEditSubmit" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">
+                      저장
+                    </button>
+                  </div>
+                  <!-- //== 댓글 수정 폼-->
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
-        <ul class="comments">
-          {% for comment in comments %}
-            <li id="comment_{{ comment.id }}">
-              <div class="profileImage">
-                {% if comment.profile_image is empty %}
-                  <img src="/static/images/tom.jpg" class="img-circle"/>
-                {% else %}
-                  <img src="{{ comment.profile_image | thumb_url('profile') }}" class="img-circle"/>
-                {% endif %}
-              </div>
-              <div class="content">
-                <div class="meta">
-                  <a href="/users/{{ comment.user_name }}">{{ comment.user_name }}</a> <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
-                </div>
-                <div class="comment">{{ comment.comment|nl2br }}</div>
-                <button class="commentEditBtn">수정</button>
-                <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
-                <!-- == 댓글 수정 폼 -->
-                <div class="commentEditDiv_{{ comment.id }}" style="display:none">
-                  <textarea id="commentEditText"></textarea>
-                  <button class="commentEditSubmit" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">
-                    저장
-                  </button>
-                </div>
-                <!-- //== 댓글 수정 폼-->
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-      <!-- //== 댓글 -->
+        <!-- //== 댓글 -->
 
-      <!-- == 댓글 입력 -->
-      <form id="commentRegisterForm" class="commentForm">
-        <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
-        <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
-        <textarea class="commentInput" name="comment" placeholder="작품에 대한 댓글을 남겨보세요."></textarea>
-        <button type="submit">확인</button>
-      </form>
+        <!-- == 댓글 입력 -->
+        <form id="commentRegisterForm" class="commentForm">
+          <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
+          <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
+          <textarea class="commentInput" name="comment" placeholder="작품에 대한 댓글을 남겨보세요."></textarea>
+          <button type="submit">확인</button>
+        </form>
 
-      <!-- //== 댓글 입력 -->
+        <!-- //== 댓글 입력 -->
       {% endif %}
       {% if exhibitions|length > 0 %}
         <!-- == 전시 이력 -->
@@ -338,27 +341,27 @@
             </ul>
           </div>
           <ul class="exhibitions">
-          {% for exhibition in exhibitions %}
-            <li>
-              <a href="/places/{{ exhibition.place_id }}">
-                <div class="imgThumbnail">
-                  <img src="{{ exhibition.place.image | thumb_url }}"/>
-                </div>
-                <div class="meta">
-                  <div class="name">
-                    {{ exhibition.place.name|length > 12 ? exhibition.place.name|slice(0, 12) ~ '...' : exhibition.place.name  }}
+            {% for exhibition in exhibitions %}
+              <li>
+                <a href="/places/{{ exhibition.place_id }}">
+                  <div class="imgThumbnail">
+                    <img src="{{ exhibition.place.image | thumb_url }}"/>
                   </div>
-                  <div class="place">
-                    <div class="pin"></div>
-                    <div class="keyword">{{ exhibition.place.area }}</div>
+                  <div class="meta">
+                    <div class="name">
+                      {{ exhibition.place.name|length > 12 ? exhibition.place.name|slice(0, 12) ~ '...' : exhibition.place.name  }}
+                    </div>
+                    <div class="place">
+                      <div class="pin"></div>
+                      <div class="keyword">{{ exhibition.place.area }}</div>
+                    </div>
+                    <div class="date">
+                      {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
+                    </div>
                   </div>
-                  <div class="date">
-                    {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
-                  </div>
-                </div>
-              </a>
-            </li>
-          {% endfor %}
+                </a>
+              </li>
+            {% endfor %}
           </ul>
         </div>
         <!-- //== 전시 이력 -->
