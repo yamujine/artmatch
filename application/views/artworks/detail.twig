@@ -145,6 +145,9 @@
 
       // 댓글 삭제
       $(document).on('click', '.commentDeleteBtn', function () {
+        if (confirm("정말 삭제 하시겠습니까?") === false) {
+            return false;
+        }
         var $this = $(this);
         $.ajax({
           method: "POST",
@@ -321,9 +324,11 @@
                     <a href="/users/{{ comment.user_name }}">{{ comment.user_name }}</a> <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
                   </div>
                   <div class="comment">{{ comment.comment|nl2br }}</div>
-                  <button class="commentEditBtn" data-id="{{ comment.id }}">수정</button>
-                  <button class="commentEditBtnCancel" style="display:none">수정취소</button>
-                  <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
+                  {% if session.id == comment.user_id %}
+                    <button class="commentEditBtn" data-id="{{ comment.id }}">수정</button>
+                    <button class="commentEditBtnCancel" style="display:none">수정취소</button>
+                    <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
+                  {% endif %}
                   <!-- == 댓글 수정 폼 -->
                   <div id="commentEditDiv_{{ comment.id }}" style="display:none">
                     <textarea id="commentEditText"></textarea>

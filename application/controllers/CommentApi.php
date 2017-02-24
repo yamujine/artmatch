@@ -91,12 +91,19 @@ class CommentApi extends API_Controller {
     }
 
     public function update() {
-        // TODO: 본인것만 수정 하도록 함
         $user_id = $this->accountlib->get_user_id();
 
         $type = $this->input->post('type');
         $type_comment_id = $this->input->post('type_comment_id');
         $comment = $this->input->post('comment');
+
+        $commentValidation = $this->comment_model->get_by_id($type, $type_comment_id);
+        if (empty($commentValidation)) {
+            alert_and_redirect('존재하지 않는 코멘트 입니다.');
+        }
+        if ($commentValidation->user_id !== $this->accountlib->get_user_id()) {
+            alert_and_redirect('본인의 코멘트만 수정할 수 있습니다.');
+        }
 
         $result_id = $this->comment_model->update_comment($type, $type_comment_id, $comment);
         if ($result_id === NULL) {
@@ -113,12 +120,19 @@ class CommentApi extends API_Controller {
     }
 
     public function delete() {
-        // TODO: 본인것만 삭제 하도록 함
         $user_id = $this->accountlib->get_user_id();
 
         $type = $this->input->post('type');
         $type_id = $this->input->post('type_id');
         $type_comment_id = $this->input->post('type_comment_id');
+
+        $commentValidation = $this->comment_model->get_by_id($type, $type_comment_id);
+        if (empty($commentValidation)) {
+            alert_and_redirect('존재하지 않는 코멘트 입니다.');
+        }
+        if ($commentValidation->user_id !== $this->accountlib->get_user_id()) {
+            alert_and_redirect('본인의 코멘트만 삭제할 수 있습니다.');
+        }
 
         $affected_rows = $this->comment_model->delete_comment($type, $type_comment_id);
         if ($affected_rows === 0) {
