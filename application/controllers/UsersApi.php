@@ -35,7 +35,7 @@ class UsersApi extends API_Controller {
         );
 
         if (!$id) {
-            $this->return_fail_response('101', ['message' => 'duplicated email']);
+            $this->return_fail_response('101', ['message' => '중복된 이메일 입니다.']);
         }
 
         $user = $this->user_model->get_by_id($id);
@@ -45,7 +45,7 @@ class UsersApi extends API_Controller {
             $this->user_model->authorize($id);
         }
         $this->accountlib->generate_user_session($id);
-        $this->return_success_response(['message' => 'signup success']);
+        $this->return_success_response();
     }
 
     public function login() {
@@ -73,27 +73,27 @@ class UsersApi extends API_Controller {
         );
 
         if (!$result) {
-            $this->return_fail_response('500', ['message' => $this->db->error()]);
+            $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러. 관리자에게 문의하세요.']);
         }
 
         $this->accountlib->set_profile_image($uploaded_image_name);
-        $this->return_success_response(['message' => 'update success']);
+        $this->return_success_response();
     }
 
     public function change_password() {
         $user = $this->user_model->get_by_id($this->accountlib->get_user_id());
 
         if (!password_verify($this->input->post('current_password'), $user->password)) {
-            $this->return_fail_response('103', ['message' => 'password is not corrected']);
+            $this->return_fail_response('103', ['message' => '비밀번호가 일치하지 않습니다.']);
         }
 
         $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
         $result = $this->user_model->update_password($user->id, $hashed_password);
         if (!$result) {
-            $this->return_fail_response('500', ['message' => $this->db->error()]);
+            $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러. 관리자에게 문의하세요.']);
         }
 
-        $this->return_success_response(['message' => 'update success']);
+        $this->return_success_response();
     }
 
     public function check_username() {
@@ -158,10 +158,10 @@ class UsersApi extends API_Controller {
             $this->return_fail_response('102', ['message' => $error_msg]);
         }
         if (!password_verify($this->input->post('password'), $user->password)) {
-            $this->return_fail_response('103', ['message' => 'password is not corrected']);
+            $this->return_fail_response('103', ['message' => '비밀번호가 일치하지 않습니다']);
         }
         $this->accountlib->generate_user_session($user->id);
-        $this->return_success_response(['message' => 'login success']);
+        $this->return_success_response();
     }
 
     private function _facebook_login() {
@@ -175,7 +175,7 @@ class UsersApi extends API_Controller {
         $accessToken = $helper->getAccessToken();
 
         if ($accessToken === NULL) {
-            $this->return_fail_response('500', ['message' => 'facebook api load error']);
+            $this->return_fail_response('500', ['message' => '페이스북 api 초기화 실패']);
         }
 
         // Logged in
@@ -197,7 +197,7 @@ class UsersApi extends API_Controller {
         }
         // 로그인 성공, 메인페이지로 이동
         $this->accountlib->generate_user_session($user->id);
-        $this->return_success_response(['message' => 'facebook login success']);
+        $this->return_success_response();
     }
 
     private function _validate_signup_form() {
