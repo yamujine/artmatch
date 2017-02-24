@@ -85,29 +85,12 @@
 
               return false;
             }
-
-            updateProfileImage($this[0].files[0], imageElement);
+            location.reload(true);
           })
           .fail(function () {
             alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
           });
       });
-
-      function updateProfileImage(file, imageElement) {
-        // FileReader 객체가 있는 경우
-        if (window.FileReader) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var src = e.target.result;
-            imageElement.attr('src', src);
-          };
-
-          reader.readAsDataURL(file);
-        } else {
-          var src = document.selection.createRange().text;
-          imageElement.attr('src', src);
-        }
-      }
     });
   </script>
 {% endblock %}

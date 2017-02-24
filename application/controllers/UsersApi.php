@@ -76,6 +76,7 @@ class UsersApi extends API_Controller {
             $this->return_fail_response('500', ['message' => $this->db->error()]);
         }
 
+        $this->accountlib->set_profile_image($uploaded_image_name);
         $this->return_success_response(['message' => 'update success']);
     }
 
