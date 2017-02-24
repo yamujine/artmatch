@@ -65,6 +65,10 @@
         .focusout(function () {
           $(this).closest('.descriptionInput').removeClass('active');
         });
+
+      // datepicker
+      $("#exhibitionStartDate").datepicker();
+      $("#exhibitionEndDate").datepicker();
     });
   </script>
 {% endblock %}
@@ -164,10 +168,10 @@
             <div class="exhibitionDate clear">
               <div class="title">전시일정</div>
               <div class="field">
-                <input type="text" name="exhibition_start_date" maxlength="8" placeholder="{{ now|date('Ymd') }}"
+                <input type="text" name="exhibition_start_date" id="exhibitionStartDate" maxlength="8" placeholder="{{ now|date('Ymd') }}"
                        value="{% if exhibition_start_date is not null %}{{ exhibition_start_date|date('Ymd') }}{% endif %}"/>
                 부터
-                <input type="text" name="exhibition_end_date" maxlength="8" placeholder="{{ now|date('Ymd') }}"
+                <input type="text" name="exhibition_end_date" id="exhibitionEndDate" maxlength="8" placeholder="{{ now|date('Ymd') }}"
                        value="{% if exhibition_end_date is not null %}{{ exhibition_end_date|date('Ymd') }}{% endif %}"/>
                 까지
               </div>
