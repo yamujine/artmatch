@@ -1,7 +1,7 @@
 <li id="comment_{{ comment.id }}">
   <div class="profileImage">
     {% if comment.profile_image is empty %}
-      <img src="/static/images/tom.jpg" class="img-circle"/>
+      <img src="{{ 'images/avatar.png' | static_url }}" class="img-circle"/>
     {% else %}
       <img src="{{ comment.profile_image | thumb_url('profile') }}" class="img-circle"/>
     {% endif %}
