@@ -36,7 +36,7 @@ class ContentsApi extends API_Controller {
             $this->return_fail_response('404', ['message' => '존재하지 않는 ' . $msg . ' 입니다.']);
         }
 
-        if ($object->user_id !== $this->accountlib()->get_user_id()) {
+        if ($object->user_id !== $this->accountlib->get_user_id()) {
             $this->return_fail_response('103', ['message' => '본인의 ' . $msg . '만 변경할 수 있습니다.']);
         }
 
