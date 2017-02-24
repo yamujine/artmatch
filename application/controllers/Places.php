@@ -252,4 +252,31 @@ class Places extends MY_Controller {
 
         alert_and_redirect('장소가 삭제되었습니다.', '/?type=' . TYPE_PLACES);
     }
+
+    public function apply($place_id) {
+        $this->load->model('apply_model');
+        $this->load->library('applylib');
+        $default_exhibition = $this->exhibition_model->get_by_place_id($place_id);
+
+        if ($this->input->method() === 'get') {
+            $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id($this->accountlib->get_user_id(), $default_exhibition->id);
+        } elseif ($this->input->method() === 'post') {
+            $artwork_ids = $this->input->post('artwork_id');
+            foreach ($artwork_ids as $artwork_id) {
+                $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($default_exhibition->id, $artwork_id);
+                if (empty($result)) {
+                    $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW);
+                }
+            }
+
+            $place = $this->place_model->get_bare_by_id($place_id);
+            $place_owner = $this->user_model->get_by_id($place->user_id);
+
+            $this->applylib->send_apply_email($place_owner->email, $artwork_ids);
+
+            alert_and_close_popup('지원이 완료되었습니다.');
+        }
+
+        $this->twig->display('places/apply', ['exhibition' => $default_exhibition, 'artworks' => $artworks]);
+    }
 }

@@ -233,6 +233,21 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`landing` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `pickartyou`.`apply`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pickartyou_dev`.`apply` ;
+
+CREATE TABLE IF NOT EXISTS `pickartyou_dev`.`apply` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `exhibition_id` INT NOT NULL COMMENT '전시 PK',
+  `artwork_id` INT NOT NULL COMMENT '작품 PK',
+  `status` TINYINT NOT NULL COMMENT '지원 상태',
+  `registered_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '지원 시간',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

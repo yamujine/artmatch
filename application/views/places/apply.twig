@@ -1,0 +1,39 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
+{% endblock %}
+
+{% block contents %}
+  {{ exhibition.title }}에 지원중입니다.
+  <div class="patItemList">
+    <div class="container">
+      <ul class="itemList artworkList">
+        {% for artwork in artworks %}
+          <li class="item {% if (index % 3) == 0 %}third{% endif %}">
+            <div class="wrap" data-type="artworks" data-id="{{ artwork.id }}">
+              <div class="imgThumb">
+                <div class="dimm"></div>
+                <div class="preview">
+                  미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+                </div>
+                <img class="img" src="{{ artwork.image | thumb_url }}"/>
+              </div>
+              <div class="meta">
+                <div class="title">{{ artwork.title|length > 12 ? artwork.title|slice(0, 12) ~ '...' : artwork.title }}</div>
+                <div class="name">상태 {{ artwork.apply_status }}</div>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <form method="POST">
+    <input type="text" name="artwork_id[]" value="36">
+    <input type="text" name="artwork_id[]" value="48">
+    <button type="submit">전송</button>
+  </form>
+{% endblock %}
+
+
