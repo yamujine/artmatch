@@ -69,12 +69,17 @@ class CommentApi extends API_Controller {
         if ($comment === NULL) {
             $this->return_fail_response('102', ['message' => 'Failed to get comment']);
         }
+        $comments = $this->comment_model->get_comments_by_type_id($type, $type_id);
+        if (!$comments) {
+            $this->return_fail_response('102', ['message' => 'Failed to count comment']);
+        }
 
         $this->return_success_response([
             'type' => $type,
             'type_id' => $type_id,
             'comment_id' => $result_id,
             'comment' => $comment,
+            'comment_count' => count($comments),
             'result_type' => 'insert'
         ]);
 
@@ -120,6 +125,9 @@ class CommentApi extends API_Controller {
             $this->return_fail_response('101', ['message' => 'Failed to delete']);
         }
         $comments = $this->comment_model->get_comments_by_type_id($type, $type_id);
+        if (!$comments) {
+            $this->return_fail_response('102', ['message' => 'Failed to count comment']);
+        }
 
         $this->return_success_response([
             'type' => $type,

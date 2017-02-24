@@ -90,6 +90,7 @@
               .end().find('#commentEditDiv').attr('id', 'commentEditDiv_'+data.body.comment.id)
               .find('.commentEditSubmit').attr({'data-type': data.body.type, 'data-id': data.body.comment.id });
             $this.find('textarea[name=comment]').val('');
+            $('.commentArea').children().find('.number').text(data.body.comment_count);
           })
           .fail(function (data) {
             alert(data.body.message);
