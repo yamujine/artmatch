@@ -246,15 +246,16 @@ class Places extends MY_Controller {
     public function apply($place_id) {
         $this->load->model('apply_model');
         $this->load->library('applylib');
+        $default_exhibition = $this->exhibition_model->get_by_place_id($place_id);
 
         if ($this->input->method() === 'get') {
-            $artworks = $this->artwork_model->get_with_apply_status_by_user_id_and_place_id($this->accountlib->get_user_id(), $place_id);
+            $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id($this->accountlib->get_user_id(), $default_exhibition->id);
         } elseif ($this->input->method() === 'post') {
             $artwork_ids = $this->input->post('artwork_id');
             foreach ($artwork_ids as $artwork_id) {
-                $result = $this->apply_model->get_by_place_id_and_artwork_id($place_id, $artwork_id);
+                $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($default_exhibition->id, $artwork_id);
                 if (empty($result)) {
-                    $this->apply_model->insert($place_id, $artwork_id, APPLY_STATUS_IN_REVIEW);
+                    $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW);
                 }
             }
 

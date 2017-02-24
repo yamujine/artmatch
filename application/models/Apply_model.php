@@ -7,14 +7,14 @@ class Apply_model extends CI_Model {
     const TABLE_NAME = 'apply';
 
     //public $id; -- Ignore PK
-    public $place_id;
+    public $exhibition_id;
     public $artwork_id;
     public $status;
     public $registered_at;
 
-    public function insert($place_id, $artwork_id, $status) {
+    public function insert($exhibition_id, $artwork_id, $status) {
         $data = [
-            'place_id' => $place_id,
+            'exhibition_id' => $exhibition_id,
             'artwork_id' => $artwork_id,
             'status' => $status
         ];
@@ -26,10 +26,10 @@ class Apply_model extends CI_Model {
         return $this->db->insert_id();
     }
 
-    public function get_by_place_id_and_artwork_id($place_id, $artwork_id) {
+    public function get_by_exhibition_id_and_artwork_id($exhibition_id, $artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)
-            ->where('place_id', $place_id)
+            ->where('exhibition_id', $exhibition_id)
             ->where('artwork_id', $artwork_id)
             ->get()->row();
     }

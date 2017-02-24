@@ -186,11 +186,11 @@ class Artwork_model extends CI_Model {
         return $picks;
     }
 
-    public function get_with_apply_status_by_user_id_and_place_id($user_id, $place_id) {
+    public function get_apply_status_by_user_id_and_exhibition_id($user_id, $exhibition_id) {
         return $this->db
             ->select('artworks.*, apply.status AS apply_status')
             ->from(self::TABLE_NAME)
-            ->join('apply', "apply.artwork_id = artworks.id AND apply.place_id = ${place_id}", 'left')
+            ->join('apply', "apply.artwork_id = artworks.id AND apply.exhibition_id = ${exhibition_id}", 'left')
             ->where('artworks.user_id', $user_id)
             ->order_by('artworks.id', 'DESC')
             ->get()->result();
