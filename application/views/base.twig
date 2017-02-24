@@ -44,7 +44,7 @@
         <li class="patCategory">
           <a href="/?type=artworks">ARTIST</a>
         </li>
-        <li class="patCategory">
+        <li class="patCategory space">
           <a href="/?type=places">SPACE</a>
         </li>
       </ul>
@@ -62,7 +62,7 @@
           </a>
         </li>
         <li class="patLogout">
-          <a href="/account/logout">Logout</a>
+          <a class="logout noDivider" href="/account/logout">Logout</a>
         </li>
         {% if session.type == 0 %}
           <li><a href="/artworks/upload">작품올리기</a></li>
