@@ -148,6 +148,21 @@
         </div>
       </div>
       <!-- //== 제목 -->
+      <!-- //== 제목 -->
+      {% if session.id == place.user_id %}
+        <!-- == 나의 글 관련 옵션 드랍다운 메뉴 -->
+        <div class="dropdown">
+          <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">
+            <div class="icon"></div>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a class="placeEditBtn" data-id="{{ place.id }}">글 수정하기</a></li>
+            <li><a class="placeDeleteBtn" data-id="{{ place.id }}">글 삭제하기</a></li>
+            <li><a class="placeCommentToggleBtn">댓글 허용</a></li>
+          </ul>
+        </div>
+        <!-- //== 나의 글 관련 옵션 드랍다운 메뉴 -->
+      {% endif %}
       <!-- == 장소 -->
       <div class="places">
         <div class="mainThumbnail">
@@ -180,12 +195,6 @@
             <button class="sliderPrevBtn"></button>
             <button class="sliderNextBtn"></button>
             {% endif %}
-          </div>
-        {% endif %}
-        {% if session.id == place.user_id %}
-          <div>
-            <button class="placeEditBtn" data-id="{{ place.id }}">수정</button>
-            <button class="placeDeleteBtn" data-id="{{ place.id }}">삭제</button>
           </div>
         {% endif %}
       </div>

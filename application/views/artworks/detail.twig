@@ -200,6 +200,20 @@
         </div>
       </div>
       <!-- //== 제목 -->
+      {% if session.id == artwork.user_id %}
+        <!-- == 나의 글 관련 옵션 드랍다운 메뉴 -->
+        <div class="dropdown">
+          <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">
+            <div class="icon"></div>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a class="artworkEditBtn" data-id="{{ artwork.id }}">글 수정하기</a></li>
+            <li><a class="artworkDeleteBtn" data-id="{{ artwork.id }}">글 삭제하기</a></li>
+            <li><a class="artworkCommentToggleBtn">댓글 허용</a></li>
+          </ul>
+        </div>
+        <!-- //== 나의 글 관련 옵션 드랍다운 메뉴 -->
+      {% endif %}
       <!-- == 작품 -->
       <div class="artworks">
         <div class="mainThumbnail">
@@ -239,12 +253,6 @@
               <button class="sliderNextBtn"></button>
             {% endif %}
           </div>
-        {% endif %}
-        {% if session.id == artwork.user_id %}
-        <div>
-          <button class="artworkEditBtn" data-id="{{ artwork.id }}">수정</button>
-          <button class="artworkDeleteBtn" data-id="{{ artwork.id }}">삭제</button>
-        </div>
         {% endif %}
       </div>
       <!-- //== 작품 -->
