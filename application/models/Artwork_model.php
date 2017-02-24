@@ -31,6 +31,16 @@ class Artwork_model extends CI_Model {
         return false;
     }
 
+    public function is_exists_by_user_id($user_id) {
+        $result = $this->db
+            ->from(self::TABLE_NAME)
+            ->where('user_id', $user_id)
+            ->limit(1)
+            ->get()->row();
+
+        return !empty($result);
+    }
+
     public function gets($limit = null, $offset = null, $search = null, $user_id = null) {
         $query = $this->db
             ->select('artworks.*, users.user_name, count(user_artwork_picks.id) as pick_count')
