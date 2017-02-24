@@ -37,7 +37,7 @@ class Account extends CI_Controller {
                 $response = $fb->get('/me?fields=id,name,picture.type(large),email');
                 $userNode = $response->getGraphUser();
                 $data['email'] = $userNode->getEmail();
-                $data['picture'] = $userNode->getPicture()->getUrl();
+                $data['facebook_profile_image_url'] = $userNode->getPicture()->getUrl();
                 $data['facebook_id'] = $userNode->getId();
             }
 

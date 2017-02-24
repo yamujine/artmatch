@@ -186,7 +186,7 @@ class UsersApi extends API_Controller {
         $user = $this->user_model->get_by_fb_id($userNode->getId());
 
         if ($user === NULL) {
-            $this->return_fail_response('102', ['message' => '이메일을 찾을 수 없습니다.']);
+            $this->return_fail_response('102', ['message' => '미가입 회원입니다.']);
         }
 
         $this->accountlib->generate_user_session($user->id);

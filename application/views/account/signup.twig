@@ -125,8 +125,8 @@
         <img src="{{ 'images/logo_black.png' | static_url }}" width="268px"/>
       </div>
       <h2>가입하여 여러분의 작품을 전시하세요.</h2>
-      {% if picture %}
-        <img src="{{ picture }}" width="120px" height="120px" />
+      {% if facebook_profile_image_url %}
+        <img src="{{ facebook_profile_image_url }}" width="120px" height="120px" />
       {% endif %}
       <form id="patSignUpForm">
         <fieldset class="patUserTypeField">
@@ -141,8 +141,8 @@
         </fieldset>
         <fieldset>
           {% if email and not duplicated_email %}
-            <input type="hidden" name="email" placeholder="이메일" onkeyup="checksEmail()" value = "{{ email }}" />
-            <div style="text-align: left"> {{ email }} </div>
+            <input type="hidden" name="email" value = "{{ email }}" />
+            <div> {{ email }} </div>
           {% else %}
             <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()" value = "{{ email }}" />
           {% endif %}
@@ -158,8 +158,8 @@
           <input type="password" name="password" placeholder="패스워드를 입력하세요." />
         </fieldset>
         <fieldset>
-          {% if picture %}
-            <input type="hidden" name="profile_image" value = "{{ picture }}" />
+          {% if facebook_profile_image_url %}
+            <input type="hidden" name="profile_image" value = "{{ facebook_profile_image_url }}" />
             <input type="hidden" name="facebook_id" value="{{ facebook_id }}" />
             <input type="hidden" name="is_facebook" value = "1" />
           {% else %}

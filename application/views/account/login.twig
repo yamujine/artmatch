@@ -67,18 +67,15 @@
           alert('페이스북 로그인을 사용할 수 없습니다.');
           return false;
         }
-        var param = {
-          is_facebook:1
-        }
         $.ajax({
           method: "POST",
           url: "/api/login",
-          data: param
+          data: {is_facebook : 1}
         }).done(function (data) {
           if (data.result === true) {
             return location.href = '/';
           } else if (data.errorCode === '102'){
-            return location.href = '/account/signup?' + $.param(param);
+            return location.href = '/account/signup?' + $.param({is_facebook : 1});
           } else {
             if (data.errorCode === '101') {
               alert('email 권한이 필요합니다');
@@ -135,6 +132,7 @@
               $('.facebook').click();
             }
           }, {scope: 'public_profile,email', auth_type: 'rerequest'});
+          break;
         }
       }
     });
