@@ -53,14 +53,13 @@ class Imageupload {
             'encrypt_name' => TRUE
         ]);
 
-        // Upload Images
-        if ($this->CI->upload->do_multi_upload($param)) {
-            foreach ($this->CI->upload->get_multi_upload_data() as $uploaded_data) {
-                if ($generate_thumbs) {
-                    $this->_generate_thumbnails($uploaded_data['full_path']);
-                }
-                $uploaded_file_names[] = $uploaded_data['file_name'];
+        // 업로드 한 순서대로 loop 돌아서 중간에 오류가 생기면 error 리턴하므로 일단 결과는 무시하고 업로드 된 애들 파일만 가져온다
+        $this->CI->upload->do_multi_upload($param);
+        foreach ($this->CI->upload->get_multi_upload_data() as $uploaded_data) {
+            if ($generate_thumbs) {
+                $this->_generate_thumbnails($uploaded_data['full_path']);
             }
+            $uploaded_file_names[] = $uploaded_data['file_name'];
         }
 
         return $uploaded_file_names;

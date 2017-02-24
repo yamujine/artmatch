@@ -101,8 +101,8 @@
               </p>
             </div>
           {% endif %}
-          <img src="{{ image }}" class="preview{% if image is null %} hidden{% endif %}"/>
-          <input type="file" name="image" id="mainImageFile" accept="image/*" required/>
+          <img src="{{ image | image_url }}" class="preview{% if image is null %} hidden{% endif %}"/>
+          <input type="file" name="image" id="mainImageFile" accept="image/*" {% if image is null %}required{% endif %}/>
         </div>
         <!-- //== 대표 이미지 선택 -->
         <!-- == 추가 이미지 선택 -->
@@ -115,8 +115,10 @@
                 <div class="remove"></div>
                 {# TODO: 이미지 삭제 관련 필요 #}
                 {#<input type="checkbox" name="delete_images[]" value="{{ image.image }}"/>#}
-                <img src="{{ extra_images[key].image }}" class="preview {% if image is null %} hidden{% endif %}"/>
-                <input type="file" name="extra_images[]" accept="image/*"/>
+                <img src="{{ extra_images[key].image | image_url }}" class="preview {% if extra_images[key].image is null %} hidden{% endif %}"/>
+                {% if not extra_images[key].image %}
+                  <input type="file" name="extra_images[]" accept="image/*"/>
+                {% endif %}
               </div>
             {% endfor %}
           </div>
@@ -133,7 +135,7 @@
         <div class="descriptionInput">
           <textarea name="description" title="description" maxlength="100"
                     placeholder="장소를 소개해주세요. (최대 100자)"
-                    required>{% if description is not null %}{{ description|nl2br }}{% endif %}</textarea>
+                    required>{% if description %}{{ description|nl2br }}{% endif %}</textarea>
           <div class="tags">
             <input type="text" title="tags" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요" maxlength="60"
                    required/>
