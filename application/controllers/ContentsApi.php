@@ -58,6 +58,7 @@ class ContentsApi extends API_Controller {
     }
 
     public function delete_extra_images() {
+        $this->load->library('imageupload');
         $type = $this->input->post('type');
         $type_id = $this->input->post('type_id');
         $request_delete_images = $this->input->post('delete_images');
