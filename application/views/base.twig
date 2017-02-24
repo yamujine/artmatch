@@ -46,7 +46,7 @@
         <li class="patUserProfile">
           <a href="/users/me">
             {% if session.profile_image is empty %}
-              <img src="{{ 'images/tom.jpg' | static_url }}" class="img-circle" />
+              <img src="{{ 'images/avatar.png' | static_url }}" class="img-circle" />
             {% else %}
               <img src="{{ session.profile_image | thumb_url('profile') }}" class="img-circle"/>
             {% endif %}

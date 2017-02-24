@@ -108,7 +108,11 @@
       {% endif %}
       <!-- == 프로필 이미지 -->
       <div class="profileImage">
-        <img src="/static/images/tom.jpg" class="img-circle"/>
+        {% if user.profile_image is empty %}
+          <img src="{{ 'images/avatar@2x.png' | static_url }}" class="img-circle"/>
+        {% else %}
+          <img src="{{ user.profile_image }}" class="img-circle"/>
+        {% endif %}
       </div>
       <!-- //== 프로필 이미지 -->
       <!-- == 유저 이름 -->
