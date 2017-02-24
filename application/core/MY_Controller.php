@@ -13,7 +13,6 @@ class MY_Controller extends CI_Controller {
         $this->load->library('twig');
         /** @var Twig_Environment $twig */
         $twig = $this->twig->getTwig();
-        $this->load->helper('url');
         $this->config->load('facebook');
         $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
         $twig->addFilter(new Twig_SimpleFilter('image_url', 'UrlGenerator::generate_original_image_url'));

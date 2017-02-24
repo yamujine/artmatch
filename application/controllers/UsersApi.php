@@ -179,16 +179,18 @@ class UsersApi extends API_Controller {
         $userNode = $response->getGraphUser();
         $this->accountlib->generate_facebook_access_token_session($accessToken);
 
+        // 페이스북 이메일 권한 체크, 권한 재요청 페이지로 이동
         if (empty($userNode->getEmail())) {
-            $this->return_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
+            $this->return_fail_response(FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION, ['message' => '이메일 권한이 없습니다.']);
         }
 
         $user = $this->user_model->get_by_fb_id($userNode->getId());
 
+        // 페이스북 아이디 없음, 로그인 페이지로 이동
         if ($user === NULL) {
-            $this->return_fail_response('102', ['message' => '미가입 회원입니다.']);
+            $this->return_fail_response(FACEBOOK_NOT_JOINED_USER, ['message' => '미가입 회원입니다.']);
         }
-
+        // 로그인 성공, 메인페이지로 이동
         $this->accountlib->generate_user_session($user->id);
         $this->return_success_response(['message' => 'facebook login success']);
     }

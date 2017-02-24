@@ -74,10 +74,10 @@
         }).done(function (data) {
           if (data.result === true) {
             return location.href = '/';
-          } else if (data.errorCode === '102'){
+          } else if (data.errorCode === '{{ FACEBOOK_NOT_JOINED_USER }}'){
             return location.href = '/account/signup?' + $.param({is_facebook : 1});
           } else {
-            if (data.errorCode === '101') {
+            if (data.errorCode === '{{ FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION }}') {
               alert('email 권한이 필요합니다');
               rerequestFacebookPermissions();
             } else {

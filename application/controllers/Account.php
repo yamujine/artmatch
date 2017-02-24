@@ -13,12 +13,14 @@ class Account extends CI_Controller {
         $this->config->load('facebook');
         /** @var Twig_Environment $twig */
         $twig = $this->twig->getTwig();
-        $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
-        $this->twig->addGlobal('FACEBOOK_API_VERSION', $this->config->item('api_version'));
         $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
         $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
         $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
+        $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
+        $this->twig->addGlobal('FACEBOOK_API_VERSION', $this->config->item('api_version'));
+        $this->twig->addGlobal('FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION', FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION);
+        $this->twig->addGlobal('FACEBOOK_NOT_JOINED_USER',FACEBOOK_NOT_JOINED_USER);
     }
 
     public function signup() {
