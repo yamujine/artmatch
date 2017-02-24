@@ -196,6 +196,12 @@ class Place_model extends CI_Model {
             ->update(self::TABLE_NAME);
     }
 
+    public function change_comment_option($place_id, $is_use_comment) {
+        $this->db->update(self::TABLE_NAME, ['use_comment' => $is_use_comment], ['id' => $place_id]);
+
+        return $this->db->affected_rows() === 1;
+    }
+
     public function delete($place_id) {
         $this->db->delete(self::TABLE_NAME, ['id' => $place_id]);
 

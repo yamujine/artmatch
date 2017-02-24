@@ -118,7 +118,7 @@
         var offset = $('.patItemList li').length;
         var totalCount = $(this).data('total-count');
 
-        $.get('/api/contents/' + type, {offset: offset, limit: 9})
+        $.get('/api/contents/list', {type: type, offset: offset, limit: 9})
           .done(function (data) {
             $('.itemList').append(data);
 

@@ -11,8 +11,9 @@ class Main extends MY_Controller {
         $this->twig->display('main', $data);
     }
 
-    public function api($type) {
+    public function api() {
         $user_id = $this->accountlib->get_user_id();
+        $type = $this->input->get('type');
         $limit = $this->input->get('limit');
         $offset = $this->input->get('offset');
 
