@@ -20,7 +20,7 @@ class ContentsApi extends API_Controller {
         }
     }
 
-    public function change_use_of_comment() {
+    public function change_comment_option() {
         $type = $this->input->post('type');
         $type_id = $this->input->post('type_id');
 
@@ -43,9 +43,9 @@ class ContentsApi extends API_Controller {
         $is_use_comment = ($object->use_comment === TYPE_NO_COMMENT) ? TYPE_USE_COMMENT : TYPE_NO_COMMENT;
 
         if ($type === TYPE_ARTWORKS) {
-            $result = $this->artwork_model->change_use_of_comments($type_id, $is_use_comment);
+            $result = $this->artwork_model->change_comment_option($type_id, $is_use_comment);
         } elseif ($type === TYPE_PLACES) {
-            $result = $this->place_model->change_use_of_comments($type_id, $is_use_comment);
+            $result = $this->place_model->change_comment_option($type_id, $is_use_comment);
         }
 
         if (!$result) {
