@@ -1,15 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class UsersApi extends API_Controller {
-    public function __construct() {
+class UsersApi extends API_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->library(['email', 'encryption', 'form_validation', 'twig', 'imageupload']);
         $this->load->helper('url');
         $this->load->model('user_model');
     }
 
-    public function register() {
+    public function register()
+    {
         // Validation
         $this->_validate_signup_form();
         if ($this->form_validation->run() !== TRUE) {
@@ -35,7 +38,7 @@ class UsersApi extends API_Controller {
         );
 
         if (!$id) {
-            $this->return_fail_response('101', ['message' => 'duplicated email']);
+            $this->return_fail_response('101', ['message' => '중복된 이메일 입니다.']);
         }
 
         $user = $this->user_model->get_by_id($id);
@@ -45,10 +48,11 @@ class UsersApi extends API_Controller {
             $this->user_model->authorize($id);
         }
         $this->accountlib->generate_user_session($id);
-        $this->return_success_response(['message' => 'signup success']);
+        $this->return_success_response(['message' => '회원가입이 완료되었습니다.']);
     }
 
-    public function login() {
+    public function login()
+    {
         if ($this->input->post('is_facebook') === '1') {
             $this->_facebook_login();
         } else {
@@ -56,7 +60,8 @@ class UsersApi extends API_Controller {
         }
     }
 
-    public function update_profile_image() {
+    public function update_profile_image()
+    {
         $user_id = $this->accountlib->get_user_id();
         $current_image = $this->user_model->get_by_id($user_id)->profile_image;
         $uploaded_image_name = $this->imageupload->upload_image('profile_image', true, 'profile');
@@ -73,29 +78,31 @@ class UsersApi extends API_Controller {
         );
 
         if (!$result) {
-            $this->return_fail_response('500', ['message' => 'database update error']);
+            $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러. 관리자에게 문의하세요.']);
         }
 
-        $this->return_success_response(['message' => 'update success']);
+        $this->return_success_response(['message' => '프로필사진 변경이 완료되었습니다.']);
     }
 
-    public function change_password() {
+    public function change_password()
+    {
         $user = $this->user_model->get_by_id($this->accountlib->get_user_id());
 
         if (!password_verify($this->input->post('current_password'), $user->password)) {
-            $this->return_fail_response('103', ['message' => 'password is not corrected']);
+            $this->return_fail_response('103', ['message' => '비밀번호가 일치하지 않습니다.']);
         }
 
         $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
         $result = $this->user_model->update_password($user->id, $hashed_password);
         if (!$result) {
-            $this->return_fail_response('500', ['message' => 'database update error']);
+            $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러. 관리자에게 문의하세요.']);
         }
 
-        $this->return_success_response(['message' => 'update success']);
+        $this->return_success_response(['message' => '비밀번호 변경이 완료되었습니다.']);
     }
 
-    public function check_username() {
+    public function check_username()
+    {
         $username = $this->input->get('username');
         if (empty($username)) {
             $this->return_fail_response('101', ['message' => '유저 아이디가 입력되지 않았습니다.']);
@@ -113,7 +120,8 @@ class UsersApi extends API_Controller {
         $this->return_success_response(['message' => '사용 가능한 유저 아이디입니다.']);
     }
 
-    public function check_email() {
+    public function check_email()
+    {
         $email = $this->input->get('email');
         if (empty($email)) {
             $this->return_fail_response('101', ['message' => '이메일이 입력되지 않았습니다.']);
@@ -127,7 +135,8 @@ class UsersApi extends API_Controller {
         $this->return_success_response(['message' => '사용 가능한 이메일입니다.']);
     }
 
-    public function reset_password() {
+    public function reset_password()
+    {
         $this->load->helper('string');
         $email = $this->input->post('email');
         $temp_password = random_string('alpha', 8);
@@ -144,7 +153,8 @@ class UsersApi extends API_Controller {
         $this->return_success_response(['message' => '이메일로 임시 비밀번호를 전송해 드렸습니다']);
     }
 
-    private function _simple_login() {
+    private function _simple_login()
+    {
         $email_or_username = $this->input->post('email_or_username');
         if (strpos($email_or_username, '@') !== false) {
             $user = $this->user_model->get_by_email($email_or_username);
@@ -157,13 +167,14 @@ class UsersApi extends API_Controller {
             $this->return_fail_response('102', ['message' => $error_msg]);
         }
         if (!password_verify($this->input->post('password'), $user->password)) {
-            $this->return_fail_response('103', ['message' => 'password is not corrected']);
+            $this->return_fail_response('103', ['message' => '비밀번호가 일치하지 않습니다']);
         }
         $this->accountlib->generate_user_session($user->id);
-        $this->return_success_response(['message' => 'login success']);
+        $this->return_success_response(['message' => '로그인 성공']);
     }
 
-    private function _facebook_login() {
+    private function _facebook_login()
+    {
         $this->config->load('facebook');
         $fb = new Facebook\Facebook([
             'app_id' => $this->config->item('app_id'),
@@ -174,7 +185,7 @@ class UsersApi extends API_Controller {
         $accessToken = $helper->getAccessToken();
 
         if ($accessToken === NULL) {
-            $this->return_fail_response('500', ['message' => 'facebook api load error']);
+            $this->return_fail_response('500', ['message' => '페이스북 api 초기화 실패']);
         }
 
         // Logged in
@@ -196,10 +207,11 @@ class UsersApi extends API_Controller {
         }
         // 로그인 성공, 메인페이지로 이동
         $this->accountlib->generate_user_session($user->id);
-        $this->return_success_response(['message' => 'facebook login success']);
+        $this->return_success_response(['message' => '페이스북 로그인 성공']);
     }
 
-    private function _validate_signup_form() {
+    private function _validate_signup_form()
+    {
         // Register validation
         $this->form_validation->set_error_delimiters('', "\r\n");
         $this->form_validation->set_rules('email', '이메일', 'required|valid_email|is_unique[users.email]', [
@@ -221,7 +233,8 @@ class UsersApi extends API_Controller {
         ]);
     }
 
-    public function is_not_prohibitied_user_name($user_name) {
+    public function is_not_prohibitied_user_name($user_name)
+    {
         if (in_array($user_name, ['admin', 'me', 'pickartyou'], false)) {
             $this->form_validation->set_message('is_not_prohibitied_user_name', '유저 아이디에 사용할 수 없는 단어가 포함되어 있습니다.');
 
