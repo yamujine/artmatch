@@ -135,7 +135,7 @@
           }
         }).done(function (data) {
           if (data.body.result_type === 'delete') {
-            $this.parent().parent().remove();
+            $('#comment_'+data.body.type_comment_id).remove();
             $('.commentArea').children().find('.number').text(data.body.comment_count);
           } else {
             alert(data.body.message);
@@ -308,7 +308,6 @@
                   <button class="commentEditSubmit" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">
                     저장
                   </button>
-                  <button class="commentEditCancel">취소</button>
                 </div>
                 <!-- //== 댓글 수정 폼-->
               </div>
