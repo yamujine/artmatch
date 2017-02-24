@@ -67,6 +67,21 @@
         });
     });
   </script>
+  <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+  <script>
+    $('input[name=address]').click(function() {
+      var $this = $(this);
+      var $area = $('input[name=area]');
+      new daum.Postcode({
+        oncomplete: function(data) {
+          $this.val(data.roadAddress);
+          if (!$area.val()) {
+            $area.val(data.bname);
+          }
+        }
+      }).open({popupName: 'addressPopup'});
+    });
+  </script>
 {% endblock %}
 
 {% block contents %}
@@ -87,7 +102,7 @@
         <!-- //== 대표 장소 -->
         <!-- == 주소 장소 -->
         <div class="address">
-          <input type="text" name="address" placeholder="상세 주소" value="{{ address }}" required/>
+          <input type="text" name="address" placeholder="상세 주소" value="{{ address }}" readonly required/>
         </div>
         <!-- //== 주소 -->
         <!-- == 대표 이미지 선택 -->
