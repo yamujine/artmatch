@@ -69,7 +69,7 @@ class Places extends MY_Controller {
         $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
         $this->form_validation->set_rules('area', 'area', 'required|trim');
         $this->form_validation->set_rules('address', 'address', 'required|trim');
-        $this->form_validation->set_rules('tags', 'tags', 'required|trim');
+        $this->form_validation->set_rules('tags', 'tags', 'required|trim|max_length[60]');
 
         $this->form_validation->set_rules('exhibition_start_date', 'exhibition_start_date', 'required|exact_length[8]|trim');
         $this->form_validation->set_rules('exhibition_end_date', 'exhibition_end_date', 'required|exact_length[8]|trim');
@@ -111,11 +111,13 @@ class Places extends MY_Controller {
             $exhibition = $this->exhibition_model->get_by_place_id($place->id);
             $exhibition_array = json_decode(json_encode($exhibition), true);
             $exhibition_data = [];
-            foreach (array_keys($exhibition_array) as $key) {
-                $new_key = 'exhibition_' . $key;
-                $exhibition_data[$new_key] = $exhibition_array[$key];
+            if ($exhibition_array !== null) {
+                foreach (array_keys($exhibition_array) as $key) {
+                    $new_key = 'exhibition_' . $key;
+                    $exhibition_data[$new_key] = $exhibition_array[$key];
+                }
+                $data = array_merge($data, $exhibition_data);
             }
-            $data = array_merge($data, $exhibition_data);
         }
 
         if ($this->input->method() === 'post') {
