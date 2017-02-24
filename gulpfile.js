@@ -71,6 +71,16 @@ gulp.task('jquery-validation', function () {
   return gulp.src('assets/bower_components/jquery-validation/dist/**')
     .pipe(gulp.dest('static/dist/jquery-validation'));
 });
+
+gulp.task('extra-assets-js', function () {
+  return gulp.src('assets/js/**')
+    .pipe(gulp.dest('static/dist/js'));
+});
+
+gulp.task('extra-assets-css', function () {
+  return gulp.src('assets/css/**')
+    .pipe(gulp.dest('static/dist/css'));
+});
 /** For Develop TASK END **/
 
 gulp.task('uglify', function () {
@@ -91,7 +101,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
-gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck', 'jquery-validation', 'vex']);
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck', 'jquery-validation', 'vex', 'extra-assets-js', 'extra-assets-css']);
 
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')
