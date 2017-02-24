@@ -30,16 +30,18 @@ body {
           li {
             &:not(:first-child) {
               a {
-                &:before {
-                  position: absolute;
-                  top: 0;
-                  bottom: 0;
-                  width: 1px;
-                  height: 100%;
-                  content: "";
-                  margin-left: -18px;
-                  background: $white-two;
-                  opacity: 0.1;
+                &:not(.noDivider) {
+                  &:before {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    width: 1px;
+                    height: 100%;
+                    content: "";
+                    margin-left: -18px;
+                    background: $white-two;
+                    opacity: 0.1;
+                  }
                 }
               }
             }
@@ -49,6 +51,50 @@ body {
               font-style: normal;
               color: $white-two;
               padding: 16px 18px;
+            }
+
+            &.patCategory {
+              border: none;
+
+              a {
+                font-family: ArialMT, Arial, sans-serif;
+                font-size: 14px;
+                color: $pinkish-grey-two;
+                padding: 14px 10px 14px 25px;
+              }
+
+              &.space {
+                a {
+                  &:before {
+                    position: absolute;
+                    top: 50%;
+                    margin-top: -5px;
+                    width: 1px;
+                    height: 10px;
+                  }
+                }
+              }
+            }
+
+            &.patLogout {
+              width: 62px;
+              height: 26px;
+              border-radius: 30px;
+              border: 1px solid $brownish-grey;
+              margin: 13px 18px 13px 0;
+              cursor: pointer;
+
+              a {
+                display: inline;
+                padding: 0 12px;
+                font-family: ArialMT, Arial, sans-serif;
+                font-size: 12px;
+                color: $white-thirteen;
+              }
+
+              &:hover {
+                border-color: $warm-grey-four;
+              }
             }
 
             &.patUserProfile {
