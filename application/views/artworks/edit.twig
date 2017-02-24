@@ -35,6 +35,9 @@
         return false;
       });
 
+      // 이미지 사이즈에 맞게 재조정
+      $('.mainImage.imageSelected').css({width: $('.mainImage.imageSelected .preview').width()});
+
       // 파일 선택시 이벤트
       $('input[type=file]').change(function () {
         var wrapElement = $(this).closest('.imageUpload');
@@ -45,16 +48,17 @@
           var reader = new FileReader();
           reader.onload = function (e) {
             var src = e.target.result;
-            previewElement.removeClass('hidden').attr('src', src);
 
-            wrapElement.css({width: previewElement.width()});
+            previewElement.removeClass('hidden').attr('src', src);
+            wrapElement.addClass('imageSelected').css({width: previewElement.width()});
           };
 
           reader.readAsDataURL($(this)[0].files[0]);
         } else {
           var src = document.selection.createRange().text;
+
           previewElement.removeClass('hidden').attr('src', src);
-          wrapElement.css({width: previewElement.width()});
+          wrapElement.addClass('imageSelected').css({width: previewElement.width()});
         }
       });
 
@@ -65,6 +69,80 @@
         .focusout(function () {
           $(this).closest('.descriptionInput').removeClass('active');
         });
+
+      // 메인 이미지 교체 클릭
+      $('.replace').click(function () {
+        $('#mainImageFile').trigger('click');
+      });
+
+      // 추가 이미지 업로드 삭제 하는 경우
+      $('.imageUpload input[type=checkbox]').change(function () {
+        $(this).closest('.imageUpload').toggleClass('checked', $(this).is(':checked'));
+
+        updateAdditionalRemoveInstruction();
+      });
+
+      // 삭제 설명 관련 표시
+      function updateAdditionalRemoveInstruction() {
+        var length = $('.imageUpload input[type=checkbox]:checked').length;
+
+        $('.additionalImages .removeInstruction').toggle(length > 0);
+        $('.additionalImages .instruction').toggle(length == 0);
+      }
+
+      // 추가 이미지 삭제 버튼 클릭
+      $('.removeInstruction .removeBtn').click(function () {
+        var type = $(this).closest('form').find('input[name=type]').val();
+        var id = $(this).closest('form').find('input[name=id]').val();
+        var targetDeletedWhenUploaded = $('.imageUpload.uploaded input[type=checkbox]:checked');
+
+        // 새로 등록하는 경우
+        if (!id || targetDeletedWhenUploaded.length == 0) {
+          cleanAllRemoveCheckedFiles();
+
+          return false;
+        }
+
+        // 기존 이미지 삭제하는 경우
+        var formData = new FormData();
+        formData.append('type', type);
+        formData.append('type_id', id);
+
+        targetDeletedWhenUploaded.each(function () {
+          formData.append('delete_images[]', $(this).val());
+        });
+
+        $.ajax({
+          method: 'POST',
+          url: '/api/contents/delete_extra_images',
+          processData: false, // To send Form Data
+          contentType: false, // To send Form Data
+          data: formData
+        })
+          .done(function (data) {
+            if (!data.result) {
+              alert(data.body.message);
+
+              return false;
+            }
+
+            cleanAllRemoveCheckedFiles();
+          })
+          .fail(function () {
+            alert('삭제 도중 오류가 발생했습니다. 다시 시도해 주세요.');
+          });
+      });
+
+      // 추가 이미지 삭제 체크된 파일 삭제 갱신
+      function cleanAllRemoveCheckedFiles() {
+        $('.imageUpload input[type=checkbox]:checked').each(function () {
+          var element = $(this).closest('.imageUpload');
+
+          element.removeClass('imageSelected uploaded').find('.preview').addClass('hidden').removeAttr('src');
+          element.find('input[type=checkbox]').prop('checked', false).trigger('change');
+          element.find('input[type=file]').val('');
+        });
+      }
     });
   </script>
 {% endblock %}
@@ -74,13 +152,21 @@
     <div class="container">
       <!-- == 업로드 폼 -->
       <form id="patUploadForm" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{{ id }}"/>
+        <input type="hidden" name="type" value="artworks"/>
+
         <!-- == 작품명 입력 -->
         <div class="title">
           <input type="text" name="title" placeholder="작품명을 입력해주세요." value="{{ title }}" required/>
         </div>
         <!-- //== 작품명 입력 -->
         <!-- == 대표 이미지 선택 -->
-        <div class="mainImage imageUpload">
+        <div class="mainImage imageUpload{% if image is not null %} imageSelected{% endif %}">
+          <!-- == 교체 아이콘 -->
+          <div class="replace">
+            <div class="icon"></div> 교체
+          </div>
+          <!-- //== 교체 아이콘 -->
           {% if image is null %}
             <div class="instruction">
               <div class="icon"><i class="glyphicon glyphicon-plus"></i></div>
@@ -104,16 +190,19 @@
         <div class="additionalImages">
           <div class="slider">
             {% for key in 0..9 %}
-              <div class="item imageUpload">
-                {# TODO: 아이콘 관련 디자이너 요청함 #}
+              <div class="item imageUpload{% if extra_images[key].image %} imageSelected uploaded{% endif %}">
+                <div class="border"></div>
                 <div class="add"></div>
-                <div class="remove"></div>
-                {# TODO: 이미지 삭제 관련 필요 #}
-                {#<input type="checkbox" name="delete_images[]" value="{{ image.image }}"/>#}
+                <!-- == 삭제 아이콘 -->
+                <div class="remove">
+                  <input type="checkbox" id="extra_images_{{ key + 1}}" name="delete_images[]" value="{{ extra_images[key].image }}"/>
+                  <label for="extra_images_{{ key + 1 }}">
+                    <div class="icon"></div>
+                  </label>
+                </div>
+                <!-- //== 삭제 아이콘 -->
                 <img src="{{ extra_images[key].image | image_url }}" class="preview {% if extra_images[key].image is null %} hidden{% endif %}"/>
-                {% if not extra_images[key].image %}
-                  <input type="file" name="extra_images[]" accept="image/*"/>
-                {% endif %}
+                <input type="file" name="extra_images[]" accept="image/*"/>
               </div>
             {% endfor %}
           </div>
@@ -123,6 +212,9 @@
           <!-- //== 컨트롤 -->
           <div class="instruction">
             작품은 최대 10개까지 올리실 수 있습니다.
+          </div>
+          <div class="removeInstruction">
+            선택한 작품을 삭제하시려면 옆의 확인 버튼을 눌러주세요. <button type="button" class="removeBtn">확인</button>
           </div>
         </div>
         <!-- //== 추가 이미지 선택 -->
