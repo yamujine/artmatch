@@ -1,0 +1,28 @@
+<li id="comment_{{ comment.id }}">
+  <div class="profileImage">
+    {% if comment.profile_image is empty %}
+      <img src="/static/images/tom.jpg" class="img-circle"/>
+    {% else %}
+      <img src="{{ comment.profile_image | thumb_url('profile') }}" class="img-circle"/>
+    {% endif %}
+  </div>
+  <div class="content">
+    <div class="meta">
+      <a href="/users/{{ comment.user_name }}">{{ comment.user_name }}</a> <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
+    </div>
+    <div class="comment">{{ comment.comment|nl2br }}</div>
+    {% if session.id == comment.user_id %}
+      <button class="commentEditBtn" data-id="{{ comment.id }}">수정</button>
+      <button class="commentEditBtnCancel" style="display:none">수정취소</button>
+      <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
+    {% endif %}
+    <!-- == 댓글 수정 폼 -->
+    <div id="commentEditDiv_{{ comment.id }}" style="display:none">
+      <textarea id="commentEditText"></textarea>
+      <button class="commentEditSubmit" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">
+        저장
+      </button>
+    </div>
+    <!-- //== 댓글 수정 폼-->
+  </div>
+</li>
