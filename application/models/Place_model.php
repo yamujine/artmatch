@@ -142,6 +142,20 @@ class Place_model extends CI_Model {
         return $places;
     }
 
+    public function get_picked_by_user_id($user_id) {
+        $picks = $this->db
+            ->select('places.*, count(P2.id) as pick_count')
+            ->from(self::TABLE_NAME)
+            ->join('user_place_picks AS P2', 'P2.place_id = places.id', 'left')
+            ->join('user_place_picks', 'user_place_picks.place_id = places.id')
+            ->where('user_place_picks.user_id', $user_id)
+            ->group_by('places.id')
+            ->order_by('user_place_picks.id', 'DESC')
+            ->get()->result();
+
+        return $picks;
+    }
+
     public function get_images_by_id($place_id) {
         return $this->db
             ->from(self::TABLE_NAME_IMAGES)

@@ -39,36 +39,6 @@ class Pick_model extends CI_Model {
             ->count_all_results();
     }
 
-    public function get_artworks_by_user_id($user_id) {
-        $this->load->model('artwork_model');
-        $picks = $this->db
-            ->select('artworks.*, count(P2.id) as pick_count')
-            ->from('artworks')
-            ->join('user_artwork_picks AS P2', 'P2.artwork_id = artworks.id', 'left')
-            ->join(self::ARTWORK_PICKS_TABLE_NAME, 'user_artwork_picks.artwork_id = artworks.id')
-            ->where('user_artwork_picks.user_id', $user_id)
-            ->group_by('artworks.id')
-            ->order_by('user_artwork_picks.id', 'DESC')
-            ->get()->result();
-
-        return $picks;
-    }
-
-    public function get_places_by_user_id($user_id) {
-        $this->load->model('place_model');
-        $picks = $this->db
-            ->select('places.*, count(P2.id) as pick_count')
-            ->from('places')
-            ->join("user_place_picks AS P2", 'P2.place_id = places.id', 'left')
-            ->join(self::PLACE_PICKS_TABLE_NAME, 'user_place_picks.place_id = places.id')
-            ->where('user_place_picks.user_id', $user_id)
-            ->group_by('places.id')
-            ->order_by('user_place_picks.id', 'DESC')
-            ->get()->result();
-
-        return $picks;
-    }
-
     public function insert_pick($type, $user_id, $type_id) {
         if ($type === TYPE_ARTWORKS) {
             $this->load->model('artwork_model');

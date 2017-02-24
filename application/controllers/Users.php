@@ -43,9 +43,9 @@ class Users extends MY_Controller {
         $my_picks = [];
         if ($is_my_page && !empty($pick_type)) {
             if ($pick_type === TYPE_ARTWORKS) {
-                $my_picks = $this->pick_model->get_artworks_by_user_id($user->id);
+                $my_picks = $this->artwork_model->get_picked_by_user_id($user->id);
             } elseif ($pick_type === TYPE_PLACES) {
-                $my_picks = $this->pick_model->get_places_by_user_id($user->id);
+                $my_picks = $this->place_model->get_picked_by_user_id($user->id);
             }
         }
 
