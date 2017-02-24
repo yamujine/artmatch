@@ -150,7 +150,7 @@
         <div class="descriptionInput">
           <textarea name="description" title="description" maxlength="100"
                     placeholder="장소를 소개해주세요. (최대 100자)"
-                    required>{% if description %}{{ description|nl2br }}{% endif %}</textarea>
+                    required>{% if description %}{{ description }}{% endif %}</textarea>
           <div class="tags">
             <input type="text" title="tags" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요" maxlength="60"
                    required/>
