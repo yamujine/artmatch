@@ -1,5 +1,6 @@
 @import "../helper/colorchips";
 @import "../helper/mixins";
+@import "../helper/_radio";
 
 #patDetail {
   width: 875px;
@@ -358,21 +359,6 @@
           label {
             margin-right: 20px;
           }
-
-          // magic radio 커스텀
-          .magic-radio+label:hover:before {
-            @include prefix(animation-name, none);
-            border-color: $black-five;
-          }
-
-          .magic-radio:checked+label:before {
-            border-color: $black-five;
-          }
-
-          .magic-radio+label:after {
-            background: $black-five;
-          }
-          // -- magic radio 커스텀
         }
         // -- 옵션 타이틀 (공통)
 
