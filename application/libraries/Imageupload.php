@@ -97,4 +97,19 @@ class Imageupload {
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_POSTFIX . $file_ext);
         @unlink(self::UPLOAD_PATH . $filename_only . self::THUMBNAIL_SMALL_POSTFIX . $file_ext);
     }
+
+    public function upload_image_by_url($url, $generate_thumbs = true, $image_type = '') {
+        $file_ext = pathinfo(basename(parse_url($url)['path']), PATHINFO_EXTENSION);
+        $filename = $this->CI->security->sanitize_filename(md5(uniqid(mt_rand(), true))) . '.' . $file_ext;
+        $image_path = self::UPLOAD_PATH . $image_type . '/' . $filename;
+        $result = copy($url, $image_path);
+
+        if ($result === FALSE) {
+            return '';
+        }
+        if ($generate_thumbs) {
+            $this->_generate_thumbnails($image_path);
+        }
+        return $filename;
+    }
 }

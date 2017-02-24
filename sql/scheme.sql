@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`users` (
   `type` TINYINT UNSIGNED NOT NULL COMMENT '창작자/공간소유자 구분 여부 0-창작자 1-공간소유자',
   `user_name` VARCHAR(15) NOT NULL COMMENT '유저 아이디',
   `profile_image` VARCHAR(45) NOT NULL COMMENT '유저 프로필 이미지 파일 이름',
+  `facebook_id` VARCHAR (45) DEFAULT NULL COMMENT '페이스북 아이디',
   `is_auth` TINYINT UNSIGNED NOT NULL COMMENT '이메일 인증 여부',
   `is_admin` TINYINT UNSIGNED NOT NULL COMMENT '관리자 여부',
   `registered_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '사용자 등록시간',

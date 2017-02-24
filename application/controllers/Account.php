@@ -10,16 +10,46 @@ class Account extends CI_Controller {
         $this->load->model('user_model');
         $this->load->helper('url');
         $this->load->library('twig');
+        $this->config->load('facebook');
         /** @var Twig_Environment $twig */
         $twig = $this->twig->getTwig();
         $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
         $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
         $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
         $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
+        $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
+        $this->twig->addGlobal('FACEBOOK_API_VERSION', $this->config->item('api_version'));
+        $this->twig->addGlobal('FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION', FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION);
+        $this->twig->addGlobal('FACEBOOK_NOT_JOINED_USER',FACEBOOK_NOT_JOINED_USER);
     }
 
     public function signup() {
-        $this->twig->display('account/signup');
+        $data = [];
+        if ($this->input->get('is_facebook') === '1') {
+            $fb = new Facebook\Facebook([
+                'app_id' => $this->config->item('app_id'),
+                'app_secret' => $this->config->item('app_secret'),
+                'default_graph_version' => $this->config->item('api_version')
+            ]);
+
+            $accessToken = $this->accountlib->get_facebook_access_token();
+
+            if ($accessToken !== NULL) {
+                $fb->setDefaultAccessToken($accessToken);
+                $response = $fb->get('/me?fields=id,name,picture.type(large),email');
+                $userNode = $response->getGraphUser();
+                $data['email'] = $userNode->getEmail();
+                $data['facebook_profile_image_url'] = $userNode->getPicture()->getUrl();
+                $data['facebook_id'] = $userNode->getId();
+            }
+
+            $is_already_used = $this->user_model->check_email($userNode->getEmail());
+
+            if ($is_already_used) {
+                $data['duplicated_email'] = TRUE;
+            }
+        }
+        $this->twig->display('account/signup', $data);
     }
 
     public function login() {

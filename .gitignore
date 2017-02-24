@@ -1,6 +1,7 @@
 .DS_Store
 
 /uploads/
+/vendor/
 
 application/cache/*
 !application/cache/index.html
