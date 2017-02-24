@@ -232,6 +232,9 @@
                 {{ place.exhibition.artwork_count }}개의 작품 전시 가능함
               {% endif %}
             </li>
+            {% if place.status == PLACE_STATUS_NEED_ARTWORK and has_artworks %}
+              <button class="btn btn-default" onclick="alert('todo 지원하기');">apply</button>>
+            {% endif %}
           </ul>
         </div>
         <div class="commentary">
