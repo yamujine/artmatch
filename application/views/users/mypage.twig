@@ -8,7 +8,7 @@
   <script type="text/javascript">
     $(function () {
       // 그리드 아이템 클릭
-      $(document).on('click', '.grid .wrap', function () {
+      $(document).on('click', '.item .wrap', function () {
         var type = $(this).data('type');
         var id = $(this).data('id');
 
@@ -123,9 +123,9 @@
       <!-- == 유저 메타 정보 -->
       <ul class="metadata">
         {% if user.type == USER_TYPE_ARTIST %}
-          <li class="artwork">작품수 <span class="number">0</span></li>
+          <li class="artwork">작품수 <span class="number">{{ mine|length }}</span></li>
         {% elseif user.type == USER_TYPE_PLACE_OWNER %}
-          <li class="place">공간수 <span class="number">0</span></li>
+          <li class="place">공간수 <span class="number">{{ mine|length }}</span></li>
         {% endif %}
         <li class="pick">PICK <span class="number">{{ given_pick_count }}</span></li>
       </ul>
@@ -166,7 +166,7 @@
       <!-- //== 픽 탭 -->
     {% endif %}
   {% endif %}
-
+  
   {% if not is_my_page or (is_my_page and pick_type is empty) %}
     {% set items = mine %}
   {% else %}
@@ -181,18 +181,16 @@
         <ul class="itemList">
           {% import 'macro/mypage.macro.twig' as mypage_macro %}
           {% for item in items %}
-            {# 나의 공간을 표시해야하는게 아닌 경우 공통 디자인의 아이템을 사용 #}
-            {% if (pick_type is not empty) or (user.type == USER_TYPE_ARTIST) %}
-               {# 타입 설정 #}
-              {% set type = pick_type %}
-              {% if type is null %}
-                {% set type = TYPE_ARTWORKS %}
+            {% if not is_my_page or (is_my_page and pick_type is empty) %}
+              {# 마이페이지 내 나의 작품/장소 #}
+              {% if user.type == USER_TYPE_ARTIST %}
+                {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
+              {% elseif user.type == USER_TYPE_PLACE_OWNER %}
+                {{ mypage_macro.render_mypage_place_item(item) }}
               {% endif %}
-               {# 아이템 렌더 #}
-              {{ mypage_macro.render_mypage_grid_item(item, type, loop.index) }}
             {% else %}
-               {# 아이템 렌더 #}
-              {{ mypage_macro.render_mypage_place_item(item) }}
+              {# 나의 공간을 표시해야하는게 아닌 경우 공통 디자인의 아이템을 사용 #}
+              {{ mypage_macro.render_mypage_grid_item(item, pick_type, loop.index) }}
             {% endif %}
           {% endfor %}
         </ul>
