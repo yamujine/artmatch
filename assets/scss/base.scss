@@ -53,7 +53,7 @@ body {
 
             &.patCategory {
               a {
-                font-family: 'ArialMT';
+                font-family: ArialMT, Arial, sans-serif;
                 font-size: 14px;
                 color: $pinkish-grey-two;
                 padding: 14px 10px 14px 25px;
@@ -71,7 +71,7 @@ body {
               a {
                 display: inline;
                 padding:0 12px;
-                font-family: ArialMT;
+                font-family: ArialMT, Arial, sans-serif;
                 font-size: 12px;
                 color: #e0e0e0;
               }
