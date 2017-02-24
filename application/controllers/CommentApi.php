@@ -46,10 +46,13 @@ class CommentApi extends API_Controller {
     public function index() {
         $type = $this->input->post('type');
         $type_id = $this->input->post('type_id');
+        $limit = $this->input->post('limit');
+        $offset = $this->input->post('offset');
 
-        $comments = $this->comment_model->get_comments_by_type_id($type, $type_id);
+        $comments = $this->comment_model->get_comments_by_type_id($type, $type_id, $limit, $offset);
+        $comment_count = $this->comment_model->get_count_of_comments_by_type_id($type, $type_id);
 
-        $this->return_success_response(['comments' => $comments, 'comment_count' => count($comments)]);
+        $this->return_success_response(['comments' => $comments, 'comment_count' => $comment_count]);
     }
 
     public function insert() {
