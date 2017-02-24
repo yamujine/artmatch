@@ -10,18 +10,36 @@ class Comment_model extends CI_Model {
     public $place_id;
     public $comment;
 
-    public function get_count_by_place_id($place_id) {
-        return $this->db
-            ->from(self::PLACE_COMMENTS_TABLE_NAME)
-            ->where('place_id', $place_id)
-            ->count_all_results();
+    public function get_by_type_and_id($type, $comment_id) {
+        if ($type === TYPE_ARTWORKS) {
+            return $this->db
+                ->select('artwork_comments.*, users.user_name, users.profile_image')
+                ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
+                ->join('users', 'users.id = artwork_comments.user_id')
+                ->where('artwork_comments.id', $comment_id)
+                ->get()->row();
+        } else if ($type === TYPE_PLACES) {
+            return $this->db
+                ->select('place_comments.*, users.user_name, users.profile_image')
+                ->from(self::PLACE_COMMENTS_TABLE_NAME)
+                ->join('users', 'users.id = place_comments.user_id')
+                ->where('place_comments.id', $comment_id)
+                ->get()->row();
+        }
     }
 
-    public function get_count_by_artwork_id($artwork_id) {
-        return $this->db
-            ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
-            ->where('artwork_id', $artwork_id)
-            ->count_all_results();
+    public function get_count_by_type_id($type, $type_id) {
+        if ($type === TYPE_ARTWORKS) {
+            return $this->db
+                ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
+                ->where('artwork_id', $type_id)
+                ->count_all_results();
+        } else if ($type === TYPE_PLACES) {
+            return $this->db
+                ->from(self::PLACE_COMMENTS_TABLE_NAME)
+                ->where('place_id', $type_id)
+                ->count_all_results();
+        }
     }
 
     /**
