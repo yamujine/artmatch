@@ -12,19 +12,19 @@ class Comment_model extends CI_Model {
 
     public function get_by_id($type, $comment_id) {
         if ($type === TYPE_ARTWORKS) {
-            $comment = $this->db
+            return $this->db
+                ->select('artwork_comments.*, users.user_name, users.profile_image')
                 ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
-                ->where('id', $comment_id)
-                ->get()->row();
-            $comment->user = $this->db
-                ->from('users')
-                ->where('id', $comment->user_id)
-                ->get()->row();
-            return $comment;
+                ->join('users', 'users.id = artwork_comments.user_id')
+                ->where('artwork_comments.id', $comment_id)
+                ->get()->result();
         } else if ($type === TYPE_PLACES) {
-
-        } else {
-            throw new Exception('type error. type='.$type);
+            return $this->db
+                ->select('place_comments.*, users.user_name, users.profile_image')
+                ->from(self::PLACE_COMMENTS_TABLE_NAME)
+                ->join('users', 'users.id = place_comments.user_id')
+                ->where('place_comments.id', $comment_id)
+                ->get()->result();
         }
     }
 

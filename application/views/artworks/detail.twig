@@ -68,15 +68,22 @@
           .done(function (data) {
             if (!data.result) {
               alert("댓글 등록 실패");
-
               return false;
             }
+            console.log(data.body.comment);
+            var $comment = $('.comments');
+            if(data.body.comment.profile_image) {
+              var user_image = '{{ user_image | thumb_url("profile") }}'
+              $comment = $comment.append($('<li>')
+                  .html($('<div class="profileImage">').html('<img src="'+user_image+'" class="img-circle"/>')));
+            } else {
+              $comment = $comment.append($('<li>')
+                .html($('<div class="profileImage">').html('<img src="/static/images/tom.jpg" class="img-circle"/>')));
+            }
 
-            // TODO: 댓글, 댓글 수 DOM 으로 처리
-            location.reload(true);
           })
-          .fail(function () {
-            alert("댓글 등록 실패");
+          .fail(function (data) {
+            alert(data.body.message);
           });
 
         return false;
@@ -280,7 +287,7 @@
         </div>
         <ul class="comments">
           {% for comment in comments %}
-            <li>
+            <li id="comment_{{ comment.id }}">
               <div class="profileImage">
                 {% if comment.profile_image is empty %}
                   <img src="/static/images/tom.jpg" class="img-circle"/>
@@ -296,7 +303,7 @@
                 <button class="commentEditBtn">수정</button>
                 <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
                 <!-- == 댓글 수정 폼 -->
-                <div class="commentEditDiv" style="display:none">
+                <div class="commentEditDiv_{{ comment.id }}" style="display:none">
                   <textarea id="commentEditText"></textarea>
                   <button class="commentEditSubmit" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">
                     저장

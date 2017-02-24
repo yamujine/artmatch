@@ -65,7 +65,10 @@ class CommentApi extends API_Controller {
         if ($result_id === NULL) {
             $this->return_fail_response('101', ['message' => 'Failed to insert']);
         }
-
+        $comment = $this->comment_model->get_by_id($type, $result_id);
+        if ($comment === NULL) {
+            $this->return_fail_response('102', ['message' => 'Failed to get comment']);
+        }
 
         $this->return_success_response([
             'type' => $type,
@@ -96,6 +99,7 @@ class CommentApi extends API_Controller {
             'comment' => $comment,
             'result_type' => 'update'
         ]);
+        $this->twig->display('artworks/detail', ['user_img' => $comment->profile_image]);
     }
 
     public function delete() {
