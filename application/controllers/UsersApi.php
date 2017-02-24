@@ -46,7 +46,7 @@ class UsersApi extends API_Controller
             $this->user_model->authorize($id);
         }
         $this->accountlib->generate_user_session($id);
-        $this->return_success_response(['message' => '회원가입이 완료되었습니다.']);
+        $this->return_success_response();
     }
 
     public function login() {
@@ -77,7 +77,7 @@ class UsersApi extends API_Controller
             $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러. 관리자에게 문의하세요.']);
         }
 
-        $this->return_success_response(['message' => '프로필사진 변경이 완료되었습니다.']);
+        $this->return_success_response();
     }
 
     public function change_password() {
@@ -93,7 +93,7 @@ class UsersApi extends API_Controller
             $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러. 관리자에게 문의하세요.']);
         }
 
-        $this->return_success_response(['message' => '비밀번호 변경이 완료되었습니다.']);
+        $this->return_success_response();
     }
 
     public function check_username() {
@@ -161,7 +161,7 @@ class UsersApi extends API_Controller
             $this->return_fail_response('103', ['message' => '비밀번호가 일치하지 않습니다']);
         }
         $this->accountlib->generate_user_session($user->id);
-        $this->return_success_response(['message' => '로그인 성공']);
+        $this->return_success_response();
     }
 
     private function _facebook_login() {
@@ -197,7 +197,7 @@ class UsersApi extends API_Controller
         }
         // 로그인 성공, 메인페이지로 이동
         $this->accountlib->generate_user_session($user->id);
-        $this->return_success_response(['message' => '페이스북 로그인 성공']);
+        $this->return_success_response();
     }
 
     private function _validate_signup_form() {
