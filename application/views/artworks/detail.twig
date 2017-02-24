@@ -52,6 +52,23 @@
         }
       });
 
+      // 작품 수정
+      $('.artworkEditBtn').click(function () {
+        var $this = $(this);
+        location.replace("/artworks/edit/" + $this.data('id'));
+        return false;
+      });
+
+      // 작품 삭제
+      $('.artworkDeleteBtn').click(function () {
+        if (confirm("정말 삭제 하시겠습니까?") === false) {
+          return false;
+        }
+        var $this = $(this);
+        location.replace("/artworks/delete/" + $this.data('id'));
+        return false;
+      });
+
       // 댓글
       $("#commentRegisterForm").submit(function () {
         var $this = $(this);
@@ -222,6 +239,12 @@
               <button class="sliderNextBtn"></button>
             {% endif %}
           </div>
+        {% endif %}
+        {% if session.id == artwork.user_id %}
+        <div>
+          <button class="artworkEditBtn" data-id="{{ artwork.id }}">수정</button>
+          <button class="artworkDeleteBtn" data-id="{{ artwork.id }}">삭제</button>
+        </div>
         {% endif %}
       </div>
       <!-- //== 작품 -->
