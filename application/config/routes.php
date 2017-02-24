@@ -74,7 +74,7 @@ $route['api/comments/update'] = 'commentApi/update';
 
 $route['api/contents/list'] = 'main/api';
 $route['api/contents/change_comment_option'] = 'contentsApi/change_comment_option';
-$route['api/contents/delete_extra_images'] = 'contentsApi/delete_extra_images';
+$route['api/contents/delete_extra_images']['POST'] = 'contentsApi/delete_extra_images';
 
 $route['api/pick']['POST'] = 'pickApi';
 
