@@ -83,6 +83,10 @@ class Accountlib {
         return $this->CI->session->userdata('facebook_access_token');
     }
 
+    public function set_profile_image($profile_image) {
+        return $this->CI->session->set_userdata('profile_image', $profile_image);
+    }
+
     public function send_email_authentication($user_email, $user_id) {
         $data['code'] = urlencode($this->CI->encryption->encrypt($user_email . '/' . $user_id));
         $email_html = $this->CI->twig->render('email/verify', $data);
