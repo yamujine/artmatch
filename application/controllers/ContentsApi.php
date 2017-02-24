@@ -60,8 +60,8 @@ class ContentsApi extends API_Controller {
     public function delete_extra_images() {
         $type = $this->input->post('type');
         $type_id = $this->input->post('type_id');
-        $delete_images = $this->input->post('delete_images');
-        $delete_list = [];
+        $request_delete_images = $this->input->post('delete_images');
+        $deleted_list = [];
 
         if ($type === TYPE_ARTWORKS) {
             $object = $this->artwork_model->get_bare_by_id($type_id);
@@ -79,31 +79,31 @@ class ContentsApi extends API_Controller {
             $this->return_fail_response('103', ['message' => '본인의 ' . $msg . '만 변경할 수 있습니다.']);
         }
 
-        if (empty($delete_images)) {
+        if (empty($request_delete_images)) {
             $this->return_fail_response('500', ['message' => '선택된 이미지가 없습니다.']);
         }
 
-        foreach ($delete_images as $delete_image) {
-            $this->imageupload->delete_image($delete_image);
+        foreach ($request_delete_images as $delete_image) {
             if ($type === TYPE_ARTWORKS) {
                 $result = $this->artwork_model->delete_image($type_id, $delete_image);
             } elseif ($type === TYPE_PLACES) {
                 $result = $this->place_model->delete_image($type_id, $delete_image);
             }
             if ($result) {
-                $delete_list[] = $delete_image;
+                $this->imageupload->delete_image($delete_image);
+                $deleted_list[] = $delete_image;
             }
         }
 
-        if (empty($delete_list)) {
+        if (empty($deleted_list)) {
             $this->return_fail_response('500', ['message' => '삭제된 이미지가 없습니다']);
         }
         
         $this->return_success_response([
             'message' => 'delete success',
-            'delete_list' => $delete_list,
-            'delete_count' => count($delete_list),
-            'request_count' => count($delete_images)
+            'deleted_list' => $deleted_list,
+            'deleted_count' => count($deleted_list),
+            'request_count' => count($request_delete_images)
         ]);
     }
 }
