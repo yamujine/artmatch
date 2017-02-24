@@ -95,33 +95,35 @@
         var comment = $(this).closest("div").find(".comment").text();
         $('#commentEditDiv_'+comment_id).css("display", "");
         $('#commentEditDiv_'+comment_id).find('#commentEditText').val(comment);
-        $(this).text("수정취소");
+        $('#comment_'+comment_id).find('.comment').text('');
+        $('#comment_'+comment_id).find('.commentEditBtnCancel').css('display', '');
+        $(this).css('display', 'none');
 
-        $(this).click(function() {
-          $(this).text("수정");
+        $('#comment_'+comment_id).find('.commentEditBtnCancel').click(function() {
           $('#commentEditDiv_'+comment_id).css("display", "none");
-          return;
+          $('#comment_'+comment_id).find('.comment').text(comment);
+          $('#comment_'+comment_id).find('.commentEditBtn').css('display', '');
+          $(this).css('display', 'none');
         });
 
-//        $('.commentEditSubmit').click(function() {
-//          var $this = $(this);
-//          var comment = $this.parent().find('#commentEditText').val();
-//
-//          $.ajax({
-//            method: "POST",
-//            url: "/api/comments/update",
-//            data: {
-//              type: $(this).data('type'),
-//              type_comment_id: comment_id,
-//              comment: comment
-//            }
-//          }).done(function (data) {
-//            $this.parent().parent().find(".commentEditDiv").css("display", "none");
-//            $this.parent().parent().parent().find(".comment").text(data.body.comment);
-//          }).fail(function () {
-//            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-//          });
-//        });
+        $('.commentEditSubmit').click(function() {
+          var comment = $('#commentEditDiv_'+comment_id).find('#commentEditText').val();
+
+          $.ajax({
+            method: "POST",
+            url: "/api/comments/update",
+            data: {
+              type: $(this).data('type'),
+              type_comment_id: comment_id,
+              comment: comment
+            }
+          }).done(function (data) {
+            $('#commentEditDiv_'+comment_id).css("display", "none");
+            $('#comment_'+comment_id).find('.comment').text(data.body.comment);
+          }).fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
+        });
         return false;
       });
 
@@ -304,6 +306,7 @@
                   </div>
                   <div class="comment">{{ comment.comment|nl2br }}</div>
                   <button class="commentEditBtn" data-id="{{ comment.id }}">수정</button>
+                  <button class="commentEditBtnCancel" style="display:none">수정취소</button>
                   <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}" data-id="{{ comment.id }}">삭제</button>
                   <!-- == 댓글 수정 폼 -->
                   <div id="commentEditDiv_{{ comment.id }}" style="display:none">
