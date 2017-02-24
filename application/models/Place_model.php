@@ -209,7 +209,9 @@ class Place_model extends CI_Model {
     }
 
     public function delete_image($place_id, $image) {
-        return $this->db->delete(self::TABLE_NAME_IMAGES, ['place_id' => $place_id, 'image' => $image]);
+        $this->db->delete(self::TABLE_NAME_IMAGES, ['place_id' => $place_id, 'image' => $image]);
+
+        return $this->db->affected_rows() === 1;
     }
 
     private function _fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {

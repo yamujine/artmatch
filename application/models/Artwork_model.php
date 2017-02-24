@@ -239,7 +239,9 @@ class Artwork_model extends CI_Model {
     }
 
     public function delete_image($artwork_id, $image) {
-        return $this->db->delete(self::TABLE_NAME_IMAGES, ['artwork_id' => $artwork_id, 'image' => $image]);
+        $this->db->delete(self::TABLE_NAME_IMAGES, ['artwork_id' => $artwork_id, 'image' => $image]);
+
+        return $this->db->affected_rows() === 1;
     }
 
     private function _fill_class_variable_with_params($user_id, $status, $title, $description, $image, $for_sale, $use_comment, $tags) {
