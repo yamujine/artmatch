@@ -289,6 +289,9 @@
             {% elseif artwork.status == ARTWORK_STATUS_NEED_SPACE %}
               <li class="exhibition">전시공간 구함</li>
             {% endif %}
+            {% if artwork.for_sale == ARTWORK_FOR_SALE or artwork.status == ARTWORK_STATUS_NEED_SPACE %}
+              <a href="mailto:{{ artwork.user.email }}" class="btn btn-default">contact</a>
+            {% endif %}
             {% if artwork.for_sale == ARTWORK_FOR_SALE %}
               <li class="buy">구매가능</li>
             {% endif %}
