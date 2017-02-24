@@ -8,16 +8,16 @@
   <script>
     function checksUsername() {
       var username = document.getElementsByName("user_name")[0].value;
-      var checkUsername = /^[A-Za-z0-9)(-_\.]{1,20}$/;
+      var checkUsername = /^[A-Za-z0-9)(-_\.]{1,15}$/;
 
-      if(!username) {
+      if (!username) {
         document.getElementById("warningUsername").innerText = "유저 아이디가 입력되지 않았습니다.";
         $("#warningUsername").css("color", "red");
         $("#checkUsername").attr("value", "uncheck");
         return;
       }
-      if(!username.match(checkUsername)) {
-        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, ()_-. 만 1~20자 이내로 입력 가능합니다.";
+      if (!username.match(checkUsername)) {
+        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, ()_-. 만 20자 이내로 입력 가능합니다.";
         $("#warningUsername").css("color", "red");
         $("#checkUsername").attr("value", "uncheck");
         return;
@@ -26,13 +26,13 @@
       $.ajax({
         method: "GET",
         url: "/api/users/check_username",
-        data: { username: username }
+        data: {username: username}
       }).done(function (data) {
         document.getElementById("warningUsername").innerText = data.body.message;
-        if(data.result) {
+        if (data.result) {
           $("#warningUsername").css("color", "green");
           $("#checkUsername").attr("value", "check");
-        }else {
+        } else {
           $("#warningUsername").css("color", "red");
           $("#checkUsername").attr("value", "uncheck");
         }
@@ -47,13 +47,13 @@
       // 정규식 출처: http://www.thewordcracker.com/jquery-examples/email-validation-javascript
       var checkEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
-      if(!email) {
+      if (!email) {
         document.getElementById("warningEmail").innerText = "이메일이 입력되지 않았습니다.";
         $("#warningEmail").css("color", "red");
         $("#checkEmail").attr("value", "uncheck");
         return;
       }
-      if(!email.match(checkEmail)) {
+      if (!email.match(checkEmail)) {
         document.getElementById("warningEmail").innerText = "올바른 이메일 주소를 입력해주세요.";
         $("#warningEmail").css("color", "red");
         $("#checkEmail").attr("value", "uncheck");
@@ -63,13 +63,13 @@
       $.ajax({
         method: "GET",
         url: "/api/users/check_email",
-        data: { email: email }
+        data: {email: email}
       }).done(function (data) {
         document.getElementById("warningEmail").innerText = data.body.message;
-        if(data.result) {
+        if (data.result) {
           $("#warningEmail").css("color", "green");
           $("#checkEmail").attr("value", "check");
-        }else {
+        } else {
           $("#warningEmail").css("color", "red");
           $("#checkEmail").attr("value", "uncheck");
         }
@@ -79,19 +79,15 @@
     }
 
     $('#patSignUpForm').submit(function () {
-
       var checkEmail = $("input[name=checkEmail]");
       var checkUsername = $("input[name=checkUsername]");
 
-      if(checkEmail === "uncheck" || checkUsername === "uncheck") {
+      if (checkEmail === "uncheck" || checkUsername === "uncheck") {
         alert('정보를 바르게 입력해주세요.');
         return false;
       }
 
-      var emailElem = $("input[name=email]");
       var passwordElem = $("input[name=password]");
-      var usernameElem = $("input[name=user_name]");
-
       if (!passwordElem.val()) {
         alert('패스워드를 입력해주세요.');
         passwordElem.focus();
@@ -105,9 +101,10 @@
         contentType: false, // To send file
         data: new FormData($(this)[0])
       }).done(function (data) {
-        alert(data.body.message);
         if (data.result === true) {
           location.href = '/';
+        } else {
+          alert(data.body.message);
         }
       }).fail(function () {
         alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
@@ -125,6 +122,9 @@
         <img src="{{ 'images/logo_black.png' | static_url }}" width="268px"/>
       </div>
       <h2>가입하여 여러분의 작품을 전시하세요.</h2>
+      {% if facebook_profile_image_url %}
+        <img src="{{ facebook_profile_image_url }}" width="120px" height="120px" />
+      {% endif %}
       <form id="patSignUpForm">
         <fieldset class="patUserTypeField">
           <div class="radio checkbox">
@@ -137,20 +137,32 @@
           </div>
         </fieldset>
         <fieldset>
-          <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()"/>
+          {% if email and not duplicated_email %}
+            <input type="hidden" name="email" value = "{{ email }}" />
+            <div> {{ email }} </div>
+          {% else %}
+            <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()" value = "{{ email }}" />
+          {% endif %}
           <input type="hidden" id="checkEmail" name="checkEmail" value="uncheck"/>
-          <div id="warningEmail"></div>
+          <div id="warningEmail">{% if duplicated_email %}중복된 이메일 입니다.{% endif %}</div>
         </fieldset>
         <fieldset>
-          <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()" />
+          <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()"/>
           <input type="hidden" id="checkUsername" name="checkUsername" value="uncheck"/>
           <div id="warningUsername"></div>
         </fieldset>
         <fieldset>
-          <input type="password" name="password" placeholder="패스워드를 입력하세요." />
+          <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
         </fieldset>
         <fieldset>
-          <input type="file" name="profile_image"/>
+          {% if facebook_profile_image_url %}
+            <input type="hidden" name="profile_image" value = "{{ facebook_profile_image_url }}" />
+            <input type="hidden" name="facebook_id" value="{{ facebook_id }}" />
+            <input type="hidden" name="is_facebook" value = "1" />
+          {% else %}
+            <input type="file" name="profile_image"/>
+            <input type="hidden" name="is_facebook" value = "0" />
+          {% endif %}
         </fieldset>
         <button type="submit">회원가입</button>
       </form>

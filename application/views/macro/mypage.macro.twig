@@ -1,6 +1,13 @@
 {% macro render_mypage_grid_item(item, type, index) %}
   <li class="item grid {% if (index % 3) == 0 %}third{% endif %}">
-    <div class="wrap" data-type="{{ type }}" data-id="{{ item.id }}">
+    {% if type == TYPE_ARTWORKS %}
+      {% set item_id = item.id %}
+      {% set subject = item.title %}
+    {% elseif type == TYPE_PLACES %}
+      {% set item_id = item.id %}
+      {% set subject = item.name %}
+    {% endif %}
+    <div class="wrap" data-type="{{ type }}" data-id="{{ item_id }}">
       <div class="imgThumb">
         <div class="dimm"></div>
         <div class="preview">
@@ -15,15 +22,9 @@
           <span class="bold">PICK</span>
           <span class="number">{{ item.pick_count }}</span>
         </div>
-        {# 작품 타입인 경우 #}
-        {% if type == TYPE_ARTWORKS %}
-          <div class="title">{{ item.subject }}</div>
-          {# 장소 타입인 경우 #}
-        {% else %}
-          <div class="title">
-            {{ item.subject|length > 12 ? item.subject|slice(0, 12) ~ '...' : item.subject }}
-          </div>
-        {% endif %}
+        <div class="title">
+          {{ subject|length > 12 ? subject|slice(0, 12) ~ '...' : subject }}
+        </div>
       </div>
     </div>
   </li>
@@ -31,7 +32,7 @@
 
 {% macro render_mypage_place_item(item) %}
   <li class="item inline">
-    <div class="wrap">
+    <div class="wrap" data-type="places" data-id="{{ item.id }}">
       <div class="imgThumb">
         <div class="dimm"></div>
         <div class="preview">
@@ -56,14 +57,18 @@
           PICK <span class="number">{{ item.pick_count }}</span>
         </div>
         <ul class="additionalImages">
-          <li><img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/></li>
-          <li><img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/></li>
-          <li><img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/></li>
-          <li class="more">
-            <div class="dimm"></div>
-            <div class="remain">+ 5</div>
-            <img src="http://mblogthumb2.phinf.naver.net/20160419_245/p9573198_1461046979918xfRli_PNG/%BE%C6%C0%CC%B8%B0_1.png?type=w2"/>
-          </li>
+          {% set length = item.extra_images|length %}
+          {% for extra in item.extra_images|slice(0,4) %}
+            {% if loop.last and length > 4 %}
+              <li class="more">
+                <div class="dimm"></div>
+                <div class="remain">+ {{ length - 4 }}</div>
+                <img src="{{ extra.image | thumb_url }}"/>
+              </li>
+            {% else %}
+              <li><img src="{{ extra.image | thumb_url }}"></li>
+            {% endif %}
+          {% endfor %}
         </ul>
       </div>
     </div>

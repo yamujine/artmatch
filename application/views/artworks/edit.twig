@@ -1,99 +1,207 @@
 {% extends "base.twig" %}
 
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="/static/dist/slick/slick.css">
+  <link rel="stylesheet" type="text/css" href="/static/dist/magic-check/magic-check.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/dist/css/artworks/edit.min.css">
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      // 추가 이미지 슬라이더
+      $('.slider').slick({
+        infinite: false,
+        variableWidth: true,
+
+        slidesToShow: 6,
+        slidesToScroll: 1,
+
+        prevArrow: false,
+        nextArrow: false
+      });
+
+      // 슬라이더 컨트롤
+      $('.sliderPrevBtn').click(function () {
+        $('.slider').slick('slickPrev');
+
+        return false;
+      });
+
+      $('.sliderNextBtn').click(function () {
+        $('.slider').slick('slickNext');
+
+        return false;
+      });
+
+      // 파일 선택시 이벤트
+      $('input[type=file]').change(function () {
+        var wrapElement = $(this).closest('.imageUpload');
+        var previewElement = $(this).closest('.imageUpload').find('.preview');
+
+        // FileReader 객체가 있는 경우
+        if (window.FileReader) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var src = e.target.result;
+            previewElement.removeClass('hidden').attr('src', src);
+
+            wrapElement.css({width: previewElement.width()});
+          };
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+          var src = document.selection.createRange().text;
+          previewElement.removeClass('hidden').attr('src', src);
+          wrapElement.css({width: previewElement.width()});
+        }
+      });
+
+      // 설명 및 태그 입력 시 포커스 이벤트
+      $('input[name=tags], textarea[name=description]').focus(function () {
+        $(this).closest('.descriptionInput').addClass('active');
+      })
+        .focusout(function () {
+          $(this).closest('.descriptionInput').removeClass('active');
+        });
+    });
+  </script>
+{% endblock %}
+
 {% block contents %}
-  
+  <div id="patDetail">
+    <div class="container">
+      <!-- == 업로드 폼 -->
+      <form id="patUploadForm" method="POST" enctype="multipart/form-data">
+        <!-- == 작품명 입력 -->
+        <div class="title">
+          <input type="text" name="title" placeholder="작품명을 입력해주세요." value="{{ title }}" required/>
+        </div>
+        <!-- //== 작품명 입력 -->
+        <!-- == 대표 이미지 선택 -->
+        <div class="mainImage imageUpload">
+          {% if image is null %}
+            <div class="instruction">
+              <div class="icon"><i class="glyphicon glyphicon-plus"></i></div>
+              <p class="upload">대표 작품 올리기</p>
+              <p class="description">
+                원본의 느낌을 최대한 유지할 수 있도록 작품의 4가지 비율<br/>
+                (S형, F형, P형, M형)을 선택해서 올릴 수 있습니다.
+              </p>
+            </div>
+          {% endif %}
+          <img src="{{ image | image_url }}" class="preview{% if image is null %} hidden{% endif %}"/>
+          <input type="file" name="image" id="mainImageFile" accept="image/*" {% if image is null %}required{% endif %}/>
+        </div>
+        <!-- //== 대표 이미지 선택 -->
+        <!-- == 저작권 -->
+        <div class="copyright">
+          작품 이미지의 도용 및 무단 재배포 방지를 위해 저작권 정보가 표기됩니다.
+        </div>
+        <!-- //== 저작권 -->
+        <!-- == 추가 이미지 선택 -->
+        <div class="additionalImages">
+          <div class="slider">
+            {% for key in 0..9 %}
+              <div class="item imageUpload">
+                {# TODO: 아이콘 관련 디자이너 요청함 #}
+                <div class="add"></div>
+                <div class="remove"></div>
+                {# TODO: 이미지 삭제 관련 필요 #}
+                {#<input type="checkbox" name="delete_images[]" value="{{ image.image }}"/>#}
+                <img src="{{ extra_images[key].image | image_url }}" class="preview {% if extra_images[key].image is null %} hidden{% endif %}"/>
+                {% if not extra_images[key].image %}
+                  <input type="file" name="extra_images[]" accept="image/*"/>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <!-- == 컨트롤 -->
+          <button class="sliderPrevBtn"></button>
+          <button class="sliderNextBtn"></button>
+          <!-- //== 컨트롤 -->
+          <div class="instruction">
+            작품은 최대 10개까지 올리실 수 있습니다.
+          </div>
+        </div>
+        <!-- //== 추가 이미지 선택 -->
+        <!-- == 작품 설명 -->
+        <div class="descriptionInput">
+          <textarea name="description" title="description" maxlength="100"
+                    placeholder="작품에 대한 이야기를 입력해주세요. (최대 100자)"
+                    required>{% if description %}{{ description|nl2br }}{% endif %}</textarea>
+          <div class="tags">
+            <input type="text" title="tags" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요" maxlength="60"
+                   required/>
+          </div>
+        </div>
+        <!-- //== 작품 설명 -->
+        <!-- == 옵션 선택 -->
+        <div class="options">
+          <div class="leftPane">
+            <!-- == 공간 옵션 -->
+            <div class="exhibition">
+              <div class="title clear">전시</div>
+              <div class="radio">
+                <input id="statusNeed" class="magic-radio" type="radio" name="status"
+                       value="{{ ARTWORK_STATUS_NEED_SPACE }}"
+                       {% if status is not defined or status == ARTWORK_STATUS_NEED_SPACE %}checked="checked"{% endif %}/>
+                <label for="statusNeed">공간구함</label>
+                <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
+                       value="{{ ARTWORK_STATUS_NOT_NEED_SPACE }}"
+                       {% if status is defined and status == ARTWORK_STATUS_NOT_NEED_SPACE %}checked="checked"{% endif %}/>
+                <label for="statusNotNeed">공간 구하지 않음</label>
+              </div>
+            </div>
+            <!-- //== 공간 옵션 -->
+            <!-- == 판매 옵션 -->
+            <div class="forSale clear">
+              <div class="title">판매</div>
+              <div class="radio">
+                <input id="sale" class="magic-radio" type="radio" name="for_sale" value="{{ ARTWORK_FOR_SALE }}"
+                       {% if for_sale is not defined or for_sale == ARTWORK_FOR_SALE %}checked="checked"{% endif %}/>
+                <label for="sale">판매함</label>
+                <input id="notSale" class="magic-radio" type="radio" name="for_sale" value="{{ ARTWORK_NOT_FOR_SALE }}"
+                       {% if for_sale is defined and for_sale == ARTWORK_NOT_FOR_SALE %}checked="checked"{% endif %}/>
+                <label for="notSale">판매 안함</label>
+              </div>
+            </div>
+            <!-- //== 판매 옵션 -->
+          </div>
+          <div class="rightPane">
+            <!-- == 댓글 옵션 -->
+            <div class="comment">
+              <div class="title">댓글</div>
+              <div class="radio">
+                <input id="comment" class="magic-radio" type="radio" name="use_comment" value="{{ TYPE_USE_COMMENT }}"
+                       {% if use_comment is not defined or use_comment == TYPE_USE_COMMENT %}checked="checked"{% endif %}/>
+                <label for="comment">댓글 허용</label>
+                <input id="noComment" class="magic-radio" type="radio" name="use_comment" value="{{ TYPE_NO_COMMENT }}"
+                       {% if use_comment is defined and use_comment == TYPE_NO_COMMENT %}checked="checked"{% endif %}/>
+                <label for="noComment">댓글 허용 안함</label>
+              </div>
+            </div>
+            <!-- //== 판매 옵션 -->
+          </div>
+        </div>
+        <!-- //== 옵션 선택 -->
+        <!-- == 취소, 등록 -->
+        <div class="buttons">
+          {# TODO: 취소시 어디로 ROUTE? #}
+          <a href="#" class="cancelBtn">취소</a>
+          <button type="submit" class="registerBtn">등록</button>
+        </div>
+        <!-- //== 취소, 등록 버튼 -->
+      </form>
+      <!-- //== 업로드 폼 -->
+    </div>
+  </div>
+
+  {# TODO: ALERT? #}
   {% if error %}
     에러 메시지: {{ error|raw }}
     <br>
     <br>
   {% endif %}
-  
-  <form class="ui form" method="POST" enctype="multipart/form-data">
-    <div class="field">
-      <label>작품명</label>
-      <input type="text" name="title" placeholder="" value="{{ title }}">
-    </div>
-    <div class="inline fields">
-      <label for="status">작품 상태</label>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NEED_SPACE }}"
-                 {% if status is not defined or status == ARTWORK_STATUS_NEED_SPACE %}checked="checked"{% endif %}
-                 tabindex="0">
-          <label>공간구함</label>
-        </div>
-      </div>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="status" value="{{ ARTWORK_STATUS_NOT_NEED_SPACE }}"
-                 {% if status is defined and status == ARTWORK_STATUS_NOT_NEED_SPACE %}checked="checked" {% endif %}tabindex="0">
-          <label>공간 구하지 않음</label>
-        </div>
-      </div>
-    </div>
-    <div class="inline fields">
-      <label for="status">판매 여부</label>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="for_sale" value="{{ ARTWORK_FOR_SALE }}"
-                 {% if for_sale is defined and for_sale == ARTWORK_FOR_SALE %}checked="checked"{% endif %} tabindex="0">
-          <label>판매함</label>
-        </div>
-      </div>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="for_sale" value="{{ ARTWORK_NOT_FOR_SALE }}"
-                 {% if for_sale is not defined or for_sale == ARTWORK_NOT_FOR_SALE %}checked="checked"{% endif %} tabindex="0">
-          <label>판매 안함</label>
-        </div>
-      </div>
-    </div>
-    <div class="inline fields">
-      <label for="status">댓글허용</label>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="use_comment" value="{{ TYPE_USE_COMMENT }}"
-                 {% if use_comment is not defined or use_comment == TYPE_USE_COMMENT %}checked="checked"{% endif %} tabindex="0">
-          <label>댓글 허용함</label>
-        </div>
-      </div>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="use_comment" value="{{ TYPE_NO_COMMENT }}"
-                 {% if use_comment is defined and use_comment == TYPE_NO_COMMENT %}checked="checked"{% endif %} tabindex="0">
-          <label>댓글 허용 안함</label>
-        </div>
-      </div>
-    </div>
-    <div class="field">
-      <div class="ui">
-        <label>대표 이미지</label>
-        {% if image %}등록된 이미지 {{ image }}{% endif %}
-        <input type="file" name="image" tabindex="0">
-      </div>
-    </div>
-    
-    <div class="field">
-      <div class="ui">
-        <label>추가 이미지</label>
-        {% for image in extra_images %}
-          <p>{{ image.image }} 삭제: <input type="checkbox" name="delete_images[]" value="{{ image.image }}"></p>
-        {% endfor %}
-        <input type="file" name="extra_images[]" multiple/>
-      </div>
-    </div>
-    
-    <div class="field">
-      <label>작품 설명</label>
-      <textarea name="description">{{ description }}</textarea>
-    </div>
-    
-    <div class="field">
-      <label>태그</label>
-      <input type="text" name="tags" value="{{ tags }}">
-    </div>
-    
-    <button class="ui button" type="submit">Submit</button>
-  </form>
-
 {% endblock %}

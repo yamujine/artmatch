@@ -79,6 +79,10 @@ class Accountlib {
         return FALSE;
     }
 
+    public function get_facebook_access_token() {
+        return $this->CI->session->userdata('facebook_access_token');
+    }
+
     public function send_email_authentication($user_email, $user_id) {
         $data['code'] = urlencode($this->CI->encryption->encrypt($user_email . '/' . $user_id));
         $email_html = $this->CI->twig->render('email/verify', $data);
@@ -94,6 +98,10 @@ class Accountlib {
     public function generate_user_session($user_id) {
         $userdata = (array)$this->CI->user_model->get_by_id($user_id);
         $this->CI->session->set_userdata($userdata);
+    }
+
+    public function generate_facebook_access_token_session($facebook_access_token) {
+        $this->CI->session->set_userdata(['facebook_access_token' => $facebook_access_token]);
     }
 
     public function send_email_temp_password($email, $temp_password) {

@@ -144,6 +144,8 @@ class Artwork_model extends CI_Model {
             ->from(self::TABLE_NAME)
             ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id', 'left')
             ->join('user_artwork_picks AS P2', "P2.artwork_id = artworks.id AND P2.user_id = '{$user_id}'", 'left')
+            ->group_by('artworks.id')
+            ->order_by('artworks.id', 'DESC')
             ->where('artworks.user_id', $user_id);
 
         return $query->get()->result();
@@ -168,6 +170,20 @@ class Artwork_model extends CI_Model {
         }
 
         return $query->get()->result();
+    }
+
+    public function get_picked_by_user_id($user_id) {
+        $picks = $this->db
+            ->select('artworks.*, count(P2.id) as pick_count')
+            ->from(self::TABLE_NAME)
+            ->join('user_artwork_picks AS P2', 'P2.artwork_id = artworks.id', 'left')
+            ->join('user_artwork_picks', 'user_artwork_picks.artwork_id = artworks.id')
+            ->where('user_artwork_picks.user_id', $user_id)
+            ->group_by('artworks.id')
+            ->order_by('user_artwork_picks.id', 'DESC')
+            ->get()->result();
+
+        return $picks;
     }
 
     public function get_images_by_id($artwork_id) {

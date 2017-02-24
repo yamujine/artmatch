@@ -39,34 +39,6 @@ class Pick_model extends CI_Model {
             ->count_all_results();
     }
 
-    public function get_artwork_picks_by_user_id($user_id) {
-        $this->load->model('artwork_model');
-        $picks = $this->db
-            ->from(self::ARTWORK_PICKS_TABLE_NAME)
-            ->where('user_id', $user_id)
-            ->get()->result();
-
-        foreach ($picks as $pick) {
-            $pick->artwork = $this->artwork_model->get_bare_by_id($pick->artwork_id);
-        }
-
-        return $picks;
-    }
-
-    public function get_place_picks_by_user_id($user_id) {
-        $this->load->model('place_model');
-        $picks = $this->db
-            ->from(self::PLACE_PICKS_TABLE_NAME)
-            ->where('user_id', $user_id)
-            ->get()->result();
-
-        foreach ($picks as $pick) {
-            $pick->place = $this->place_model->get_bare_by_id($pick->place_id);
-        }
-
-        return $picks;
-    }
-
     public function insert_pick($type, $user_id, $type_id) {
         if ($type === TYPE_ARTWORKS) {
             $this->load->model('artwork_model');

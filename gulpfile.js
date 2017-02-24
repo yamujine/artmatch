@@ -41,14 +41,21 @@ gulp.task('slick', function () {
   filesExist(['assets/bower_components/slick-carousel/slick']);
 
   return gulp.src('assets/bower_components/slick-carousel/slick/**')
-      .pipe(gulp.dest('static/dist/slick'));
+    .pipe(gulp.dest('static/dist/slick'));
 });
 
 gulp.task('magnificpopup', function () {
   filesExist(['assets/bower_components/magnific-popup/dist']);
 
   return gulp.src('assets/bower_components/magnific-popup/dist/**')
-      .pipe(gulp.dest('static/dist/magnific-popup'));
+    .pipe(gulp.dest('static/dist/magnific-popup'));
+});
+
+gulp.task('magiccheck', function () {
+  filesExist(['assets/bower_components/magic-check']);
+
+  return gulp.src('assets/bower_components/magic-check/css/**')
+    .pipe(gulp.dest('static/dist/magic-check'));
 });
 /** For Develop TASK END **/
 
@@ -70,7 +77,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
-gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup']);
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck']);
 
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')
