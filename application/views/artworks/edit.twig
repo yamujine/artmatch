@@ -57,6 +57,14 @@
           wrapElement.css({width: previewElement.width()});
         }
       });
+
+      // 설명 및 태그 입력 시 포커스 이벤트
+      $('input[name=tags], textarea[name=description]').focus(function () {
+        $(this).closest('.descriptionInput').addClass('active');
+      })
+        .focusout(function () {
+          $(this).closest('.descriptionInput').removeClass('active');
+        });
     });
   </script>
 {% endblock %}

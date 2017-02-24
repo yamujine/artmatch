@@ -212,6 +212,10 @@
         position: relative;
         border: 1px solid $white-eight;
 
+        &.active {
+          border-color: $warm-grey-three;
+        }
+
         // 설명 입력 영역
         textarea[name=description] {
           width: 100%;
