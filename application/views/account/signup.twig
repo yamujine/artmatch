@@ -147,11 +147,7 @@
             <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()" value = "{{ email }}" />
           {% endif %}
           <input type="hidden" id="checkEmail" name="checkEmail" value="uncheck"/>
-          {% if duplicated_email %}
-            <div id="warningEmail" style = "color: red;">중복된 이메일 입니다.</div>
-          {% else %}
-            <div id="warningEmail"></div>
-          {% endif %}
+          <div id="warningEmail">{% if duplicated_email %}중복된 이메일 입니다.{% endif %}</div>
         </fieldset>
         <fieldset>
           <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()" />
