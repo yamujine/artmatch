@@ -374,7 +374,7 @@
         <!-- == 전시 이력 -->
         <div class="exhibitionArea">
           <div class="titleWrap">
-            <div class="title">전시했던 장소</div>
+            <div class="title">전시했던 장소 <span class="number">{{ exhibitions|length }}</span></div>
             <ul class="sliderControl">
               <li class="active"><a href="#">01</a></li>
               <li><a href="#">02</a></li>
@@ -391,12 +391,12 @@
                     <div class="name">
                       {{ exhibition.place.name|length > 12 ? exhibition.place.name|slice(0, 12) ~ '...' : exhibition.place.name  }}
                     </div>
+                    <div class="date">
+                      {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
+                    </div>
                     <div class="place">
                       <div class="pin"></div>
                       <div class="keyword">{{ exhibition.place.area }}</div>
-                    </div>
-                    <div class="date">
-                      {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
                     </div>
                   </div>
                 </a>
