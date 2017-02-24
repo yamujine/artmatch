@@ -68,23 +68,43 @@ class CommentApi extends API_Controller {
         if ($result_id === NULL) {
             $this->return_fail_response('101', ['message' => 'Failed to insert']);
         }
+        $comment = $this->comment_model->get_by_type_and_id($type, $result_id);
+        if ($comment === NULL) {
+            $this->return_fail_response('102', ['message' => 'Failed to get comment']);
+        }
+        $comment_count = $this->comment_model->get_count_by_type_id($type, $type_id);
+        if ($comment_count === null) {
+            $this->return_fail_response('102', ['message' => 'Failed to count comment']);
+        }
+
+        $artwork['id'] = $type_id;
+        $insert_comment = $this->twig->render('artworks/comment', ['comment' => $comment, 'artwork' => $artwork]);
 
         $this->return_success_response([
             'type' => $type,
             'type_id' => $type_id,
             'comment_id' => $result_id,
             'comment' => $comment,
+            'comment_count' => $comment_count,
+            'insert_comment' => $insert_comment,
             'result_type' => 'insert'
         ]);
     }
 
     public function update() {
-        // TODO: 본인것만 수정 하도록 함
         $user_id = $this->accountlib->get_user_id();
 
         $type = $this->input->post('type');
         $type_comment_id = $this->input->post('type_comment_id');
         $comment = $this->input->post('comment');
+
+        $comment_validation = $this->comment_model->get_by_type_and_id($type, $type_comment_id);
+        if (empty($comment_validation)) {
+            $this->return_fail_response('101', ['message' => '존재하지 않는 코멘트 입니다.']);
+        }
+        if ($comment_validation->user_id !== $user_id) {
+            $this->return_fail_response('101', ['message' => '본인의 코멘트만 수정할 수 있습니다.']);
+        }
 
         $result_id = $this->comment_model->update_comment($type, $type_comment_id, $comment);
         if ($result_id === NULL) {
@@ -101,20 +121,33 @@ class CommentApi extends API_Controller {
     }
 
     public function delete() {
-        // TODO: 본인것만 삭제 하도록 함
         $user_id = $this->accountlib->get_user_id();
 
         $type = $this->input->post('type');
+        $type_id = $this->input->post('type_id');
         $type_comment_id = $this->input->post('type_comment_id');
+
+        $comment_validation = $this->comment_model->get_by_type_and_id($type, $type_comment_id);
+        if (empty($comment_validation)) {
+            $this->return_fail_response('101', ['message' => '존재하지 않는 코멘트 입니다.']);
+        }
+        if ($comment_validation->user_id !== $user_id) {
+            $this->return_fail_response('101', ['message' => '본인의 코멘트만 삭제할 수 있습니다.']);
+        }
 
         $affected_rows = $this->comment_model->delete_comment($type, $type_comment_id);
         if ($affected_rows === 0) {
             $this->return_fail_response('101', ['message' => 'Failed to delete']);
         }
+        $comment_count = $this->comment_model->get_count_by_type_id($type, $type_id);
+        if ($comment_count === null) {
+            $this->return_fail_response('102', ['message' => 'Failed to count comment']);
+        }
 
         $this->return_success_response([
             'type' => $type,
             'type_comment_id' => $type_comment_id,
+            'comment_count' => $comment_count,
             'result_type' => 'delete'
         ]);
     }

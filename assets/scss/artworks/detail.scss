@@ -4,7 +4,8 @@
 body {
   #patDetail {
     .container {
-      width: 960px;
+      position: relative;
+      width: 875px;
       margin: 46px auto 0 auto;
 
       // 공통 - 팝업 이미지
@@ -36,6 +37,56 @@ body {
         }
       }
       // --
+
+      // 드랍 다운 메뉴
+      .dropdown {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        .dropdown-toggle {
+          font-size: 14px;
+          background: $white-two;
+          border: none;
+          outline: none;
+
+          .icon {
+            width: 5px;
+            height: 25px;
+            background: url(/static/images/detail_option_vertical.png) no-repeat;
+          }
+
+          &:hover {
+            .icon {
+              background: url(/static/images/detail_option_vertical_hover.png);
+            }
+          }
+        }
+
+        .dropdown-menu {
+          min-width: 120px;
+          @include prefix(border-radius, 0px);
+          @include prefix(box-shadow, none);
+          padding: 0;
+
+          li {
+            a {
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 14px;
+              color: $greyish-brown;
+              cursor: pointer;
+              padding: 16px 0;
+              text-align: center;
+            }
+
+            &:not(:first-child) {
+              border-top: 1px solid $white;
+            }
+          }
+        }
+      }
+      // -- 드랍 다운 메뉴
+
       // 작품 이미지
       .artworks {
         margin: 0 auto;

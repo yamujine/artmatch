@@ -12,6 +12,12 @@ class API_Controller extends CI_Controller {
         parent::__construct();
         $this->output->set_content_type('application/json');
         $this->result = ['result' => false, 'errorCode' => null, 'body' => null];
+        $this->twig->addGlobal('session', $_SESSION);
+        // 사용자 정의 상수를 Twig global로 등록
+        $defined_constants = get_defined_constants(true)['user'];
+        foreach ($defined_constants as $constant => $value) {
+            $this->twig->addGlobal($constant, $value);
+        }
     }
 
     /**

@@ -123,6 +123,30 @@
 
         return false;
       });
+      $(document).on('click', '.placeCommentToggleBtn', function() {
+        var $this = $(this);
+        $.ajax({
+          method: "POST",
+          url: "/api/contents/change_comment_option",
+          data: {
+            type: $this.data('type'),
+            type_id: $this.data('type-id')
+          }
+        })
+          .done(function (data) {
+            $('.dropdown-toggle').dropdown('toggle');
+            if (data.body.comment_status == {{ TYPE_NO_COMMENT }}) {
+              alert('댓글이 비허용 처리 되었습니다.');
+            } else if (data.body.comment_status == {{ TYPE_USE_COMMENT }}) {
+              alert('댓글이 허용 처리 되었습니다.');
+            }
+            location.reload(true);
+          })
+          .fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
+        return false;
+      });
     });
   </script>
 {% endblock %}
@@ -148,6 +172,21 @@
         </div>
       </div>
       <!-- //== 제목 -->
+      <!-- //== 제목 -->
+      {% if session.id == place.user_id %}
+        <!-- == 나의 글 관련 옵션 드랍다운 메뉴 -->
+        <div class="dropdown">
+          <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">
+            <div class="icon"></div>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a class="placeEditBtn" data-id="{{ place.id }}">글 수정하기</a></li>
+            <li><a class="placeDeleteBtn" data-id="{{ place.id }}">글 삭제하기</a></li>
+            <li><a class="placeCommentToggleBtn" data-type="{{ TYPE_PLACES }}" data-type-id="{{ place.id }}">댓글 {% if place.use_comment == TYPE_NO_COMMENT %}허용{% else %}비허용{% endif %}</a></li>
+          </ul>
+        </div>
+        <!-- //== 나의 글 관련 옵션 드랍다운 메뉴 -->
+      {% endif %}
       <!-- == 장소 -->
       <div class="places">
         <div class="mainThumbnail">
@@ -182,12 +221,6 @@
             {% endif %}
           </div>
         {% endif %}
-        {% if session.id == place.user_id %}
-          <div>
-            <button class="placeEditBtn" data-id="{{ place.id }}">수정</button>
-            <button class="placeDeleteBtn" data-id="{{ place.id }}">삭제</button>
-          </div>
-        {% endif %}
       </div>
       <!-- //== 장소 -->
       <!-- == 대표의 한마디 -->
@@ -211,6 +244,9 @@
               <li class="fee">대관료 없음</li>
             {% else %}
               <li class="fee">대관료 있음</li>
+            {% endif %}
+            {% if place.status == PLACE_STATUS_NEED_ARTWORK %}
+              <a href="mailto:{{ place.user.email }}" class="btn btn-default">contact</a>
             {% endif %}
             <li class="exhibition_available_count">
               {{ place.exhibition.start_date|date('Y.m.d') }} ~ {{ place.exhibition.end_date|date('Y.m.d') }}까지

@@ -85,66 +85,82 @@
           .done(function (data) {
             if (!data.result) {
               alert("댓글 등록 실패");
-
               return false;
             }
 
-            // TODO: 댓글, 댓글 수 DOM 으로 처리
-            location.reload(true);
+            $('.comments').append(data.body.insert_comment);
+            $this.find('textarea[name=comment]').val('');
+            $('.commentArea').children().find('.number').text(data.body.comment_count);
           })
-          .fail(function () {
-            alert("댓글 등록 실패");
+          .fail(function (data) {
+            alert(data.body.message);
           });
-
         return false;
       });
 
-        // 댓글 수정
-        $('.commentEditBtn').click(function () {
-            var comment = $(this).closest("div").find(".comment").text();
-            var $editForm = $(this).closest("div").find(".commentEditDiv");
-            $editForm.css("display", "");
-            $editForm.find('#commentEditText').val(comment);
+      // 댓글 수정
+      $(document).on('click', '.commentEditBtn', function () {
+        var comment_id = $(this).data("id");
+        var comment = $(this).closest("div").find(".comment").text();
+        $('#commentEditDiv_' + comment_id).css("display", "");
+        $('#commentEditDiv_' + comment_id).find('#commentEditText').val(comment);
+        $('#comment_' + comment_id).find('.comment').text('');
+        $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', '');
+        $(this).css('display', 'none');
 
-            $('.commentEditCancel').click(function() {
-                $(this).parent().css("display", "none");
-            });
-
-            $('.commentEditSubmit').click(function() {
-                var $this = $(this);
-                var comment = $this.parent().find('#commentEditText').val();
-
-                $.ajax({
-                    method: "POST",
-                    url: "/api/comments/update",
-                    data: {
-                        type: $(this).data('type'),
-                        type_comment_id: $(this).data('id'),
-                        comment: comment
-                    }
-                }).done(function (data) {
-                    $this.parent().parent().find(".commentEditDiv").css("display", "none");
-                    $this.parent().parent().parent().find(".comment").text(data.body.comment);
-                }).fail(function () {
-                    alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-                });
-            });
-            return false;
+        $('#comment_' + comment_id).find('.commentEditBtnCancel').click(function () {
+          $('#commentEditDiv_' + comment_id).css("display", "none");
+          $('#comment_' + comment_id).find('.comment').text(comment);
+          $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
+          $(this).css('display', 'none');
         });
 
+        $(document).on('click', '.commentEditSubmit', function () {
+          var comment = $('#commentEditDiv_' + comment_id).find('#commentEditText').val();
+
+          $.ajax({
+            method: "POST",
+            url: "/api/comments/update",
+            data: {
+              type: $(this).data('type'),
+              type_comment_id: comment_id,
+              comment: comment
+            }
+          }).done(function (data) {
+            if (data.body.result_type === 'update') {
+              $('#commentEditDiv_' + comment_id).css("display", "none");
+              $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', 'none');
+              $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
+              $('#comment_' + comment_id).find('.comment').text(data.body.comment);
+            } else {
+              alert(data.body.message);
+            }
+          }).fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
+        });
+        return false;
+      });
+
+
       // 댓글 삭제
-      $('.commentDeleteBtn').click(function () {
+      $(document).on('click', '.commentDeleteBtn', function () {
+        if (confirm("정말 삭제 하시겠습니까?") === false) {
+          return false;
+        }
         var $this = $(this);
         $.ajax({
           method: "POST",
           url: "/api/comments/delete",
           data: {
             type: $this.data('type'),
+            type_id: $this.data('type-id'),
             type_comment_id: $this.data('id')
           }
         }).done(function (data) {
           if (data.body.result_type === 'delete') {
-            $this.parent().parent().remove();
+            $('#comment_'+data.body.type_comment_id).remove();
+            $('.commentArea').children().find('.number').text(data.body.comment_count);
           } else {
             alert(data.body.message);
           }
@@ -153,7 +169,7 @@
         });
         return false;
       });
-      
+
       // PICK
       $('.pickBtn').click(function () {
         var $this = $(this);
@@ -167,18 +183,43 @@
             type_id: $this.data('id')
           }
         })
-            .done(function (data) {
-              if (data.body.result_type === 'on') {
-                $this.addClass('active').find('.number').html(data.body.pick_count);
-              } else if (data.body.result_type === 'off') {
-                $this.removeClass('active').find('.number').html(data.body.pick_count);
-              } else {
-                alert(data.body.message);
-              }
-            })
-            .fail(function () {
-              alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-            });
+          .done(function (data) {
+            if (data.body.result_type === 'on') {
+              $this.addClass('active').find('.number').html(data.body.pick_count);
+            } else if (data.body.result_type === 'off') {
+              $this.removeClass('active').find('.number').html(data.body.pick_count);
+            } else {
+              alert(data.body.message);
+            }
+          })
+          .fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
+        return false;
+      });
+  
+      $(document).on('click', '.artworkCommentToggleBtn', function() {
+        var $this = $(this);
+        $.ajax({
+          method: "POST",
+          url: "/api/contents/change_comment_option",
+          data: {
+            type: $this.data('type'),
+            type_id: $this.data('type-id')
+          }
+        })
+          .done(function (data) {
+            $('.dropdown-toggle').dropdown('toggle');
+            if (data.body.comment_status === {{ TYPE_NO_COMMENT }}) {
+              alert('댓글이 비허용 처리 되었습니다.');
+            } else if (data.body.comment_status === {{ TYPE_USE_COMMENT }}) {
+              alert('댓글이 허용 처리 되었습니다.');
+            }
+            location.reload(true);
+          })
+          .fail(function () {
+            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
+          });
         return false;
       });
     });
@@ -200,6 +241,20 @@
         </div>
       </div>
       <!-- //== 제목 -->
+      {% if session.id == artwork.user_id %}
+        <!-- == 나의 글 관련 옵션 드랍다운 메뉴 -->
+        <div class="dropdown">
+          <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">
+            <div class="icon"></div>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a class="artworkEditBtn" data-id="{{ artwork.id }}">글 수정하기</a></li>
+            <li><a class="artworkDeleteBtn" data-id="{{ artwork.id }}">글 삭제하기</a></li>
+            <li><a class="artworkCommentToggleBtn" data-type="{{ TYPE_ARTWORK }}" data-type-id="{{ artwork.id }}">댓글 {% if artwork.use_comment == TYPE_NO_COMMENT %}허용{% else %}비허용{% endif %}</a></li>
+          </ul>
+        </div>
+        <!-- //== 나의 글 관련 옵션 드랍다운 메뉴 -->
+      {% endif %}
       <!-- == 작품 -->
       <div class="artworks">
         <div class="mainThumbnail">
@@ -225,13 +280,13 @@
             <div class="slider{% if artwork.extra_images|length <= 6 %} deactivate{% endif %}">
               {# data-mfp-src 에 (원본 이미지 URL) 하위 img src 에는 썸네일용 이미지 src를 설정 #}
               {% for extra in artwork.extra_images %}
-              <div class="item">
-                <div class="imgThumbnail popupImage" data-mfp-src="{{ extra.image | image_url }}">
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img src="{{ extra.image | thumb_url }}"/>
+                <div class="item">
+                  <div class="imgThumbnail popupImage" data-mfp-src="{{ extra.image | image_url }}">
+                    <div class="dimm"></div>
+                    <div class="preview">미리 보기</div>
+                    <img src="{{ extra.image | thumb_url }}"/>
+                  </div>
                 </div>
-              </div>
               {% endfor %}
             </div>
             {% if artwork.extra_images|length > 6 %}
@@ -239,12 +294,6 @@
               <button class="sliderNextBtn"></button>
             {% endif %}
           </div>
-        {% endif %}
-        {% if session.id == artwork.user_id %}
-        <div>
-          <button class="artworkEditBtn" data-id="{{ artwork.id }}">수정</button>
-          <button class="artworkDeleteBtn" data-id="{{ artwork.id }}">삭제</button>
-        </div>
         {% endif %}
       </div>
       <!-- //== 작품 -->
@@ -264,6 +313,9 @@
               <li class="exhibition display">현재 전시중</li>
             {% elseif artwork.status == ARTWORK_STATUS_NEED_SPACE %}
               <li class="exhibition">전시공간 구함</li>
+            {% endif %}
+            {% if artwork.for_sale == ARTWORK_FOR_SALE or artwork.status == ARTWORK_STATUS_NEED_SPACE %}
+              <a href="mailto:{{ artwork.user.email }}" class="btn btn-default">contact</a>
             {% endif %}
             {% if artwork.for_sale == ARTWORK_FOR_SALE %}
               <li class="buy">구매가능</li>
@@ -290,57 +342,33 @@
       <!-- //== 작가의 한마디 -->
 
       {% if artwork.use_comment == 1 %}
-      <!-- == 댓글 -->
-      <div class="commentArea">
-        <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
-        <hr class="divider"/>
-        <div class="commentMore">
-          <button class="commentMoreBtn">
-            이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
-          </button>
+        <!-- == 댓글 -->
+        <div class="commentArea">
+          <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
+          <hr class="divider"/>
+          <div class="commentMore">
+            <button class="commentMoreBtn">
+              이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
+            </button>
+          </div>
+          <ul class="comments">
+            {% for comment in comments %}
+              {{ include('artworks/comment.twig') }}
+            {% endfor %}
+          </ul>
         </div>
-        <ul class="comments">
-          {% for comment in comments %}
-            <li>
-              <div class="profileImage">
-                {% if comment.profile_image is empty %}
-                  <img src="{{ 'images/avatar.png' | static_url }}" class="img-circle"/>
-                {% else %}
-                  <img src="{{ comment.profile_image | thumb_url('profile') }}" class="img-circle"/>
-                {% endif %}
-              </div>
-              <div class="content">
-                <div class="meta">
-                  <a href="/users/{{ comment.user_name }}">{{ comment.user_name }}</a> <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
-                </div>
-                <div class="comment">{{ comment.comment|nl2br }}</div>
-                <button class="commentEditBtn">수정</button>
-                <button class="commentDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">삭제</button>
-                <!-- == 댓글 수정 폼 -->
-                <div class="commentEditDiv" style="display:none">
-                  <textarea id="commentEditText"></textarea>
-                  <button class="commentEditSubmit" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ comment.id }}">
-                    저장
-                  </button>
-                  <button class="commentEditCancel">취소</button>
-                </div>
-                <!-- //== 댓글 수정 폼-->
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-      <!-- //== 댓글 -->
+        <!-- //== 댓글 -->
 
-      <!-- == 댓글 입력 -->
-      <form id="commentRegisterForm" class="commentForm">
-        <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
-        <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
-        <textarea class="commentInput" name="comment" placeholder="작품에 대한 댓글을 남겨보세요."></textarea>
-        <button type="submit">확인</button>
-      </form>
 
-      <!-- //== 댓글 입력 -->
+        <!-- == 댓글 입력 -->
+        <form id="commentRegisterForm" class="commentForm">
+          <input type="hidden" name="type" placeholder="" value="{{ TYPE_ARTWORKS }}">
+          <input type="hidden" name="type_id" placeholder="" value="{{ artwork.id }}">
+          <textarea class="commentInput" name="comment" placeholder="작품에 대한 댓글을 남겨보세요."></textarea>
+          <button type="submit">확인</button>
+        </form>
+
+        <!-- //== 댓글 입력 -->
       {% endif %}
       {% if exhibitions|length > 0 %}
         <!-- == 전시 이력 -->
@@ -353,27 +381,27 @@
             </ul>
           </div>
           <ul class="exhibitions">
-          {% for exhibition in exhibitions %}
-            <li>
-              <a href="/places/{{ exhibition.place_id }}">
-                <div class="imgThumbnail">
-                  <img src="{{ exhibition.place.image | thumb_url }}"/>
-                </div>
-                <div class="meta">
-                  <div class="name">
-                    {{ exhibition.place.name|length > 12 ? exhibition.place.name|slice(0, 12) ~ '...' : exhibition.place.name  }}
+            {% for exhibition in exhibitions %}
+              <li>
+                <a href="/places/{{ exhibition.place_id }}">
+                  <div class="imgThumbnail">
+                    <img src="{{ exhibition.place.image | thumb_url }}"/>
                   </div>
-                  <div class="place">
-                    <div class="pin"></div>
-                    <div class="keyword">{{ exhibition.place.area }}</div>
+                  <div class="meta">
+                    <div class="name">
+                      {{ exhibition.place.name|length > 12 ? exhibition.place.name|slice(0, 12) ~ '...' : exhibition.place.name  }}
+                    </div>
+                    <div class="place">
+                      <div class="pin"></div>
+                      <div class="keyword">{{ exhibition.place.area }}</div>
+                    </div>
+                    <div class="date">
+                      {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
+                    </div>
                   </div>
-                  <div class="date">
-                    {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
-                  </div>
-                </div>
-              </a>
-            </li>
-          {% endfor %}
+                </a>
+              </li>
+            {% endfor %}
           </ul>
         </div>
         <!-- //== 전시 이력 -->
