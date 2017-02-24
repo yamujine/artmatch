@@ -17,12 +17,12 @@ class API_Controller extends CI_Controller {
     /**
      * @deprecated return_success_response 쓰는 방식으로 변경해주세요.
      */
-    public function set_success_response($body = '') {
+    public function set_success_response($body) {
         $this->result['result'] = true;
         $this->result['body'] = $body;
     }
 
-    public function return_success_response($body = '') {
+    public function return_success_response(array $body = []) {
         $this->result['result'] = true;
         $this->result['body'] = $body;
 
@@ -38,7 +38,7 @@ class API_Controller extends CI_Controller {
         $this->result['body'] = $body;
     }
 
-    public function return_fail_response($error_code, $body) {
+    public function return_fail_response($error_code, array $body) {
         $this->result['result'] = false;
         $this->result['errorCode'] = $error_code;
         $this->result['body'] = $body;
