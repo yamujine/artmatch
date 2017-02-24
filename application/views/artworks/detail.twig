@@ -352,9 +352,10 @@
             </button>
           </div>
           <ul class="comments">
-            {% for comment in comments %}
-              {{ include('artworks/comment.twig') }}
-            {% endfor %}
+            {% import 'macro/comment.item.twig' as comment_macro %}
+              {% for comment in comments %}
+                {{ comment_macro.render_comment_item(comment, artwork) }}
+              {% endfor %}
           </ul>
         </div>
         <!-- //== 댓글 -->

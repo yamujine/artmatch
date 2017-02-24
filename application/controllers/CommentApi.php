@@ -78,7 +78,7 @@ class CommentApi extends API_Controller {
         }
 
         $artwork['id'] = $type_id;
-        $insert_comment = $this->twig->render('artworks/comment', ['comment' => $comment, 'artwork' => $artwork]);
+        $insert_comment = $this->twig->render('api/comments', ['comments' => [$comment], 'artwork' => $artwork]);
 
         $this->return_success_response([
             'type' => $type,
