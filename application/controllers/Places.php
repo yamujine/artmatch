@@ -267,6 +267,6 @@ class Places extends MY_Controller {
             alert_and_close_popup('지원이 완료되었습니다.');
         }
 
-        $this->twig->display('places/apply', ['artworks' => $artworks]);
+        $this->twig->display('places/apply', ['exhibition' => $default_exhibition, 'artworks' => $artworks]);
     }
 }
