@@ -57,6 +57,20 @@ gulp.task('magiccheck', function () {
   return gulp.src('assets/bower_components/magic-check/css/**')
     .pipe(gulp.dest('static/dist/magic-check'));
 });
+
+gulp.task('vex', function () {
+  filesExist(['assets/bower_components/vex']);
+
+  return gulp.src('assets/bower_components/vex/dist/**')
+    .pipe(gulp.dest('static/dist/vex'));
+});
+
+gulp.task('jquery-validation', function () {
+  filesExist(['assets/bower_components/jquery-validation']);
+
+  return gulp.src('assets/bower_components/jquery-validation/dist/**')
+    .pipe(gulp.dest('static/dist/jquery-validation'));
+});
 /** For Develop TASK END **/
 
 gulp.task('uglify', function () {
@@ -77,7 +91,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
-gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck']);
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck', 'jquery-validation', 'vex']);
 
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')
