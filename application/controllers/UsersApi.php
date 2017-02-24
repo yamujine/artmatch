@@ -73,7 +73,7 @@ class UsersApi extends API_Controller {
         );
 
         if (!$result) {
-            $this->return_fail_response('500', ['message' => $this->db->error()]);
+            $this->return_fail_response('500', ['message' => 'database update error']);
         }
 
         $this->return_success_response(['message' => 'update success']);
@@ -89,7 +89,7 @@ class UsersApi extends API_Controller {
         $hashed_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
         $result = $this->user_model->update_password($user->id, $hashed_password);
         if (!$result) {
-            $this->return_fail_response('500', ['message' => $this->db->error()]);
+            $this->return_fail_response('500', ['message' => 'database update error']);
         }
 
         $this->return_success_response(['message' => 'update success']);
