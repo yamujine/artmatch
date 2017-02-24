@@ -8,6 +8,8 @@ class Exhibition_model extends CI_Model {
 
     //public $id; -- Ignore PK
     public $place_id;
+    public $title;
+    public $description;
     public $start_date;
     public $end_date;
     public $artwork_count;
@@ -22,9 +24,11 @@ class Exhibition_model extends CI_Model {
     public $exhibition_id;
     public $artwork_id;
 
-    public function insert($place_id, $start_date, $end_date, $artwork_count, $is_free) {
+    public function insert($place_id, $title, $description, $start_date, $end_date, $artwork_count, $is_free) {
         $data = [
             'place_id' => $place_id,
+            'title' => $title,
+            'description' => $description,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'artwork_count' => $artwork_count,
@@ -38,8 +42,10 @@ class Exhibition_model extends CI_Model {
         }
     }
 
-    public function update_by_place_id($place_id, $start_date, $end_date, $artwork_count, $is_free) {
+    public function update_by_place_id($place_id, $title, $description, $start_date, $end_date, $artwork_count, $is_free) {
         $data = [
+            'title' => $title,
+            'description' => $description,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'artwork_count' => $artwork_count,

@@ -262,6 +262,10 @@
           </ul>
         </div>
         <div class="commentary">
+          전시 제목: {{ place.exhibition.title }}<br>
+          전시 설명: {{ place.exhibition.description|nl2br }}
+        </div>
+        <div class="commentary">
           {{ place.description|nl2br }}
         </div>
         <div class="tags">
