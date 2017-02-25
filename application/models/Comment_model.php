@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @deprecated Artwork_Comment_model, Place_Comment_model 로 분리하였습니다.
+ * @property Comment_model
+ */
 class Comment_model extends CI_Model {
     const ARTWORK_COMMENTS_TABLE_NAME = 'artwork_comments';
     const PLACE_COMMENTS_TABLE_NAME = 'place_comments';
@@ -10,6 +14,9 @@ class Comment_model extends CI_Model {
     public $place_id;
     public $comment;
 
+    /**
+     * @deprecated 분리된 모델의 get($comment_id) 이용
+     */
     public function get_by_type_and_id($type, $comment_id) {
         if ($type === TYPE_ARTWORKS) {
             return $this->db
@@ -28,6 +35,9 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated 분리된 모델의 get_count_by_artwork_id($artwork_id), get_count_by_place_id($place_id) 이용
+     */
     public function get_count_by_type_id($type, $type_id) {
         if ($type === TYPE_ARTWORKS) {
             return $this->db
@@ -43,6 +53,10 @@ class Comment_model extends CI_Model {
     }
 
     /**
+     * @deprecated 분리된 모델의
+     * get_query_for_comments_by_artwork_id($artwork_id),
+     * get_query_for_comments_by_place_id($place_id) 이용
+     *
      * 상세페이지 코멘트 가져오기용 쿼리
      * @param $type
      * @param $type_id
@@ -67,6 +81,10 @@ class Comment_model extends CI_Model {
     }
 
     /**
+     * @deprecated 분리된 모델의
+     * get_comments_by_artwork_id($artwork_id),
+     * get_comments_by_place_id($place_id) 이용
+
      * get_query_for_comments_by_type_id을 이용한 코멘트 리턴
      * @param $type
      * @param $type_id
@@ -81,12 +99,16 @@ class Comment_model extends CI_Model {
             $query = $query->limit($limit, $offset);
         }
 
-        $query = $query->order_by('id', 'ASC');
+        $query = $query->order_by('id', 'desc');
 
         return $query->get()->result();
     }
 
     /**
+     * @deprecated 분리된 모델의
+     * get_count_of_comments_by_artwork_id($artwork_id),
+     * get_count_of_comments_by_place_id($place_id) 이용
+     *
      * get_query_for_comments_by_type_id을 이용한 코멘트 수 리턴
      * @param $type
      * @param $type_id
@@ -98,6 +120,11 @@ class Comment_model extends CI_Model {
         return $query->get()->num_rows();
     }
 
+    /**
+     * @deprecated 분리된 모델의
+     * insert_comment($user_id, $place_id, $comment),
+     * insert_comment($user_id, $artwork_id, $comment) 이용
+     */
     public function insert_comment($type, $user_id, $type_id, $comment) {
         if ($type === TYPE_ARTWORKS) {
             return $this->insert_artwork_comment($user_id, $type_id, $comment);
@@ -106,6 +133,11 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated 분리된 모델의
+     * delete_comment($artwork_comment_id),
+     * delete_comment($place_comment_id) 이용
+     */
     public function delete_comment($type, $type_comment_id) {
         if ($type === TYPE_ARTWORKS) {
             return $this->delete_artwork_comment($type_comment_id);
@@ -114,6 +146,11 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated 분리된 모델의
+     * update_comment($artwork_comment_id),
+     * update_comment($place_comment_id) 이용
+     */
     public function update_comment($type, $type_comment_id, $comment) {
         if ($type === TYPE_ARTWORKS) {
             return $this->update_artwork_comment($type_comment_id, $comment);
@@ -122,6 +159,9 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function insert_artwork_comment($user_id, $artwork_id, $comment) {
         $data = [
             'user_id' => $user_id,
@@ -137,12 +177,18 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function delete_artwork_comment($id) {
         $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['id' => $id]);
 
         return $this->db->affected_rows();
     }
 
+    /**
+     * @deprecated
+     */
     public function update_artwork_comment($id, $comment) {
         $result = $this->db->set(['comment' => $comment])
             ->where('id', $id)
@@ -155,6 +201,9 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function insert_place_comment($user_id, $place_id, $comment) {
         $data = [
             'user_id' => $user_id,
@@ -170,12 +219,18 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function delete_place_comment($id) {
         $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, ['id' => $id]);
 
         return $this->db->affected_rows();
     }
 
+    /**
+     * @deprecated
+     */
     public function update_place_comment($id, $comment) {
         $result = $this->db->set(['comment' => $comment])
             ->where('id', $id)
@@ -188,10 +243,16 @@ class Comment_model extends CI_Model {
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function delete_all_comments_by_artwork_id($artwork_id) {
         return $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['artwork_id' => $artwork_id]);
     }
 
+    /**
+     * @deprecated
+     */
     public function delete_all_comments_by_place_id($place_id) {
         return $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, ['place_id' => $place_id]);
     }

@@ -4,6 +4,7 @@
   <link rel="stylesheet" type="text/css" href="/static/dist/magnific-popup/magnific-popup.css">
   <link rel="stylesheet" type="text/css" href="/static/dist/slick/slick.css">
   <link rel="stylesheet" type="text/css" href="/static/dist/css/artworks/detail.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
@@ -170,6 +171,31 @@
         return false;
       });
 
+      // 댓글 더 보기
+      $('.commentMoreBtn').click(function () {
+        var $this = $(this);
+        var type = $this.data('type');
+        var type_id = $this.data('type-id');
+        var current_offset = $('.comments li').length;
+        var changed_offset;
+
+        // 더보기 버튼 숨기기
+        $this.hide();
+        // 로더 보여주기
+        $('.patLoader').show();
+
+        $.post('/api/comments', {type: type, type_id: type_id, offset: current_offset, limit: 3})
+          .done(function (data) {
+            $('.comments').prepend(data.body.comments);
+
+            $('.patLoader').hide();
+            changed_offset = current_offset + 3;
+            if (changed_offset < data.body.comment_count) {
+              $this.show();
+            }
+          });
+      });
+
       // PICK
       $('.pickBtn').click(function () {
         var $this = $(this);
@@ -197,7 +223,7 @@
           });
         return false;
       });
-  
+
       $(document).on('click', '.artworkCommentToggleBtn', function() {
         var $this = $(this);
         $.ajax({
@@ -346,16 +372,20 @@
         <div class="commentArea">
           <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
           <hr class="divider"/>
-          <div class="commentMore">
-            <button class="commentMoreBtn">
-              이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
-            </button>
-          </div>
+          {% if comment_count > 3 %}
+            <div class="commentMore">
+              <div class="patLoader"></div>
+              <button class="commentMoreBtn"
+                      data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}">
+                이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
+              </button>
+            </div>
+          {% endif %}
           <ul class="comments">
             {% import 'macro/comment.item.twig' as comment_macro %}
-              {% for comment in comments %}
-                {{ comment_macro.render_comment_item(comment, TYPE_ARTWORKS, artwork.id) }}
-              {% endfor %}
+            {% for comment in comments %}
+              {{ comment_macro.render_comment_item(comment, TYPE_ARTWORKS, artwork.id) }}
+            {% endfor %}
           </ul>
         </div>
         <!-- //== 댓글 -->

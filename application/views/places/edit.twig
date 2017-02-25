@@ -144,6 +144,49 @@
         });
       }
 
+      $("form").validate({
+        rules: {
+          tags: {
+            required: true,
+            maxlength: 60
+          }
+        },
+        messages: {
+          name: {
+            required: "장소명을 입력 해 주세요."
+          },
+          area: {
+            required: "대표 장소를 입력 해 주세요."
+          },
+          address: {
+            required: "주소를 입력 해 주세요."
+          },
+          image: {
+            required: "사진을 추가 해 주세요."
+          },
+          description: {
+            required: "장소 설명을 입력 해 주세요."
+          },
+          tags: {
+            required: "태그를 입력 해 주세요.",
+            maxlength: "태그는 60자 까지 입력 가능 합니다."
+          },
+          exhibition_artwork_count: {
+            required: "전시 가능한 작품 수를 입력 해 주세요."
+          },
+          exhibition_title: {
+            required: "전시 제목을 입력 해 주세요."
+          },
+          exhibition_start_date: {
+            required: "전시 시작일을 입력해 주세요."
+          },
+          exhibition_end_date: {
+            required: "전시 종료일을 입력해 주세요."
+          }
+        }
+      });
+
+
       // datepicker
       $("#exhibitionStartDate").datepicker();
       $("#exhibitionEndDate").datepicker();
@@ -255,7 +298,7 @@
         <!-- //== 작품 설명 -->
         <!-- == 옵션 선택 -->
         <div class="options">
-          전시 제목<input type="text" name="exhibition_title" value="{{ exhibition_title }}">
+          전시 제목<input type="text" name="exhibition_title" value="{{ exhibition_title }}" required >
           전시 설명<textarea name="exhibition_description">{{ exhibition_description }}</textarea>
         </div>
         <div class="options">
@@ -280,10 +323,10 @@
               <div class="title">전시일정</div>
               <div class="field">
                 <input type="text" name="exhibition_start_date" id="exhibitionStartDate" maxlength="8" placeholder="{{ now|date('Ymd') }}"
-                       value="{% if exhibition_start_date is not null %}{{ exhibition_start_date|date('Ymd') }}{% endif %}"/>
+                       value="{% if exhibition_start_date is not null %}{{ exhibition_start_date|date('Ymd') }}{% endif %}" required />
                 부터
                 <input type="text" name="exhibition_end_date" id="exhibitionEndDate" maxlength="8" placeholder="{{ now|date('Ymd') }}"
-                       value="{% if exhibition_end_date is not null %}{{ exhibition_end_date|date('Ymd') }}{% endif %}"/>
+                       value="{% if exhibition_end_date is not null %}{{ exhibition_end_date|date('Ymd') }}{% endif %}" required />
                 까지
               </div>
             </div>
@@ -293,7 +336,7 @@
               <div class="title">작품 수</div>
               <div class="field">
                 <input type="text" name="exhibition_artwork_count" min="0" max="100" placeholder="0"
-                       value="{{ exhibition_artwork_count }}"/> 점
+                       value="{{ exhibition_artwork_count }}" required /> 점
               </div>
             </div>
             <!-- //== 작품 수 -->
