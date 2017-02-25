@@ -254,6 +254,10 @@ class Places extends MY_Controller {
         $this->load->library('applylib');
         $default_exhibition = $this->exhibition_model->get_by_place_id($place_id);
 
+        if ($this->accountlib->get_user_type() !== USER_TYPE_ARTIST) {
+            alert_and_redirect('창작자 회원만 전시 지원이 가능합니다.');
+        }
+
         if ($this->input->method() === 'get') {
             $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id(
                 $this->accountlib->get_user_id(),
@@ -279,6 +283,6 @@ class Places extends MY_Controller {
             alert_and_redirect('지원이 완료되었습니다.', '/places/' . $place_id);
         }
 
-        $this->twig->display('places/apply', ['exhibition' => $default_exhibition, 'artworks' => $artworks]);
+        $this->twig->display('places/apply', ['exhibition' => $default_exhibition, 'artworks' => $artworks, 'place_id' => $place_id]);
     }
 }

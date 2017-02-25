@@ -275,8 +275,8 @@
                     <div class="title">{{ artwork.title }}</div>
                     <div class="name">{{ artwork.user.user_name }}</div>
                   </div>
-                  <button class="button selectItemBtn" data-exhibition-id="{{ exhibition.id }}"
-                          data-artwork-id="{{ artwork.id }}"></button>
+                  <button class="button selectItemBtn {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}checked{% endif %}" data-exhibition-id="{{ exhibition.id }}"
+                          data-artwork-id="{{ artwork.id }}" {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}></button>
                 </li>
               {% endfor %}
             {% endfor %}
