@@ -229,7 +229,7 @@
               {% for artwork in exhibition.applied_artworks %}
                 작품명 :
                 {{ artwork.title }}
-                <button class="appliedAccept" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}">accept</button>
+                <button class="appliedAccept" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}">accept</button>
               {% endfor %}
               <br>
             {% endfor %}
