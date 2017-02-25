@@ -61,7 +61,7 @@
       return false;
     });
 
-    $('.facebook').click(function () {
+    $('.facebookBtn').click(function () {
       FB.login(function(response) {
         if (response.status !== 'connected') {
           alert('페이스북 로그인을 사용할 수 없습니다.');
@@ -129,7 +129,7 @@
         if (response.data[i].permission === 'email' && response.data[i].status === 'declined') {
           FB.login(function (response) {
             if (response.status === 'connected') {
-              $('.facebook').click();
+              $('.facebookBtn').click();
             }
           }, {scope: 'public_profile,email', auth_type: 'rerequest'});
           break;
@@ -142,43 +142,47 @@
 {% endblock %}
 
 {% block contents %}
+  <!-- == 로그인 -->
   <div class="patLogin">
     <div class="container">
-      <div class="leftCover">
-        <div class="background"></div>
-      </div>
-      <div class="rightForm">
-        <div class="logo">
-          <img src="{{ 'images/logo_black.png' | static_url }}" width="149px" height="18px"/>
-        </div>
-        <div class="loginForm">
-          <div class="loginFormContainer">
-            <form id="patLoginForm" method="POST">
-              <fieldset>
-                <input type="text" name="email_or_username" placeholder="이메일 또는 이름"/>
-              </fieldset>
-              <fieldset>
-                <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
-              </fieldset>
-              <button type="submit">로그인</button>
-            </form>
-            <p>또는</p>
-            <button class="facebook">페이스북으로 로그인</button>
-            <div class="patLoginExcept">
-              <p>
-                <a data-toggle="modal" data-target="#password_modal">비밀번호를 잊으셨나요?</a>
-              </p>
-              <hr/>
-              <p>
-                계정이 필요하신가요?
-                <a href="/account/signup">회원가입</a>
-              </p>
-            </div>
+      <!-- == 로고 -->
+      <div class="logo"></div>
+      <!-- //== 로고 -->
+      <!-- == 타이틀 -->
+      <div class="title">잠자고 있는 여러분의 작품을 깨워주세요.</div>
+      <!-- //== 타이틀 -->
+      <!-- == 로그인 폼 -->
+      <div class="loginForm">
+        <div class="loginFormContainer">
+          <form id="patLoginForm" method="POST">
+            <!-- == 페이스북 로그인 -->
+            <button class="facebookBtn"><span class="bold">Facebook</span>으로 로그인 하기</button>
+            <!-- //== 페이스북 로그인 -->
+            <div class="divider"></div>
+            <fieldset>
+              <input type="text" name="email_or_username" placeholder="이메일 또는 이름을 입력해주세요."/>
+            </fieldset>
+            <fieldset>
+              <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+            </fieldset>
+            <button type="submit">로그인</button>
+          </form>
+
+          <div class="patLoginExcept">
+            <p class="passwordFind">
+              <a data-toggle="modal" data-target="#password_modal">비밀번호를 잊으셨나요?</a>
+            </p>
+            <p class="join">
+              아직 회원이 아니신가요?<br/>
+              <a href="/account/signup">회원가입하기</a>
+            </p>
           </div>
         </div>
       </div>
+      <!-- //== 로그인 폼 -->
     </div>
   </div>
+  <!-- //== 로그인 -->
 
   <div class="modal fade" id="password_modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -196,7 +200,6 @@
               </div>
             </div>
           </form>
-
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
