@@ -76,7 +76,7 @@ class Exhibition_model extends CI_Model {
             ->get()->result();
     }
 
-    public function get_exhibition_by_id($exhibition_id) {
+    public function get_by_id($exhibition_id) {
         return $this->db
             ->from(self::TABLE_NAME)
             ->where('id', $exhibition_id)
