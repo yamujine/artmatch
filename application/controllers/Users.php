@@ -28,19 +28,18 @@ class Users extends MY_Controller {
 
     private function _applied_list() {
         $this->load->model(['exhibition_model', 'place_model', 'artwork_model']);
-        $this->load->library('applylib');
         $places = $this->place_model->get_all_by_user_id($this->accountlib->get_user_id());
-        $exhibitions = [];
-        $applied_artworks = [];
         foreach ($places as $place) {
-            $exhibitions = array_merge($exhibitions, $this->exhibition_model->get_exhibitions_by_place_id($place->id));
-        }
-        foreach ($exhibitions as $exhibition) {
-            $applied_artworks = array_merge($applied_artworks, $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id));
+            $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place->id);
+            $place->exhibitions = $exhibitions;
+            foreach ($place->exhibitions as $exhibition) {
+                $applied_artworks = $this->artwork_model->get_in_review_artworks_by_exhibition_id($exhibition->id);
+                $exhibition->applied_artworks = $applied_artworks;
+            }
         }
         return [
-            'applied_artworks' => $applied_artworks,
-            'is_applied_list' => 1
+            'is_applied_list' => true,
+            'my_places' => $places
         ];
     }
 
