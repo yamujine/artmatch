@@ -29,7 +29,7 @@ class Applylib {
     }
 
     /**
-     * @param array $to_send_list [[artwork, artwork] //same user artworks,[artwork, artwork, artwork]]
+     * @param array $to_send_list [[artwork, artwork],[artwork, artwork, artwork] //same user artworks]
      * @param $exhibition_id
      */
     public function send_accepted_email(array $to_send_list, $exhibition_id) {
