@@ -27,7 +27,7 @@
           <li class="item {% if (loop.index % 3) == 0 %}third{% endif %}">
             <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"/>
             <label for="artwork_{{ artwork.id }}">
-              <img class="imageThumb" src="http://cfile4.uf.tistory.com/image/276F413C576180C72A82CA"/>
+              <img class="imageThumb" src="{{ artwork.image | thumb_url }}"/>
             </label>
             <div class="box">
               1
