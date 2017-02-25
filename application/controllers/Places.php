@@ -70,7 +70,7 @@ class Places extends MY_Controller {
         $this->form_validation->set_rules('name', 'name', 'required|trim');
         $this->form_validation->set_rules('status', 'status', 'required');
         $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
-        $this->form_validation->set_rules('area', 'area', 'required|trim');
+        $this->form_validation->set_rules('area', 'area', 'required|trim|max_length[6]');
         $this->form_validation->set_rules('address', 'address', 'required|trim');
         $this->form_validation->set_rules('tags', 'tags', 'required|trim|max_length[60]');
 

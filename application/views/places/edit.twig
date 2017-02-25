@@ -9,7 +9,7 @@
 {% block script %}
   <script src="{{ 'dist/js/jquery-ui.min.js' | static_url }}"></script>
   <script src="{{ 'dist/js/datepicker-ko.js' | static_url }}"></script>
-  
+
   <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
   <script type="text/javascript">
     $(function () {
@@ -151,7 +151,10 @@
       $("#patUploadForm").validate({
         rules: {
           name: "required",
-          area: "required",
+          area: {
+            required: true,
+            maxlength: 6
+          },
           address: "required",
           image: {
               required: function() {
@@ -180,7 +183,8 @@
             required: "장소명을 입력해 주세요."
           },
           area: {
-            required: "대표 장소를 입력해 주세요."
+            required: "대표 장소를 입력해 주세요.",
+            maxlength: "대표 장소는 6자까지 입력 가능합니다."
           },
           address: {
             required: "주소를 입력해 주세요."
@@ -189,8 +193,8 @@
             required: "사진을 추가해 주세요."
           },
           description: {
-            required: "장소설명을 입력해 주세요.",
-            maxlength: "장소설명은 100자 까지 입력 가능 합니다."
+            required: "장소 설명을 입력해 주세요.",
+            maxlength: "장소 설명은 100자 까지 입력 가능합니다."
           },
           tags: {
             required: "태그를 입력해 주세요.",
@@ -211,10 +215,13 @@
         }
       });
 
-
       // datepicker
       $("#exhibitionStartDate").datepicker();
       $("#exhibitionEndDate").datepicker();
+
+      $('.patGnbSubmit').click(function() {
+        $("#patUploadForm").submit();
+      });
     });
   </script>
   <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
@@ -232,6 +239,17 @@
       }).open({popupName: 'addressPopup'});
     });
   </script>
+{% endblock %}
+
+{% block buttons %}
+  <ul class="nav navbar-nav navbar-right">
+    <li class="patGnbCancel">
+      <a class="noDivider" href="{% if id %}/places/{{ id }}{% else %}/{% endif %}">취소</a>
+    </li>
+    <li class="patGnbSubmit">
+      <a class="noDivider" href="#">등록</a>
+    </li>
+  </ul>
 {% endblock %}
 
 {% block contents %}
