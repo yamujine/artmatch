@@ -18,6 +18,24 @@ body {
     }
   }
 
+  // 검색 팝업
+  &.searching {
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+
+    #patSearch {
+      display: block;
+    }
+
+    #patTop {
+      .search {
+        display: none;
+      }
+    }
+  }
+  // -- 검색 팝업
+
   /* 상단 메뉴 */
   #patTop {
     background: $black-five;
@@ -51,6 +69,7 @@ body {
               font-style: normal;
               color: $white-two;
               padding: 16px 18px;
+              cursor: pointer;
             }
 
             &.patCategory {
@@ -117,6 +136,7 @@ body {
     }
   }
 
+  // 하단 푸터 영역
   #patFooter {
     background: $white-five;
     margin: 50px 0 0 0;
@@ -167,4 +187,78 @@ body {
       }
     }
   }
+  // -- 하단 푸터 영역
+
+  // 검색 영역
+  #patSearch {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    top: 52px;
+    bottom: 0;
+    background: $white-two;
+
+    .searchForm {
+      width: 960px;
+      margin: 70px auto 0 auto;
+
+      .searchInput {
+        display: inline-block;
+        position: relative;
+
+        &.focusing {
+          .resetKeywordBtn {
+            display: block;
+          }
+        }
+
+        // 입력 창
+        input[name=q] {
+          width: 800px;
+          height: 50px;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 20px;
+          color: $black;
+          padding: 0 0 0 10px;
+          border: none;
+          border-bottom: 3px solid rgba(0, 0, 0, 0.24);
+          outline: none;
+
+          &:focus, &:active {
+            border-bottom: 3px solid rgba(0, 0, 0, 1.0);
+          }
+        }
+        // -- 입력 창
+
+        // 검색 입력 값 초기화 버튼
+        .resetKeywordBtn {
+          display: none;
+          width: 48px;
+          height: 48px;
+          border: none;
+          outline: none;
+          position: absolute;
+          right: 0;
+          bottom: 4px;
+          background: url(/static/images/escape.png);
+        }
+        // -- 검색 입력 값 초기화 버튼
+      }
+
+      // 검색 버튼
+      button[type=submit] {
+        width: 120px;
+        height: 44px;
+        color: $white-two;
+        background: $black-five;
+        border: none;
+        @include prefix(border-radius, 30px);
+        margin: 0 0 0 35px;
+      }
+      // -- 검색 버튼
+    }
+  }
+  // -- 검색 영역
 }
