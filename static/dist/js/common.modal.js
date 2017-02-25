@@ -1,1 +1,1 @@
-"use strict";$(function(){$(document).on("click",".modal-backdrop",function(){console.log("ddd"),$(".patModal").modal("hide")})});
+"use strict";$(function(){$(document).on("click",".modal-backdrop",function(){$(".patModal").modal("hide")})});
