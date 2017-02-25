@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Places extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'artwork_comment_model', 'place_comment_model', 'pick_model']);
+        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'artwork_comment_model', 'place_comment_model', 'place_pick_model']);
         $this->load->library('tag');
         $this->load->helper('url');
     }
@@ -234,7 +234,7 @@ class Places extends MY_Controller {
             $this->place_comment_model->delete_all_comments_by_place_id($place_id);
 
             // 장소 Pick
-            $this->pick_model->delete_all_picks_by_place_id($place_id);
+            $this->place_pick_model->delete_all_picks_by_place_id($place_id);
 
             // 전시
             $this->exhibition_model->delete_all_by_place_id($place_id);

@@ -120,5 +120,5 @@ gulp.task('build', sync.sync([
 
 gulp.task('build:watch', function () {
   gulp.watch('assets/scss/**/*.scss', ['sass']);
-  gulp.watch('assets/js/**/*.js', ['uglify']);
+  gulp.watch('assets/js/*.js', ['uglify']);
 });

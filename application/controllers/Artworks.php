@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'artwork_comment_model', 'pick_model', 'user_model']);
+        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'artwork_comment_model', 'artwork_pick_model', 'user_model']);
         $this->load->library(['tag']);
         $this->load->helper('url');
     }
@@ -182,7 +182,7 @@ class Artworks extends MY_Controller {
             $this->artwork_comment_model->delete_all_comments_by_artwork_id($artwork_id);
 
             // 작품 Pick
-            $this->pick_model->delete_all_picks_by_artwork_id($artwork_id);
+            $this->artwork_pick_model->delete_all_picks_by_artwork_id($artwork_id);
 
             // 전시 내 작품
             $this->exhibition_model->delete_all_artworks_by_artwork_id($artwork_id);

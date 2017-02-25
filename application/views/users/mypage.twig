@@ -97,6 +97,21 @@
           });
       });
     });
+    {% if show_applied_list %}
+    //더미 function
+      $('.appliedAccept').on('click', function() {
+       $.ajax({
+         method: "POST",
+         url: "/api/exhibition/accept",
+         data: {
+           exhibition_id: $(this).data("exhibition-id"),
+           applied_artwork_ids: [$(this).data("artwork-id")]
+         }
+       }).done(function (data) {
+         location.reload(true);
+       })
+      });
+    {% endif %}
   </script>
 {% endblock %}
 
@@ -151,7 +166,7 @@
     <div id="patTab">
       <ul class="selectTab">
         <li>
-          <a {% if pick_type is null %}class="active"{% endif %} href="/users/me">
+          <a {% if pick_type is null and show_applied_list is null %}class="active"{% endif %} href="/users/me">
             {% if user.type == USER_TYPE_ARTIST %}
               WORK
             {% elseif user.type == USER_TYPE_PLACE_OWNER %}
@@ -162,6 +177,11 @@
         <li>
           <a {% if pick_type is not null %}class="active"{% endif %} href="?type=artworks">PICK</a>
         </li>
+        {% if user.type == USER_TYPE_PLACE_OWNER %}
+          <li>
+            <a {% if show_applied_list %}class="active"{% endif %} href="?show_applied_list=1">전시요청</a>
+          </li>
+        {% endif %}
       </ul>
       <div class="divider"></div>
     </div>
@@ -191,19 +211,45 @@
         <!-- == 아이템 목록 -->
         <ul class="itemList">
           {% import 'macro/mypage.macro.twig' as mypage_macro %}
-          {% for item in items %}
-            {% if not is_my_page or (is_my_page and pick_type is empty) %}
-              {# 마이페이지 내 나의 작품/장소 #}
-              {% if user.type == USER_TYPE_ARTIST %}
-                {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
-              {% elseif user.type == USER_TYPE_PLACE_OWNER %}
-                {{ mypage_macro.render_mypage_place_item(item) }}
+          {% if show_applied_list is empty %}
+            {% for item in items %}
+              {% if not is_my_page or (is_my_page and pick_type is empty) %}
+                {# 마이페이지 내 나의 작품/장소 #}
+                {% if user.type == USER_TYPE_ARTIST %}
+                  {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
+                {% elseif user.type == USER_TYPE_PLACE_OWNER and show_applied_list is empty %}
+                  {{ mypage_macro.render_mypage_place_item(item) }}
+                {% endif %}
+              {% else %}
+                {# 나의 공간을 표시해야하는게 아닌 경우 공통 디자인의 아이템을 사용 #}
+                {{ mypage_macro.render_mypage_grid_item(item, pick_type, loop.index) }}
               {% endif %}
-            {% else %}
-              {# 나의 공간을 표시해야하는게 아닌 경우 공통 디자인의 아이템을 사용 #}
-              {{ mypage_macro.render_mypage_grid_item(item, pick_type, loop.index) }}
-            {% endif %}
-          {% endfor %}
+            {% endfor %}
+          {% elseif show_applied_list %}
+            {# 전시 #}
+            {% for exhibition in exhibitions %}
+              전시명 : {{ exhibition.title }}
+              <br>
+              {# 전시에 지원학 작품 #}
+              {# @TODO 마크업 필요 #}
+              {% for artwork in exhibition.applied_artworks %}
+                <div>
+                  작품명 :
+                  {{ artwork.title }}
+                  <br>
+                  <img class="img" src="{{ artwork.image | thumb_url}}" />
+                  <br>
+                  {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW %}
+                    <button class="appliedAccept" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}">등록하기</button>
+                  {% else %}
+                    <button disabled>{% if artwork.apply_status == APPLY_STATUS_REJECTED %} reject {% else %} accepted {% endif %}</button>
+                  {% endif %}
+                </div>
+                <br>
+              {% endfor %}
+              <br>
+            {% endfor %}
+          {% endif %}
         </ul>
         <!-- //== 아이템 목록 -->
       </div>
@@ -246,7 +292,7 @@
             <div class="field">
               <input type="password" title="text" name="newPassword" placeholder="새로운 비밀번호를 입력해주세요." />
             </div>
-            <button type="submit">비밀번호 찾기</button>
+            <button type="submit">비밀번호 변경</button>
           </form>
         </div>
       </div>
