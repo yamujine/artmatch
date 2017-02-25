@@ -53,11 +53,6 @@
 {% block script %}
   <script>
     $(function () {
-      $("#applyForm").find(".cancelBtn").click(function () {
-        // uncheck all
-        $("#applyForm").find("input[type=checkbox]").removeAttr("checked").prop("checked", false);
-      });
-
       $("#applyForm").validate({
         rules: {
           'artwork_id[]': {
