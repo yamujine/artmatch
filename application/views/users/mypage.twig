@@ -92,6 +92,21 @@
           });
       });
     });
+    {% if is_applied_list %}
+    //더미 function
+      $('.appliedAccept').on('click', function() {
+       $.ajax({
+         method: "POST",
+         url: "/api/apply/accept_applied_artworks",
+         data: {
+           exhibition_id: '39',
+           applied_artwork_ids: ['36', '48']
+         }
+       }).done(function (data) {
+         console.dir(data);
+       })
+      });
+    {% endif %}
   </script>
 {% endblock %}
 
@@ -146,7 +161,7 @@
     <div id="patTab">
       <ul class="selectTab">
         <li>
-          <a {% if pick_type is null %}class="active"{% endif %} href="/users/me">
+          <a {% if pick_type is null and is_applied_list is null %}class="active"{% endif %} href="/users/me">
             {% if user.type == USER_TYPE_ARTIST %}
               WORK
             {% elseif user.type == USER_TYPE_PLACE_OWNER %}
@@ -157,6 +172,11 @@
         <li>
           <a {% if pick_type is not null %}class="active"{% endif %} href="?type=artworks">PICK</a>
         </li>
+        {% if user.type == USER_TYPE_PLACE_OWNER %}
+          <li>
+            <a {% if is_applied_list %}class="active"{% endif %} href="?is_applied_list=1">전시요청</a>
+          </li>
+        {% endif %}
       </ul>
       <div class="divider"></div>
     </div>
@@ -179,6 +199,10 @@
     {% set items = my_picks %}
   {% endif %}
 
+  {% if is_applied_list %}
+    {% set items = applied_artworks %}
+  {% endif %}
+
   {% if items|length > 0 %}
     <!-- == 작품 또는 장소 아이템 -->
     <div class="patItemList">
@@ -191,14 +215,19 @@
               {# 마이페이지 내 나의 작품/장소 #}
               {% if user.type == USER_TYPE_ARTIST %}
                 {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
-              {% elseif user.type == USER_TYPE_PLACE_OWNER %}
+              {% elseif user.type == USER_TYPE_PLACE_OWNER and is_applied_list is empty %}
                 {{ mypage_macro.render_mypage_place_item(item) }}
+              {% elseif user.type == USER_TYPE_PLACE_OWNER and is_applied_list %}
+                {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
               {% endif %}
             {% else %}
               {# 나의 공간을 표시해야하는게 아닌 경우 공통 디자인의 아이템을 사용 #}
               {{ mypage_macro.render_mypage_grid_item(item, pick_type, loop.index) }}
             {% endif %}
           {% endfor %}
+          {% if is_applied_list %}
+            <button class="appliedAccept">accept</button>
+          {% endif %}
         </ul>
         <!-- //== 아이템 목록 -->
       </div>
