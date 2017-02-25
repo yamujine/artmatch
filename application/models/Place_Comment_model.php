@@ -53,7 +53,7 @@ class Place_Comment_model extends CI_Model {
             $query = $query->limit($limit, $offset);
         }
 
-        $query = $query->order_by('id', 'ASC');
+        $query = $query->order_by('id', 'DESC');
 
         return $query->get()->result();
     }
