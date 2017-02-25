@@ -235,6 +235,22 @@ html, body {
             }
           }
 
+          .loginBtn {
+            width: 150px;
+            height: 36px;
+            background: $white-two;
+            color: $black-five;
+            border: 1px solid $warm-grey-four;
+            padding: 9px 39px;
+            font-size: 14px;
+            font-weight: normal;
+            outline: none;
+            text-align: center;
+            margin-top: 40px;
+            text-decoration: none;
+            @include prefix(border-radius, 4px);
+          }
+
           // 회원 가입 버튼
           button[type=submit] {
             width: 150px;
