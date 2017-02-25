@@ -207,8 +207,8 @@
         var current_offset = $('.comments li').length;
         var changed_offset;
 
-        // 더보기 버튼 숨기기
-        $this.hide();
+        // 더보기 영역 숨기기
+        $this.closest('.commentMore').hide();
         // 로더 보여주기
         $('.patLoader').show();
 
@@ -219,7 +219,7 @@
             $('.patLoader').hide();
             changed_offset = current_offset + 3;
             if (changed_offset < data.body.comment_count) {
-              $this.show();
+              $this.closest('.commentMore').show();
             }
           });
       });
@@ -401,8 +401,8 @@
           <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
           <hr class="divider"/>
           {% if comment_count > 3 %}
+            <div class="patLoader"></div>
             <div class="commentMore">
-              <div class="patLoader"></div>
               <button class="commentMoreBtn"
                       data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}">
                 이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
@@ -410,7 +410,7 @@
             </div>
           {% endif %}
           <ul class="comments">
-            {% import 'macro/comment.item.twig' as comment_macro %}
+            {% import 'macro/comment.macro.twig' as comment_macro %}
             {% for comment in comments %}
               {{ comment_macro.render_comment_item(comment, TYPE_ARTWORKS, artwork.id) }}
             {% endfor %}

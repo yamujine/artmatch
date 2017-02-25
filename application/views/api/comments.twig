@@ -1,4 +1,4 @@
-{% import 'macro/comment.item.twig' as comment_macro %}
+{% import 'macro/comment.macro.twig' as comment_macro %}
 {% for comment in comments %}
   {{ comment_macro.render_comment_item(comment, type, type_id) }}
 {% endfor %}
