@@ -7,7 +7,7 @@ class CommentApi extends API_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('comment_model');
+        $this->load->model(['comment_model', 'artwork_comment_model', 'place_comment_model']);
         $this->validate_types();
     }
 
@@ -49,8 +49,13 @@ class CommentApi extends API_Controller {
         $limit = $this->input->post('limit');
         $offset = $this->input->post('offset');
 
-        $comments = $this->comment_model->get_comments_by_type_id($type, $type_id, $limit, $offset);
-        $comment_count = $this->comment_model->get_count_of_comments_by_type_id($type, $type_id);
+        if ($type === TYPE_ARTWORKS) {
+            $comments = $this->artwork_comment_model->get_comments_by_artwork_id($type_id, $limit, $offset);
+            $comment_count = $this->artwork_comment_model->get_count_of_comments_by_artwork_id($type_id);
+        } elseif ($type === TYPE_PLACES) {
+            $comments = $this->place_comment_model->get_comments_by_place_id($type_id, $limit, $offset);
+            $comment_count = $this->place_comment_model->get_count_of_comments_by_place_id($type_id);
+        }
 
         $this->return_success_response(['comments' => $comments, 'comment_count' => $comment_count]);
     }

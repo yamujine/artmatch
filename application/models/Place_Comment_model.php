@@ -8,7 +8,7 @@ class Place_Comment_model extends CI_Model {
     public $place_id;
     public $comment;
 
-    public function get_by_id($place_comment_id) {
+    public function get($place_comment_id) {
         return $this->db
             ->select('place_comments.*, users.user_name, users.profile_image')
             ->from(self::PLACE_COMMENTS_TABLE_NAME)
@@ -84,8 +84,8 @@ class Place_Comment_model extends CI_Model {
         }
     }
 
-    public function delete_comment($id) {
-        $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, ['id' => $id]);
+    public function delete_comment($place_comment_id) {
+        $this->db->delete(self::PLACE_COMMENTS_TABLE_NAME, ['id' => $place_comment_id]);
 
         return $this->db->affected_rows();
     }

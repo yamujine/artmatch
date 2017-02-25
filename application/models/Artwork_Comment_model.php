@@ -8,7 +8,7 @@ class Artwork_Comment_model extends CI_Model {
     public $artwork_id;
     public $comment;
 
-    public function get_by_id($artwork_comment_id) {
+    public function get($artwork_comment_id) {
         return $this->db
             ->select('artwork_comments.*, users.user_name, users.profile_image')
             ->from(self::ARTWORK_COMMENTS_TABLE_NAME)
@@ -84,8 +84,8 @@ class Artwork_Comment_model extends CI_Model {
         }
     }
 
-    public function delete_comment($id) {
-        $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['id' => $id]);
+    public function delete_comment($artwork_comment_id) {
+        $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['id' => $artwork_comment_id]);
 
         return $this->db->affected_rows();
     }
