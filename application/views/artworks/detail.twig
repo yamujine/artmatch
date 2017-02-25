@@ -188,8 +188,8 @@
           }
         }).done(function (data) {
           if (data.body.result_type === 'delete') {
-            $('#comment_'+data.body.type_comment_id).remove();
-            $('.commentArea').children().find('.number').text(data.body.comment_count);
+            $('#comment_' + data.body.type_comment_id).remove();
+            $('.commentArea .number').text(data.body.comment_count);
           } else {
             alert(data.body.message);
           }
