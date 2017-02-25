@@ -4,6 +4,7 @@
   <link rel="stylesheet" type="text/css" href="/static/dist/magnific-popup/magnific-popup.css">
   <link rel="stylesheet" type="text/css" href="/static/dist/slick/slick.css">
   <link rel="stylesheet" type="text/css" href="/static/dist/css/artworks/detail.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
@@ -168,6 +169,13 @@
           alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
         });
         return false;
+      });
+
+      // 댓글 더 보기
+      $('.commentMoreBtn').click(function () {
+        $(this).hide();
+        // 로더 보여주기
+        $('.patLoader').show();
       });
 
       // PICK
@@ -346,11 +354,14 @@
         <div class="commentArea">
           <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
           <hr class="divider"/>
+          {% if comment_count > 3 %}
           <div class="commentMore">
+            <div class="patLoader"></div>
             <button class="commentMoreBtn">
               이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
             </button>
           </div>
+          {% endif %}
           <ul class="comments">
             {% import 'macro/comment.item.twig' as comment_macro %}
               {% for comment in comments %}
