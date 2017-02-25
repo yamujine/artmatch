@@ -34,7 +34,7 @@ class Applylib {
      */
     public function send_accepted_email(array $to_send_list) {
         if (!empty($to_send_list)) {
-            foreach ($to_send_list as $email=>$accepted_artworks) {
+            foreach ($to_send_list as $email => $accepted_artworks) {
                 $email_html = $this->CI->twig->render('email/accepted', ['artworks' => $accepted_artworks]);
 
                 $this->CI->email->initialize(['mailtype' => 'html']);
