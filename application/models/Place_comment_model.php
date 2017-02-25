@@ -1,6 +1,6 @@
 <?php
 
-class Place_Comment_model extends CI_Model {
+class Place_comment_model extends CI_Model {
     const PLACE_COMMENTS_TABLE_NAME = 'place_comments';
 
     //public $id; -- Ignore PK

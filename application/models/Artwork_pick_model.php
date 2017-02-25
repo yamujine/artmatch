@@ -1,34 +1,34 @@
 <?php
 
-class Place_Pick_model extends CI_Model {
+class Artwork_pick_model extends CI_Model {
     /**
-     * table_name: user_place_picks
+     * table_name: user_artwork_picks
      */
-    const TABLE_NAME = 'user_place_picks';
+    const TABLE_NAME = 'user_artwork_picks';
 
     //public $id; -- Ignore PK
     public $user_id;
-    public $place_id;
+    public $artwork_id;
 
-    public function get_count_by_place_id($place_id) {
+    public function get_count_by_artwork_id($artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)
-            ->where('place_id', $place_id)
+            ->where('artwork_id', $artwork_id)
             ->count_all_results();
     }
 
-    public function get_given_place_pick_by_user_id($user_id) {
+    public function get_given_artwork_pick_by_user_id($user_id) {
         return $this->db
             ->from(self::TABLE_NAME)
-            ->join('places', 'places.id = user_place_picks.place_id')
-            ->where('places.user_id', $user_id)
+            ->join('artworks', 'artworks.id = user_artwork_picks.artwork_id')
+            ->where('artworks.user_id', $user_id)
             ->count_all_results();
     }
 
-    public function check_pick($user_id, $place_id) {
+    public function check_pick($user_id, $artwork_id) {
         $data = [
             'user_id' => $user_id,
-            'place_id' => $place_id
+            'artwork_id' => $artwork_id
         ];
 
         $result = $this->db
@@ -44,10 +44,10 @@ class Place_Pick_model extends CI_Model {
         }
     }
 
-    public function insert_pick($user_id, $place_id) {
+    public function insert_pick($user_id, $artwork_id) {
         $data = [
             'user_id' => $user_id,
-            'place_id' => $place_id
+            'artwork_id' => $artwork_id
         ];
 
         if ($this->db->insert(self::TABLE_NAME, $data)) {
@@ -57,10 +57,10 @@ class Place_Pick_model extends CI_Model {
         }
     }
 
-    public function delete_place_pick($user_id, $place_id) {
+    public function delete_pick($user_id, $artwork_id) {
         $data = [
             'user_id' => $user_id,
-            'place_id' => $place_id
+            'artwork_id' => $artwork_id
         ];
 
         $this->db->delete(self::TABLE_NAME, $data);
@@ -68,7 +68,7 @@ class Place_Pick_model extends CI_Model {
         return $this->db->affected_rows() === 1;
     }
 
-    public function delete_all_picks_by_place_id($place_id) {
-        return $this->db->delete(self::PLACE_PICKS_TABLE_NAME, ['place_id' => $place_id]);
+    public function delete_all_picks_by_artwork_id($artwork_id) {
+        return $this->db->delete(self::ARTWORK_PICKS_TABLE_NAME, ['artwork_id' => $artwork_id]);
     }
 }

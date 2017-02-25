@@ -1,6 +1,6 @@
 <?php
 
-class Artwork_Comment_model extends CI_Model {
+class Artwork_comment_model extends CI_Model {
     const ARTWORK_COMMENTS_TABLE_NAME = 'artwork_comments';
 
     //public $id; -- Ignore PK
