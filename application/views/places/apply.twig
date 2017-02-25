@@ -2,45 +2,41 @@
 
 {% block style %}
   <link rel="stylesheet" type="text/css" href="{{ 'dist/css/places/apply.min.css' | static_url }}">
-  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
 {% endblock %}
 
 {% block contents %}
-  <div class="top">
+  <!-- == 작품 지원 -->
+  <div class="apply">
     <div class="message">
-    전시를 원하는 작품을 선택하신 후<br>
-      <span class="what">지원하기 버튼을 누르시면 해당 장소 대표님께 전달</span>됩니다!
+      전시를 원하는 작품을 선택하신 후<br>
+      <span class="underline">지원하기 버튼을 누르시면 해당 장소 대표님께 전달</span>됩니다!
     </div>
     <div class="buttons">
       <a href="javascript:window.close();" class="cancelBtn">취소하기</a>
-      <button type="submit" class="registerBtn">지원하기</button>
+      <button type="button" class="registerBtn">지원하기</button>
     </div>
   </div>
-  
+  <!-- //== 작품 지원 -->
+
   <div class="patItemList">
     <div class="container">
       <ul class="itemList artworkList">
+        {# TODO: 아래의 이미지를 클릭하면 체크박스의 checked가 true가 됨 #}
+        {# 사용자가 전송을 누를 때 checked된 체크박스만 선택해 value를 넘기면 완료! #}
         {% for artwork in artworks %}
-          <li class="item {% if (index % 3) == 0 %}third{% endif %}">
-            <div class="wrap" data-type="artworks" data-id="{{ artwork.id }}">
-              <div class="imgThumb">
-                <div class="dimm"></div>
-                <div class="preview">
-                  미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
-                </div>
-                <img class="img" src="{{ artwork.image | thumb_url }}"/>
-              </div>
+          <li class="item {% if (loop.index % 3) == 0 %}third{% endif %}">
+            <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"/>
+            <label for="artwork_{{ artwork.id }}">
+              <img class="imageThumb" src="http://cfile4.uf.tistory.com/image/276F413C576180C72A82CA"/>
+            </label>
+            <div class="box">
+              1
             </div>
           </li>
         {% endfor %}
       </ul>
     </div>
   </div>
-  <form method="POST">
-    <input type="text" name="artwork_id[]" value="36">
-    <input type="text" name="artwork_id[]" value="48">
-    <button type="submit">전송</button>
-  </form>
 {% endblock %}
 
 
