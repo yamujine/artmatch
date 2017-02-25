@@ -177,6 +177,7 @@
         var type = $this.data('type');
         var type_id = $this.data('type-id');
         var current_offset = $('.comments li').length;
+        var changed_offset;
 
         // 더보기 버튼 숨기기
         $this.hide();
@@ -188,8 +189,8 @@
             $('.comments').prepend(data.body.comments);
 
             $('.patLoader').hide();
-
-            if (current_offset + 3 < data.body.comment_count) {
+            changed_offset = current_offset + 3;
+            if (changed_offset < data.body.comment_count) {
               $this.show();
             }
           });
