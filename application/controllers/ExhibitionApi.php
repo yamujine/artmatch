@@ -27,7 +27,8 @@ class ExhibitionApi extends API_Controller {
                 $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
             }
         }
-        $this->return_success_response();
+
+        $this->return_success_response(['message' => '선정이 완료되었습니다.']);
     }
 
     /**

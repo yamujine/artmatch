@@ -96,22 +96,51 @@
             alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
           });
       });
-    });
-    {% if show_applied_list %}
-    //더미 function
-      $('.appliedAccept').on('click', function() {
-       $.ajax({
-         method: "POST",
-         url: "/api/exhibition/accept",
-         data: {
-           exhibition_id: $(this).data("exhibition-id"),
-           applied_artwork_ids: [$(this).data("artwork-id")]
-         }
-       }).done(function (data) {
-         location.reload(true);
-       })
+
+      $('.artworkImage').click(function () {
+        location.href = '/artworks/' + $(this).data('id');
+        return false;
       });
-    {% endif %}
+
+      $('.selectItemBtn').click(function () {
+        $(this).toggleClass('checked');
+
+        var selectedCnt = $('.checked').length;
+        $('.selectedCnt').text(selectedCnt);
+
+        return false;
+      });
+
+      $('.selectBtn').click(function () {
+        var exhibitionId;
+        var artworkIds = [];
+        $('.checked').each(function () {
+          exhibitionId = $(this).data('exhibition-id');
+          artworkIds.push($(this).data('artwork-id'));
+        });
+
+        artworkIds = $.unique(artworkIds);
+        if (artworkIds.length === 0) {
+          alert('선택된 작품이 없습니다.');
+          return false;
+        }
+
+        $.ajax({
+          method: 'POST',
+          url: '/api/exhibition/accept',
+          data: {
+            exhibition_id: exhibitionId,
+            applied_artwork_ids: artworkIds
+          }
+        }).done(function (data) {
+          alert(data.body.message);
+          location.reload(true);
+        });
+
+        return false;
+      });
+
+    });
   </script>
 {% endblock %}
 
@@ -197,7 +226,7 @@
       <!-- //== 픽 탭 -->
     {% endif %}
   {% endif %}
-  
+
   {% if not is_my_page or (is_my_page and pick_type is empty) %}
     {% set items = mine %}
   {% else %}
@@ -206,9 +235,9 @@
 
   {% if show_applied_list is not empty %}
     <div class="exhibitionApply">
-      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">10</span></div>
+      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ total_applied_count }}</span></div>
       <div class="rightSection">
-        <div class="selectedCount">선택된 작품 <span class="number">6</span></div>
+        <div class="selectedCount">선택된 작품 <span class="number selectedCnt">0</span></div>
         <button class="selectBtn">채택</button>
       </div>
     </div>
@@ -241,12 +270,13 @@
               {# 전시에 지원한 작품 #}
               {% for artwork in exhibition.applied_artworks %}
                 <li class="item applied">
-                  <img src="{{ artwork.image | thumb_url}}" class="crop"/>
+                  <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}"/>
                   <div class="meta">
                     <div class="title">{{ artwork.title }}</div>
-                    <div class="name">김트리</div>
+                    <div class="name">{{ artwork.user.user_name }}</div>
                   </div>
-                  <button class="button" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}"></button>
+                  <button class="button selectItemBtn" data-exhibition-id="{{ exhibition.id }}"
+                          data-artwork-id="{{ artwork.id }}"></button>
                 </li>
               {% endfor %}
             {% endfor %}
