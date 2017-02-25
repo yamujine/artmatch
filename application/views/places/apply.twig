@@ -1,11 +1,22 @@
 {% extends "base.twig" %}
 
 {% block style %}
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/places/apply.min.css' | static_url }}">
   <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
 {% endblock %}
 
 {% block contents %}
-  {{ exhibition.title }}에 지원중입니다.
+  <div class="top">
+    <div class="message">
+    전시를 원하는 작품을 선택하신 후<br>
+      <span class="what">지원하기 버튼을 누르시면 해당 장소 대표님께 전달</span>됩니다!
+    </div>
+    <div class="buttons">
+      <a href="javascript:window.close();" class="cancelBtn">취소하기</a>
+      <button type="submit" class="registerBtn">지원하기</button>
+    </div>
+  </div>
+  
   <div class="patItemList">
     <div class="container">
       <ul class="itemList artworkList">
@@ -18,10 +29,6 @@
                   미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
                 </div>
                 <img class="img" src="{{ artwork.image | thumb_url }}"/>
-              </div>
-              <div class="meta">
-                <div class="title">{{ artwork.title|length > 12 ? artwork.title|slice(0, 12) ~ '...' : artwork.title }}</div>
-                <div class="name">상태 {{ artwork.apply_status }}</div>
               </div>
             </div>
           </li>
