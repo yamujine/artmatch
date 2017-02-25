@@ -57,7 +57,7 @@ class Place_pick_model extends CI_Model {
         }
     }
 
-    public function delete_place_pick($user_id, $place_id) {
+    public function delete_pick($user_id, $place_id) {
         $data = [
             'user_id' => $user_id,
             'place_id' => $place_id
