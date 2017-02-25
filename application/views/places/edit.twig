@@ -9,7 +9,7 @@
 {% block script %}
   <script src="{{ 'dist/js/jquery-ui.min.js' | static_url }}"></script>
   <script src="{{ 'dist/js/datepicker-ko.js' | static_url }}"></script>
-  
+
   <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
   <script type="text/javascript">
     $(function () {
@@ -215,10 +215,13 @@
         }
       });
 
-
       // datepicker
       $("#exhibitionStartDate").datepicker();
       $("#exhibitionEndDate").datepicker();
+
+      $('.patGnbSubmit').click(function() {
+        $("#patUploadForm").submit();
+      });
     });
   </script>
   <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
@@ -236,6 +239,17 @@
       }).open({popupName: 'addressPopup'});
     });
   </script>
+{% endblock %}
+
+{% block buttons %}
+  <ul class="nav navbar-nav navbar-right">
+    <li class="patGnbCancel">
+      <a class="noDivider" href="{% if id %}/places/{{ id }}{% else %}/{% endif %}">취소</a>
+    </li>
+    <li class="patGnbSubmit">
+      <a class="noDivider" href="#">등록</a>
+    </li>
+  </ul>
 {% endblock %}
 
 {% block contents %}

@@ -183,9 +183,22 @@
         }
       });
 
-
+      $('.patGnbSubmit').click(function() {
+        $("#patUploadForm").submit();
+      });
     });
   </script>
+{% endblock %}
+
+{% block buttons %}
+  <ul class="nav navbar-nav navbar-right">
+    <li class="patGnbCancel">
+      <a class="noDivider" href="{% if id %}/artworks/{{ id }}{% else %}/{% endif %}">취소</a>
+    </li>
+    <li class="patGnbSubmit">
+      <a class="noDivider" href="#">등록</a>
+    </li>
+  </ul>
 {% endblock %}
 
 {% block contents %}
