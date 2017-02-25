@@ -143,6 +143,32 @@
           element.find('input[type=file]').val('');
         });
       }
+
+      $("form").validate({
+        rules: {
+          tags: {
+            required: true,
+            maxlength: 60
+          }
+        },
+        messages: {
+          title: {
+            required: "작품명을 입력 해 주세요."
+          },
+          image: {
+            required: "사진을 추가 해 주세요."
+          },
+          description: {
+            required: "작품 설명을 입력 해 주세요."
+          },
+          tags: {
+            required: "태그를 입력 해 주세요.",
+            maxlength: "태그는 60자 까지 입력 가능 합니다."
+          }
+        }
+      });
+
+
     });
   </script>
 {% endblock %}
