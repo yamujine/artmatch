@@ -165,7 +165,7 @@
     <!-- == 탭 -->
     <div id="patTab">
       <ul class="selectTab">
-        <li>
+        <li class="my">
           <a {% if pick_type is null and show_applied_list is null %}class="active"{% endif %} href="/users/me">
             {% if user.type == USER_TYPE_ARTIST %}
               WORK
@@ -174,12 +174,12 @@
             {% endif %}
           </a>
         </li>
-        <li>
+        <li class="pick">
           <a {% if pick_type is not null %}class="active"{% endif %} href="?type=artworks">PICK</a>
         </li>
         {% if user.type == USER_TYPE_PLACE_OWNER %}
-          <li>
-            <a {% if show_applied_list %}class="active"{% endif %} href="?show_applied_list=1">전시요청</a>
+          <li class="apply">
+            <a {% if show_applied_list %}class="active"{% endif %} href="?show_applied_list=1">APPLY</a>
           </li>
         {% endif %}
       </ul>
@@ -204,9 +204,19 @@
     {% set items = my_picks %}
   {% endif %}
 
+  {% if show_applied_list is not empty %}
+    <div class="exhibitionApply">
+      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">10</span></div>
+      <div class="rightSection">
+        <div class="selectedCount">선택된 작품 <span class="number">6</span></div>
+        <button class="selectBtn">채택</button>
+      </div>
+    </div>
+  {% endif %}
+
   {% if items|length > 0 %}
     <!-- == 작품 또는 장소 아이템 -->
-    <div class="patItemList">
+    <div class="patItemList {% if show_applied_list %} applied{% endif %}">
       <div class="container">
         <!-- == 아이템 목록 -->
         <ul class="itemList">
@@ -228,24 +238,17 @@
           {% elseif show_applied_list %}
             {# 전시 #}
             {% for exhibition in exhibitions %}
-              {# 전시에 지원학 작품 #}
-              {# @TODO 마크업 필요 #}
+              {# 전시에 지원한 작품 #}
               {% for artwork in exhibition.applied_artworks %}
-                <div>
-                  작품명 :
-                  {{ artwork.title }}
-                  <br>
-                  <img class="img" src="{{ artwork.image | thumb_url}}" />
-                  <br>
-                  {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW %}
-                    <button class="appliedAccept" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}">등록하기</button>
-                  {% else %}
-                    <button disabled>{% if artwork.apply_status == APPLY_STATUS_REJECTED %} reject {% else %} accepted {% endif %}</button>
-                  {% endif %}
-                </div>
-                <br>
+                <li class="item applied">
+                  <img src="{{ artwork.image | thumb_url}}" class="crop"/>
+                  <div class="meta">
+                    <div class="title">{{ artwork.title }}</div>
+                    <div class="name">김트리</div>
+                  </div>
+                  <button class="button" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}"></button>
+                </li>
               {% endfor %}
-              <br>
             {% endfor %}
           {% endif %}
         </ul>
