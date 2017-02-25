@@ -530,14 +530,21 @@ body {
         .commentInput {
           font-family: 'Noto Sans KR', sans-serif;
           font-size: 14px;
-          color: $warm-grey-four;
           width: 100%;
           height: 100%;
           padding: 10px 15px;
-          // TODO: 컬러칩 정리
-          border: 1px solid #E8E8E8;
+          border: 1px solid $black-10;
           resize: none;
           outline: none;
+          color: $black;
+
+          @include placeholder {
+            color: $warm-grey-four;
+          }
+
+          &:focus, &:active {
+            border: 1px solid $warm-grey-nine;
+          }
         }
         // -- 댓글 입력창
 
@@ -549,7 +556,7 @@ body {
           width: 70px;
           height: 35px;
           background: none;
-          border: 1px solid #E8E8E8;
+          border: 1px solid $white-eleven;
           outline: none;
           @include prefix(border-radius, 30px);
           font-family: 'Noto Sans KR', sans-serif;
@@ -557,7 +564,8 @@ body {
           color: $greyish-brown;
 
           &:hover {
-            background: $white-three;
+            color: $white-two;
+            background: $greyish-brown;
           }
         }
         // -- 댓글 입력 버튼
