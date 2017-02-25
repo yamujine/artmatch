@@ -84,8 +84,8 @@ class Artwork_Comment_model extends CI_Model {
         }
     }
 
-    public function delete_comment($artwork_id) {
-        $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['id' => $artwork_id]);
+    public function delete_comment($id) {
+        $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['id' => $id]);
 
         return $this->db->affected_rows();
     }
