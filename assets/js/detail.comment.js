@@ -1,7 +1,18 @@
-// 댓글
-$("#commentRegisterForm").submit(function () {
-  var $this = $(this);
+// 검증
+$("#commentRegisterForm").validate({
+  rules: {
+    comment: "required"
+  },
+  messages: {
+    comment: "코멘트 내용을 입력해 주세요"
+  },
+  submitHandler: function(form) {
+    insert_comment($(form));
+  }
+});
 
+// 댓글
+function insert_comment($this) {
   $.ajax({
     method: "POST",
     url: "/api/comments/insert",
@@ -25,7 +36,7 @@ $("#commentRegisterForm").submit(function () {
       alert(data.body.message);
     });
   return false;
-});
+}
 
 // 댓글 수정
 $(document).on('click', '.commentEditBtn', function () {
