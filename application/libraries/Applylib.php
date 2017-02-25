@@ -27,4 +27,23 @@ class Applylib {
         $this->CI->email->to($email);
         $this->CI->email->send();
     }
+
+    /**
+     * @param array $to_send_list
+     * @param $exhibition_id
+     */
+    public function send_accepted_email(array $to_send_list) {
+        if (!empty($to_send_list)) {
+            foreach ($to_send_list as $email => $accepted_artworks) {
+                $email_html = $this->CI->twig->render('email/accepted', ['artworks' => $accepted_artworks]);
+
+                $this->CI->email->initialize(['mailtype' => 'html']);
+                $this->CI->email->from('no-reply@pickartyou.com', 'pickartyou');
+                $this->CI->email->subject('[Pick Art You] 지원한 작품이 전시에 등록되었습니다.');
+                $this->CI->email->message($email_html);
+                $this->CI->email->to($email);
+                $this->CI->email->send();
+            }
+        }
+    }
 }

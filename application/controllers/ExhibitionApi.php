@@ -5,12 +5,15 @@ class ExhibitionApi extends API_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(['apply_model', 'exhibition_model', 'place_model']);
+        $this->load->model(['apply_model', 'exhibition_model', 'place_model', 'artwork_model']);
+        $this->load->library('applylib');
     }
 
     public function accept() {
         $applied_artwork_ids = $this->input->post('applied_artwork_ids');
         $exhibition_id = $this->input->post('exhibition_id');
+        $accepted_artwork_list = [];
+        $to_send_list = [];
 
         if (!$this->_is_my_exhibition($exhibition_id)) {
             $this->return_fail_response('501', ['message' => '본인의 전시만 수락 할 수 있습니다.']);
@@ -26,8 +29,16 @@ class ExhibitionApi extends API_Controller {
             if ($id === false || $result === false) {
                 $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
             }
+            
+            $accepted_artwork = $this->artwork_model->get_by_id($applied_artwork_id);
+            $accepted_artwork_list[] = $accepted_artwork;
         }
 
+        foreach ($accepted_artwork_list as $accepted_artwork) {
+            //같은 유저의 작품은 하나의 dept로 합침
+            $to_send_list[$accepted_artwork->user->email][] = $accepted_artwork;
+        }
+        $this->applylib->send_accepted_email($to_send_list);
         $this->return_success_response(['message' => '선정이 완료되었습니다.']);
     }
 
