@@ -5,9 +5,6 @@ class Users extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['user_model', 'pick_model', 'artwork_model', 'place_model']);
-        $this->twig->addGlobal('APPLY_STATUS_IN_REVIEW', APPLY_STATUS_IN_REVIEW);
-        $this->twig->addGlobal('APPLY_STATUS_REJECTED', APPLY_STATUS_REJECTED);
-        $this->twig->addGlobal('APPLY_STATUS_ACCEPTED', APPLY_STATUS_ACCEPTED);
     }
 
     public function detail($user_name) {
