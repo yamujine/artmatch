@@ -53,8 +53,8 @@ class Places extends MY_Controller {
         $data['has_artworks'] = $this->artwork_model->is_exists_by_user_id($user_id);
 
         // 댓글
-        // TODO: 적절한 초기 값으로 offset, limit 설정 필요
-        $data['comments'] = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id);
+        $comments = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id, 3, 0);
+        $data['comments'] = array_reverse($comments);
         $data['comment_count'] = $this->comment_model->get_count_of_comments_by_type_id(TYPE_PLACES, $place_id);
 
         // 조회수 증가
