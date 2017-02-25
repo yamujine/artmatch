@@ -141,6 +141,27 @@ class Artwork_model extends CI_Model {
         return $artworks;
     }
 
+    public function get_users_and_artworks_by_emails_and_ids(array $emails, array $artwork_ids) {
+        if (empty($artwork_ids)) {
+            return NULL;
+        }
+
+        $users = $this->db
+            ->from('users')
+            ->where_in('email', $emails)
+            ->get()->result();
+
+        foreach ($users as $user) {
+            $user->artworks = $this->db
+                ->from(self::TABLE_NAME)
+                ->where('user_id', $user->id)
+                ->where_in('id', $artwork_ids)
+                ->get()->result();
+        }
+
+        return $users;
+    }
+
     public function get_bare_by_id($artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)
