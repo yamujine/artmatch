@@ -10,6 +10,7 @@
 {% block script %}
   <script type="text/javascript" src="/static/dist/magnific-popup/jquery.magnific-popup.min.js"></script>
   <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
+  <script type="text/javascript" src="{{ 'dist/js/detail.comment.js' | static_url }}"></script>
   <script type="text/javascript">
     $(function () {
       // 추가 이미지 Carousel 구현은 6개가 넘어갈 경우
@@ -44,7 +45,6 @@
       // 전시 이력 Carousel 구현은 4개가 넘는 경우
       var exhibitionCount = $('.exhibitions .item').length;
       if (exhibitionCount > 4) {
-        console.log("dd");
         $('.exhibitions').slick({
           infinite: false,
           variableWidth: true,
@@ -82,7 +82,6 @@
       $('.placeEditBtn').click(function () {
         var $this = $(this);
         location.replace("/places/edit/" + $this.data('id'));
-        return false;
       });
 
       // 장소 삭제
@@ -92,105 +91,6 @@
         }
         var $this = $(this);
         location.replace("/places/delete/" + $this.data('id'));
-        return false;
-      });
-
-      // 댓글
-      $("#commentRegisterForm").submit(function () {
-        var $this = $(this);
-
-        $.ajax({
-          method: "POST",
-          url: "/api/comments/insert",
-          data: {
-            type: $this.find("input[name=type]").val(),
-            type_id: $this.find("input[name=type_id]").val(),
-            comment: $this.find("textarea[name=comment]").val()
-          }
-        })
-          .done(function (data) {
-            if (!data.result) {
-              alert("댓글 등록 실패");
-              return false;
-            }
-
-            $('.comments').append(data.body.insert_comment);
-            $this.find('textarea[name=comment]').val('');
-            $('.commentArea').children().find('.number').text(data.body.comment_count);
-          })
-          .fail(function (data) {
-            alert(data.body.message);
-          });
-        return false;
-      });
-
-      // 댓글 수정
-      $(document).on('click', '.commentEditBtn', function () {
-        var comment_id = $(this).data("id");
-        var comment = $(this).closest("div").find(".comment").text();
-        $('#commentEditDiv_' + comment_id).css("display", "");
-        $('#commentEditDiv_' + comment_id).find('#commentEditText').val(comment);
-        $('#comment_' + comment_id).find('.comment').text('');
-        $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', '');
-        $(this).css('display', 'none');
-
-        $('#comment_' + comment_id).find('.commentEditBtnCancel').click(function () {
-          $('#commentEditDiv_' + comment_id).css("display", "none");
-          $('#comment_' + comment_id).find('.comment').text(comment);
-          $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
-          $(this).css('display', 'none');
-        });
-
-        $(document).on('click', '.commentEditSubmit', function () {
-          var comment = $('#commentEditDiv_' + comment_id).find('#commentEditText').val();
-
-          $.ajax({
-            method: "POST",
-            url: "/api/comments/update",
-            data: {
-              type: $(this).data('type'),
-              type_comment_id: comment_id,
-              comment: comment
-            }
-          }).done(function (data) {
-            if (data.body.result_type === 'update') {
-              $('#commentEditDiv_' + comment_id).css("display", "none");
-              $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', 'none');
-              $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
-              $('#comment_' + comment_id).find('.comment').text(data.body.comment);
-            } else {
-              alert(data.body.message);
-            }
-          }).fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
-        });
-        return false;
-      });
-
-      // 댓글 더 보기
-      $('.commentMoreBtn').click(function () {
-        var $this = $(this);
-        var type = $this.data('type');
-        var type_id = $this.data('type-id');
-        var current_offset = $('.comments li').length;
-        var changed_offset;
-
-        // 더보기 버튼 숨기기
-        $this.hide();
-        // 로더 보여주기
-        $('.patLoader').show();
-
-        $.post('/api/comments', {type: type, type_id: type_id, offset: current_offset, limit: 3})
-          .done(function (data) {
-            $('.comments').prepend(data.body.comments);
-
-            $('.patLoader').hide();
-            changed_offset = current_offset + 3;
-            if (changed_offset < data.body.comment_count) {
-              $this.show();
-            }
-          });
       });
 
       // PICK
