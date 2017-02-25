@@ -24,10 +24,19 @@
       <div class="container">
         <ul class="itemList artworkList">
           {% for artwork in artworks %}
-            <li class="item {% if (loop.index % 3) == 0 %}third{% endif %}">
+            <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if artwork.status == APPLY_STATUS_IN_REVIEW %}in_review{% elseif artwork.status == APPLY_STATUS_ACCEPTED %}accepted{% endif %}">
+              <div class="dimm"></div>
+              <div class="inReviewStatus">
+                <div class="icon"></div>
+                <div class="status">전시요청중</div>
+              </div>
+              <div class="acceptedStatus">
+                <div class="icon"></div>
+                <div class="status">채택완료</div>
+              </div>
+
               <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"
-                     {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}
-                     />
+                     {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}/>
               <label for="artwork_{{ artwork.id }}">
                 <img class="imageThumb" src="{{ artwork.image | thumb_url }}"/>
               </label>
