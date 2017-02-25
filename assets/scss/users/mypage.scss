@@ -639,10 +639,10 @@
         }
 
         li.item {
-          float: left;
-          cursor: pointer;
-
           &.applied {
+            float: left;
+            cursor: pointer;
+
             position: relative;
             width: 448px;
             height: 216px;
