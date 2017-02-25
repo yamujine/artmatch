@@ -89,4 +89,4 @@ $route['api/users/change_password']['POST'] = 'usersApi/change_password';
 $route['api/users/reset_password']['POST'] = 'usersApi/reset_password';
 $route['api/landing'] = 'landingApi';
 
-$route['api/exhibition/accept'] = 'applyApi/accept';
+$route['api/exhibition/accept'] = 'exhibitionsApi/accept';

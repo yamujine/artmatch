@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ApplyApi extends API_Controller {
+class ExhibitionsApi extends API_Controller {
 
     public function __construct() {
         parent::__construct();
