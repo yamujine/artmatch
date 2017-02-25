@@ -1,5 +1,6 @@
 
-{{ exhibition }} 에 지원한 작품이 등록되었습니다.
+전시에 지원한 작품이 등록되었습니다.
 {% for artwork in artworks %}
+  작품상세
   {{ artwork.image | thumb_url }}
 {% endfor %}

@@ -12,7 +12,9 @@ class ExhibitionApi extends API_Controller {
     public function accept() {
         $applied_artwork_ids = $this->input->post('applied_artwork_ids');
         $exhibition_id = $this->input->post('exhibition_id');
-        $email_list = [];
+        $email_key = [];
+        $accepted_artwork_list = [];
+        $to_send_list = [];
 
         if (!$this->_is_my_exhibition($exhibition_id)) {
             $this->return_fail_response('501', ['message' => '본인의 전시만 수락 할 수 있습니다.']);
@@ -29,13 +31,21 @@ class ExhibitionApi extends API_Controller {
                 $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
             }
             //email 발송 대상 리스트
-            $artwork = $this->artwork_model->get_by_id($applied_artwork_id);
-            $email_list[] = $artwork->user->email;
+            $accepted_artwork = $this->artwork_model->get_by_id($applied_artwork_id);
+            $email_key[] = $accepted_artwork->user->email;
+            $accepted_artwork_list[] = $accepted_artwork;
         }
         //중복값 제거
-        $email_list = array_unique($email_list);
+        $email_key = array_unique($email_key);
+        foreach ($email_key as $i=>$email) {
+            foreach ($accepted_artwork_list as $accepted_artwork) {
+                if ($email === $accepted_artwork->user->email) {
+                    $to_send_list[$i][] = $accepted_artwork;
+                }
+            }
+        }
 
-        $this->applylib->send_accepted_email($email_list, $exhibition_id, $applied_artwork_ids);
+        $this->applylib->send_accepted_email($to_send_list, $exhibition_id);
         $this->return_success_response();
     }
 
