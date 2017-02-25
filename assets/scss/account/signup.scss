@@ -1,128 +1,261 @@
 @import "../helper/colorchips";
+@import "../helper/mixins.scss";
 
 body {
-  background: $white-five;
+  background: url(/static/images/landing/bg.png) center center no-repeat;
+  background-size: cover;
 }
 
 html, body {
   height: 100%;
   padding: 0;
 
+  // 상단 메뉴
   #patTop {
     display: none;
   }
+  // -- 상단 메뉴
 
   #patContents {
+    position: relative;
+    width: 100%;
     height: 100%;
     margin: 0 0 -180px 0;
     padding: 0;
-    width: 100%;
 
+    // 회원가입
     .patSignUp {
       position: absolute;
-      width: 400px;
-      min-height: 540px;
-      left: 50%;
+      width: 353px;
+      height: 670px;
       top: 50%;
-      margin: -270px 0 0 -200px;
-      background: $white-two;
-      border-radius: 8px;
-
-      -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-      -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+      left: 50%;
+      margin: -345px 0 0 -176px;
 
       .container {
-        width: 268px;
+        width: 100%;
         height: 100%;
         padding: 0;
-        margin: 0 auto;
-        text-align: center;
-        font-family: 'Noto Sans KR';
+        margin: 0;
 
+        // 로고
         .logo {
-          margin: 60px 0 0 0;
+          width: 194px;
+          height: 23px;
+          margin: 0 auto 9px auto;
+          background: url(/static/images/landing/logo.png) center center no-repeat;
+          @include prefix(background-size, cover);
+          @include retina-image('/static/images/landing/logo@2x.png', 100%, 100%);
         }
+        // -- 로고
 
-        h2 {
-          color: $brownish-grey;
-          margin-bottom: 30px;
+        // 타이틀
+        .title {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 18px;
+          font-weight: normal;
+          text-align: center;
+          letter-spacing: normal;
+          line-height: normal;
+          font-stretch: normal;
+          color: $white-two;
         }
+        // -- 타이틀
 
+        // 회원가입폼
         #patSignUpForm {
-          fieldset {
+          width: 100%;
+          height: 573px;
+          background: $white-two;
+          border: none;
+          @include prefix(border-radius, 4px);
+          margin: 38px 0 0 0;
+          padding: 40px 0;
+          text-align: center;
+
+          // 메시지
+          .signUpMessage {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 12px;
+            font-weight: 300;
+            line-height: 1.67;
+            color: rgba(0, 0, 0, 0.66);
+            margin: 0 0 20px 0;
+          }
+          // -- 메시지
+
+          .profileImage {
             position: relative;
-            margin-bottom: 8px;
+            margin: 0 auto 20px auto;
+            width: 90px;
+            height: 90px;
+            overflow: hidden;
 
-            &.patUserTypeField {
-              margin-bottom: 0;
-              text-align: left;
+            &:hover {
+              .dimm, .editBtn {
+                display: block;
+              }
             }
 
-            input[type=text], input[type=password], input[type=file] {
+            .dimm {
+              display: none;
+              position: absolute;
+              left: 0;
+              top: 0;
+              z-index: 3;
               width: 100%;
-              height: 38px;
-              position: relative;
-              background: $pinkish-grey-two;
-              font-size: 14px;
-              outline: none;
-              font-weight: 500;
-              border: 0;
-              background: $white-five;
-              padding: 5px 5px 5px 10px;
-              color: $black-five;
-
-              -webkit-border-radius: 3px;
-              -moz-border-radius: 3px;
-              border-radius: 3px;
-              -webkit-box-shadow: none;
-              -moz-box-shadow: none;
-              box-shadow: none;
+              height: 100%;
+              background: $black;
+              opacity: 0.3;
+              @include prefix(border-radius, 45px);
             }
 
-            .radio.checkbox {
-              display: inline-block;
-              font-size: 16px;
-              font-weight: bold;
+            // 프로필 이미지 수정 버튼
+            .editBtn {
+              input[type=file] {
+                z-index: 100;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                font-size: 10000px;
+                margin: 0;
+                padding: 0;
+                cursor: pointer;
+                opacity: 0;
+                filter: alpha(opacity=0);
+              }
+
+              z-index: 4;
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              margin: -10px 0 0 -13px;
+              display: none;
+              width: 25px;
+              height: 21px;
+              background: url(/static/images/camera.png) no-repeat;
+              border: none;
+              outline: none;
+              overflow: hidden;
+            }
+            // -- 프로필 이미지 수정 버튼
+
+            img {
+              z-index: 2;
+              width: 100%;
+              height: 100%;
+              border: 1px solid $warm-grey-four;
+            }
+          }
+
+          // 입력 폼
+          fieldset {
+            input {
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 12px;
+              padding: 0 0 0 14px;
+              color: $black;
+              width: 297px;
+              height: 45px;
+              border: 1px solid $white-ten;
+              margin-bottom: 10px;
+              outline: none;
+              @include prefix(border-radius, 5px);
+
+              @include placeholder {
+                opacity: 0.8;
+              }
+            }
+          }
+          // -- 입력 폼
+
+          .patUserTypeField {
+            .radio {
+              float: left;
+              width: 148px;
+              height: 45px;
+              margin: 0;
+              padding: 0;
 
               &:first-child {
-                padding-right: 20px;
+                margin: 0 0 0 28px;
+              }
+
+              label {
+                display: inline-block;
+                cursor: pointer;
+                position: relative;
+                width: 148px;
+                height: 45px;
+                margin: 0;
+                padding: 0;
               }
 
               input[type=radio] {
-                margin-left: 0;
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                border: 0;
+              }
+
+              input[type=radio]:checked + label {
+                display: inline-block;
+                position: relative;
+                cursor: pointer;
+                @include prefix(user-select, none);
+              }
+
+              input[type=radio] + label:before {
+                display: inline-block;
+                width: 148px;
+                height: 45px;
+                padding: 12px 0;
+                border: 1px solid $cobalt-16;
+                color: $cobalt-16;
+              }
+
+              input[type=radio] + label[for=creatorType]:before {
+                content: '작품전시자';
+                @include prefix(border-radius, 4px 0 0 4px);
+              }
+
+              input[type=radio] + label[for=placeType]:before {
+                content: '공간소유자';
+                @include prefix(border-radius, 0 4px 4px 0);
+              }
+
+              input[type=radio]:checked + label:before {
+                color: $black-five;
+                border: 1px solid $black-five
               }
             }
           }
 
+          // 회원 가입 버튼
           button[type=submit] {
-            width: 100%;
+            width: 150px;
             border: 0;
-            height: 38px;
-            background: #818181;
+            height: 36px;
+            background: $black-five;
             color: $white-two;
             padding: 0 18px;
-            font-size: 15px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: normal;
             outline: none;
-            vertical-align: middle;
             text-align: center;
-            margin-top: 10px;
-
-            -webkit-box-shadow: none;
-            -moz-box-shadow: none;
-            box-shadow: none;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-
-            &:hover {
-              background: #a8a8a8;
-            }
+            margin-top: 40px;
+            @include prefix(border-radius, 4px);
           }
+          // -- 회원 가입 버튼
         }
+        // -- 회원가입폼
       }
     }
+    // -- 회원가입
   }
 
   #patFooter {

@@ -58,18 +58,18 @@ gulp.task('magiccheck', function () {
     .pipe(gulp.dest('static/dist/magic-check'));
 });
 
-gulp.task('vex', function () {
-  filesExist(['assets/bower_components/vex']);
-
-  return gulp.src('assets/bower_components/vex/dist/**')
-    .pipe(gulp.dest('static/dist/vex'));
-});
-
 gulp.task('jquery-validation', function () {
   filesExist(['assets/bower_components/jquery-validation']);
 
   return gulp.src('assets/bower_components/jquery-validation/dist/**')
     .pipe(gulp.dest('static/dist/jquery-validation'));
+});
+
+gulp.task('jquery-validation-bootstrap-tooltip', function () {
+  filesExist(['assets/bower_components/jquery-validation-bootstrap-tooltip']);
+
+  return gulp.src('assets/bower_components/jquery-validation-bootstrap-tooltip/jquery-validate.bootstrap-tooltip.js')
+    .pipe(gulp.dest('static/dist/jquery-validation-bootstrap-tooltip'));
 });
 
 gulp.task('extra-assets-js', function () {
@@ -101,7 +101,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('static/dist/css'));
 });
 
-gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck', 'jquery-validation', 'vex', 'extra-assets-js', 'extra-assets-css']);
+gulp.task('dev', ['jquery', 'bootstrap', 'prefixfree', 'slick', 'magnificpopup', 'magiccheck', 'jquery-validation', 'jquery-validation-bootstrap-tooltip', 'extra-assets-js', 'extra-assets-css']);
 
 gulp.task('font', function () {
   return gulp.src('assets/fonts/**')

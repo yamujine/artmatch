@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Places extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'comment_model', 'pick_model']);
+        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'artwork_comment_model', 'place_comment_model', 'pick_model']);
         $this->load->library('tag');
         $this->load->helper('url');
     }
@@ -53,9 +53,9 @@ class Places extends MY_Controller {
         $data['has_artworks'] = $this->artwork_model->is_exists_by_user_id($user_id);
 
         // 댓글
-        // TODO: 적절한 초기 값으로 offset, limit 설정 필요
-        $data['comments'] = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id);
-        $data['comment_count'] = $this->comment_model->get_count_of_comments_by_type_id(TYPE_PLACES, $place_id);
+        $comments = $this->place_comment_model->get_comments_by_place_id($place_id, 3, 0);
+        $data['comments'] = array_reverse($comments);
+        $data['comment_count'] = $this->place_comment_model->get_count_of_comments_by_place_id($place_id);
 
         // 조회수 증가
         $this->place_model->update_view_count_by_id($place_id);
@@ -238,7 +238,7 @@ class Places extends MY_Controller {
             }
 
             // 장소 코멘트
-            $this->comment_model->delete_all_comments_by_place_id($place_id);
+            $this->place_comment_model->delete_all_comments_by_place_id($place_id);
 
             // 장소 Pick
             $this->pick_model->delete_all_picks_by_place_id($place_id);
@@ -259,13 +259,19 @@ class Places extends MY_Controller {
         $default_exhibition = $this->exhibition_model->get_by_place_id($place_id);
 
         if ($this->input->method() === 'get') {
-            $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id($this->accountlib->get_user_id(), $default_exhibition->id);
+            $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id(
+                $this->accountlib->get_user_id(),
+                $default_exhibition->id
+            );
         } elseif ($this->input->method() === 'post') {
             $artwork_ids = $this->input->post('artwork_id');
             foreach ($artwork_ids as $artwork_id) {
-                $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($default_exhibition->id, $artwork_id);
-                if (empty($result)) {
-                    $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW);
+                $is_valid_artwork = !empty($this->artwork_model->get_bare_by_id($artwork_id));
+                if ($is_valid_artwork) {
+                    $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($default_exhibition->id, $artwork_id);
+                    if (empty($result)) {
+                        $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW);
+                    }
                 }
             }
 

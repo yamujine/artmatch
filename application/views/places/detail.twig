@@ -4,151 +4,14 @@
   <link rel="stylesheet" type="text/css" href="/static/dist/magnific-popup/magnific-popup.css">
   <link rel="stylesheet" type="text/css" href="/static/dist/slick/slick.css">
   <link rel="stylesheet" type="text/css" href="/static/dist/css/places/detail.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
   <script type="text/javascript" src="/static/dist/magnific-popup/jquery.magnific-popup.min.js"></script>
   <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      // 추가 이미지 Carousel 구현은 6개가 넘어갈 경우
-      var additionalImageCount = $('.additionalImages .slider div').length;
-      if (additionalImageCount > 6) {
-        // Carousel 시작
-        $('.slider').slick({
-          infinite: false,
-          variableWidth: true,
-
-          slidesToShow: 6,
-          slidesToScroll: 1,
-
-          prevArrow: false,
-          nextArrow: false
-        });
-
-        // 슬라이더 컨트롤
-        $('.sliderPrevBtn').click(function () {
-          $('.slider').slick('slickPrev');
-
-          return false;
-        });
-
-        $('.sliderNextBtn').click(function () {
-          $('.slider').slick('slickNext');
-
-          return false;
-        });
-      }
-
-      // 이미지 전체 보기
-      $('.popupImage').magnificPopup({
-        type: 'image',
-        gallery: {
-          enabled: true
-        }
-      });
-
-      // 장소 수정
-      $('.placeEditBtn').click(function () {
-        var $this = $(this);
-        location.replace("/places/edit/" + $this.data('id'));
-        return false;
-      });
-
-      // 장소 삭제
-      $('.placeDeleteBtn').click(function () {
-        if (confirm("정말 삭제 하시겠습니까?") === false) {
-          return false;
-        }
-        var $this = $(this);
-        location.replace("/places/delete/" + $this.data('id'));
-        return false;
-      });
-
-      // 댓글
-      $("#commentRegisterForm").submit(function () {
-        var $this = $(this);
-
-        $.ajax({
-          method: "POST",
-          url: "/api/comments/insert",
-          data: {
-            type: $this.find("input[name=type]").val(),
-            type_id: $this.find("input[name=type_id]").val(),
-            comment: $this.find("textarea[name=comment]").val()
-          }
-        })
-          .done(function (data) {
-            if (!data.result) {
-              alert("댓글 등록 실패");
-
-              return false;
-            }
-
-            // TODO: 댓글, 댓글 수 DOM 으로 처리
-            location.reload(true);
-          })
-          .fail(function () {
-            alert("댓글 등록 실패");
-          });
-
-        return false;
-      });
-
-      // PICK
-      $('.pickBtn').click(function () {
-        var $this = $(this);
-        var number = parseInt($(this).find('.number').html(), 10);
-
-        $.ajax({
-          method: "POST",
-          url: "/api/pick",
-          data: {
-            type: $this.data('type'),
-            type_id: $this.data('id')
-          }
-        })
-          .done(function (data) {
-            if (data.body.result_type === 'on') {
-              $this.addClass('active').find('.number').html(data.body.pick_count);
-            } else if (data.body.result_type === 'off') {
-              $this.removeClass('active').find('.number').html(data.body.pick_count);
-            } else {
-              alert(data.body.message);
-            }
-          })
-          .fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
-
-        return false;
-      });
-      $(document).on('click', '.placeCommentToggleBtn', function() {
-        var $this = $(this);
-        $.ajax({
-          method: "POST",
-          url: "/api/contents/change_comment_option",
-          data: {
-            type: $this.data('type'),
-            type_id: $this.data('type-id')
-          }
-        })
-          .done(function (data) {
-            $('.dropdown-toggle').dropdown('toggle');
-            if (data.body.comment_status == {{ TYPE_NO_COMMENT }}) {
-              alert('댓글이 비허용 처리 되었습니다.');
-            } else if (data.body.comment_status == {{ TYPE_USE_COMMENT }}) {
-              alert('댓글이 허용 처리 되었습니다.');
-            }
-            location.reload(true);
-          })
-          .fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
-        return false;
-      });
-    });
-  </script>
+  <script type="text/javascript" src="{{ 'dist/js/detail.common.js' | static_url }}"></script>
+  <script type="text/javascript" src="{{ 'dist/js/detail.comment.js' | static_url }}"></script>
 {% endblock %}
 
 {% block contents %}
@@ -180,8 +43,8 @@
             <div class="icon"></div>
           </button>
           <ul class="dropdown-menu dropdown-menu-right">
-            <li><a class="placeEditBtn" data-id="{{ place.id }}">글 수정하기</a></li>
-            <li><a class="placeDeleteBtn" data-id="{{ place.id }}">글 삭제하기</a></li>
+            <li><a class="placeEditBtn" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">글 수정하기</a></li>
+            <li><a class="placeDeleteBtn" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">글 삭제하기</a></li>
             <li><a class="placeCommentToggleBtn" data-type="{{ TYPE_PLACES }}" data-type-id="{{ place.id }}">댓글 {% if place.use_comment == TYPE_NO_COMMENT %}허용{% else %}비허용{% endif %}</a></li>
           </ul>
         </div>
@@ -206,18 +69,18 @@
             <div class="slider{% if place.extra_images|length <= 6 %} deactivate{% endif %}">
               {# data-mfp-src 에 (원본 이미지 URL) 하위 img src 에는 썸네일용 이미지 src를 설정 #}
               {% for extra in place.extra_images %}
-              <div class="item">
-                <div class="imgThumbnail popupImage" data-mfp-src="{{ extra.image | image_url }}">
-                  <div class="dimm"></div>
-                  <div class="preview">미리 보기</div>
-                  <img src="{{ extra.image | thumb_url }}"/>
+                <div class="item">
+                  <div class="imgThumbnail popupImage" data-mfp-src="{{ extra.image | image_url }}">
+                    <div class="dimm"></div>
+                    <div class="preview">미리 보기</div>
+                    <img src="{{ extra.image | thumb_url }}"/>
+                  </div>
                 </div>
-              </div>
               {% endfor %}
             </div>
             {% if place.extra_images|length > 6 %}
-            <button class="sliderPrevBtn"></button>
-            <button class="sliderNextBtn"></button>
+              <button class="sliderPrevBtn"></button>
+              <button class="sliderNextBtn"></button>
             {% endif %}
           </div>
         {% endif %}
@@ -257,7 +120,7 @@
               {% endif %}
             </li>
             {% if place.status == PLACE_STATUS_NEED_ARTWORK and has_artworks %}
-              <button class="btn btn-default" onclick="alert('todo 지원하기');">apply</button>>
+              <a class="btn btn-default" href="/places/apply/{{ place.id }}">apply</a>>
             {% endif %}
           </ul>
         </div>
@@ -284,28 +147,18 @@
         <div class="commentArea">
           <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
           <hr class="divider"/>
-          <div class="commentMore">
-            <button class="commentMoreBtn">
+          {% if comment_count > 3 %}
+            <div class="commentMore">
+              <div class="patLoader"></div>
+              <button class="commentMoreBtn" data-type="{{ TYPE_PLACES }}" data-type-id="{{ place.id }}">
               이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
-            </button>
-          </div>
+              </button>
+            </div>
+          {% endif %}
           <ul class="comments">
+            {% import 'macro/comment.macro.twig' as comment_macro %}
             {% for comment in comments %}
-              <li>
-                <div class="profileImage">
-                  {% if comment.profile_image is empty %}
-                    <img src="{{ 'images/avatar.png' | static_url }}" class="img-circle"/>
-                  {% else %}
-                    <img src="{{ comment.profile_image | thumb_url('profile') }}" class="img-circle"/>
-                  {% endif %}
-                </div>
-                <div class="content">
-                  <div class="meta">
-                    <a href="/users/{{ comment.user_name }}">{{ comment.user_name }}</a> <span class="regDate">{{ comment.posted_at|date('y.m.d') }}</span>
-                  </div>
-                  <div class="comment">{{ comment.comment|nl2br }}</div>
-                </div>
-              </li>
+              {{ comment_macro.render_comment_item(comment, TYPE_PLACES) }}
             {% endfor %}
           </ul>
         </div>
@@ -324,30 +177,36 @@
         <div class="exhibitionArea">
           <div class="titleWrap">
             <div class="title">전시했던 작가</div>
-            <ul class="sliderControl">
-              <li class="active"><a href="#">01</a></li>
-              <li><a href="#">02</a></li>
-            </ul>
+            {% if exhibition_artwork_count|length > 4 %}
+              <div class="sliderControl">
+                <button class="prevBtn">
+                  <span class="glyphicon glyphicon-menu-left"></span>
+                </button>
+                <button class="nextBtn">
+                  <span class="glyphicon glyphicon-menu-right"></span>
+                </button>
+              </div>
+            {% endif %}
           </div>
-          <ul class="exhibitions">
-          {% for exhibition in exhibitions %}
-            {% for artwork in exhibition.artworks %}
-              <li>
-                <a href="/artworks/{{ artwork.id }}">
-                  <div class="imgThumbnail">
-                    <img src="{{ artwork.image | thumb_url }}"/>
-                  </div>
-                  <div class="meta">
-                    <div class="name">{{ artwork.user.user_name }}</div>
-                    <div class="date">
-                      전시기간 {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
+          <div class="exhibitions">
+            {% for exhibition in exhibitions %}
+              {% for artwork in exhibition.artworks %}
+                <div class="item">
+                  <a href="/artworks/{{ artwork.id }}">
+                    <div class="imgThumbnail">
+                      <img src="{{ artwork.image | thumb_url }}"/>
                     </div>
-                  </div>
-                </a>
-              </li>
+                    <div class="meta">
+                      <div class="name">{{ artwork.user.user_name }}</div>
+                      <div class="date">
+                        전시기간 {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              {% endfor %}
             {% endfor %}
-          {% endfor %}
-          </ul>
+          </div>
         </div>
         <!-- //== 전시 이력 -->
       {% endif %}

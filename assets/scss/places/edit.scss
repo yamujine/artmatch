@@ -85,20 +85,53 @@
 
       // 대표 이미지 업로드
       .mainImage {
-        border: 1px solid $white-eleven;
         background: $white-twelve;
         position: relative;
         overflow: hidden;
         margin: 50px auto 0 auto;
         max-width: 875px;
         height: 462px;
+        outline: 1px solid $white-eleven;
 
         &:hover {
-          border-width: 4px;
+          outline: 4px solid $black-five-80;
+
+          &.imageSelected {
+            .replace {
+              display: block;
+            }
+          }
         }
 
+        // 교체 버튼
+        .replace {
+          cursor: pointer;
+          z-index: 1000;
+          display: none;
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: 78px;
+          height: 42px;
+          padding: 11px 0;
+          background: $black-five-80;
+          color: $white-three;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 12px;
+          text-align: center;
+
+          .icon {
+            display: inline-block;
+            width: 14px;
+            height: 10px;
+            background: url(/static/images/icon_picture.png) no-repeat;
+            margin: 0 3px 0 0;
+          }
+        }
+        // -- 교체 버튼
+
         input[type=file] {
-          z-index: 100;
+          z-index: 9;
           position: absolute;
           width: 100%;
           height: 100%;
@@ -158,6 +191,7 @@
       .additionalImages {
         position: relative;
         width: 875px;
+        min-height: 180px;
         margin: 0 auto;
 
         // 슬라이더
@@ -177,15 +211,107 @@
             outline: none;
             float: left;
             background: $white-twelve;
-            border: 1px solid $white-eleven;
 
-            &:hover {
-              border-width: 4px;
+            .border {
+              position: absolute;
+              left: 0;
+              top: 0;
+              z-index: 11;
+              width: 100%;
+              height: 100%;
+              border: 1px solid $white-eleven;
+            }
+
+            &:not(.checked) {
+              &:hover {
+                .border {
+                  border: 4px solid $black-five-80;
+                }
+              }
+            }
+
+            &.imageSelected {
+              &:hover {
+                .remove {
+                  display: block;
+                }
+              }
+            }
+
+            &.checked {
+              .remove {
+                display: block;
+              }
+
+              .border {
+                border: 4px solid $tealish;
+              }
             }
 
             &:not(:first-child) {
               margin-left: 7px;
             }
+
+            // 삭제
+            .remove {
+              display: none;
+              cursor: pointer;
+              z-index: 1000;
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 36px;
+              height: 36px;
+
+              label {
+                cursor: pointer;
+                position: relative;
+                width: 36px;
+                height: 36px;
+                margin: 0;
+
+                .icon {
+                  position: absolute;
+                  left: 50%;
+                  top: 50%;
+                  margin: -7px 0 0 -6px;
+                  width: 13px;
+                  height: 14px;
+                  background: url(/static/images/icon_trash.png) no-repeat;
+                }
+              }
+
+              input[type=checkbox] {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                border: 0;
+              }
+
+              input[type=checkbox]:checked + label {
+                display: inline-block;
+                position: relative;
+                cursor: pointer;
+                @include prefix(user-select, none);
+              }
+
+              input[type=checkbox] + label:before {
+                content: '';
+                display: inline-block;
+                width: 36px;
+                height: 36px;
+                background: $black-five-80;
+              }
+
+              input[type=checkbox]:checked + label:before {
+                background: $tealish;
+              }
+            }
+            // -- 삭제
 
             input[type=file] {
               z-index: 100;
@@ -234,6 +360,7 @@
         }
         // -- 슬라이더 컨트롤
 
+        // 추가 이미지 관련 설명
         .instruction {
           font-family: 'Noto Sans KR', sans-serif;
           font-size: 12px;
@@ -241,6 +368,33 @@
           color: $greyish-four;
           margin: 14px 0 36px 0;
         }
+        // -- 추가 이미지 관련 설명
+
+        // 삭제 설명 관련
+        .removeInstruction {
+          display: none;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 12px;
+          text-align: center;
+          color: $tealish;
+          margin: 14px 0 36px 0;
+
+          .removeBtn {
+            display: inline-block;
+            border: 1px solid $tealish;
+            padding: 4px 15px;
+            margin: 0 0 0 5px;
+            @include prefix(border-radius, 30px);
+            background: $white-two;
+            outline: none;
+
+            &:hover {
+              background: $tealish;
+              color: $white-two;
+            }
+          }
+        }
+        // -- 삭제 설명 관련
       }
       // -- 추가 이미지 업로드
 

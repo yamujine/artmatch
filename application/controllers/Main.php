@@ -25,7 +25,7 @@ class Main extends MY_Controller {
     private function _render_content_list($user_id, $type, $limit = 9, $offset = 0, $use_pick_artists = true) {
         $data = [];
         $this->load->library(['tag']);
-        $this->load->model(['artwork_model', 'place_model', 'comment_model', 'pick_model', 'exhibition_model']);
+        $this->load->model(['artwork_model', 'place_model', 'pick_model', 'exhibition_model']);
         $query = $this->input->get('q');
 
         if ($use_pick_artists) {

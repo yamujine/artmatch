@@ -1,28 +1,35 @@
 @import "../helper/colorchips";
+@import "../helper/mixins.scss";
 
 body {
-  background: url('http://cdn.bizwatch.co.kr/news/photo/2015/05/26/26c044343ef504b2ff1ba81c17577deb150333.jpg') center center no-repeat;
+  background: url(/static/images/landing/bg.png) center center no-repeat;
   background-size: cover;
 }
 
 html, body {
   height: 100%;
 
+  // 상단 메뉴
+  #patTop {
+    display: none;
+  }
+  // -- 상단 메뉴
+
   #patContents {
+    position: relative;
+    width: 100%;
     height: 100%;
     margin: 0 0 -180px 0;
     padding: 0;
-    width: 100%;
 
+    // 로그인
     .patLogin {
       position: absolute;
-      width: 800px;
-      height: 540px;
-      left: 50%;
+      width: 353px;
+      height: 587px;
       top: 50%;
-      margin: -270px 0 0 -400px;
-      background: $white-two;
-      border-radius: 8px;
+      left: 50%;
+      margin: -330px 0 0 -176px;
 
       .container {
         width: 100%;
@@ -30,170 +37,143 @@ html, body {
         padding: 0;
         margin: 0;
 
-        .leftCover {
-          display: inline-block;
-          width: 50%;
-          height: 100%;
-          float: left;
-          vertical-align: top;
-          border-radius: 8px 0 0 8px;
-          overflow: hidden;
-
-          .background {
-            width: 100%;
-            height: 100%;
-            background: url('https://media.timeout.com/images/103695402/image.jpg') center center no-repeat;
-            background-size: cover;
-          }
+        // 로고
+        .logo {
+          width: 194px;
+          height: 23px;
+          margin: 0 auto 9px auto;
+          background: url(/static/images/landing/logo.png) center center no-repeat;
+          @include prefix(background-size, cover);
+          @include retina-image('/static/images/landing/logo@2x.png', 100%, 100%);
         }
+        // -- 로고
 
-        .rightForm {
-          display: inline-block;
-          width: 50%;
-          height: 100%;
-          vertical-align: top;
-          float: left;
+        // 타이틀
+        .title {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 18px;
+          font-weight: normal;
+          text-align: center;
+          letter-spacing: normal;
+          line-height: normal;
+          font-stretch: normal;
+          color: $white-two;
+        }
+        // -- 타이틀
+
+        // 로그인 폼
+        .loginForm {
+          width: 353px;
+          height: 490px;
+          background: $white-two;
+          @include prefix(border-radius, 4px);
+          margin: 38px 0 0 0;
+          padding: 50px 0;
           text-align: center;
 
-          .logo {
-            margin: 60px 0;
+          // 페이스북 로그인 버튼
+          .facebookBtn {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+            border: none;
+            @include prefix(border-radius, 5px);
+            letter-spacing: 0.3px;
+            text-align: center;
+            width: 300px;
+            height: 46px;
+            background: rgb(44, 81, 169);
+            color: $white-two;
+
+            .bold {
+              font-weight: bold;
+            }
           }
+          // -- 페이스북 로그인 버튼
 
-          .loginForm {
-            width: 100%;
+          // 디바이더
+          .divider {
+            display: inline-block;
+            width: 176px;
+            height: 19px;
+            background: url(/static/images/or_divider.png) center center no-repeat;
+            margin: 10px 0;
+          }
+          // -- 디바이더
 
-            .loginFormContainer {
-              width: 268px;
-              margin: 0 auto;
-              font-family: 'Noto Sans KR';
+          // 입력 폼
+          fieldset {
+            input {
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 12px;
+              padding: 0 0 0 14px;
+              color: $black;
+              width: 297px;
+              height: 45px;
+              border: 1px solid $white-ten;
+              margin-bottom: 10px;
+              outline: none;
+              @include prefix(border-radius, 5px);
 
-              #patLoginForm {
-                fieldset {
-                  position: relative;
-                  margin-bottom: 8px;
-
-                  input {
-                    width: 100%;
-                    height: 38px;
-                    position: relative;
-                    background: $pinkish-grey-two;
-                    font-size: 14px;
-                    outline: none;
-                    font-weight: 500;
-                    border: 0;
-                    background: $white-five;
-                    padding: 5px 5px 5px 10px;
-                    color: $black-five;
-
-                    -webkit-border-radius: 3px;
-                    -moz-border-radius: 3px;
-                    border-radius: 3px;
-                    -webkit-box-shadow: none;
-                    -moz-box-shadow: none;
-                    box-shadow: none;
-                  }
-                }
-
-                button[type=submit] {
-                  width: 100%;
-                  border: 0;
-                  height: 38px;
-                  background: #818181;
-                  color: $white-two;
-                  padding: 0 18px;
-                  font-size: 15px;
-                  font-weight: bold;
-                  outline: none;
-                  vertical-align: middle;
-                  text-align: center;
-                  margin-top: 10px;
-
-                  -webkit-box-shadow: none;
-                  -moz-box-shadow: none;
-                  box-shadow: none;
-                  -webkit-border-radius: 4px;
-                  -moz-border-radius: 4px;
-                  border-radius: 4px;
-
-                  &:hover {
-                    background: #a8a8a8;
-                  }
-                }
+              @include placeholder {
+                opacity: 0.8;
               }
+            }
+          }
+          // -- 입력 폼
 
-              p {
-                font-weight: 500;
-                margin: 12px 0;
-                font-size: 10px;
+          // 로그인 버튼
+          button[type=submit] {
+            width: 300px;
+            height: 46px;
+            margin: 12px 0 0 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+            color: $white-two;
+            background: $black;
+            border: none;
+            @include prefix(border-radius, 5px);
+          }
+          // -- 로그인 버튼
+
+          .patLoginExcept {
+            margin: 15px 0 0 0;
+
+            .passwordFind {
+              text-align: left;
+
+              a {
+                font-size: 12px;
+                margin: 0 0 0 30px;
+                cursor: pointer;
+                color: $black-five;
+                text-decoration: underline;
               }
+            }
 
-              // TODO: 임시 버튼
-              button.facebook {
-                width: 100%;
-                border: 0;
-                height: 38px;
-                background: #4267b2;
-                color: $white-two;
-                font-weight: bold;
-                outline: none;
-                font-size: 15px;
-                padding: 0 18px;
+            .join {
+              padding: 45px 0 0 0;
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 12px;
+              line-height: 1.67;
+              letter-spacing: 0.2px;
+              color: $greyish-five;
 
-                -webkit-box-shadow: none;
-                -moz-box-shadow: none;
-                box-shadow: none;
-                -webkit-border-radius: 4px;
-                -moz-border-radius: 4px;
-                border-radius: 4px;
-              }
-
-              div.patLoginExcept {
-                margin-top: 30px;
-
-                p {
-                  font-size: 12px;
-                  margin: 5px 0;
-                  font-weight: 300;
-
-                  a {
-                    font-weight: 500;
-                    color: $black-five;
-                    padding: 0 6px;
-                  }
-                }
-
-                hr {
-                  width: 40%;
-                  margin: 8px auto;
-                }
+              a {
+                color: $greyish-five;
+                text-decoration: underline;
               }
             }
           }
         }
+        // -- 로그인 폼
       }
     }
+    // -- 로그인
   }
 
+  // 하단 푸터
   #patFooter {
-    background: transparent;
-    height: 130px;
-
-    .container {
-      .logo, .slogan {
-        display: none;
-      }
-
-      p.copyright {
-        color: $white-two;
-      }
-
-      .links {
-        li {
-          a {
-            color: $white-two;
-          }
-        }
-      }
-    }
+    display: none;
   }
+  // -- 하단 푸터
 }

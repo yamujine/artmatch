@@ -7,6 +7,150 @@
   margin: 0;
   padding: 0;
 
+  // 검색 결과
+  .patSearchResult {
+    margin: 70px auto 0 auto;
+
+    // 검색 입력 폼
+    .searchForm {
+      width: 960px;
+      margin: 0 auto;
+
+      .searchInput {
+        display: inline-block;
+        position: relative;
+
+        &.focusing {
+          .resetKeywordBtn {
+            display: block;
+          }
+        }
+
+        // 입력 창
+        input[name=q] {
+          width: 800px;
+          height: 50px;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 20px;
+          color: $black;
+          padding: 0 0 0 10px;
+          border: none;
+          border-bottom: 3px solid rgba(0, 0, 0, 0.24);
+          outline: none;
+
+          &:focus, &:active {
+            border-bottom: 3px solid rgba(0, 0, 0, 1.0);
+          }
+        }
+        // -- 입력 창
+
+        // 검색 입력 값 초기화 버튼
+        .resetKeywordBtn {
+          display: none;
+          width: 48px;
+          height: 48px;
+          border: none;
+          outline: none;
+          position: absolute;
+          right: 0;
+          bottom: 4px;
+          background: url(/static/images/escape.png);
+        }
+        // -- 검색 입력 값 초기화 버튼
+      }
+
+      // 검색 버튼
+      button[type=submit] {
+        width: 120px;
+        height: 44px;
+        color: $white-two;
+        background: $black-five;
+        border: none;
+        @include prefix(border-radius, 30px);
+        margin: 0 0 0 35px;
+      }
+      // -- 검색 버튼
+    }
+    // -- 검색 입력 폼
+
+    // 결과 탭
+    .resultTab {
+      width: 960px;
+      margin: 36px auto 0 auto;
+
+      .tab {
+        list-style: none;
+        margin: 0;
+        padding: 14px 0;
+        border-bottom: 1px solid $pinkish-grey-five;
+
+        li {
+          position: relative;
+          display: inline-block;
+
+          &:first-child {
+            margin: 0 42px 0 0;
+
+            &:after {
+              position: absolute;
+              top: 2px;
+              width: 1px;
+              height: 17px;
+              content: "";
+              margin-left: 20px;
+              background: $white-ten;
+            }
+          }
+
+          a {
+            font-family: ArialMT, Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0 8px;
+            opacity: 0.2;
+            color: $black;
+
+            &.active {
+              opacity: 0.8;
+            }
+          }
+        }
+      }
+    }
+    // -- 결과 탭
+
+    // 결과
+    .result {
+      width: 960px;
+      margin: 24px auto;
+      padding: 0 0 0 5px;
+      text-align: left;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
+      color: $black-five;
+
+      .number {
+        font-weight: bold;
+      }
+    }
+    // -- 결과
+
+    .emptyResult {
+      width: 960px;
+      min-height: 500px;
+      margin:0 auto;
+      padding: 240px 0;
+      text-align: center;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+      color: $black-five;
+    }
+  }
+  // -- 검색 결과
+
+  // 갤러리 CAROUSEL
   .patGallery {
     position: relative;
     background: $white-three;
@@ -176,7 +320,9 @@
       }
     }
   }
+  // -- 갤러리 CAROUSEL
 
+  // 작품, 장소 선택 탭
   .patTypeSelect {
     width: 100%;
     height: 50px;
@@ -237,7 +383,9 @@
       background: $black;
     }
   }
+  // -- 작품, 장소 선택 탭
 
+  // 장소 키워드
   .patPlaceTagCloud {
     margin-bottom: 30px;
 
@@ -292,6 +440,7 @@
       }
     }
   }
+  // -- 장소 키워드
 
   .patItemList {
     .container {

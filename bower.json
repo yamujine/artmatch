@@ -23,6 +23,6 @@
     "magnific-popup": "^1.1.0",
     "magic-check": "^1.0.3",
     "jquery-validation": "^1.16.0",
-    "vex": "^3.0.0"
+    "jquery-validation-bootstrap-tooltip": "^0.10.2"
   }
 }

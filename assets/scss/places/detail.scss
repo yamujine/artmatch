@@ -565,10 +565,17 @@ body {
           width: 100%;
           height: 100%;
           padding: 10px 15px;
-          // TODO: 컬러칩 정리
-          border: 1px solid #E8E8E8;
+          border: 1px solid $black-10;
           resize: none;
           outline: none;
+
+          @include placeholder {
+            color: $warm-grey-four;
+          }
+
+          &:focus, &:active {
+            border: 1px solid $warm-grey-nine;
+          }
         }
         // -- 댓글 입력창
 
@@ -580,7 +587,7 @@ body {
           width: 70px;
           height: 35px;
           background: none;
-          border: 1px solid #E8E8E8;
+          border: 1px solid $white-eleven;
           outline: none;
           @include prefix(border-radius, 30px);
           font-family: 'Noto Sans KR', sans-serif;
@@ -588,7 +595,8 @@ body {
           color: $greyish-brown;
 
           &:hover {
-            background: $white-three;
+            color: $white-two;
+            background: $greyish-brown;
           }
         }
         // -- 댓글 입력 버튼
@@ -616,28 +624,27 @@ body {
             position: absolute;
             right: 0;
             bottom: 0;
-            list-style: none;
             padding: 0;
             margin: 0;
 
-            li {
+            button {
+              width: 22px;
+              height: 22px;
+              padding: 3px 0 1px 0;
               display: inline-block;
+              outline: none;
+              font-size: 12px;
+              background: $white-two;
+              border: 1px solid $white-eight;
+              color: $warm-grey-two;
 
               &:not(:first-child) {
                 margin-left: 8px;
               }
 
-              a {
-                font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-                font-size: 12px;
-                font-weight: bold;
-                color: $greyish-four;
-              }
-
-              &.active {
-                a {
-                  color: $black;
-                }
+              &:hover {
+                border: 1px solid $warm-grey-four;
+                color: $brownish-grey;
               }
             }
           }
@@ -651,11 +658,12 @@ body {
           margin: 0;
           width: 100%;
           height: 252px;
+          overflow: hidden;
 
-          li {
+          .item {
             float: left;
             width: 213px;
-            height: 100%;
+            height: 252px;
             background: $white-two;
             border: 1px solid $white-nine;
 
@@ -665,12 +673,13 @@ body {
 
             // 전시 카드
             a {
+              outline: none;
               text-decoration: none;
 
               // 썸네일
               .imgThumbnail {
                 width: 100%;
-                height: 182px;
+                height: 160px;
 
                 img {
                   width: 100%;

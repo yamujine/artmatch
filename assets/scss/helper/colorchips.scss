@@ -1,8 +1,11 @@
 /* PICK ART YOU BASE COLOR CHIPS */
 
 $black: #000000;
+$black-10: rgba(0, 0, 0, 0.1);
+$black-66: rgba(0, 0, 0, 0.66);
 $black-four: #111111;
 $black-five: #333333;
+$black-five-80: rgba(50, 50, 50, 0.8);
 $black-six: #262626;
 $black-seven: #222222;
 
@@ -23,6 +26,7 @@ $greyish: #adadad;
 $greyish-two: #a8a8a8;
 $greyish-three: #b7b7b7;
 $greyish-four: #acacac;
+$greyish-five: #a5a5a5;
 
 $warm-grey: #a2a2a2;
 $warm-grey-two: #888888;
@@ -32,6 +36,7 @@ $warm-grey-five: #777777;
 $warm-grey-six: #707070;
 $warm-grey-seven: #757575;
 $warm-grey-eight: #8f8f8f;
+$warm-grey-nine: #a1a1a1;
 
 $brownish-grey: #666666;
 $brownish-grey-two: #5a5a5a;
@@ -40,6 +45,7 @@ $brownish-grey-three: #6d6d6d;
 $pinkish-grey-two: #c6c6c6;
 $pinkish-grey-three: #bbbbbb;
 $pinkish-grey-four: #c3c3c3;
+$pinkish-grey-five: #cccccc;
 
 $bluegrey: #778da7;
 
@@ -54,3 +60,5 @@ $dusty-orange: #e57625;
 
 $warm-blue: #383bd5;
 $bluish: #1e8fcb;
+
+$cobalt-16: rgba(31, 53, 127, 0.16);

@@ -135,86 +135,146 @@
             }
           });
       });
+
+      // 포커싱인 경우 결과 키워드가 남아있냐 여부와는 관계 없이 focusing 클래스를 적용
+      $('.patSearchResult .searchForm .searchInput input[name=q]').focus(function () {
+        $(this).closest('.searchInput').addClass('focusing');
+      })
+        .focusout(function () {
+          // 포커싱 아웃인 경우 결과 키워드가 남아있냐 여부에 따라 focusing 클래스 적용
+          var keyword = $(this).val();
+          $(this).closest('.searchInput').toggleClass('focusing', keyword != '');
+        });
+
+      // 검색 결과 입력값 삭제
+      $('.patSearchResult .resetKeywordBtn').click(function () {
+        $(this).closest('.searchInput').removeClass('focusing')
+          .find('input[name=q]').val('');
+      });
     });
   </script>
 {% endblock %}
 
 {% block contents %}
-  <div class="patGallery">
-    <div class="container">
-      <div class="slider">
-        <div class="sliderTrack">
-          <div class="item title">
-            <img src="{{ 'images/main_pick_artist.png' | static_url }}"/>
-          </div>
-          {% for item in pick_artworks %}
-            <div class="item {% if item.is_picked %}picked{% endif %}">
-              <a href="/artworks/{{ item.id }}">
-                <div class="imgThumb">
-                  <div class="dimm"></div>
-                  <div class="preview">
-                    미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
-                  </div>
-                  {# 썸네일 이미지 #}
-                  <img class="img" src="{{ item.image | thumb_url }}" />
-                  <div class="meta">
-                    <div class="title">{{ item.title }}</div>
-                    <div class="pick">
-                      <span class="">PICK</span>
-                      <span class="number">{{ item.pick_count }}</span>
+  {# 검색 결과 여부에 따라 렌더링 달라짐 #}
+  {% if query is not null %}
+    <!-- == 검색 결과 -->
+    <div class="patSearchResult">
+      <!-- == 검색 입력 폼 -->
+      <form class="searchForm">
+        <div class="searchInput focusing">
+          <input type="text" name="q" title="search" placeholder="검색어를 입력해주세요." value="{{ query }}"/>
+          <button type="button" class="resetKeywordBtn"></button>
+        </div>
+        <button type="submit">검색</button>
+      </form>
+      <!-- //== 검색 입력 폼 -->
+      <!-- == 탭 -->
+      <div class="resultTab">
+        <ul class="tab">
+          <li><a {% if type == TYPE_ARTWORKS %}class="active"{% endif %} href="?type=artworks&q={{ query }}">ARTIST</a></li>
+          <li><a {% if type == TYPE_PLACES %}class="active"{% endif %} href="?type=places&q={{ query }}">SPACE</a></li>
+        </ul>
+      </div>
+      <!-- //== 탭 -->
+      <!-- == 결과 -->
+      <div class="result">
+        총 <span class="number">17</span>건
+      </div>
+      <!-- //== 결과 -->
+      {% if items|length == 0 %}
+        <div class="emptyResult">
+          검색 결과가 없습니다.
+        </div>
+      {% endif %}
+    </div>
+    <!-- //== 검색 결과-->
+  {% else %}
+    <!-- == 갤러리 CAROUSEL -->
+    <div class="patGallery">
+      <div class="container">
+        <div class="slider">
+          <div class="sliderTrack">
+            <div class="item title">
+              <img src="{{ 'images/main_pick_artist.png' | static_url }}"/>
+            </div>
+            {% for item in pick_artworks %}
+              <div class="item {% if item.is_picked %}picked{% endif %}">
+                <a href="/artworks/{{ item.id }}">
+                  <div class="imgThumb">
+                    <div class="dimm"></div>
+                    <div class="preview">
+                      미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
+                    </div>
+                    {# 썸네일 이미지 #}
+                    <img class="img" src="{{ item.image | thumb_url }}" />
+                    <div class="meta">
+                      <div class="title">{{ item.title }}</div>
+                      <div class="pick">
+                        <span class="">PICK</span>
+                        <span class="number">{{ item.pick_count }}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </a>
-            </div>
-          {% endfor %}
+                </a>
+              </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
+      <div class="sliderControl">
+        <button class="sliderPrevBtn">
+          <i class="glyphicon glyphicon-menu-left"></i>
+        </button>
+        <button class="sliderNextBtn">
+          <i class="glyphicon glyphicon-menu-right"></i>
+        </button>
+      </div>
     </div>
-    <div class="sliderControl">
-      <button class="sliderPrevBtn">
-        <i class="glyphicon glyphicon-menu-left"></i>
-      </button>
-      <button class="sliderNextBtn">
-        <i class="glyphicon glyphicon-menu-right"></i>
-      </button>
+    <!-- //== 갤러리 CAROUSEL -->
+
+    <!-- == 작품, 장소 선택 탭 -->
+    <div class="patTypeSelect">
+      <ul class="typeSelectTab">
+        <li><a {% if type == TYPE_ARTWORKS %}class="active"{% endif %} href="?type=artworks">ARTIST</a></li>
+        <li><a {% if type == TYPE_PLACES %}class="active"{% endif %} href="?type=places">SPACE</a></li>
+      </ul>
+      <div class="divider"></div>
     </div>
-  </div>
+    <!-- //== 작품, 장소 선택 탭 -->
 
-  <div class="patTypeSelect">
-    <ul class="typeSelectTab">
-      <li><a {% if type == TYPE_ARTWORKS %}class="active"{% endif %} href="?type=artworks">ARTIST</a></li>
-      <li><a {% if type == TYPE_PLACES %}class="active"{% endif %} href="?type=places">SPACE</a></li>
-    </ul>
-    <div class="divider"></div>
-  </div>
 
-  {% if type == TYPE_PLACES %}
-    <div class="patPlaceTagCloud">
+    {% if type == TYPE_PLACES %}
+      <!-- == 장소 키워드 -->
+      <div class="patPlaceTagCloud">
+        <div class="container">
+          <div class="tagLabel"></div>
+          <ul class="tagList">
+            <li><a href="?type=places&q=홍대">홍대</a></li>
+            <li><a href="?type=places&q=인천">인천</a></li>
+            <li><a href="?type=places&q=아트플랫폼">아트플랫폼</a></li>
+            <li><a href="?type=places&q=한남동">한남동</a></li>
+            <li><a href="?type=places&q=상수">상수</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- //== 장소 키워드 -->
+    {% endif %}
+  {% endif %}
+
+  {% if items|length > 0 %}
+    <div class="patItemList">
       <div class="container">
-        <div class="tagLabel"></div>
-        <ul class="tagList">
-          <li><a href="?type=places&q=홍대">홍대</a></li>
-          <li><a href="?type=places&q=인천">인천</a></li>
-          <li><a href="?type=places&q=아트플랫폼">아트플랫폼</a></li>
-          <li><a href="?type=places&q=한남동">한남동</a></li>
-          <li><a href="?type=places&q=상수">상수</a></li>
+        {# 그리드 형태의 목록 (작품, 장소) #}
+        <ul class="itemList {% if type == TYPE_ARTWORKS %}artworkList{% else %}placeList{% endif %}">
+          {% import 'macro/main.macro.twig' as main_macro %}
+          {% for item in items %}
+            {{ main_macro.render_main_item(item, type, loop.index) }}
+          {% endfor %}
         </ul>
       </div>
     </div>
   {% endif %}
-
-  <div class="patItemList">
-    <div class="container">
-      {# 그리드 형태의 목록 (작품, 장소) #}
-      <ul class="itemList {% if type == TYPE_ARTWORKS %}artworkList{% else %}placeList{% endif %}">
-        {% import 'macro/main.item.twig' as main_macro %}
-        {% for item in items %}
-          {{ main_macro.render_main_item(item, type, loop.index) }}
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
 
   <div class="patLoader"></div>
 

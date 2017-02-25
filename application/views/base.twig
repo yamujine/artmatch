@@ -13,18 +13,25 @@
   <link rel="stylesheet" type="text/css" href="{{ 'dist/bootstrap/css/bootstrap.min.css' | static_url }}">
   <link rel="stylesheet" type="text/css" href="{{ 'dist/css/base.min.css' | static_url }}">
   <link rel="stylesheet" type="text/css" href="{{ 'dist/css/jquery-bootstrap-datepicker.css' | static_url }}">
-
   <link href="https://maxcdn.bootstrapcdn.com/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+  <!-- == 공용 모달 == -->
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/modal.min.css' | static_url }}">
   {% block style %}
   {% endblock %}
 
   <!-- ======================== 스크립트 ======================== -->
   <script src="{{ 'dist/jquery/jquery.min.js' | static_url }}"></script>
   <script src="{{ 'dist/bootstrap/js/bootstrap.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/jquery-validation/jquery.validate.js' | static_url }}"></script>
+  <script src="{{ 'dist/jquery-validation-bootstrap-tooltip/jquery-validate.bootstrap-tooltip.js' | static_url }}"></script>
+
   <script src="{{ 'dist/prefixfree/prefixfree.js' | static_url }}"></script>
   <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="{{ 'dist/js/datepicker-ko-KR.js' | static_url }}"></script>
+
+  <!-- == 공용 == -->
+  <script src="{{ 'dist/js/common.gnb.js' | static_url }}"></script>
+  <script src="{{ 'dist/js/common.modal.js' | static_url }}"></script>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -72,7 +79,9 @@
         {% elseif session.type == 1 %}
           <li><a href="/places/upload">장소등록하기</a></li>
         {% endif %}
-        <li><a href="#"><span class="glyphicon glyphicon-search"></span></a></li>
+        <li class="search">
+          <a class="searchBtn"><span class="glyphicon glyphicon-search"></span></a>
+        </li>
       </ul>
       {% endif %}
     </nav>
@@ -99,21 +108,21 @@
     </ul>
   </div>
 </footer>
-<!-- ======================== 스크립트 영역 ======================== -->
-<script type="text/javascript">
-  // TODO: 정확한 동작 설명 확인 필요
-  $(function () {
-    $(window).scroll(function () {
-      var scrollOffsetTop = $(window).scrollTop();
 
-      if (scrollOffsetTop > 0) {
-        $('body').addClass('scroll');
-      } else {
-        $('body').removeClass('scroll');
-      }
-    });
-  });
-</script>
+<!-- ======================== 검색 팝업 영역 ======================== -->
+<!-- == 검색 팝업 -->
+<div id="patSearch">
+  <form class="searchForm">
+    <div class="searchInput">
+      <input type="text" name="q" title="search" placeholder="검색어를 입력해주세요." value=""/>
+      <button type="button" class="resetKeywordBtn"></button>
+    </div>
+    <button type="submit">검색</button>
+  </form>
+</div>
+<!-- //== 검색 팝업 -->
+
+<!-- ======================== 스크립트 영역 ======================== -->
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -122,7 +131,6 @@
   
   ga('create', 'UA-92165968-1', 'auto');
   ga('send', 'pageview');
-
 </script>
 {% block script %}
 {% endblock %}
