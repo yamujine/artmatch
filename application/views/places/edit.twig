@@ -180,8 +180,8 @@
             required: "사진을 추가해 주세요."
           },
           description: {
-            required: "장소 설명을 입력해 주세요.",
-            maxlength: "설명은 100자 까지 입력 가능 합니다."
+            required: "장소설명을 입력해 주세요.",
+            maxlength: "장소설명은 100자 까지 입력 가능 합니다."
           },
           tags: {
             required: "태그를 입력해 주세요.",
@@ -266,7 +266,7 @@
             </div>
           {% endif %}
           <img src="{{ image | image_url }}" class="preview{% if image is null %} hidden{% endif %}"/>
-          <input type="file" name="image" id="mainImageFile" accept="image/*" {% if image is null %}required{% endif %}/>
+          <input type="file" name="image" id="mainImageFile" accept="image/*"/>
         </div>
         <!-- //== 대표 이미지 선택 -->
         <!-- == 추가 이미지 선택 -->
@@ -303,10 +303,10 @@
         <!-- //== 추가 이미지 선택 -->
         <!-- == 작품 설명 -->
         <div class="descriptionInput">
-          <textarea name="description" title="description"
+          <textarea name="description"
                     placeholder="장소를 소개해주세요. (최대 100자)">{% if description %}{{ description }}{% endif %}</textarea>
           <div class="tags">
-            <input type="text" title="tags" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요"/>
+            <input type="text" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요"/>
           </div>
         </div>
         <!-- //== 작품 설명 -->
