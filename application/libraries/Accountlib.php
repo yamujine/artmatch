@@ -87,8 +87,11 @@ class Accountlib {
         return $this->CI->session->set_userdata('profile_image', $profile_image);
     }
 
-    public function send_email_authentication($user_email, $user_id) {
-        $data['code'] = urlencode($this->CI->encryption->encrypt($user_email . '/' . $user_id));
+    public function send_email_authentication($user_email, $user_id, $user_name) {
+        $data = [
+            'code' => urlencode($this->CI->encryption->encrypt($user_email . '/' . $user_id)),
+            'user_name' => $user_name
+        ];
         $email_html = $this->CI->twig->render('email/verify', $data);
 
         $this->CI->email->initialize(['mailtype' => 'html']);

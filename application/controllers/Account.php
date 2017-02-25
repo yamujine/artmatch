@@ -100,7 +100,7 @@ class Account extends CI_Controller {
         $user = $this->accountlib->get_user();
 
         if ($this->input->method() === 'post' && $this->input->post('resend') === '1') {
-            $this->accountlib->send_email_authentication($user->email, $user->id);
+            $this->accountlib->send_email_authentication($user->email, $user->id, $user->user_name);
             $data['msg'] = '인증 이메일 재발송이 완료되었습니다.';
         }
 
