@@ -150,7 +150,10 @@
       // validation
       $("#patUploadForm").validate({
         rules: {
-          name: "required",
+          name: {
+            required: true,
+            maxlength: 20
+          },
           area: {
             required: true,
             maxlength: 6
@@ -180,7 +183,8 @@
         },
         messages: {
           name: {
-            required: "장소명을 입력해 주세요."
+            required: "장소명을 입력해 주세요.",
+            maxlength: "장소명은 20자까지 입력 가능합니다."
           },
           area: {
             required: "대표 장소를 입력해 주세요.",

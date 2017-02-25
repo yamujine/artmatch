@@ -146,7 +146,10 @@
 
       $("#patUploadForm").validate({
         rules: {
-          title: "required",
+          title: {
+            required: true,
+            maxlength: 20
+          },
           image: {
             required: function() {
               if($("#mainImageFile").data('img') === null) {
@@ -167,7 +170,8 @@
         },
         messages: {
           title: {
-            required: "작품명을 입력해 주세요."
+            required: "작품명을 입력해 주세요.",
+            maxlength: "작품명은 20자 까지 입력 가능 합니다."
           },
           image: {
             required: "사진을 추가해 주세요."
