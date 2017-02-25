@@ -18,9 +18,11 @@
  * @property film_model       $film_model
  * @property film_model1      $film_model1
  *
+ * @property Artwork_model          $artwork_model              artwork comment model
+ * @property Place_model            $place_model                place comment model
  * @property Comment_model          $comment_model              deprecated comment model
- * @property Artwork_Comment_model  $artwork_comment_model      deprecated comment model
- * @property Place_Comment_model    $place_comment_model        deprecated comment model
+ * @property Artwork_Comment_model  $artwork_comment_model      artwork comment model
+ * @property Place_Comment_model    $place_comment_model        place comment model
  *
  */
 class my_models
