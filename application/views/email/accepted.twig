@@ -1,6 +1,27 @@
 
-전시에 지원한 작품이 등록되었습니다.
-{% for artwork in artworks %}
-  작품상세
-  {{ artwork.image | thumb_url }}
-{% endfor %}
+{% extends "email/base.twig" %}
+
+{% block hidden_text %}
+  PICK ART YOU 전시 작품 등록 안내
+{% endblock %}
+
+{% block contents %}
+  <table width="420" cellpadding="0" cellspacing="0" border="0" class="container">
+    <tr>
+      <td height="10" style="font-size: 10px; line-height: 10px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666;" class="body-text">
+        <p style="font-family: 'Noto Sans KR', sans-serif; font-size:16px; word-break:keep-all; line-height:22px; letter-spacing: -0.2px; color:#666666; padding:0; margin:0;" class="body-text"><multiline>
+            전시에 지원한 작품이 등록되었습니다.
+            {% for artwork in artworks %}
+              작품상세
+              <img src = "{{ artwork.image | thumb_url }}" />
+            {% endfor %}
+          </multiline></p>
+      </td>
+    </tr>
+  </table>
+{% endblock %}
+
+

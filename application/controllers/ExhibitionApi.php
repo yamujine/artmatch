@@ -30,9 +30,11 @@ class ExhibitionApi extends API_Controller {
             if ($id === false || $result === false) {
                 $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
             }
-            //email 발송 대상 리스트
+            
             $accepted_artwork = $this->artwork_model->get_by_id($applied_artwork_id);
+            //이메일 리스트
             $email_key[] = $accepted_artwork->user->email;
+            //모든 등록된 작품
             $accepted_artwork_list[] = $accepted_artwork;
         }
         //중복값 제거
@@ -40,6 +42,7 @@ class ExhibitionApi extends API_Controller {
         foreach ($email_key as $i=>$email) {
             foreach ($accepted_artwork_list as $accepted_artwork) {
                 if ($email === $accepted_artwork->user->email) {
+                    //같은 유저의 작품은 하나의 dept로 합침
                     $to_send_list[$i][] = $accepted_artwork;
                 }
             }

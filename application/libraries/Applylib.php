@@ -28,6 +28,10 @@ class Applylib {
         $this->CI->email->send();
     }
 
+    /**
+     * @param array $to_send_list [[artwork, artwork] //same user artworks,[artwork, artwork, artwork]]
+     * @param $exhibition_id
+     */
     public function send_accepted_email(array $to_send_list, $exhibition_id) {
         $this->CI->load->model(['artwork_model', 'exhibition_model']);
         $exhibition = $this->CI->exhibition_model->get_by_id($exhibition_id);
