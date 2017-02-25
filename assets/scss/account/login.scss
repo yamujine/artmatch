@@ -110,7 +110,7 @@ html, body {
               width: 297px;
               height: 45px;
               border: 1px solid $white-ten;
-              margin-bottom: 22px;
+              margin-bottom: 10px;
               outline: none;
               @include prefix(border-radius, 5px);
 
@@ -124,7 +124,8 @@ html, body {
           // 로그인 버튼
           button[type=submit] {
             width: 300px;
-            height: 37px;
+            height: 46px;
+            margin: 12px 0 0 0;
             font-family: 'Noto Sans KR', sans-serif;
             font-size: 14px;
             color: $white-two;
