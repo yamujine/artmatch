@@ -41,6 +41,35 @@
         });
       }
 
+      // 전시 이력 Carousel 구현은 4개가 넘는 경우
+      var exhibitionCount = $('.exhibitions .item').length;
+      if (exhibitionCount > 4) {
+        console.log("dd");
+        $('.exhibitions').slick({
+          infinite: false,
+          variableWidth: true,
+
+          slidesToShow: 4,
+          slidesToScroll: 1,
+
+          prevArrow: false,
+          nextArrow: false
+        });
+      }
+
+      // 슬라이더 컨트롤
+      $('.exhibitionArea .sliderControl .prevBtn').click(function () {
+        $('.exhibitions').slick('slickPrev');
+
+        return false;
+      });
+
+      $('.exhibitionArea .sliderControl .nextBtn').click(function () {
+        $('.exhibitions').slick('slickNext');
+
+        return false;
+      });
+
       // 이미지 전체 보기
       $('.popupImage').magnificPopup({
         type: 'image',
@@ -410,15 +439,21 @@
         <div class="exhibitionArea">
           <div class="titleWrap">
             <div class="title">전시했던 작가</div>
-            <ul class="sliderControl">
-              <li class="active"><a href="#">01</a></li>
-              <li><a href="#">02</a></li>
-            </ul>
+            {% if exhibition_artwork_count|length > 4 %}
+              <div class="sliderControl">
+                <button class="prevBtn">
+                  <span class="glyphicon glyphicon-menu-left"></span>
+                </button>
+                <button class="nextBtn">
+                  <span class="glyphicon glyphicon-menu-right"></span>
+                </button>
+              </div>
+            {% endif %}
           </div>
-          <ul class="exhibitions">
+          <div class="exhibitions">
             {% for exhibition in exhibitions %}
               {% for artwork in exhibition.artworks %}
-                <li>
+                <div class="item">
                   <a href="/artworks/{{ artwork.id }}">
                     <div class="imgThumbnail">
                       <img src="{{ artwork.image | thumb_url }}"/>
@@ -430,10 +465,10 @@
                       </div>
                     </div>
                   </a>
-                </li>
+                </div>
               {% endfor %}
             {% endfor %}
-          </ul>
+          </div>
         </div>
         <!-- //== 전시 이력 -->
       {% endif %}
