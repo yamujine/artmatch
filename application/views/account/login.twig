@@ -27,21 +27,10 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    $('#patLoginForm').submit(function () {
+    // 로그인 로직 사용
+    function login() {
       var emailOrUsernameElem = $("input[name=email_or_username]");
       var passwordElem = $("input[name=password]");
-
-      if (!emailOrUsernameElem.val()) {
-        alert('이메일 또는 유저 아이디를 입력해주세요.');
-        emailOrUsernameElem.focus();
-        return false;
-      }
-
-      if (!passwordElem.val()) {
-        alert('패스워드를 입력해주세요.');
-        passwordElem.focus();
-        return false;
-      }
 
       data = {};
       data.email_or_username = emailOrUsernameElem.val();
@@ -62,6 +51,25 @@
       });
 
       return false;
+    }
+
+    // 로그인 validation
+    $('#patLoginForm').validate({
+      rules: {
+        email_or_username: "required",
+        password: "required"
+      },
+      messages: {
+        email_or_username: {
+          required: "아이디 또는 이메일을 입력해 주세요."
+        },
+        password: {
+          required: "비밀번호를 입력해 주세요."
+        }
+      },
+      submitHandler: function() {
+        login();
+      }
     });
 
     $('.facebookBtn').click(function () {
@@ -93,16 +101,7 @@
       }, {scope: 'public_profile,email'});
     });
 
-    $('#passwordChangeForm').submit(function () {
-      var emailElement = $("input[name=email]");
-
-      if (!emailElement.val()) {
-        alert('이메일을 입력해주세요.');
-        emailElement.focus();
-
-        return false;
-      }
-
+    function password_change () {
       $.ajax({
         method: "POST",
         url: "/api/users/reset_password",
@@ -113,13 +112,27 @@
         if (data.result) {
           $('#passwordChangeModal').modal('hide');
         }
-
         alert(data.body.message);
       }).fail(function () {
         alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
       });
 
       return false;
+    }
+
+    $('#passwordChangeForm').validate({
+      rules: {
+        email: "required"
+      },
+      messages: {
+        email: {
+          required: "이메일을 입력해 주세요.",
+          email: "올바른 형태의 이메일을 입력해 주세요."
+        }
+      },
+      submitHandler: function() {
+        password_change();
+      }
     });
 
     function rerequestFacebookPermissions() {
@@ -159,10 +172,10 @@
             <!-- //== 페이스북 로그인 -->
             <div class="divider"></div>
             <fieldset>
-              <input type="text" name="email_or_username" placeholder="이메일 또는 이름을 입력해주세요."/>
+              <input type="text" name="email_or_username" placeholder="이메일 또는 이름을 입력해주세요." />
             </fieldset>
             <fieldset>
-              <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+              <input type="password" name="password" placeholder="패스워드를 입력하세요." data-placement="bottom"/>
             </fieldset>
             <button type="submit">로그인</button>
           </form>
@@ -200,7 +213,7 @@
               새로운 비밀번호를 보내드립니다.
             </div>
             <div class="field first">
-              <input type="email" title="text" name="email" placeholder="이메일을 입력해주세요." />
+              <input type="email" name="email" placeholder="이메일을 입력해주세요." />
             </div>
 
             <button type="submit">비밀번호 찾기</button>

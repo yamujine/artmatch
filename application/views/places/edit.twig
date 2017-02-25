@@ -147,12 +147,21 @@
         });
       }
 
+      // validation
       $("#patUploadForm").validate({
         rules: {
           name: "required",
           area: "required",
           address: "required",
-          image: "required",
+          image: {
+              required: function() {
+                  if($("#mainImageFile").data('img') === null) {
+                      return true;
+                  } else {
+                      return false;
+                  }
+              }
+          },
           description: {
             required: true,
             maxlength: 100
@@ -266,7 +275,7 @@
             </div>
           {% endif %}
           <img src="{{ image | image_url }}" class="preview{% if image is null %} hidden{% endif %}"/>
-          <input type="file" name="image" id="mainImageFile" accept="image/*"/>
+          <input type="file" name="image" id="mainImageFile" accept="image/*" data-img="{{ image }}"/>
         </div>
         <!-- //== 대표 이미지 선택 -->
         <!-- == 추가 이미지 선택 -->
