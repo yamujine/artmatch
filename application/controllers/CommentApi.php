@@ -7,7 +7,7 @@ class CommentApi extends API_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(['comment_model', 'artwork_comment_model', 'place_comment_model']);
+        $this->load->model(['artwork_comment_model', 'place_comment_model']);
         $this->validate_types();
     }
 

@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Places extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'artwork_comment_model', 'place_comment_model', 'comment_model', 'pick_model']);
+        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'artwork_comment_model', 'place_comment_model', 'pick_model']);
         $this->load->library('tag');
         $this->load->helper('url');
     }

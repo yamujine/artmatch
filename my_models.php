@@ -20,7 +20,6 @@
  *
  * @property Artwork_model          $artwork_model              artwork model
  * @property Place_model            $place_model                place model
- * @property Comment_model          $comment_model              deprecated comment model
  * @property Artwork_Comment_model  $artwork_comment_model      artwork comment model
  * @property Place_Comment_model    $place_comment_model        place comment model
  * @property Exhibition_model       $exhibition_model           exhibition model
