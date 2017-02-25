@@ -12,7 +12,6 @@ class ExhibitionApi extends API_Controller {
     public function accept() {
         $applied_artwork_ids = $this->input->post('applied_artwork_ids');
         $exhibition_id = $this->input->post('exhibition_id');
-        $email_key = [];
         $accepted_artwork_list = [];
         $to_send_list = [];
 
