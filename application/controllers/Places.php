@@ -246,6 +246,9 @@ class Places extends MY_Controller {
         alert_and_redirect('장소가 삭제되었습니다.', '/?type=' . TYPE_PLACES);
     }
 
+    /**
+     * @param $place_id
+     */
     public function apply($place_id) {
         $this->load->model('apply_model');
         $this->load->library('applylib');

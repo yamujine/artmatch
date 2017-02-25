@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block contents %}
+  <form method="POST">
   <!-- == 작품 지원 -->
   <div class="apply">
     <div class="message">
@@ -13,7 +14,7 @@
     </div>
     <div class="buttons">
       <a href="javascript:window.close();" class="cancelBtn">취소하기</a>
-      <button type="button" class="registerBtn">지원하기</button>
+      <button type="submit" class="registerBtn" disabled>지원하기</button>
     </div>
   </div>
   <!-- //== 작품 지원 -->
@@ -25,18 +26,49 @@
         {# 사용자가 전송을 누를 때 checked된 체크박스만 선택해 value를 넘기면 완료! #}
         {% for artwork in artworks %}
           <li class="item {% if (loop.index % 3) == 0 %}third{% endif %}">
-            <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"/>
+            <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"
+                   {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}
+                   />
             <label for="artwork_{{ artwork.id }}">
               <img class="imageThumb" src="{{ artwork.image | thumb_url }}"/>
             </label>
-            <div class="box">
-              1
-            </div>
+            <div class="box">✔</div>
           </li>
+
         {% endfor %}
       </ul>
     </div>
   </div>
+  </form>
 {% endblock %}
 
+{% block script %}
+  <script>
+    $(".cancelBtn").click(function () {
+      $("input[type=checkbox]").removeAttr("checked");
+      $("input[type=checkbox]").prop("checked", false);
+    });
 
+    $("form").validate({
+      rules: {
+        'artwork_id[]': {
+          required: true
+        }
+      },
+      messages: {
+        'artwork_id[]': {
+          required: "지원할 작품을 선택해 주세요."
+        }
+      }
+    });
+
+    $("input[type=checkbox]").click(function () {
+      if ($("input[type=checkbox]").is(":checked")) {
+        $(".registerBtn").removeAttr("disabled");
+      } else {
+        $(".registerBtn").attr("disabled", "disabled");
+      }
+    });
+
+  </script>
+{% endblock %}

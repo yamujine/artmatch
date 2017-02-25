@@ -25,6 +25,7 @@
  * @property Exhibition_model       $exhibition_model           exhibition model
  * @property Artwork_pick_model     $artwork_pick_model         pick model
  * @property Place_pick_model       $place_pick_model           pick model
+ * @property Apply_model            $apply_model                apply model
  *
  */
 class my_models

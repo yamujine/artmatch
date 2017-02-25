@@ -61,7 +61,7 @@ body {
           background: $pinkish-grey-two;
           border: none;
 
-          &:hover {
+          &:hover:enabled {
             background: $black-seven;
           }
         }
