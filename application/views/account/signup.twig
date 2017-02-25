@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block script %}
-  <script>
+  <script type="text/javascript">
     function checksUsername() {
       var username = document.getElementsByName("user_name")[0].value;
       var checkUsername = /^[A-Za-z0-9)(-_\.]{1,15}$/;
@@ -112,60 +112,102 @@
 
       return false;
     });
+
+    // 프로필 이미지 등록 변경
+    $('input[type=file]').change(function () {
+      var $this = $(this);
+
+      // FileReader 객체가 있는 경우
+      if (window.FileReader) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var src = e.target.result;
+
+          $this.closest('.profileImage').find('img').attr('src', src);
+        };
+
+        reader.readAsDataURL($this[0].files[0]);
+      } else {
+        var src = document.selection.createRange().text;
+
+        $this.closest('.profileImage').find('img').attr('src', src);
+      }
+    });
   </script>
 {% endblock %}
 
 {% block contents %}
+  <!-- == 회원가입 -->
   <div class="patSignUp">
     <div class="container">
-      <div class="logo">
-        <img src="{{ 'images/logo_black.png' | static_url }}" width="268px"/>
-      </div>
-      <h2>가입하여 여러분의 작품을 전시하세요.</h2>
+      <!-- == 로고 -->
+      <div class="logo"></div>
+      <!-- //== 로고 -->
+      <!-- == 타이틀 -->
+      <div class="title">잠자고 있는 여러분의 작품을 깨워주세요.</div>
+      <!-- //== 타이틀 -->
       {% if facebook_profile_image_url %}
-        <img src="{{ facebook_profile_image_url }}" width="120px" height="120px" />
+        <img src="{{ facebook_profile_image_url }}" width="120px" height="120px"/>
       {% endif %}
+
+      <!-- == 회원가입 폼 -->
       <form id="patSignUpForm">
-        <fieldset class="patUserTypeField">
-          <div class="radio checkbox">
-            <input id="creatorType" type="radio" name="type" checked="checked" value="{{ USER_TYPE_ARTIST }}">
-            <label for="creatorType">창작자</label>
-          </div>
-          <div class="radio checkbox">
-            <input id="placeType" type="radio" name="type" value="{{ USER_TYPE_PLACE_OWNER }}">
-            <label for="placeType">공간소유자</label>
-          </div>
-        </fieldset>
-        <fieldset>
-          {% if email and not duplicated_email %}
-            <input type="hidden" name="email" value = "{{ email }}" />
-            <div> {{ email }} </div>
+        <div class="signUpMessage">
+          최소한의 정보만으로 여러분의 잠들어 있는 작품을<br/>
+          다시 깨울 수 있는 기회를 잡으세요.
+        </div>
+        <div class="profileImage">
+          {% if facebook_profile_image_url is empty %}
+            <div class="dimm"></div>
+            <div class="editBtn">
+              <input type="file" name="profileImage"/>
+            </div>
+            <img src="{{ 'images/avatar@2x.png' | static_url }}" class="img-circle"/>
           {% else %}
-            <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()" value = "{{ email }}" />
+            <img src="{{ facebook_profile_image_url }}" class="img-circle"/>
           {% endif %}
-          <input type="hidden" id="checkEmail" name="checkEmail" value="uncheck"/>
-          <div id="warningEmail">{% if duplicated_email %}중복된 이메일 입니다.{% endif %}</div>
-        </fieldset>
+        </div>
         <fieldset>
           <input type="text" name="user_name" placeholder="아이디" onkeyup="checksUsername()"/>
           <input type="hidden" id="checkUsername" name="checkUsername" value="uncheck"/>
           <div id="warningUsername"></div>
         </fieldset>
         <fieldset>
-          <input type="password" name="password" placeholder="패스워드를 입력하세요."/>
+          {% if email and not duplicated_email %}
+            <input type="hidden" name="email" value="{{ email }}"/>
+            <div> {{ email }} </div>
+          {% else %}
+            <input type="text" name="email" placeholder="이메일" onkeyup="checksEmail()" value="{{ email }}"/>
+          {% endif %}
+          <input type="hidden" id="checkEmail" name="checkEmail" value="uncheck"/>
+          <div id="warningEmail">{% if duplicated_email %}중복된 이메일 입니다.{% endif %}</div>
+        </fieldset>
+        <fieldset>
+          <input type="password" name="password" placeholder="비밀번호"/>
         </fieldset>
         <fieldset>
           {% if facebook_profile_image_url %}
-            <input type="hidden" name="profile_image" value = "{{ facebook_profile_image_url }}" />
-            <input type="hidden" name="facebook_id" value="{{ facebook_id }}" />
-            <input type="hidden" name="is_facebook" value = "1" />
+            <input type="hidden" name="profile_image" value="{{ facebook_profile_image_url }}"/>
+            <input type="hidden" name="facebook_id" value="{{ facebook_id }}"/>
+            <input type="hidden" name="is_facebook" value="1"/>
           {% else %}
-            <input type="file" name="profile_image"/>
-            <input type="hidden" name="is_facebook" value = "0" />
+            <input type="hidden" name="is_facebook" value="0"/>
           {% endif %}
+        </fieldset>
+        <fieldset class="patUserTypeField">
+          <div class="radio checkbox">
+            <input id="creatorType" type="radio" name="type" checked="checked" value="{{ USER_TYPE_ARTIST }}">
+            <label for="creatorType"></label>
+          </div>
+          <div class="radio checkbox">
+            <input id="placeType" type="radio" name="type" value="{{ USER_TYPE_PLACE_OWNER }}">
+            <label for="placeType"></label>
+          </div>
         </fieldset>
         <button type="submit">회원가입</button>
       </form>
+      <!-- //== 회원가입 폼 -->
     </div>
   </div>
+  <!-- == 회원가입 -->
 {% endblock %}
