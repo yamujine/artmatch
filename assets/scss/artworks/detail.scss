@@ -635,15 +635,8 @@ body {
                   right: 0;
 
                   .commentEditSubmit {
+                    position: relative;
                     color: $black;
-                  }
-
-                  .commentEditCancelBtn {
-                    color: $lipstick;
-                  }
-
-                  .commentEditSubmit, .commentEditCancelBtn {
-                    margin-right: 14px;
 
                     &:after {
                       position: absolute;
@@ -651,10 +644,30 @@ body {
                       width: 1px;
                       height: 12px;
                       background: $white;
-                      right: 50%;
+                      right: -8px;
                       top: 50%;
                       margin: -6px 0 0 0;
                     }
+                  }
+
+                  .commentEditCancelBtn {
+                    position: relative;
+                    color: $lipstick;
+
+                    &:after {
+                      position: absolute;
+                      content: '';
+                      width: 1px;
+                      height: 12px;
+                      background: $white;
+                      right: -10px;
+                      top: 50%;
+                      margin: -6px 0 0 0;
+                    }
+                  }
+
+                  .commentEditSubmit, .commentEditCancelBtn {
+                    margin-right: 14px;
                   }
 
                   button {
