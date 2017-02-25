@@ -144,8 +144,22 @@
         });
       }
 
-      $("form").validate({
+      $("#patUploadForm").validate({
         rules: {
+          title: "required",
+          image: {
+            required: function() {
+              if($("#mainImageFile").data('img') === null) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+          },
+          description: {
+            required: true,
+            maxlength: 100
+          },
           tags: {
             required: true,
             maxlength: 60
@@ -153,16 +167,17 @@
         },
         messages: {
           title: {
-            required: "작품명을 입력 해 주세요."
+            required: "작품명을 입력해 주세요."
           },
           image: {
-            required: "사진을 추가 해 주세요."
+            required: "사진을 추가해 주세요."
           },
           description: {
-            required: "작품 설명을 입력 해 주세요."
+            required: "작품설명을 입력해 주세요.",
+            maxlength: "작품설명은 100자 까지 입력 가능 합니다."
           },
           tags: {
-            required: "태그를 입력 해 주세요.",
+            required: "태그를 입력해 주세요.",
             maxlength: "태그는 60자 까지 입력 가능 합니다."
           }
         }
@@ -204,7 +219,7 @@
             </div>
           {% endif %}
           <img src="{{ image | image_url }}" class="preview{% if image is null %} hidden{% endif %}"/>
-          <input type="file" name="image" id="mainImageFile" accept="image/*" {% if image is null %}required{% endif %}/>
+          <input type="file" name="image" id="mainImageFile" accept="image/*" data-img="{{ image }}"/>
         </div>
         <!-- //== 대표 이미지 선택 -->
         <!-- == 저작권 -->
