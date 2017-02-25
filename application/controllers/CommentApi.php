@@ -77,8 +77,7 @@ class CommentApi extends API_Controller {
             $this->return_fail_response('102', ['message' => 'Failed to count comment']);
         }
 
-        $artwork['id'] = $type_id;
-        $insert_comment = $this->twig->render('artworks/comment', ['comment' => $comment, 'artwork' => $artwork]);
+        $insert_comment = $this->twig->render('api/comments', ['comments' => [$comment], 'type' => $type, 'type_id' => $type_id]);
 
         $this->return_success_response([
             'type' => $type,
