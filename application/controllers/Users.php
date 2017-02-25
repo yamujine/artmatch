@@ -5,6 +5,9 @@ class Users extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['user_model', 'pick_model', 'artwork_model', 'place_model']);
+        $this->twig->addGlobal('APPLY_STATUS_IN_REVIEW', APPLY_STATUS_IN_REVIEW);
+        $this->twig->addGlobal('APPLY_STATUS_REJECTED', APPLY_STATUS_REJECTED);
+        $this->twig->addGlobal('APPLY_STATUS_ACCEPTED', APPLY_STATUS_ACCEPTED);
     }
 
     public function detail($user_name) {
@@ -36,7 +39,7 @@ class Users extends MY_Controller {
             $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place->id);
 
             foreach ($exhibitions as $exhibition) {
-                $applied_artworks = $this->artwork_model->get_in_review_artworks_by_exhibition_id($exhibition->id);
+                $applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);
 
                 if (!empty($applied_artworks)) {
                     $exhibition->applied_artworks = $applied_artworks;

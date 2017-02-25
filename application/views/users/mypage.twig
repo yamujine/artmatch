@@ -234,7 +234,11 @@
               {% for artwork in exhibition.applied_artworks %}
                 작품명 :
                 {{ artwork.title }}
-                <button class="appliedAccept" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}">accept</button>
+                {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW %}
+                  <button class="appliedAccept" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}">등록하기</button>
+                {% else %}
+                  <button disabled>{% if artwork.apply_status == APPLY_STATUS_REJECTED %} reject {% else %} accepted {% endif %}</button>
+                {% endif %}
               {% endfor %}
               <br>
             {% endfor %}
