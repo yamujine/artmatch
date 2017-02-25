@@ -259,13 +259,19 @@ class Places extends MY_Controller {
         $default_exhibition = $this->exhibition_model->get_by_place_id($place_id);
 
         if ($this->input->method() === 'get') {
-            $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id($this->accountlib->get_user_id(), $default_exhibition->id);
+            $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id(
+                $this->accountlib->get_user_id(),
+                $default_exhibition->id
+            );
         } elseif ($this->input->method() === 'post') {
             $artwork_ids = $this->input->post('artwork_id');
             foreach ($artwork_ids as $artwork_id) {
-                $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($default_exhibition->id, $artwork_id);
-                if (empty($result)) {
-                    $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW);
+                $is_valid_artwork = !empty($this->artwork_model->get_bare_by_id($artwork_id));
+                if ($is_valid_artwork) {
+                    $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($default_exhibition->id, $artwork_id);
+                    if (empty($result)) {
+                        $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW);
+                    }
                 }
             }
 
