@@ -308,6 +308,10 @@ body {
             font-weight: 500;
             color: $black;
             letter-spacing: -0.4px;
+
+            a {
+              color: $black;
+            }
           }
           // 작품 상태
           .status {
