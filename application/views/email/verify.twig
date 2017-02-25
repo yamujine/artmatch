@@ -1,3 +1,31 @@
-<a href="{{ base_url() }}account/verify?key={{ code }}" style="color: white; font-weight: normal; text-decoration: none; word-break: break-word; font-size: 20px; line-height: 26px; border-top: 14px solid; border-bottom: 14px solid; border-right: 32px solid; border-left: 32px solid; background-color: #2ab27b; border-color: #2ab27b; display: inline-block; letter-spacing: 1px; min-width: 80px; text-align: center; border-radius: 4px; text-shadow: 0 1px 1px rgba(0,0,0,0.25);">
-클릭하여 이메일 인증 완료
-</a>
+{% extends "email/base.twig" %}
+
+{% block hidden_text %}
+  PICK ART YOU 이메일 인증
+{% endblock %}
+
+{% block contents %}
+<table width="420" cellpadding="0" cellspacing="0" border="0" class="container">
+  <tr>
+    <td height="10" style="font-size: 10px; line-height: 10px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666;" class="body-text">
+      <p style="font-family: 'Noto Sans KR', sans-serif; font-size:16px; word-break:keep-all; line-height:22px; letter-spacing: -0.2px; color:#666666; padding:0; margin:0;" class="body-text"><multiline>
+          안녕하세요. <span style="font-weight:700;">{{ user_name }}</span>님<br><br>
+          누구나 전시자가 될 수 있는 공간 PICK ART YOU에 오신 것을 환영합니다 :)
+          PICK ART YOU는 다음세대재단에서 진행하는 소셜이노베이션캠프36에서 만든
+          대학생 창작자의 작품과 전시가 가능한 장소를 연결해주는 서비스입니다.<br><br>
+          지금 바로 작품 또는 공간을 올려보세요.
+        </multiline></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <p style="padding:43px 0 54px 0;">
+        <a href="{{ base_url() }}account/verify?key={{ code }}" _target="_blank" style="background-color:black;padding:15px 45px;color:white;text-decoration:none; font-weight:500;">PICK ART YOU 지금 시작하기 &nbsp;&gt;</a>
+      </p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

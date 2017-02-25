@@ -5,38 +5,71 @@
 {% endblock %}
 
 {% block contents %}
-  <!-- == 작품 지원 -->
-  <div class="apply">
-    <div class="message">
-      전시를 원하는 작품을 선택하신 후<br>
-      <span class="underline">지원하기 버튼을 누르시면 해당 장소 대표님께 전달</span>됩니다!
+  <form id="applyForm" method="POST">
+    <!-- == 작품 지원 -->
+    <div class="apply">
+      <div class="message">
+        전시를 원하는 작품을 선택하신 후<br>
+        <span class="underline">지원하기 버튼을 누르시면 해당 장소 대표님께 전달</span>됩니다!
+      </div>
+      <div class="buttons">
+        <a href="javascript:window.close();" class="cancelBtn">취소하기</a>
+        <button type="submit" class="registerBtn" disabled>지원하기</button>
+      </div>
     </div>
-    <div class="buttons">
-      <a href="javascript:window.close();" class="cancelBtn">취소하기</a>
-      <button type="button" class="registerBtn">지원하기</button>
-    </div>
-  </div>
-  <!-- //== 작품 지원 -->
+    <!-- //== 작품 지원 -->
 
-  <div class="patItemList">
-    <div class="container">
-      <ul class="itemList artworkList">
-        {# TODO: 아래의 이미지를 클릭하면 체크박스의 checked가 true가 됨 #}
-        {# 사용자가 전송을 누를 때 checked된 체크박스만 선택해 value를 넘기면 완료! #}
-        {% for artwork in artworks %}
-          <li class="item {% if (loop.index % 3) == 0 %}third{% endif %}">
-            <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"/>
-            <label for="artwork_{{ artwork.id }}">
-              <img class="imageThumb" src="http://cfile4.uf.tistory.com/image/276F413C576180C72A82CA"/>
-            </label>
-            <div class="box">
-              1
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
+    <!-- == 지원 작품 목록 -->
+    <div class="patItemList">
+      <div class="container">
+        <ul class="itemList artworkList">
+          {% for artwork in artworks %}
+            <li class="item {% if (loop.index % 3) == 0 %}third{% endif %}">
+              <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"
+                     {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}
+                     />
+              <label for="artwork_{{ artwork.id }}">
+                <img class="imageThumb" src="{{ artwork.image | thumb_url }}"/>
+              </label>
+              <div class="box">✔</div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-  </div>
+    <!-- //== 지원 작품 목록 -->
+  </form>
 {% endblock %}
 
+{% block script %}
+  <script>
+    $(function () {
+      $("#applyForm").find(".cancelBtn").click(function () {
+        // uncheck all
+        $("#applyForm").find("input[type=checkbox]").removeAttr("checked").prop("checked", false);
+      });
 
+      $("#applyForm").validate({
+        rules: {
+          'artwork_id[]': {
+            required: true
+          }
+        },
+        messages: {
+          'artwork_id[]': {
+            required: "지원할 작품을 선택해 주세요."
+          }
+        }
+      });
+
+      $("#applyForm").find("input[type=checkbox]").click(function () {
+        if (!$("input[type=checkbox]").is(":checked")) {
+          $("#applyForm").find(".registerBtn").attr("disabled", "disabled");
+        } else {
+          $("#applyForm").find(".registerBtn").removeAttr("disabled");
+        }
+      });
+
+    });
+  </script>
+{% endblock %}

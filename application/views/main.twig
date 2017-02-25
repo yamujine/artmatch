@@ -70,8 +70,7 @@
         event.stopPropagation();
       });
 
-      // PICK
-      $('.wrap').each(function () {
+      var attach_pick_event = function () {
         var wrap = $(this);
         var li = $(this).parent();
 
@@ -106,7 +105,10 @@
 
           return false;
         });
-      });
+      };
+
+      // PICK
+      $('.wrap').each(attach_pick_event);
 
       // 더 보기
       $('.patItemMoreButton').click(function () {
@@ -126,7 +128,7 @@
 
         $.get('/api/contents/list', data)
           .done(function (data) {
-            $('.itemList').append(data);
+            var appended = $('.itemList').append(data);
 
             $('.patLoader').hide();
 
@@ -139,6 +141,9 @@
             if (offset + 9 < totalCount) {
               $('.patItemMoreButton').show();
             }
+
+            // PICK
+            $(appended).find('.wrap').each(attach_pick_event);
           });
       });
 

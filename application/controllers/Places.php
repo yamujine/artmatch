@@ -246,6 +246,9 @@ class Places extends MY_Controller {
         alert_and_redirect('장소가 삭제되었습니다.', '/?type=' . TYPE_PLACES);
     }
 
+    /**
+     * @param $place_id
+     */
     public function apply($place_id) {
         $this->load->model('apply_model');
         $this->load->library('applylib');
@@ -273,7 +276,7 @@ class Places extends MY_Controller {
 
             $this->applylib->send_apply_email($place_owner->email, $artwork_ids);
 
-            alert_and_close_popup('지원이 완료되었습니다.');
+            alert_and_redirect('지원이 완료되었습니다.', '/places/' . $place_id);
         }
 
         $this->twig->display('places/apply', ['exhibition' => $default_exhibition, 'artworks' => $artworks]);
