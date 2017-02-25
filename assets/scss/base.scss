@@ -110,6 +110,45 @@ body {
               }
             }
 
+            &.patGnbCancel {
+              width: 62px;
+              height: 26px;
+              border-radius: 30px;
+              border: 1px solid $brownish-grey;
+              margin: 13px 18px 13px 0;
+              cursor: pointer;
+
+              a {
+                display: inline;
+                padding: 0 19px;
+                font-family: ArialMT, Arial, sans-serif;
+                font-size: 12px;
+                color: $white-thirteen;
+              }
+
+              &:hover {
+                border-color: $warm-grey-four;
+              }
+            }
+
+            &.patGnbSubmit {
+              width: 62px;
+              height: 26px;
+              border-radius: 30px;
+              border: 1px solid $white-two;
+              margin: 13px 18px 13px 0;
+              cursor: pointer;
+              background: $white-two;
+
+              a {
+                display: inline;
+                padding: 0 19px;
+                font-family: ArialMT, Arial, sans-serif;
+                font-size: 12px;
+                color: $black;
+              }
+            }
+
             &.patUserProfile {
               a {
                 font-family: 'Noto Sans KR', sans-serif;
