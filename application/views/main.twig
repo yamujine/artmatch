@@ -70,7 +70,7 @@
         event.stopPropagation();
       });
 
-      var attach_pick_event = function() {
+      var attach_pick_event = function () {
         var wrap = $(this);
         var li = $(this).parent();
 
@@ -119,8 +119,14 @@
         var type = $(this).data('type');
         var offset = $('.patItemList li').length;
         var totalCount = $(this).data('total-count');
+        var query = $(this).data('query');
 
-        $.get('/api/contents/list', {type: type, offset: offset, limit: 9})
+        var data = {type: type, offset: offset, limit: 9};
+        if (query) {
+          data['q'] = query;
+        }
+
+        $.get('/api/contents/list', data)
           .done(function (data) {
             var appended = $('.itemList').append(data);
 
@@ -184,7 +190,7 @@
       <!-- //== 탭 -->
       <!-- == 결과 -->
       <div class="result">
-        총 <span class="number">17</span>건
+        총 <span class="number">{{ total_count }}</span>건
       </div>
       <!-- //== 결과 -->
       {% if items|length == 0 %}
@@ -212,7 +218,7 @@
                       미리 보기 <i class="glyphicon glyphicon-menu-right"></i>
                     </div>
                     {# 썸네일 이미지 #}
-                    <img class="img" src="{{ item.image | thumb_url }}" />
+                    <img class="img" src="{{ item.image | thumb_url }}"/>
                     <div class="meta">
                       <div class="title">{{ item.title }}</div>
                       <div class="pick">
@@ -286,7 +292,7 @@
   {% if total_count > 9 %}
     {# 더 보기 버튼 #}
     <div class="patItemMore">
-      <button class="patItemMoreButton" data-type="{{ type }}" data-total-count="{{ total_count }}">
+      <button class="patItemMoreButton" data-type="{{ type }}" {% if query %}data-query="{{ query }}"{% endif %} data-total-count="{{ total_count }}">
         더 보기 <i class="glyphicon glyphicon-menu-down"></i>
       </button>
     </div>
