@@ -15,7 +15,7 @@
     {% if session.id == comment.user_id %}
       <button class="commentEditBtn" data-id="{{ comment.id }}">수정</button>
       <button class="commentEditBtnCancel" style="display:none">수정취소</button>
-      <button class="commentDeleteBtn" data-type="{{ type }}" data-type-id="{{ type.id }}" data-id="{{ comment.id }}">삭제</button>
+      <button class="commentDeleteBtn" data-type="{{ type }}" data-type-id="{{ type_id }}" data-id="{{ comment.id }}">삭제</button>
     {% endif %}
     <!-- == 댓글 수정 폼 -->
     <div id="commentEditDiv_{{ comment.id }}" style="display:none">
