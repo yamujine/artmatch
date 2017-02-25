@@ -23,7 +23,8 @@
  * @property Artwork_Comment_model  $artwork_comment_model      artwork comment model
  * @property Place_Comment_model    $place_comment_model        place comment model
  * @property Exhibition_model       $exhibition_model           exhibition model
- * @property Pick_model             $pick_model                 pick model
+ * @property Artwork_Pick_model     $artwork_pick_model         pick model
+ * @property Place_Pick_model       $place_pick_model           pick model
  *
  */
 class my_models
