@@ -397,7 +397,7 @@
         display: inline-block;
         width: 76px;
         height: 24px;
-        background: url(/images/ic-keyword.png) center center no-repeat;
+        background: url(/static/images/ic-keyword.png) center center no-repeat;
         background-size: 100% 100%;
       }
 
@@ -485,7 +485,7 @@
                   margin-top: 4px;
                   width: 8px;
                   height: 12px;
-                  background: url(/images/pin.png) no-repeat;
+                  background: url(/static/images/pin.png) no-repeat;
                 }
                 .keyword {
                   display: inline-block;
@@ -536,7 +536,7 @@
             .wrap {
               .imgThumb {
                 .pickBtn {
-                  background: url(/images/main_btn_pick_select.png);
+                  background: url(/static/images/main_btn_pick_select.png);
                 }
               }
               .meta {
@@ -557,7 +557,7 @@
                     padding: 10px 10px 0 0;
                     top: -10px;
                     right: -10px;
-                    background: url(/images/main_btn_pick_select_hover.png) top right no-repeat;
+                    background: url(/static/images/main_btn_pick_select_hover.png) top right no-repeat;
                   }
                 }
               }
@@ -620,7 +620,7 @@
                 right: 0;
                 display: none;
                 // TODO: 백그라운드 이미지 URL 전부 수정 필요
-                background: url(/images/main_btn_pick_normal.png);
+                background: url(/static/images/main_btn_pick_normal.png);
                 outline: none;
                 border: none;
               }
@@ -633,11 +633,11 @@
 
                 &.recruit {
                   width: 52px;
-                  background: url(/images/tag_ing.png);
+                  background: url(/static/images/tag_ing.png);
                 }
                 &.recruitFinish {
                   width: 63px;
-                  background: url(/images/tag_finish.png);
+                  background: url(/static/images/tag_finish.png);
                 }
               }
             }
