@@ -32,23 +32,14 @@ class ExhibitionApi extends API_Controller {
             }
             
             $accepted_artwork = $this->artwork_model->get_by_id($applied_artwork_id);
-            //이메일 리스트
-            $email_key[] = $accepted_artwork->user->email;
-            //모든 등록된 작품
             $accepted_artwork_list[] = $accepted_artwork;
         }
-        //중복값 제거
-        $email_key = array_unique($email_key);
-        foreach ($email_key as $i=>$email) {
-            foreach ($accepted_artwork_list as $accepted_artwork) {
-                if ($email === $accepted_artwork->user->email) {
-                    //같은 유저의 작품은 하나의 dept로 합침
-                    $to_send_list[$i][] = $accepted_artwork;
-                }
-            }
-        }
 
-        $this->applylib->send_accepted_email($to_send_list, $exhibition_id);
+        foreach ($accepted_artwork_list as $accepted_artwork) {
+            //같은 유저의 작품은 하나의 dept로 합침
+            $to_send_list[$accepted_artwork->user->email][] = $accepted_artwork;
+        }
+        $this->applylib->send_accepted_email($to_send_list);
         $this->return_success_response(['message' => '선정이 완료되었습니다.']);
     }
 
