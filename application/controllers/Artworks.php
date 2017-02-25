@@ -60,7 +60,7 @@ class Artworks extends MY_Controller {
         $data = [];
 
         // Form validation
-        $this->form_validation->set_rules('title', 'title', 'required|trim');
+        $this->form_validation->set_rules('title', 'title', 'required|trim|max_length[20]');
         $this->form_validation->set_rules('status', 'status', 'required');
         $this->form_validation->set_rules('for_sale', 'for_sale', 'required');
         $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
