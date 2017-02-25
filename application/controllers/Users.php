@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Users extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['user_model', 'pick_model', 'artwork_model', 'place_model']);
+        $this->load->model(['user_model', 'artwork_pick_model', 'place_pick_model', 'artwork_model', 'place_model']);
     }
 
     public function detail($user_name) {
@@ -62,9 +62,9 @@ class Users extends MY_Controller {
 
         // 받은 pick 카운트
         if ($user->type === USER_TYPE_ARTIST) {
-            $given_pick_count = $this->pick_model->get_given_artwork_pick_by_user_id($user->id);
+            $given_pick_count = $this->artwork_pick_model->get_given_artwork_pick_by_user_id($user->id);
         } else if ($user->type === USER_TYPE_PLACE_OWNER) {
-            $given_pick_count = $this->pick_model->get_given_place_pick_by_user_id($user->id);
+            $given_pick_count = $this->place_pick_model->get_given_place_pick_by_user_id($user->id);
         }
 
         // 내가 pick한 작품 장소 리스트
