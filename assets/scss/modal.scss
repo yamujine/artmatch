@@ -1,0 +1,109 @@
+@import "helper/colorchips";
+@import "helper/mixins";
+
+body {
+  &.modal-open {
+    .modal {
+      &.patModal {
+        overflow: hidden;
+      }
+    }
+  }
+
+  .patModal {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    margin-top: -175px;
+    margin-left: -175px;
+
+    .modal-dialog {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+
+      .modal-content {
+        height: 100%;
+
+        .modal-header {
+          padding: 8px;
+          border: none;
+
+          button {
+            outline: none;
+          }
+        }
+
+        .modal-body {
+          margin: 0;
+          padding: 0;
+          text-align: center;
+
+          // 모달 타이틀
+          .title {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+            color: $black-66;
+            margin: 4px 0 0 0;
+          }
+          // -- 모달 타이틀
+
+          // 모달 설명
+          .description {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 12px;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+            line-height: 1.58;
+            color: $black-66;
+            margin: 16px 0 0 0;
+          }
+          // -- 모달 설명
+
+          // 입력 필드 공통
+          .field {
+            &.first {
+              margin: 50px 0 0 0;
+            }
+
+            input[type=text], input[type=email], input[type=password] {
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 12px;
+              padding: 0 0 0 14px;
+              color: $black;
+              width: 297px;
+              height: 45px;
+              border: 1px solid $white-ten;
+              margin-bottom: 16px;
+              outline: none;
+              @include prefix(border-radius, 5px);
+
+              @include placeholder {
+                opacity: 0.8;
+              }
+            }
+          }
+          // -- 입력 필드 공통
+
+          // submit 버튼 공통
+          button[type=submit] {
+            width: 300px;
+            height: 46px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+            color: $white-two;
+            background: $black;
+            border: none;
+            @include prefix(border-radius, 5px);
+          }
+          // -- submit 버튼 공통
+        }
+      }
+    }
+  }
+}
