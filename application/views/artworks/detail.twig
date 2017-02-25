@@ -176,6 +176,22 @@
         $(this).hide();
         // 로더 보여주기
         $('.patLoader').show();
+
+        var type = $(this).data('type');
+        var type_id = $(this).data('type-id');
+        var offset = $('.comments li').length;
+
+        $.post('/api/comments', {type: type, type_id: type_id, offset: offset, limit: 3})
+          .done(function (data) {
+            $('.comments').prepend(data.body.more_comment);
+
+            $('.patLoader').hide();
+
+            if (offset + 3 < data.body.comment_count) {
+              $('.commentMoreBtn').show();
+            }
+          });
+
       });
 
       // PICK
@@ -205,7 +221,7 @@
           });
         return false;
       });
-  
+
       $(document).on('click', '.artworkCommentToggleBtn', function() {
         var $this = $(this);
         $.ajax({
@@ -355,18 +371,19 @@
           <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>
           <hr class="divider"/>
           {% if comment_count > 3 %}
-          <div class="commentMore">
-            <div class="patLoader"></div>
-            <button class="commentMoreBtn">
-              이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
-            </button>
-          </div>
+            <div class="commentMore">
+              <div class="patLoader"></div>
+              <button class="commentMoreBtn"
+                      data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}">
+                이전 댓글 더보기 <i class="glyphicon glyphicon-menu-down"></i>
+              </button>
+            </div>
           {% endif %}
           <ul class="comments">
             {% import 'macro/comment.item.twig' as comment_macro %}
-              {% for comment in comments %}
-                {{ comment_macro.render_comment_item(comment, TYPE_ARTWORKS, artwork.id) }}
-              {% endfor %}
+            {% for comment in comments %}
+              {{ comment_macro.render_comment_item(comment, TYPE_ARTWORKS, artwork.id) }}
+            {% endfor %}
           </ul>
         </div>
         <!-- //== 댓글 -->
