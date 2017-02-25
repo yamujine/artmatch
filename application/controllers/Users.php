@@ -29,6 +29,7 @@ class Users extends MY_Controller {
     private function _applied_list() {
         $this->load->model(['exhibition_model', 'place_model', 'artwork_model']);
         $exhibition_list = [];
+        $total_applied_count = 0;
 
         $places = $this->place_model->get_all_by_user_id($this->accountlib->get_user_id());
 
@@ -40,13 +41,15 @@ class Users extends MY_Controller {
 
                 if (!empty($applied_artworks)) {
                     $exhibition->applied_artworks = $applied_artworks;
+                    $total_applied_count += count($applied_artworks);
                     $exhibition_list[] = $exhibition;
                 }
             }
         }
         return [
             'show_applied_list' => true,
-            'exhibitions' => $exhibition_list
+            'exhibitions' => $exhibition_list,
+            'total_applied_count' => $total_applied_count
         ];
     }
 

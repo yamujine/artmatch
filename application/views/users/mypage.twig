@@ -197,7 +197,7 @@
       <!-- //== 픽 탭 -->
     {% endif %}
   {% endif %}
-  
+
   {% if not is_my_page or (is_my_page and pick_type is empty) %}
     {% set items = mine %}
   {% else %}
@@ -206,7 +206,7 @@
 
   {% if show_applied_list is not empty %}
     <div class="exhibitionApply">
-      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">10</span></div>
+      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ total_applied_count }}</span></div>
       <div class="rightSection">
         <div class="selectedCount">선택된 작품 <span class="number">6</span></div>
         <button class="selectBtn">채택</button>
@@ -241,10 +241,10 @@
               {# 전시에 지원한 작품 #}
               {% for artwork in exhibition.applied_artworks %}
                 <li class="item applied">
-                  <img src="{{ artwork.image | thumb_url}}" class="crop"/>
+                  <img src="{{ artwork.image | image_url}}" class="crop"/>
                   <div class="meta">
                     <div class="title">{{ artwork.title }}</div>
-                    <div class="name">김트리</div>
+                    <div class="name">{{ artwork.user.user_name }}</div>
                   </div>
                   <button class="button" data-exhibition-id="{{ exhibition.id }}" data-artwork-id="{{ artwork.id }}" data-status="{{ artwork.apply_status }}"></button>
                 </li>
