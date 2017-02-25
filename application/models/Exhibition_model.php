@@ -76,6 +76,13 @@ class Exhibition_model extends CI_Model {
             ->get()->result();
     }
 
+    public function get_exhibition_by_id($exhibition_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('id', $exhibition_id)
+            ->get()->row();
+    }
+
     /**
      * 해당 작품이 전시중인지 리턴하는 함수
      * @param $artwork_id
@@ -167,5 +174,18 @@ class Exhibition_model extends CI_Model {
         }
 
         return true;
+    }
+
+    public function insert_exhibition_artworks($exhibition_id, $artwork_id) {
+        $data = [
+            'exhibition_id' => $exhibition_id,
+            'artwork_id' => $artwork_id
+        ];
+
+        if (!$this->db->insert(self::ARTWORK_TABLE_NAME, $data)) {
+            return false;
+        }
+
+        return $this->db->insert_id();
     }
 }
