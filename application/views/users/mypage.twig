@@ -226,14 +226,17 @@
           {% elseif is_applied_list %}
             {# 장소 #}
             {% for place in places %}
-              {{ place.name }}
+              장소명 : {{ place.name }}
+              <br>
               {# 전시 #}
               {% for exhibition in place.exhibitions %}
-                {{ exhibition.title }}
+                전시명 : {{ exhibition.title }}
+                <br>
                 {# 전시에 지원학 작품 #}
                 {% for artwork in exhibition.applied_artworks %}
                   {{ mypage_macro.render_mypage_grid_item(artwork, TYPE_ARTWORKS, loop.index) }}
                 {% endfor %}
+                <br>
               {% endfor %}
             {% endfor %}
           {% endif %}
