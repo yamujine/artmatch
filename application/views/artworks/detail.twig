@@ -173,22 +173,24 @@
 
       // 댓글 더 보기
       $('.commentMoreBtn').click(function () {
-        $(this).hide();
+        var $this = $(this);
+        var type = $this.data('type');
+        var type_id = $this.data('type-id');
+        var current_offset = $('.comments li').length;
+
+        // 더보기 버튼 숨기기
+        $this.hide();
         // 로더 보여주기
         $('.patLoader').show();
 
-        var type = $(this).data('type');
-        var type_id = $(this).data('type-id');
-        var offset = $('.comments li').length;
-
-        $.post('/api/comments', {type: type, type_id: type_id, offset: offset, limit: 3})
+        $.post('/api/comments', {type: type, type_id: type_id, offset: current_offset, limit: 3})
           .done(function (data) {
-            $('.comments').prepend(data.body.more_comment);
+            $('.comments').prepend(data.body.comments);
 
             $('.patLoader').hide();
 
-            if (offset + 3 < data.body.comment_count) {
-              $('.commentMoreBtn').show();
+            if (current_offset + 3 < data.body.comment_count) {
+              $this.show();
             }
           });
 
