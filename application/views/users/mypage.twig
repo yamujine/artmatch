@@ -22,40 +22,46 @@
         });
 
       // 비밀번호 변경
-      $('#password_change_form').submit(function () {
-        var currentPasswordElem = $("input[name=current_password]");
-        var newPasswordElem = $("input[name=new_password]");
+      $('#passwordChangeForm').submit(function (event) {
+        event.preventDefault();
 
-        if (!currentPasswordElem.val()) {
+        var currentPasswordElement = $("input[name=currentPassword]");
+        var newPasswordElement = $("input[name=newPassword]");
+
+        if (!currentPasswordElement.val()) {
           alert('기존 비밀번호를 입력해 주세요');
-          currentPasswordElem.focus();
+          currentPasswordElement.focus();
+
           return false;
         }
 
-        if (!newPasswordElem.val()) {
+        if (!newPasswordElement.val()) {
           alert('새로운 비밀번호를 입력해 주세요');
-          newPasswordElem.focus();
+          newPasswordElement.focus();
+
           return false;
         }
-
-        data = {};
-        data.current_password = currentPasswordElem.val();
-        data.new_password = newPasswordElem.val();
 
         $.ajax({
           method: "POST",
           url: "/api/users/change_password",
-          data: data
-        }).done(function (data) {
-          if (data.result === true) {
-            alert('비밀번호가 성공적으로 변경되었습니다');
-            $('#password_modal').modal('hide');
-          } else {
-            alert(data.body.message);
+          data: {
+            current_password: currentPasswordElement.val(),
+            new_password: newPasswordElement.val()
           }
+        }).done(function (data) {
+          if (!data.result) {
+            alert(data.body.message);
+
+            return false;
+          }
+
+          alert('비밀번호가 성공적으로 변경되었습니다');
+          $('#passwordChangeModal').modal('hide');
         }).fail(function () {
           alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
         });
+
         return false;
       });
 
@@ -103,7 +109,7 @@
       {% if is_my_page %}
         <!-- == 유저 수정 버튼 -->
         <div class="editButtons">
-          <button class="passwordEditBtn">비밀번호 변경</button>
+          <button class="passwordEditBtn" data-toggle="modal" data-backdrop="static" data-keyboard="false"  data-target="#passwordChangeModal">비밀번호 변경</button>
         </div>
         <!-- //== 유저 수정 버튼 -->
       {% endif %}
@@ -207,7 +213,7 @@
     <!-- == 아이템 없음 -->
     <div class="itemEmpty">
       <div class="container">
-        {% if (user.type == USER_TYPE_ARTIST) or (pick_type == TYPE_ARTWORKS) %}
+        {% if (user.type == USER_TYPE_ARTIST and pick_type is null) or (pick_type == TYPE_ARTWORKS) %}
           <p class="empty">아직 작품이 없습니다 :)</p>
           {% if pick_type is null %}
             <a href="/artworks/upload">작품 등록하러 가기 <i class="glyphicon glyphicon-menu-right"></i></a>
@@ -223,66 +229,28 @@
     <!-- == 아이템 없음 -->
   {% endif %}
 
-  {# TODO: 비밀번호 변경 및 프로필 이미지 관련 모달 디자인 진행중, 시안 나오면 바로 작업할 예정 #}
-  <div class="modal fade" id="profile_modal" tabindex="-1" role="dialog">
+  <!-- == 비밀번호 변경 모달 -->
+  <div class="patModal modal" id="passwordChangeModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
               aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">프로필 이미지 변경</h4>
         </div>
         <div class="modal-body">
-          <form id="profile_change_form" class="ui form" method="POST" enctype="multipart/form-data"
-                action="/api/users/update/image">
-            <div class="field">
-              <div class="ui">
-                <label>사진 선택</label>
-                {% if user.profile_image %}현재 사진 {{ user.profile_image }}{% endif %}
-                <input type="file" name="profile_image" tabindex="0">
-              </div>
+          <form id="passwordChangeForm" method="POST">
+            <div class="title">비밀번호 변경</div>
+            <div class="field first">
+              <input type="password" title="text" name="currentPassword" placeholder="기존 비밀번호를 입력해주세요." />
             </div>
+            <div class="field">
+              <input type="password" title="text" name="newPassword" placeholder="새로운 비밀번호를 입력해주세요." />
+            </div>
+            <button type="submit">비밀번호 찾기</button>
           </form>
-
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="profile_submit">Save changes</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-
-  <div class="modal fade" id="password_modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-              aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">비밀번호 변경</h4>
-        </div>
-        <div class="modal-body">
-          <form id="password_change_form" class="ui form" method="POST">
-            <div class="field">
-              <div class="ui">
-                <label>기존 비밀번호 입력</label>
-                <input type="password" name="current_password" tabindex="0">
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui">
-                <label>새로운 비밀번호 입력</label>
-                <input type="password" name="new_password" tabindex="0">
-              </div>
-            </div>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="password_submit">Save changes</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+      </div>
+    </div>
+  </div>
+  <!-- //== 비밀번호 변경 모달 -->
 {% endblock %}

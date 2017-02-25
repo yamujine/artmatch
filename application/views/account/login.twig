@@ -93,37 +93,33 @@
       }, {scope: 'public_profile,email'});
     });
 
-    $('#password_change_form').submit(function () {
-      var emailElem = $("input[name=email]");
+    $('#passwordChangeForm').submit(function () {
+      var emailElement = $("input[name=email]");
 
-      if (!emailElem.val()) {
+      if (!emailElement.val()) {
         alert('이메일을 입력해주세요.');
-        emailElem.focus();
+        emailElement.focus();
+
         return false;
       }
-
-      data = {};
-      data.email = emailElem.val();
 
       $.ajax({
         method: "POST",
         url: "/api/users/reset_password",
-        data: data
-      }).done(function (data) {
-        if (data.result === true) {
-          alert(data.body.message);
-          $('#password_modal').modal('hide');
-        } else {
-          alert(data.body.message);
+        data: {
+          email: emailElement.va()
         }
+      }).done(function (data) {
+        if (data.result) {
+          $('#passwordChangeModal').modal('hide');
+        }
+
+        alert(data.body.message);
       }).fail(function () {
         alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
       });
-      return false;
-    });
 
-    $('#password_submit').click(function () {
-      $('#password_change_form').submit();
+      return false;
     });
 
     function rerequestFacebookPermissions() {
@@ -173,7 +169,7 @@
 
           <div class="patLoginExcept">
             <p class="passwordFind">
-              <a data-toggle="modal" data-target="#password_modal">비밀번호를 잊으셨나요?</a>
+              <a data-toggle="modal" data-backdrop="static" data-keyboard="false"  data-target="#passwordChangeModal">비밀번호를 잊으셨나요?</a>
             </p>
             <p class="join">
               아직 회원이 아니신가요?<br/>
@@ -187,30 +183,31 @@
   </div>
   <!-- //== 로그인 -->
 
-  <div class="modal fade" id="password_modal" tabindex="-1" role="dialog">
+  <!-- == 비밀번호 찾기 모달 -->
+  <div class="patModal modal" id="passwordChangeModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
               aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">비밀번호 찾기</h4>
         </div>
         <div class="modal-body">
-          <form id="password_change_form" class="ui form" method="POST" enctype="multipart/form-data"
+          <form id="passwordChangeForm" method="POST" enctype="multipart/form-data"
                 action="/api/users/reset_password">
-            <div class="field">
-              <div class="ui">
-                <label>이메일</label>
-                <input type="email" name="email" tabindex="0">
-              </div>
+            <div class="title">비밀번호 찾기</div>
+            <div class="description">
+              비밀번호를 잊으셨나요? 가입하신 이메일을 입력해주시면<br/>
+              새로운 비밀번호를 보내드립니다.
             </div>
+            <div class="field first">
+              <input type="email" title="text" name="email" placeholder="이메일을 입력해주세요." />
+            </div>
+
+            <button type="submit">비밀번호 찾기</button>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="password_submit">Save changes</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+      </div>
+    </div>
+  </div>
+  <!-- //== 비밀번호 찾기 모달 -->
 {% endblock %}

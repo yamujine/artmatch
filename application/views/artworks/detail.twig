@@ -10,247 +10,8 @@
 {% block script %}
   <script type="text/javascript" src="/static/dist/magnific-popup/jquery.magnific-popup.min.js"></script>
   <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
+  <script type="text/javascript" src="{{ 'dist/js/detail.common.js' | static_url }}"></script>
   <script type="text/javascript" src="{{ 'dist/js/detail.comment.js' | static_url }}"></script>
-  <script type="text/javascript">
-    $(function () {
-      // 메인 모든 사이즈의 이미지 형태에 대응하기 위함
-      var mainImageWidth = $('.mainImage .image img').width();
-      $('.mainImage').css({width: mainImageWidth});
-
-      // 추가 이미지 Carousel 구현은 6개가 넘어갈 경우
-      var additionalImageCount = $('.additionalImages .slider .item').length;
-      if (additionalImageCount > 6) {
-        // Carousel 시작
-        $('.slider').slick({
-          infinite: false,
-          variableWidth: true,
-
-          slidesToShow: 6,
-          slidesToScroll: 1,
-
-          prevArrow: false,
-          nextArrow: false
-        });
-
-        // 슬라이더 컨트롤
-        $('.sliderPrevBtn').click(function () {
-          $('.slider').slick('slickPrev');
-
-          return false;
-        });
-
-        $('.sliderNextBtn').click(function () {
-          $('.slider').slick('slickNext');
-
-          return false;
-        });
-      }
-
-      // 전시 이력 Carousel 구현은 4개가 넘는 경우
-      var exhibitionCount = $('.exhibitions .item').length;
-      if (exhibitionCount > 4) {
-        $('.exhibitions').slick({
-          infinite: false,
-          variableWidth: true,
-
-          slidesToShow: 4,
-          slidesToScroll: 1,
-
-          prevArrow: false,
-          nextArrow: false
-        });
-      }
-
-      // 슬라이더 컨트롤
-      $('.exhibitionArea .sliderControl .prevBtn').click(function () {
-        $('.exhibitions').slick('slickPrev');
-
-        return false;
-      });
-
-      $('.exhibitionArea .sliderControl .nextBtn').click(function () {
-        $('.exhibitions').slick('slickNext');
-
-        return false;
-      });
-
-      // 이미지 전체 보기
-      $('.popupImage').magnificPopup({
-        type: 'image',
-        gallery: {
-          enabled: true
-        }
-      });
-
-      // 작품 수정
-      $('.artworkEditBtn').click(function () {
-        var $this = $(this);
-        location.replace("/artworks/edit/" + $this.data('id'));
-        return false;
-      });
-
-      // 작품 삭제
-      $('.artworkDeleteBtn').click(function () {
-        if (confirm("정말 삭제 하시겠습니까?") === false) {
-          return false;
-        }
-        var $this = $(this);
-        location.replace("/artworks/delete/" + $this.data('id'));
-        return false;
-      });
-
-      // 댓글
-      $("#commentRegisterForm").submit(function () {
-        var $this = $(this);
-
-        $.ajax({
-          method: "POST",
-          url: "/api/comments/insert",
-          data: {
-            type: $this.find("input[name=type]").val(),
-            type_id: $this.find("input[name=type_id]").val(),
-            comment: $this.find("textarea[name=comment]").val()
-          }
-        })
-          .done(function (data) {
-            if (!data.result) {
-              alert("댓글 등록 실패");
-              return false;
-            }
-
-            $('.comments').append(data.body.insert_comment);
-            $this.find('textarea[name=comment]').val('');
-            $('.commentArea').children().find('.number').text(data.body.comment_count);
-          })
-          .fail(function (data) {
-            alert(data.body.message);
-          });
-        return false;
-      });
-
-      // 댓글 수정
-      $(document).on('click', '.commentEditBtn', function () {
-        var comment_id = $(this).data("id");
-        var comment = $(this).closest("div").find(".comment").text();
-        $('#commentEditDiv_' + comment_id).css("display", "");
-        $('#commentEditDiv_' + comment_id).find('#commentEditText').val(comment);
-        $('#comment_' + comment_id).find('.comment').text('');
-        $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', '');
-        $(this).css('display', 'none');
-
-        $('#comment_' + comment_id).find('.commentEditBtnCancel').click(function () {
-          $('#commentEditDiv_' + comment_id).css("display", "none");
-          $('#comment_' + comment_id).find('.comment').text(comment);
-          $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
-          $(this).css('display', 'none');
-        });
-
-        $(document).on('click', '.commentEditSubmit', function () {
-          var comment = $('#commentEditDiv_' + comment_id).find('#commentEditText').val();
-
-          $.ajax({
-            method: "POST",
-            url: "/api/comments/update",
-            data: {
-              type: $(this).data('type'),
-              type_comment_id: comment_id,
-              comment: comment
-            }
-          }).done(function (data) {
-            if (data.body.result_type === 'update') {
-              $('#commentEditDiv_' + comment_id).css("display", "none");
-              $('#comment_' + comment_id).find('.commentEditBtnCancel').css('display', 'none');
-              $('#comment_' + comment_id).find('.commentEditBtn').css('display', '');
-              $('#comment_' + comment_id).find('.comment').text(data.body.comment);
-            } else {
-              alert(data.body.message);
-            }
-          }).fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
-        });
-        return false;
-      });
-
-      // 댓글 더 보기
-      $('.commentMoreBtn').click(function () {
-        var $this = $(this);
-        var type = $this.data('type');
-        var type_id = $this.data('type-id');
-        var current_offset = $('.comments li').length;
-        var changed_offset;
-
-        // 더보기 영역 숨기기
-        $this.closest('.commentMore').hide();
-        // 로더 보여주기
-        $('.patLoader').show();
-
-        $.post('/api/comments', {type: type, type_id: type_id, offset: current_offset, limit: 3})
-          .done(function (data) {
-            $('.comments').prepend(data.body.comments);
-
-            $('.patLoader').hide();
-            changed_offset = current_offset + 3;
-            if (changed_offset < data.body.comment_count) {
-              $this.closest('.commentMore').show();
-            }
-          });
-      });
-
-      // PICK
-      $('.pickBtn').click(function () {
-        var $this = $(this);
-        var number = parseInt($(this).find('.number').html(), 10);
-
-        $.ajax({
-          method: "POST",
-          url: "/api/pick",
-          data: {
-            type: $this.data('type'),
-            type_id: $this.data('id')
-          }
-        })
-          .done(function (data) {
-            if (data.body.result_type === 'on') {
-              $this.addClass('active').find('.number').html(data.body.pick_count);
-            } else if (data.body.result_type === 'off') {
-              $this.removeClass('active').find('.number').html(data.body.pick_count);
-            } else {
-              alert(data.body.message);
-            }
-          })
-          .fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
-        return false;
-      });
-
-      $(document).on('click', '.artworkCommentToggleBtn', function() {
-        var $this = $(this);
-        $.ajax({
-          method: "POST",
-          url: "/api/contents/change_comment_option",
-          data: {
-            type: $this.data('type'),
-            type_id: $this.data('type-id')
-          }
-        })
-          .done(function (data) {
-            $('.dropdown-toggle').dropdown('toggle');
-            if (data.body.comment_status === {{ TYPE_NO_COMMENT }}) {
-              alert('댓글이 비허용 처리 되었습니다.');
-            } else if (data.body.comment_status === {{ TYPE_USE_COMMENT }}) {
-              alert('댓글이 허용 처리 되었습니다.');
-            }
-            location.reload(true);
-          })
-          .fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
-        return false;
-      });
-    });
-  </script>
 {% endblock %}
 
 {% block contents %}
@@ -275,9 +36,9 @@
             <div class="icon"></div>
           </button>
           <ul class="dropdown-menu dropdown-menu-right">
-            <li><a class="artworkEditBtn" data-id="{{ artwork.id }}">글 수정하기</a></li>
-            <li><a class="artworkDeleteBtn" data-id="{{ artwork.id }}">글 삭제하기</a></li>
-            <li><a class="artworkCommentToggleBtn" data-type="{{ TYPE_ARTWORK }}" data-type-id="{{ artwork.id }}">댓글 {% if artwork.use_comment == TYPE_NO_COMMENT %}허용{% else %}비허용{% endif %}</a></li>
+            <li><a class="artworkEditBtn" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">글 수정하기</a></li>
+            <li><a class="artworkDeleteBtn" data-type="{{ TYPE_ARTWORKS }}" data-id="{{ artwork.id }}">글 삭제하기</a></li>
+            <li><a class="artworkCommentToggleBtn" data-type="{{ TYPE_ARTWORKS }}" data-type-id="{{ artwork.id }}">댓글 {% if artwork.use_comment == TYPE_NO_COMMENT %}허용{% else %}비허용{% endif %}</a></li>
           </ul>
         </div>
         <!-- //== 나의 글 관련 옵션 드랍다운 메뉴 -->
@@ -341,9 +102,6 @@
             {% elseif artwork.status == ARTWORK_STATUS_NEED_SPACE %}
               <li class="exhibition">전시공간 구함</li>
             {% endif %}
-            {% if artwork.for_sale == ARTWORK_FOR_SALE or artwork.status == ARTWORK_STATUS_NEED_SPACE %}
-              <a href="mailto:{{ artwork.user.email }}" class="btn btn-default">contact</a>
-            {% endif %}
             {% if artwork.for_sale == ARTWORK_FOR_SALE %}
               <li class="buy">구매가능</li>
             {% endif %}
@@ -367,6 +125,19 @@
         </div>
       </div>
       <!-- //== 작가의 한마디 -->
+
+      {% if artwork.for_sale == ARTWORK_FOR_SALE or artwork.status == ARTWORK_STATUS_NEED_SPACE %}
+        <!-- == 전시 지원 방법 -->
+        <ul class="contactTo">
+          <!-- == 작가님께 메일로 연락하기 -->
+          <li class="email">
+            <a href="mailto:{{ artwork.user.email }}">
+              작가님께 이메일로 연락하기
+            </a>
+          </li>
+        </ul>
+        <!-- //== 전시 지원 방법 -->
+      {% endif %}
 
       {% if artwork.use_comment == 1 %}
         <!-- == 댓글 -->
