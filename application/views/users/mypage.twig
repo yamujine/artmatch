@@ -160,7 +160,7 @@
     <div id="patTab">
       <ul class="selectTab">
         <li>
-          <a {% if pick_type is null and is_applied_list is null %}class="active"{% endif %} href="/users/me">
+          <a {% if pick_type is null and show_applied_list is null %}class="active"{% endif %} href="/users/me">
             {% if user.type == USER_TYPE_ARTIST %}
               WORK
             {% elseif user.type == USER_TYPE_PLACE_OWNER %}
@@ -173,7 +173,7 @@
         </li>
         {% if user.type == USER_TYPE_PLACE_OWNER %}
           <li>
-            <a {% if is_applied_list %}class="active"{% endif %} href="?is_applied_list=1">전시요청</a>
+            <a {% if show_applied_list %}class="active"{% endif %} href="?show_applied_list=1">전시요청</a>
           </li>
         {% endif %}
       </ul>
@@ -205,13 +205,13 @@
         <!-- == 아이템 목록 -->
         <ul class="itemList">
           {% import 'macro/mypage.macro.twig' as mypage_macro %}
-          {% if is_applied_list is empty %}
+          {% if show_applied_list is empty %}
             {% for item in items %}
               {% if not is_my_page or (is_my_page and pick_type is empty) %}
                 {# 마이페이지 내 나의 작품/장소 #}
                 {% if user.type == USER_TYPE_ARTIST %}
                   {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
-                {% elseif user.type == USER_TYPE_PLACE_OWNER and is_applied_list is empty %}
+                {% elseif user.type == USER_TYPE_PLACE_OWNER and show_applied_list is empty %}
                   {{ mypage_macro.render_mypage_place_item(item) }}
                 {% endif %}
               {% else %}
@@ -219,7 +219,7 @@
                 {{ mypage_macro.render_mypage_grid_item(item, pick_type, loop.index) }}
               {% endif %}
             {% endfor %}
-          {% elseif is_applied_list %}
+          {% elseif show_applied_list %}
             {# 전시 #}
             {% for exhibition in exhibitions %}
               전시명 : {{ exhibition.title }}

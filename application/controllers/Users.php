@@ -16,9 +16,9 @@ class Users extends MY_Controller {
     public function me() {
         $user_name = $this->accountlib->get_user_name();
         $pick_type = $this->input->get('type');
-        $is_applied_list = $this->input->get('is_applied_list');
+        $show_applied_list = $this->input->get('show_applied_list');
         $data = $this->_get_user_details($user_name, true, $pick_type);
-        if ($is_applied_list === '1') {
+        if ($show_applied_list === '1') {
             $result = $this->_applied_list();
             $data = array_merge($data, $result);
         }
@@ -42,7 +42,7 @@ class Users extends MY_Controller {
             }
         }
         return [
-            'is_applied_list' => true,
+            'show_applied_list' => true,
             'exhibitions' => $exhibition_list
         ];
     }
