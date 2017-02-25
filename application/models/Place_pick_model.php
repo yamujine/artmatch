@@ -69,6 +69,6 @@ class Place_pick_model extends CI_Model {
     }
 
     public function delete_all_picks_by_place_id($place_id) {
-        return $this->db->delete(self::PLACE_PICKS_TABLE_NAME, ['place_id' => $place_id]);
+        return $this->db->delete(self::TABLE_NAME, ['place_id' => $place_id]);
     }
 }

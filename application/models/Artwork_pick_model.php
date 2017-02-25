@@ -69,6 +69,6 @@ class Artwork_pick_model extends CI_Model {
     }
 
     public function delete_all_picks_by_artwork_id($artwork_id) {
-        return $this->db->delete(self::ARTWORK_PICKS_TABLE_NAME, ['artwork_id' => $artwork_id]);
+        return $this->db->delete(self::TABLE_NAME, ['artwork_id' => $artwork_id]);
     }
 }
