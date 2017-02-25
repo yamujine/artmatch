@@ -33,7 +33,6 @@ class Applylib {
      * @param $exhibition_id
      */
     public function send_accepted_email(array $to_send_list) {
-        $this->CI->load->model(['artwork_model']);
         if (!empty($to_send_list)) {
             foreach ($to_send_list as $email=>$accepted_artworks) {
                 $email_html = $this->CI->twig->render('email/accepted', ['artworks' => $accepted_artworks]);
