@@ -24,7 +24,7 @@
       <div class="container">
         <ul class="itemList artworkList">
           {% for artwork in artworks %}
-            <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if artwork.status == APPLY_STATUS_IN_REVIEW %}in_review{% elseif artwork.status == APPLY_STATUS_ACCEPTED %}accepted{% endif %}">
+            <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW %}in_review{% elseif artwork.apply_status == APPLY_STATUS_ACCEPTED %}accepted{% endif %}">
               <div class="dimm"></div>
               <div class="inReviewStatus">
                 <div class="icon"></div>
