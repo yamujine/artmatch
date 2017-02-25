@@ -102,7 +102,7 @@ class Artwork_Comment_model extends CI_Model {
         }
     }
 
-    public function delete_all_comments_by_id($artwork_id) {
+    public function delete_all_comments_by_artwork_id($artwork_id) {
         return $this->db->delete(self::ARTWORK_COMMENTS_TABLE_NAME, ['artwork_id' => $artwork_id]);
     }
 }

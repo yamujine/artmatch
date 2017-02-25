@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'comment_model', 'pick_model', 'user_model']);
+        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'artwork_comment_model', 'pick_model', 'user_model']);
         $this->load->library(['tag']);
         $this->load->helper('url');
     }
@@ -44,9 +44,9 @@ class Artworks extends MY_Controller {
         $data['exhibitions'] = $exhibitions;
 
         // 댓글
-        $comments = $this->comment_model->get_comments_by_type_id(TYPE_ARTWORKS, $artwork_id, 3, 0);
+        $comments = $this->artwork_comment_model->get_comments_by_artwork_id($artwork_id, 3, 0);
         $data['comments'] = array_reverse($comments);
-        $data['comment_count'] = $this->comment_model->get_count_of_comments_by_type_id(TYPE_ARTWORKS, $artwork_id);
+        $data['comment_count'] = $this->artwork_comment_model->get_count_of_comments_by_artwork_id($artwork_id);
 
         // 조회수 증가
         $this->artwork_model->update_view_count_by_id($artwork_id);
@@ -179,7 +179,7 @@ class Artworks extends MY_Controller {
             }
 
             // 작품 코멘트
-            $this->comment_model->delete_all_comments_by_artwork_id($artwork_id);
+            $this->artwork_comment_model->delete_all_comments_by_artwork_id($artwork_id);
 
             // 작품 Pick
             $this->pick_model->delete_all_picks_by_artwork_id($artwork_id);

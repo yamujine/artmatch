@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Places extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'comment_model', 'pick_model']);
+        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'artwork_comment_model', 'place_comment_model', 'pick_model']);
         $this->load->library('tag');
         $this->load->helper('url');
     }
@@ -53,9 +53,9 @@ class Places extends MY_Controller {
         $data['has_artworks'] = $this->artwork_model->is_exists_by_user_id($user_id);
 
         // 댓글
-        $comments = $this->comment_model->get_comments_by_type_id(TYPE_PLACES, $place_id, 3, 0);
+        $comments = $this->place_comment_model->get_comments_by_place_id($place_id, 3, 0);
         $data['comments'] = array_reverse($comments);
-        $data['comment_count'] = $this->comment_model->get_count_of_comments_by_type_id(TYPE_PLACES, $place_id);
+        $data['comment_count'] = $this->place_comment_model->get_count_of_comments_by_place_id($place_id);
 
         // 조회수 증가
         $this->place_model->update_view_count_by_id($place_id);
@@ -238,7 +238,7 @@ class Places extends MY_Controller {
             }
 
             // 장소 코멘트
-            $this->comment_model->delete_all_comments_by_place_id($place_id);
+            $this->place_comment_model->delete_all_comments_by_place_id($place_id);
 
             // 장소 Pick
             $this->pick_model->delete_all_picks_by_place_id($place_id);

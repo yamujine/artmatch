@@ -7,7 +7,7 @@ class CommentApi extends API_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(['comment_model', 'artwork_comment_model', 'place_comment_model']);
+        $this->load->model(['artwork_comment_model', 'place_comment_model']);
         $this->validate_types();
     }
 
@@ -70,20 +70,31 @@ class CommentApi extends API_Controller {
 
         $this->validate_type_and_type_id();
 
-        $result_id = $this->comment_model->insert_comment($type, $user_id, $type_id, $comment);
+        if ($type === TYPE_ARTWORKS) {
+            $result_id = $this->artwork_comment_model->insert_comment($user_id, $type_id, $comment);
+        } elseif ($type === TYPE_PLACES) {
+            $result_id = $this->place_comment_model->insert_comment($user_id, $type_id, $comment);
+        }
         if ($result_id === NULL) {
             $this->return_fail_response('101', ['message' => 'Failed to insert']);
         }
-        $comment = $this->comment_model->get_by_type_and_id($type, $result_id);
-        if ($comment === NULL) {
+
+        $comment = $this->_get_comment($type, $result_id);
+        if (empty($comment)) {
             $this->return_fail_response('102', ['message' => 'Failed to get comment']);
         }
-        $comment_count = $this->comment_model->get_count_by_type_id($type, $type_id);
+
+        if ($type === TYPE_ARTWORKS) {
+            $comment_count = $this->artwork_comment_model->get_count_by_artwork_id($type_id);
+        } elseif ($type === TYPE_PLACES) {
+            $comment_count = $this->place_comment_model->get_count_by_place_id($type_id);
+        }
         if ($comment_count === null) {
             $this->return_fail_response('102', ['message' => 'Failed to count comment']);
         }
 
-        $insert_comment = $this->twig->render('api/comments', ['comments' => [$comment], 'type' => $type, 'type_id' => $type_id]);
+        $insert_comment = $this->twig->render('api/comments',
+            ['comments' => [$comment], 'type' => $type, 'type_id' => $type_id]);
 
         $this->return_success_response([
             'type' => $type,
@@ -103,15 +114,20 @@ class CommentApi extends API_Controller {
         $type_comment_id = $this->input->post('type_comment_id');
         $comment = $this->input->post('comment');
 
-        $comment_validation = $this->comment_model->get_by_type_and_id($type, $type_comment_id);
-        if (empty($comment_validation)) {
+        $current_comment = $this->_get_comment($type, $type_comment_id);
+        if (empty($current_comment)) {
             $this->return_fail_response('101', ['message' => '존재하지 않는 코멘트 입니다.']);
         }
-        if ($comment_validation->user_id !== $user_id) {
+
+        if ($current_comment->user_id !== $user_id) {
             $this->return_fail_response('101', ['message' => '본인의 코멘트만 수정할 수 있습니다.']);
         }
 
-        $result_id = $this->comment_model->update_comment($type, $type_comment_id, $comment);
+        if ($type === TYPE_ARTWORKS) {
+            $result_id = $this->artwork_comment_model->update_comment($type_comment_id, $comment);
+        } elseif ($type === TYPE_PLACES) {
+            $result_id = $this->place_comment_model->update_comment($type_comment_id, $comment);
+        }
         if ($result_id === NULL) {
             $this->return_fail_response('101', ['message' => 'Failed to update']);
         }
@@ -125,26 +141,44 @@ class CommentApi extends API_Controller {
         ]);
     }
 
+    private function _get_comment($type, $comment_id) {
+        if ($type === TYPE_ARTWORKS) {
+            $comment = $this->artwork_comment_model->get($comment_id);
+        } elseif ($type === TYPE_PLACES) {
+            $comment = $this->place_comment_model->get($comment_id);
+        }
+        return $comment;
+    }
+
     public function delete() {
         $user_id = $this->accountlib->get_user_id();
 
         $type = $this->input->post('type');
-        $type_id = $this->input->post('type_id');
+        $type_id = $this->input->post('type_id'); // TODO 이건 current_comment 조회 할 때 알 수 있는 값이므로 받을 필요 없음.
         $type_comment_id = $this->input->post('type_comment_id');
 
-        $comment_validation = $this->comment_model->get_by_type_and_id($type, $type_comment_id);
-        if (empty($comment_validation)) {
+        $current_comment = $this->_get_comment($type, $type_comment_id);
+        if (empty($current_comment)) {
             $this->return_fail_response('101', ['message' => '존재하지 않는 코멘트 입니다.']);
         }
-        if ($comment_validation->user_id !== $user_id) {
+        if ($current_comment->user_id !== $user_id) {
             $this->return_fail_response('101', ['message' => '본인의 코멘트만 삭제할 수 있습니다.']);
         }
 
-        $affected_rows = $this->comment_model->delete_comment($type, $type_comment_id);
+        if ($type === TYPE_ARTWORKS) {
+            $affected_rows = $this->artwork_comment_model->delete_comment($type_comment_id);
+        } elseif ($type === TYPE_PLACES) {
+            $affected_rows = $this->place_comment_model->delete_comment($type_comment_id);
+        }
         if ($affected_rows === 0) {
             $this->return_fail_response('101', ['message' => 'Failed to delete']);
         }
-        $comment_count = $this->comment_model->get_count_by_type_id($type, $type_id);
+
+        if ($type === TYPE_ARTWORKS) {
+            $comment_count = $this->artwork_comment_model->get_count_by_artwork_id($type_id);
+        } elseif ($type === TYPE_PLACES) {
+            $comment_count = $this->place_comment_model->get_count_by_place_id($type_id);
+        }
         if ($comment_count === null) {
             $this->return_fail_response('102', ['message' => 'Failed to count comment']);
         }
