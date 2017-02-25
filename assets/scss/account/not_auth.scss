@@ -1,0 +1,126 @@
+@import "../helper/colorchips";
+@import "../helper/mixins.scss";
+
+body {
+  background: url(/static/images/landing/bg.png) center center no-repeat;
+  background-size: cover;
+}
+
+html, body {
+  height: 100%;
+
+  // 상단 메뉴
+  #patTop {
+    display: none;
+  }
+  // -- 상단 메뉴
+
+  #patContents {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 -180px 0;
+    padding: 0;
+
+    .patContainer {
+      position: absolute;
+      width: 353px;
+      height: 311px;
+      top: 50%;
+      left: 50%;
+      margin: -230px 0 0 -176px;
+
+      // 로고
+      .logo {
+        width: 194px;
+        height: 23px;
+        margin: 0 auto 9px auto;
+        background: url(/static/images/landing/logo.png) center center no-repeat;
+        @include prefix(background-size, cover);
+        @include retina-image('/static/images/landing/logo@2x.png', 100%, 100%);
+      }
+      // -- 로고
+
+      // 타이틀
+      .title {
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 18px;
+        font-weight: normal;
+        text-align: center;
+        letter-spacing: normal;
+        line-height: normal;
+        font-stretch: normal;
+        color: $white-two;
+      }
+      // -- 타이틀
+
+      // 재발송 폼
+      .resendForm {
+        width: 100%;
+        height: 254px;
+        background: $white-two;
+        @include prefix(border-radius, 4px);
+        margin: 38px 0 0 0;
+        padding: 40px 0;
+        text-align: center;
+
+        // 이메일 인증 관련 메시지
+        .notAuthMessage {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 14px;
+          color: $black;
+          line-height: 1.43;
+          letter-spacing: 0.3px;
+          margin: 0 0 30px 0;
+        }
+        // -- 이메일 인증 관련 메시지
+
+        // 재전송 성공 메시지
+        .resendMessage {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 14px;
+          color: $black;
+          line-height: 1.43;
+          letter-spacing: 0.3px;
+          margin: 0 0 30px 0;
+        }
+        // -- 재전송 성공 메시지
+
+        // 이메일 발송 관련
+        p {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 12px;
+          font-weight: 300;
+          line-height: 1.67;
+          letter-spacing: 0.3px;
+          color: rgba(0, 0, 0, 0.66);
+          margin: 0 0 30px 0;
+        }
+        // -- 이메일 발송 관련
+
+        // 이메일 재전송 버튼
+        button[type=submit] {
+          width: 298px;
+          height: 46px;
+          border: none;
+          outline: none;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.3px;
+          color: $white-two;
+          background: $black-five;
+          @include prefix(border-radius, 4px);
+        }
+        // -- 이메일 재전송 버튼
+      }
+      // -- 재발송 폼
+    }
+  }
+
+  // 하단 푸터
+  #patFooter {
+    display: none;
+  }
+  // -- 하단 푸터
+}

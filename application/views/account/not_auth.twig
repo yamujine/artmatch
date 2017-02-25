@@ -1,17 +1,37 @@
 {% extends "base.twig" %}
 
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/account/not_auth.min.css' | static_url }}">
+{% endblock %}
+
 {% block contents %}
-	{% if msg %}
-		<div class="ui success message">
-			<i class="close icon"></i>
-			<div class="header">
-				{{ msg }}
-			</div>
-		</div>
-	{% endif %}
-	아직 {{ user.email }}로 보낸 메일을 못 받으셨나요?
-	<form class="ui form" method="POST">
-		<input type="hidden" name="resend" value="1">
-		<button class="ui green button" type="submit">재발송하기</button>
-	</form>
+  <div class="patContainer">
+    <!-- == 로고 -->
+    <div class="logo"></div>
+    <!-- //== 로고 -->
+    <!-- == 타이틀 -->
+    <div class="title">잠자고 있는 여러분의 작품을 깨워주세요.</div>
+    <!-- //== 타이틀 -->
+    <!-- == 재발송 폼 -->
+    <div class="resendForm">
+      <form method="POST">
+        <input type="hidden" name="resend" value="1">
+        {% if msg is null %}
+          <div class="notAuthMessage">
+            아직 이메일 인증이 완료되지 않았습니다.
+          </div>
+        {% else %}
+          <div class="resendMessage">
+            {{ msg }}
+          </div>
+        {% endif %}
+        <p>
+          혹시, 메일을 못받으셨다면 스팸함이나 휴지통을 봐주세요<br/>
+          또는 <span>다시 인증 이메일 받기</span>를 눌러주세요 :)
+        </p>
+        <button type="submit">다시 인증 이메일 받기</button>
+      </form>
+    </div>
+    <!-- //== 재발송 폼 -->
+  </div>
 {% endblock %}
