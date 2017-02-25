@@ -1,4 +1,4 @@
-{% macro render_comment_item(comment, type, type_id) %}
+{% macro render_comment_item(comment, type) %}
   <li id="comment_{{ comment.id }}">
     <div class="profileImage">
       {% if comment.profile_image is empty %}
@@ -16,7 +16,7 @@
       {% if session.id == comment.user_id %}
         <button class="commentEditBtn" data-id="{{ comment.id }}">수정</button>
         <button class="commentEditCancelBtn" style="display:none">수정취소</button>
-        <button class="commentDeleteBtn" data-type="{{ type }}" data-type-id="{{ type_id }}" data-id="{{ comment.id }}">
+        <button class="commentDeleteBtn" data-type="{{ type }}" data-id="{{ comment.id }}">
           삭제
         </button>
       {% endif %}

@@ -57,7 +57,7 @@ class CommentApi extends API_Controller {
             $comment_count = $this->place_comment_model->get_count_of_comments_by_place_id($type_id);
         }
 
-        $comments = $this->twig->render('api/comments', ['comments' => array_reverse($comments), 'type' => $type, 'type_id' => $type_id]);
+        $comments = $this->twig->render('api/comments', ['comments' => array_reverse($comments), 'type' => $type]);
         $this->return_success_response(['comments' => $comments, 'comment_count' => $comment_count]);
     }
 
@@ -147,6 +147,7 @@ class CommentApi extends API_Controller {
         } elseif ($type === TYPE_PLACES) {
             $comment = $this->place_comment_model->get($comment_id);
         }
+
         return $comment;
     }
 
@@ -154,7 +155,6 @@ class CommentApi extends API_Controller {
         $user_id = $this->accountlib->get_user_id();
 
         $type = $this->input->post('type');
-        $type_id = $this->input->post('type_id'); // TODO 이건 current_comment 조회 할 때 알 수 있는 값이므로 받을 필요 없음.
         $type_comment_id = $this->input->post('type_comment_id');
 
         $current_comment = $this->_get_comment($type, $type_comment_id);
@@ -175,9 +175,9 @@ class CommentApi extends API_Controller {
         }
 
         if ($type === TYPE_ARTWORKS) {
-            $comment_count = $this->artwork_comment_model->get_count_by_artwork_id($type_id);
+            $comment_count = $this->artwork_comment_model->get_count_by_artwork_id($current_comment->artwork_id);
         } elseif ($type === TYPE_PLACES) {
-            $comment_count = $this->place_comment_model->get_count_by_place_id($type_id);
+            $comment_count = $this->place_comment_model->get_count_by_place_id($current_comment->place_id);
         }
         if ($comment_count === null) {
             $this->return_fail_response('102', ['message' => 'Failed to count comment']);
