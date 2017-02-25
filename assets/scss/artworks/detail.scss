@@ -413,6 +413,63 @@ body {
       }
       // -- 작가의 한마디
 
+      // 전시 지원 방법
+      .contactTo {
+        width: 875px;
+        height: 64px;
+        background: $white-fifteen;
+        border: 1px solid $white-fourteen;
+        padding: 0;
+        margin: 20px 0 0 0;
+        list-style: none;
+
+        li {
+          position: relative;
+          float: left;
+          width: 100%;
+          padding: 18px 30px;
+          text-align: center;
+          cursor: pointer;
+
+          &.email {
+            a {
+              position: relative;
+              padding-left: 38px;
+
+              &:before {
+                position: absolute;
+                content: '';
+                margin-left: -38px;
+                margin-top: 2px;
+                width: 25px;
+                height: 20px;
+                background: url(/static/images/detail_mail_to_icon.png) no-repeat;
+              }
+            }
+
+            &:hover {
+              a {
+                color: $black;
+
+                &:before {
+                  background: url(/static/images/detail_mail_to_icon_hover.png) no-repeat;
+                }
+              }
+            }
+          }
+
+          a {
+            width: 100%;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            letter-spacing: -0.3px;
+            color: $greyish-brown;
+            text-decoration: none;
+          }
+        }
+      }
+      // -- 전시 지원 방법
+
       // 댓글
       .commentArea {
         width: 875px;

@@ -102,9 +102,6 @@
             {% elseif artwork.status == ARTWORK_STATUS_NEED_SPACE %}
               <li class="exhibition">전시공간 구함</li>
             {% endif %}
-            {% if artwork.for_sale == ARTWORK_FOR_SALE or artwork.status == ARTWORK_STATUS_NEED_SPACE %}
-              <a href="mailto:{{ artwork.user.email }}" class="btn btn-default">contact</a>
-            {% endif %}
             {% if artwork.for_sale == ARTWORK_FOR_SALE %}
               <li class="buy">구매가능</li>
             {% endif %}
@@ -128,6 +125,19 @@
         </div>
       </div>
       <!-- //== 작가의 한마디 -->
+
+      {% if artwork.for_sale == ARTWORK_FOR_SALE or artwork.status == ARTWORK_STATUS_NEED_SPACE %}
+        <!-- == 전시 지원 방법 -->
+        <ul class="contactTo">
+          <!-- == 작가님께 메일로 연락하기 -->
+          <li class="email">
+            <a href="mailto:{{ artwork.user.email }}">
+              작가님께 이메일로 연락하기
+            </a>
+          </li>
+        </ul>
+        <!-- //== 전시 지원 방법 -->
+      {% endif %}
 
       {% if artwork.use_comment == 1 %}
         <!-- == 댓글 -->

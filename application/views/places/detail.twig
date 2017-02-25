@@ -108,9 +108,6 @@
             {% else %}
               <li class="fee">대관료 있음</li>
             {% endif %}
-            {% if place.status == PLACE_STATUS_NEED_ARTWORK %}
-              <a href="mailto:{{ place.user.email }}" class="btn btn-default">contact</a>
-            {% endif %}
             <li class="exhibition_available_count">
               {{ place.exhibition.start_date|date('Y.m.d') }} ~ {{ place.exhibition.end_date|date('Y.m.d') }}까지
               {% if place.is_now_exhibiting %}
@@ -119,9 +116,6 @@
                 {{ place.exhibition.artwork_count }}개의 작품 전시 가능함
               {% endif %}
             </li>
-            {% if place.status == PLACE_STATUS_NEED_ARTWORK and has_artworks %}
-              <a class="btn btn-default" href="/places/apply/{{ place.id }}">apply</a>>
-            {% endif %}
           </ul>
         </div>
         <div class="commentary">
@@ -137,6 +131,29 @@
         </div>
       </div>
       <!-- //== 대표의 한마디 -->
+
+      {% if place.status == PLACE_STATUS_NEED_ARTWORK %}
+        <!-- == 전시 지원 방법 -->
+        <ul class="contactTo">
+          <!-- == 작가님께 메일로 연락하기 -->
+          <li class="email {% if has_artworks %}half{% endif %}">
+            <a href="mailto:{{ place.user.email }}">
+              이메일로 연락하기
+            </a>
+          </li>
+          <!-- //== 작가님께 메일로 연락하기 -->
+          {% if has_artworks %}
+            <!-- == 전시 지원 하기 -->
+            <li class="apply half">
+              <a href="/places/apply/{{ place.id }}">
+                내 작품 전시지원하기
+              </a>
+            </li>
+            <!-- //== 전시 지원 하기 -->
+          {% endif %}
+        </ul>
+        <!-- //== 전시 지원 방법 -->
+      {% endif %}
 
       {% if place.use_comment == 1 %}
         <!-- == 댓글 -->
