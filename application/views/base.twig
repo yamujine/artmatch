@@ -137,7 +137,9 @@
 
     // 검색 버튼을 클릭한 경우
     $('.searchBtn').click(function () {
-      $('body').toggleClass('searching');
+      // 영역 버그
+      $(window).scrollTop(0);
+      $('body').addClass('searching');
     });
 
     // 검색 창 포커스, 아웃 포커스
