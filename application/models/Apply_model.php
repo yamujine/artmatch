@@ -33,4 +33,13 @@ class Apply_model extends CI_Model {
             ->where('artwork_id', $artwork_id)
             ->get()->row();
     }
+
+    public function update_status($exhibition_id, $artwork_id, $status) {
+        $this->db->update(self::TABLE_NAME, ['status' => $status], ['exhibition_id' => $exhibition_id, 'artwork_id' => $artwork_id]);
+        if ($this->db->affected_rows() > 0) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 }
