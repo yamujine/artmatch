@@ -40,7 +40,7 @@ class UsersApi extends API_Controller {
 
         $user = $this->user_model->get_by_id($id);
         if ($this->input->post('is_facebook') !== '1') {
-            $this->accountlib->send_email_authentication($user->email, $user->id);
+            $this->accountlib->send_email_authentication($user->email, $user->id, $user->user_name);
         } else {
             $this->user_model->authorize($id);
         }
