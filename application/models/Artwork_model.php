@@ -206,6 +206,16 @@ class Artwork_model extends CI_Model {
             ->get()->result();
     }
 
+    public function get_apply_status_by_exhibition_id($exhibition_id) {
+        return $this->db
+            ->from('apply')
+            ->join(self::TABLE_NAME, "apply.artwork_id = artworks.id", 'left')
+            ->where('apply.exhibition_id',$exhibition_id)
+            ->where('apply.status', APPLY_STATUS_IN_REVIEW)
+            ->order_by('artworks.id', 'DESC')
+            ->get()->result();
+    }
+
     public function get_images_by_id($artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME_IMAGES)
