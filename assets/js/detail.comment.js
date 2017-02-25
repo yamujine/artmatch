@@ -42,14 +42,21 @@ function insert_comment($this) {
 $(document).on('click', '.commentEditBtn', function () {
   var comment_id = $(this).data("id");
   $("#commentDiv_" + comment_id).hide();
-  $("#commentEditDiv_" + comment_id).show();
+
+  var textarea = $("#commentEditDiv_" + comment_id).addClass('active').find('textarea');
+  textarea.focus();
+
+  // 커서 뒤로 이동시키기 위해
+  var tmpStr = textarea.val();
+  textarea.val('');
+  textarea.val(tmpStr);
 });
 
 // 댓글 수정 취소
 $(document).on('click', '.commentEditCancelBtn', function () {
   var comment_id = $(this).data("id");
   $("#commentDiv_" + comment_id).show();
-  $("#commentEditDiv_" + comment_id).hide();
+  $("#commentEditDiv_" + comment_id).removeClass('active');
 });
 
 // 댓글 수정 저장

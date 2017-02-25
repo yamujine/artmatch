@@ -228,8 +228,6 @@
           {% elseif show_applied_list %}
             {# 전시 #}
             {% for exhibition in exhibitions %}
-              전시명 : {{ exhibition.title }}
-              <br>
               {# 전시에 지원학 작품 #}
               {# @TODO 마크업 필요 #}
               {% for artwork in exhibition.applied_artworks %}

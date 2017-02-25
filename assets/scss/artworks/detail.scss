@@ -551,7 +551,8 @@ body {
             // -- 프로필 이미지
             // 내용
             .content {
-              margin: 0 40px 0 50px;
+              position: relative;
+              margin: 0 0 0 50px;
 
               .meta {
                 float: left;
@@ -567,11 +568,119 @@ body {
                 }
               }
               .comment {
+                width: 590px;
                 font-family: 'Noto Sans KR', sans-serif;
                 font-size: 14px;
                 color: $warm-grey-six;
                 clear: both;
               }
+              // 수정, 삭제 버튼
+              .buttons {
+                position: absolute;
+                top: 0;
+                right: 0;
+
+                button {
+                  border: none;
+                  outline: none;
+                  background: none;
+                  display: inline-block;
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 12px;
+                  color: $warm-grey-four;
+                }
+
+                .commentEditBtn {
+                  margin-right: 14px;
+
+                  &:after {
+                    position: absolute;
+                    content: '';
+                    width: 1px;
+                    height: 12px;
+                    background: $white;
+                    right: 50%;
+                    top: 50%;
+                    margin: -6px 0 0 0;
+                  }
+                }
+              }
+              // -- 수정, 삭제 버튼
+
+              // 댓글 수정 폼
+              .commentEditForm {
+                clear: both;
+                display: none;
+
+                &.active {
+                  display: block;
+
+                  textarea {
+                    color: $black;
+                  }
+                }
+
+                textarea {
+                  font-family: 'Noto Sans KR', sans-serif;
+                  font-size: 14px;
+                  width: 590px;
+                  resize: none;
+                  border: none;
+                  outline: none;
+                }
+
+                .buttons {
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+
+                  .commentEditSubmit {
+                    position: relative;
+                    color: $black;
+
+                    &:after {
+                      position: absolute;
+                      content: '';
+                      width: 1px;
+                      height: 12px;
+                      background: $white;
+                      right: -8px;
+                      top: 50%;
+                      margin: -6px 0 0 0;
+                    }
+                  }
+
+                  .commentEditCancelBtn {
+                    position: relative;
+                    color: $lipstick;
+
+                    &:after {
+                      position: absolute;
+                      content: '';
+                      width: 1px;
+                      height: 12px;
+                      background: $white;
+                      right: -10px;
+                      top: 50%;
+                      margin: -6px 0 0 0;
+                    }
+                  }
+
+                  .commentEditSubmit, .commentEditCancelBtn {
+                    margin-right: 14px;
+                  }
+
+                  button {
+                    border: none;
+                    outline: none;
+                    display: inline-block;
+                    font-family: 'Noto Sans KR', sans-serif;
+                    font-size: 12px;
+                    color: $warm-grey-four;
+                  }
+                }
+              }
+              // -- 댓글 수정 폼
             }
             // -- 내용
           }
