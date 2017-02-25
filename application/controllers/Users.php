@@ -29,17 +29,21 @@ class Users extends MY_Controller {
     private function _applied_list() {
         $this->load->model(['exhibition_model', 'place_model', 'artwork_model']);
         $places = $this->place_model->get_all_by_user_id($this->accountlib->get_user_id());
+        $exhibition_list = [];
         foreach ($places as $place) {
             $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place->id);
             $place->exhibitions = $exhibitions;
             foreach ($place->exhibitions as $exhibition) {
                 $applied_artworks = $this->artwork_model->get_in_review_artworks_by_exhibition_id($exhibition->id);
-                $exhibition->applied_artworks = $applied_artworks;
+                if (!empty($applied_artworks)) {
+                    $exhibition->applied_artworks = $applied_artworks;
+                    $exhibition_list[] = $exhibition;
+                }
             }
         }
         return [
             'is_applied_list' => true,
-            'my_places' => $places
+            'exhibitions' => $exhibition_list
         ];
     }
 

@@ -99,8 +99,8 @@
          method: "POST",
          url: "/api/exhibition/accept",
          data: {
-           exhibition_id: '39',
-           applied_artwork_ids: ['36', '48']
+           exhibition_id: $(this).attr("exhibition_id"),
+           applied_artwork_ids: [$(this).attr("artwork_id")]
          }
        }).done(function (data) {
        })
@@ -198,10 +198,6 @@
     {% set items = my_picks %}
   {% endif %}
 
-  {% if is_applied_list %}
-    {% set places = my_places %}
-  {% endif %}
-
   {% if items|length > 0 %}
     <!-- == 작품 또는 장소 아이템 -->
     <div class="patItemList">
@@ -224,24 +220,18 @@
               {% endif %}
             {% endfor %}
           {% elseif is_applied_list %}
-            {# 장소 #}
-            {% for place in places %}
-              장소명 : {{ place.name }}
+            {# 전시 #}
+            {% for exhibition in exhibitions %}
+              전시명 : {{ exhibition.title }}
               <br>
-              {# 전시 #}
-              {% for exhibition in place.exhibitions %}
-                전시명 : {{ exhibition.title }}
-                <br>
-                {# 전시에 지원학 작품 #}
-                {% for artwork in exhibition.applied_artworks %}
-                  {{ mypage_macro.render_mypage_grid_item(artwork, TYPE_ARTWORKS, loop.index) }}
-                {% endfor %}
-                <br>
+              {# 전시에 지원학 작품 #}
+              {% for artwork in exhibition.applied_artworks %}
+                작품명 :
+                {{ artwork.title }}
+                <button class="appliedAccept" exhibition_id = "{{ exhibition.id }}" artwork_id = "{{ artwork.id }}">accept</button>
               {% endfor %}
+              <br>
             {% endfor %}
-          {% endif %}
-          {% if is_applied_list %}
-            <button class="appliedAccept">accept</button>
           {% endif %}
         </ul>
         <!-- //== 아이템 목록 -->
