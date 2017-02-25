@@ -5,7 +5,7 @@ class ApplyApi extends API_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(['apply_model','exhibition_model', 'place_model']);
+        $this->load->model(['apply_model', 'exhibition_model', 'place_model']);
     }
 
     public function accept() {
@@ -13,13 +13,11 @@ class ApplyApi extends API_Controller {
         $exhibition_id = $this->input->post('exhibition_id');
 
         if (!$this->_is_my_exhibition($exhibition_id)) {
-            $msg = '본인의 전시만 수락 할 수 있습니다.';
-            $this->return_fail_response('501', ['message' => $msg]);
+            $this->return_fail_response('501', ['message' => '본인의 전시만 수락 할 수 있습니다.']);
         }
 
         if (!$this->_is_applied_artworks($exhibition_id, $applied_artwork_ids)) {
-            $msg = '본인의 전시에 지원한 작품만 수락할 수 있습니다.';
-            $this->return_fail_response('502', ['message' => $msg]);
+            $this->return_fail_response('502', ['message' => '본인의 전시에 지원한 작품만 수락할 수 있습니다.']);
         }
 
         foreach ($applied_artwork_ids as $applied_artwork_id) {

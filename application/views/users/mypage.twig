@@ -97,7 +97,7 @@
       $('.appliedAccept').on('click', function() {
        $.ajax({
          method: "POST",
-         url: "/api/places/artworks/accept",
+         url: "/api/exhibition/accept",
          data: {
            exhibition_id: '39',
            applied_artwork_ids: ['36', '48']
