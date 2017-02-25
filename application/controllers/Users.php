@@ -16,10 +16,32 @@ class Users extends MY_Controller {
     public function me() {
         $user_name = $this->accountlib->get_user_name();
         $pick_type = $this->input->get('type');
-
+        $is_applied_list = $this->input->get('is_applied_list');
         $data = $this->_get_user_details($user_name, true, $pick_type);
+        if ($is_applied_list === '1') {
+            $result = $this->_applied_list();
+            $data = array_merge($data, $result);
+        }
 
         $this->twig->display('users/mypage', $data);
+    }
+
+    private function _applied_list() {
+        $this->load->model(['exhibition_model', 'place_model', 'artwork_model']);
+        $this->load->library('applylib');
+        $places = $this->place_model->get_all_by_user_id($this->accountlib->get_user_id());
+        $exhibitions = [];
+        $applied_artworks = [];
+        foreach ($places as $place) {
+            $exhibitions = array_merge($exhibitions, $this->exhibition_model->get_exhibitions_by_place_id($place->id));
+        }
+        foreach ($exhibitions as $exhibition) {
+            $applied_artworks = array_merge($applied_artworks, $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id));
+        }
+        return [
+            'applied_artworks' => $applied_artworks,
+            'is_applied_list' => 1
+        ];
     }
 
     private function _get_user_details($user_name, $is_my_page = false, $pick_type = '') {
