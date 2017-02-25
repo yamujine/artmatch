@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`places` (
   `name` VARCHAR(20) NOT NULL COMMENT '장소 이름',
   `description` TEXT NULL COMMENT '장소 설명',
   `image` VARCHAR(45) NOT NULL COMMENT '장소 대표 이미지',
-  `area` VARCHAR(8) NOT NULL COMMENT '대표 지역명',
+  `area` VARCHAR(6) NOT NULL COMMENT '대표 지역명',
   `address` VARCHAR(250) NOT NULL COMMENT '장소의 실제 주소',
   `use_comment` TINYINT(1) NOT NULL COMMENT '댓글 사용 여부',
   `tags` VARCHAR(60) NULL COMMENT '장소의 태그',
