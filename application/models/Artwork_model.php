@@ -208,11 +208,11 @@ class Artwork_model extends CI_Model {
 
     public function get_apply_status_by_exhibition_id($exhibition_id) {
         return $this->db
-            ->select('artworks.*, apply.status AS apply_status')
+            ->select('artworks.*, apply.status AS apply_status, apply.registered_at AS apply_registered_at')
             ->from('apply')
             ->join(self::TABLE_NAME, 'apply.artwork_id = artworks.id', 'left')
             ->where('apply.exhibition_id',$exhibition_id)
-            ->order_by('artworks.id', 'DESC')
+            ->order_by('apply_registered_at', 'DESC')
             ->get()->result();
     }
 
