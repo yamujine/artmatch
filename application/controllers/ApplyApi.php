@@ -8,25 +8,22 @@ class ApplyApi extends API_Controller {
         $this->load->model(['apply_model','exhibition_model', 'place_model']);
     }
 
-    public function accept_applied_artworks() {
+    public function accept() {
         $applied_artwork_ids = $this->input->post('applied_artwork_ids');
         $exhibition_id = $this->input->post('exhibition_id');
-        $msg = NULL;
 
         if (!$this->_is_my_exhibition($exhibition_id)) {
             $msg = '본인의 전시만 수락 할 수 있습니다.';
+            $this->return_fail_response('501', ['message' => $msg]);
         }
 
         if (!$this->_is_applied_artworks($exhibition_id, $applied_artwork_ids)) {
             $msg = '본인의 전시에 지원한 작품만 수락할 수 있습니다.';
-        }
-
-        if ($msg !== NULL) {
-            $this->return_fail_response('501', ['message' => $msg]);
+            $this->return_fail_response('502', ['message' => $msg]);
         }
 
         foreach ($applied_artwork_ids as $applied_artwork_id) {
-            $result = $this->apply_model->update_status($exhibition_id, $applied_artwork_id);
+            $result = $this->apply_model->update_status($exhibition_id, $applied_artwork_id, APPLY_STATUS_ACCEPTED);
             $id = $this->exhibition_model->insert_exhibition_artworks($exhibition_id, $applied_artwork_id);
 
             if ($id === false || $result === false) {
@@ -42,7 +39,7 @@ class ApplyApi extends API_Controller {
      * @return bool
      */
     private function _is_my_exhibition($exhibition_id) {
-        $exhibition = $this->exhibition_model->get_exhibition_by_id($exhibition_id);
+        $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
 
         if ($exhibition === NULL) {
             return false;
