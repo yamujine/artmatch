@@ -96,6 +96,73 @@ body {
               margin-right: 20px;
             }
 
+            .inReviewStatus, .acceptedStatus {
+              display: none;
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 12px;
+            }
+
+            .dimm {
+              display: none;
+              z-index: 10;
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              left: 0;
+              top: 0;
+              background: $black-66;
+            }
+
+            .icon {
+              width: 20px;
+              height: 20px;
+              margin: 0 auto 4px auto;
+            }
+
+            &.in_review {
+              .dimm {
+                display: block;
+              }
+
+              .inReviewStatus {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-left: -29px;
+                margin-top: -20px;
+                z-index: 11;
+                color: $white-two;
+
+                .icon {
+                  background: url(/static/images/pending.png) no-repeat;
+                }
+
+                display: block;
+              }
+            }
+
+            &.accepted {
+              .dimm {
+                display: block;
+              }
+
+              .acceptedStatus {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-left: -29px;
+                margin-top: -20px;
+                z-index: 11;
+                color: $white-two;
+
+                .icon {
+                  background: url(/static/images/picked.png) no-repeat;
+                }
+
+                display: block;
+              }
+            }
+
             label {
               cursor: pointer;
               position: relative;

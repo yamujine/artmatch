@@ -49,7 +49,7 @@ class ExhibitionApi extends API_Controller {
         }
 
         $this->applylib->send_accepted_email($to_send_list, $exhibition_id);
-        $this->return_success_response();
+        $this->return_success_response(['message' => '선정이 완료되었습니다.']);
     }
 
     /**
