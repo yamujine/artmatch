@@ -172,26 +172,7 @@ html, body {
 
   // 하단 푸터
   #patFooter {
-    background: transparent;
-    height: 130px;
-
-    .container {
-      .logo, .slogan {
-        display: none;
-      }
-
-      p.copyright {
-        color: $white-two;
-      }
-
-      .links {
-        li {
-          a {
-            color: $white-two;
-          }
-        }
-      }
-    }
+    display: none;
   }
   // -- 하단 푸터
 }
