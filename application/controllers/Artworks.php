@@ -58,14 +58,6 @@ class Artworks extends MY_Controller {
         $this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
 
         $data = [];
-
-        // Form validation
-        $this->form_validation->set_rules('title', 'title', 'required|trim|max_length[20]');
-        $this->form_validation->set_rules('status', 'status', 'required');
-        $this->form_validation->set_rules('for_sale', 'for_sale', 'required');
-        $this->form_validation->set_rules('use_comment', 'use_comment', 'required');
-        $this->form_validation->set_rules('tags', 'tags', 'required|trim|max_length[60]');
-
         $user_id = $this->accountlib->get_user_id();
         $status = $this->input->post('status');
         $title = $this->input->post('title');
@@ -92,7 +84,7 @@ class Artworks extends MY_Controller {
         }
 
         if ($this->input->method() === 'post') {
-            if ($this->form_validation->run() === TRUE) {
+            if ($this->_is_valid_artwork_form()) {
                 // Upload representative image first
                 $uploaded_image_name = $this->imageupload->upload_image('image');
 
@@ -194,5 +186,29 @@ class Artworks extends MY_Controller {
         }
 
         alert_and_redirect('작품이 삭제되었습니다.', '/?type=' . TYPE_ARTWORKS);
+    }
+
+    private function _is_valid_artwork_form() {
+        $this->form_validation->set_error_delimiters('', "\r\n");
+
+        $this->form_validation->set_rules('title', '작품명', 'required|trim|max_length[20]', [
+            'required' => '작품명이 입력되지 않았습니다.',
+            'max_length' => '작품명은 최대 20자(공백 포함)까지 입력이 가능합니다.'
+        ]);
+        $this->form_validation->set_rules('status', '전시 여부', 'required', [
+            'required' => '전시 여부를 선택해주세요.'
+        ]);
+        $this->form_validation->set_rules('for_sale', '판매 여부', 'required', [
+            'required' => '판매 여부를 선택해주세요.'
+        ]);
+        $this->form_validation->set_rules('use_comment', '댓글 허용 여부', 'required', [
+            'required' => '댓글 허용 여부를 선택해주세요.'
+        ]);
+        $this->form_validation->set_rules('tags', '태그', 'required|trim|max_length[60]', [
+            'required' => '태그를 입력해주세요.',
+            'max_length' => '태그는 최대 60자(공백 포함)까지 입력이 가능합니다.'
+        ]);
+
+        return $this->form_validation->run();
     }
 }
