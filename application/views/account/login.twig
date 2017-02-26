@@ -101,12 +101,12 @@
       }, {scope: 'public_profile,email'});
     });
 
-    function password_change () {
+    function password_change (email) {
       $.ajax({
         method: "POST",
         url: "/api/users/reset_password",
         data: {
-          email: emailElement.va()
+          email: email
         }
       }).done(function (data) {
         if (data.result) {
@@ -119,6 +119,11 @@
 
       return false;
     }
+
+    $('#passwordChangeForm').submit(function () {
+      var emailElem = $(this).find("input[name=email]");
+      password_change(emailElem.val());
+    });
 
     $('#passwordChangeForm').validate({
       rules: {
