@@ -278,11 +278,11 @@
         <!-- //== 추가 이미지 선택 -->
         <!-- == 작품 설명 -->
         <div class="descriptionInput">
-          <textarea name="description" title="description" maxlength="100"
+          <textarea name="description" maxlength="100"
                     placeholder="작품에 대한 이야기를 입력해주세요. (최대 100자)"
                     required>{% if description %}{{ description }}{% endif %}</textarea>
           <div class="tags">
-            <input type="text" title="tags" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요" maxlength="60"
+            <input type="text" name="tags" value="{{ tags }}" placeholder="# 태그를 입력해주세요" maxlength="60"
                    required/>
           </div>
         </div>
