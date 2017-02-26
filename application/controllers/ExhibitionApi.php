@@ -23,6 +23,10 @@ class ExhibitionApi extends API_Controller {
         }
 
         foreach ($applied_artwork_ids as $applied_artwork_id) {
+            $apply = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition_id, $applied_artwork_id);
+            if($apply->status !== APPLY_STATUS_IN_REVIEW) {
+                break;
+            }
             $result = $this->apply_model->update_status($exhibition_id, $applied_artwork_id, APPLY_STATUS_ACCEPTED);
             $id = $this->exhibition_model->insert_exhibition_artworks($exhibition_id, $applied_artwork_id);
 
