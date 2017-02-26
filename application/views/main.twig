@@ -6,6 +6,13 @@
 
 {% block script %}
   <script type="text/javascript">
+    $(window).resize(function () {
+      var browserWidth = $(window).width();
+      var marginLeftToApply = (browserWidth - 972) / 2;
+
+      $('.sliderTrack .item:first-child').css({marginLeft: marginLeftToApply});
+    });
+
     $(function () {
       // Carousel Init
       var totalWidth = 0;
@@ -14,7 +21,7 @@
       var totalCount = 0;
       var $items = $('.sliderTrack .item');
       var browserWidth = $(window).width();
-      var marginLeftToApply = (browserWidth - 970) / 2;
+      var marginLeftToApply = (browserWidth - 972) / 2;
 
       totalCount = $items.length;
 
