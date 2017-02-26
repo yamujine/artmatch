@@ -22,15 +22,21 @@ class ExhibitionApi extends API_Controller {
             $this->return_fail_response('502', ['message' => '본인의 전시에 지원한 작품만 수락할 수 있습니다.']);
         }
 
-        foreach ($applied_artwork_ids as $applied_artwork_id) {
-            $result = $this->apply_model->update_status($exhibition_id, $applied_artwork_id, APPLY_STATUS_ACCEPTED);
-            $id = $this->exhibition_model->insert_exhibition_artworks($exhibition_id, $applied_artwork_id);
+        $already_applied_artwork_ids_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition_id);
+        $already_applied_artwork_ids = array_map(function ($value) {
+            return $value->artwork_id;
+        }, $already_applied_artwork_ids_objects);
+        $unapplied_artwork_ids = array_diff($applied_artwork_ids, $already_applied_artwork_ids);
+
+        foreach ($unapplied_artwork_ids as $unapplied_artwork_id) {
+            $result = $this->apply_model->update_status($exhibition_id, $unapplied_artwork_id, APPLY_STATUS_ACCEPTED);
+            $id = $this->exhibition_model->insert_exhibition_artworks($exhibition_id, $unapplied_artwork_id);
 
             if ($id === false || $result === false) {
                 $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
             }
             
-            $accepted_artwork = $this->artwork_model->get_by_id($applied_artwork_id);
+            $accepted_artwork = $this->artwork_model->get_by_id($unapplied_artwork_id);
             $accepted_artwork_list[] = $accepted_artwork;
         }
 

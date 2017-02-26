@@ -2,6 +2,11 @@
 @import "../helper/mixins";
 
 body {
+  #patCotents {
+    width: 875px;
+    padding: 0;
+  }
+
   #patDetail {
     .container {
       position: relative;
@@ -385,8 +390,8 @@ body {
         // 픽
         .pick {
           position: absolute;
-          top: 29px;
-          right: 27px;
+          top: 27px;
+          right: 28px;
           width: 112px;
           height: 112px;
 
@@ -566,6 +571,7 @@ body {
                 .regDate {
                   color: $pinkish-grey-three;
                   font-weight: normal;
+                  margin-left: 4px;
                 }
               }
               .comment {

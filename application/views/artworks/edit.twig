@@ -223,7 +223,9 @@
           <!-- //== 교체 아이콘 -->
           {% if image is null %}
             <div class="instruction">
-              <div class="icon"><i class="glyphicon glyphicon-plus"></i></div>
+              <div class="icon">
+                <img src="{{ 'images/icon_plus.png' | static_url }}"/>
+              </div>
               <p class="upload">대표 작품 올리기</p>
               <p class="description">
                 원본의 느낌을 최대한 유지할 수 있도록 작품의 4가지 비율<br/>
