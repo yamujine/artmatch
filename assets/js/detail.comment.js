@@ -79,7 +79,7 @@ $(document).on('click', '.commentEditSubmit', function () {
   }).done(function (data) {
     if (data.body.result_type === 'update') {
       $("#commentDiv_" + comment_id).show();
-      $('#commentEditDiv_' + comment_id).hide();
+      $('#commentEditDiv_' + comment_id).removeClass('active');
       $('#comment_' + comment_id).find('.comment').html(nl2br(data.body.comment));
     } else {
       alert(data.body.message);
