@@ -265,17 +265,19 @@
           <input type="text" name="name" placeholder="장소명을 입력해주세요." value="{{ name }}"/>
         </div>
         <!-- //== 장소명 입력 -->
-        <!-- == 대표 장소 -->
-        <div class="area">
-          <div class="pin"></div>
-          <input type="text" name="area" placeholder="대표 장소" value="{{ area }}"/>
+        <div class="addressInput">
+          <!-- == 대표 장소 -->
+          <div class="area">
+            <div class="pin"></div>
+            <input type="text" name="area" placeholder="키워드 입력" value="{{ area }}"/>
+          </div>
+          <!-- //== 대표 장소 -->
+          <!-- == 주소 장소 -->
+          <div class="address">
+            <input type="text" name="address" placeholder="상세 주소" value="{{ address }}" readonly/>
+          </div>
+          <!-- //== 주소 -->
         </div>
-        <!-- //== 대표 장소 -->
-        <!-- == 주소 장소 -->
-        <div class="address">
-          <input type="text" name="address" placeholder="상세 주소" value="{{ address }}" readonly/>
-        </div>
-        <!-- //== 주소 -->
         <!-- == 대표 이미지 선택 -->
         <div class="mainImage imageUpload{% if image is not null %} imageSelected{% endif %}">
           <!-- == 교체 아이콘 -->
@@ -285,7 +287,9 @@
           <!-- //== 교체 아이콘 -->
           {% if image is null %}
             <div class="instruction">
-              <div class="icon"><i class="glyphicon glyphicon-plus"></i></div>
+              <div class="icon">
+                <img src="{{ 'images/icon_plus.png' | static_url }}"/>
+              </div>
               <p class="upload">대표 사진 올리기</p>
               <p class="description">
                 3:4 비율로 적용됩니다.

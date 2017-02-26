@@ -13,10 +13,16 @@
       var currentCoordinateX = 0;
       var totalCount = 0;
       var $items = $('.sliderTrack .item');
+      var browserWidth = $(window).width();
+      var marginLeftToApply = (browserWidth - 970) / 2;
 
       totalCount = $items.length;
 
       $items.each(function (key, value) {
+        if (key == 0) {
+          $(value).css({marginLeft: marginLeftToApply});
+        }
+
         totalWidth += $(value).outerWidth(true);
       });
 
@@ -290,10 +296,10 @@
   <div class="patLoader"></div>
 
   {% if total_count > 9 %}
-    {# 더 보기 버튼 #}
+    {# 더보기 버튼 #}
     <div class="patItemMore">
       <button class="patItemMoreButton" data-type="{{ type }}" {% if query %}data-query="{{ query }}"{% endif %} data-total-count="{{ total_count }}">
-        더 보기 <i class="glyphicon glyphicon-menu-down"></i>
+        더보기 <i class="glyphicon glyphicon-menu-down"></i>
       </button>
     </div>
   {% endif %}

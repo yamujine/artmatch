@@ -154,12 +154,12 @@
   .patGallery {
     position: relative;
     background: $white-three;
-    padding: 100px 0 135px 0;
+    padding: 80px 0 45px 0;
 
     .sliderControl {
-      position: absolute;
-      bottom: 57px;
-      right: 133px;
+      width: 920px;
+      text-align: right;
+      margin: 40px auto 0 auto;
 
       button {
         width: 34px;
@@ -174,7 +174,7 @@
         }
 
         &.sliderPrevBtn {
-          margin-right: 14px;
+          margin-right: 8px;
         }
       }
     }
@@ -256,7 +256,7 @@
 
               i {
                 font-size: 8px;
-                margin: 7px 0 0 6px;
+                margin: 5px 0 0 3px;
                 position: absolute;
               }
             }
@@ -536,7 +536,8 @@
             .wrap {
               .imgThumb {
                 .pickBtn {
-                  background: url(/static/images/main_btn_pick_select.png);
+                  background: url(/static/images/main_btn_picked_hover.png);
+                  background-size: cover;
                 }
               }
               .meta {
@@ -552,12 +553,8 @@
               .imgThumb {
                 .pickBtn {
                   &:hover {
-                    width: 70px;
-                    height: 70px;
-                    padding: 10px 10px 0 0;
-                    top: -10px;
-                    right: -10px;
-                    background: url(/static/images/main_btn_pick_select_hover.png) top right no-repeat;
+                    background: url(/static/images/main_btn_pick_normal_hover.png) top right no-repeat;
+                    background-size: cover;
                   }
                 }
               }
@@ -613,14 +610,15 @@
               }
               .pickBtn {
                 z-index: 10;
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
                 position: absolute;
                 top: 0;
                 right: 0;
                 display: none;
                 // TODO: 백그라운드 이미지 URL 전부 수정 필요
                 background: url(/static/images/main_btn_pick_normal.png);
+                background-size: cover;
                 outline: none;
                 border: none;
               }
@@ -634,10 +632,12 @@
                 &.recruit {
                   width: 52px;
                   background: url(/static/images/tag_ing.png);
+                  background-size: cover;
                 }
                 &.recruitFinish {
                   width: 63px;
                   background: url(/static/images/tag_finish.png);
+                  background-size: cover;
                 }
               }
             }
@@ -645,13 +645,13 @@
             .meta {
               position: relative;
               font-family: 'Noto Sans KR', sans-serif;
-              margin: 12px 0 0 14px;
+              margin: 12px 0 0 5px;
 
               .pick {
                 font-family: "Helvetica Neue", Helvetica, sans-serif;
                 position: absolute;
                 top: 4px;
-                right: 12px;
+                right: 0;
                 font-size: 12px;
                 color: $warm-grey;
 
@@ -661,8 +661,9 @@
               }
 
               .title {
+                margin-bottom: 8px;
                 color: $black;
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: 500;
               }
 
@@ -680,6 +681,13 @@
               .imgThumb {
                 .dimm, .preview, .pickBtn {
                   display: block;
+                }
+              }
+              .meta {
+                margin-left: 14px;
+
+                .pick {
+                  right: 12px;
                 }
               }
             }
