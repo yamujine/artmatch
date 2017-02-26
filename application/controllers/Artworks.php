@@ -158,6 +158,8 @@ class Artworks extends MY_Controller {
     }
 
     public function delete($artwork_id) {
+        $this->load->library('imageupload');
+
         $artwork = $this->artwork_model->get_bare_by_id($artwork_id);
         if (empty($artwork)) {
             alert_and_redirect('존재하지 않는 작품입니다.');
