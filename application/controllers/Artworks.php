@@ -186,6 +186,9 @@ class Artworks extends MY_Controller {
 
             // 전시 내 작품
             $this->exhibition_model->delete_all_artworks_by_artwork_id($artwork_id);
+
+            // 지원 내역
+            $this->apply_model->delete_by_artwork_id($artwork_id);
         }
 
         alert_and_redirect('작품이 삭제되었습니다.', '/?type=' . TYPE_ARTWORKS);

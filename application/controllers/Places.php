@@ -237,10 +237,14 @@ class Places extends MY_Controller {
             $this->place_pick_model->delete_all_picks_by_place_id($place_id);
 
             // 전시
+            $exhibition = $this->exhibition_model->get_by_place_id($place_id);
             $this->exhibition_model->delete_all_by_place_id($place_id);
 
             // 장소 내 작품
             $this->exhibition_model->delete_all_artworks_by_place_id($place_id);
+
+            // 지원 내역
+            $this->apply_model->delete_by_exhibition_id($exhibition->id);
         }
 
         alert_and_redirect('장소가 삭제되었습니다.', '/?type=' . TYPE_PLACES);
