@@ -12,8 +12,10 @@ class Tag {
 
         $parts = preg_split('/\s+/', $tag_string);
         foreach ($parts as $part) {
-            if (!empty($part) && $part[0] === '#') {
-                $tag_array[] = trim($part);
+            $part = trim($part);
+            // 태그는 #으로 시작하고 공백을 제외한 2글자 이상인 경우를 사용함
+            if (!empty($part) && $part[0] === '#' && strlen($part) > 1) {
+                $tag_array[] = $part;
             }
         }
 
