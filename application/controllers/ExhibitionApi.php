@@ -26,17 +26,17 @@ class ExhibitionApi extends API_Controller {
         $already_applied_artwork_ids = array_map(function ($value) {
             return $value->artwork_id;
         }, $already_applied_artwork_ids_objects);
-        $un_regist_artwork_ids = array_diff($applied_artwork_ids, $already_applied_artwork_ids);
+        $unapplied_artwork_ids = array_diff($applied_artwork_ids, $already_applied_artwork_ids);
 
-        foreach ($un_regist_artwork_ids as $un_regist_artwork_id) {
-            $result = $this->apply_model->update_status($exhibition_id, $un_regist_artwork_id, APPLY_STATUS_ACCEPTED);
-            $id = $this->exhibition_model->insert_exhibition_artworks($exhibition_id, $un_regist_artwork_id);
+        foreach ($unapplied_artwork_ids as $unapplied_artwork_id) {
+            $result = $this->apply_model->update_status($exhibition_id, $unapplied_artwork_id, APPLY_STATUS_ACCEPTED);
+            $id = $this->exhibition_model->insert_exhibition_artworks($exhibition_id, $unapplied_artwork_id);
 
             if ($id === false || $result === false) {
                 $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
             }
             
-            $accepted_artwork = $this->artwork_model->get_by_id($un_regist_artwork_id);
+            $accepted_artwork = $this->artwork_model->get_by_id($unapplied_artwork_id);
             $accepted_artwork_list[] = $accepted_artwork;
         }
 
