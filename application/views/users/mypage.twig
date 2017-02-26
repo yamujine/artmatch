@@ -290,7 +290,7 @@
     <!-- == 아이템 없음 -->
     <div class="itemEmpty">
       <div class="container">
-        {% if (user.type == USER_TYPE_ARTIST and pick_type is null) or (pick_type == TYPE_ARTWORKS) %}
+        {% if (user.type == USER_TYPE_ARTIST and pick_type is empty) or (pick_type == TYPE_ARTWORKS) %}
           <p class="empty">아직 작품이 없습니다 :)</p>
           {% if pick_type is null %}
             <a href="/artworks/upload">작품 등록하러 가기 <i class="glyphicon glyphicon-menu-right"></i></a>
