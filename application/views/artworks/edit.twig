@@ -151,12 +151,8 @@
             maxlength: 20
           },
           image: {
-            required: function() {
-              if($("#mainImageFile").data('img') === null) {
-                return true;
-              } else {
-                return false;
-              }
+            required: function(element) {
+              return $("#mainImageFile").attr('value') === '';
             }
           },
           description: {
@@ -236,7 +232,7 @@
             </div>
           {% endif %}
           <img src="{{ image | image_url }}" class="preview{% if image is null %} hidden{% endif %}"/>
-          <input type="file" name="image" id="mainImageFile" accept="image/*" data-img="{{ image }}"/>
+          <input type="file" name="image" id="mainImageFile" accept="image/*" value="{{ image }}"/>
         </div>
         <!-- //== 대표 이미지 선택 -->
         <!-- == 저작권 -->
