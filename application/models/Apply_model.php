@@ -42,4 +42,14 @@ class Apply_model extends CI_Model {
             return FALSE;
         }
     }
+
+    public function delete_by_exhibition_id($exhibition_id) {
+        $this->db->delete(self::TABLE_NAME, ['exhibition_id' => $exhibition_id]);
+
+        return $this->db->affected_rows() > 0;
+    }
+
+    public function delete_by_artwork_id($artwork_id) {
+        return $this->db->delete(self::TABLE_NAME, ['artwork_id' => $artwork_id]);
+    }
 }
