@@ -114,7 +114,7 @@
       $('.selectBtn').click(function () {
         var exhibitionId;
         var artworkIds = [];
-        $('.checked').each(function () {
+        $('.checked:enabled').each(function () {
           exhibitionId = $(this).data('exhibition-id');
           artworkIds.push($(this).data('artwork-id'));
         });
