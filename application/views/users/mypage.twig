@@ -299,7 +299,7 @@
           <p class="empty">아직 지원된 작품이 없습니다 :)</p>
         {% else %}
           <p class="empty">아직 공간이 없습니다 :)</p>
-            {% if pick_type is null %}
+          {% if pick_type is empty %}
             <a href="/places/upload">장소 등록하러 가기 <i class="glyphicon glyphicon-menu-right"></i></a>
           {% endif %}
         {% endif %}
