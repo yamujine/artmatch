@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Artworks extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'artwork_comment_model', 'artwork_pick_model', 'user_model']);
+        $this->load->model(['artwork_model', 'place_model', 'exhibition_model', 'artwork_comment_model', 'artwork_pick_model', 'user_model', 'apply_model']);
         $this->load->library(['tag']);
         $this->load->helper('url');
     }
@@ -186,6 +186,9 @@ class Artworks extends MY_Controller {
 
             // 전시 내 작품
             $this->exhibition_model->delete_all_artworks_by_artwork_id($artwork_id);
+
+            // 지원 내역
+            $this->apply_model->delete_by_artwork_id($artwork_id);
         }
 
         alert_and_redirect('작품이 삭제되었습니다.', '/?type=' . TYPE_ARTWORKS);

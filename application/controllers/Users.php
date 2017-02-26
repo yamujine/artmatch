@@ -56,6 +56,10 @@ class Users extends MY_Controller {
     private function _get_user_details($user_name, $is_my_page = false, $pick_type = '') {
         $user = $this->user_model->get_by_user_name($user_name);
 
+        if ($user === null) {
+            alert_and_redirect('존재하지 않는 회원입니다');
+        }
+        
         // 내 작품, 장소 리스트
         if ($user->type === USER_TYPE_ARTIST) {
             $mine = $this->artwork_model->get_all_by_user_id($user->id);
