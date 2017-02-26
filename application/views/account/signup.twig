@@ -8,7 +8,7 @@
   <script type="text/javascript">
     function checksUsername() {
       var username = document.getElementsByName("user_name")[0].value;
-      var checkUsername = /^[A-Za-z0-9)(-_\.]{1,15}$/;
+      var checkUsername = /^[A-Za-z0-9-_\.]{1,15}$/;
 
       if (!username) {
         document.getElementById("warningUsername").innerText = "유저 아이디가 입력되지 않았습니다.";
@@ -17,7 +17,7 @@
         return;
       }
       if (!username.match(checkUsername)) {
-        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, ()_-. 만 20자 이내로 입력 가능합니다.";
+        document.getElementById("warningUsername").innerText = "아이디는 영어, 숫자, _-. 만 15자 이내로 입력 가능합니다.";
         $("#warningUsername").css("color", "red");
         $("#checkUsername").attr("value", "uncheck");
         return;
