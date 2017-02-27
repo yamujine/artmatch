@@ -30,6 +30,10 @@ class MY_Controller extends CI_Controller {
         } elseif ($this->accountlib->is_auth() === false) {
             redirect('/account/not_authenticated');
         }
+
+        if (ENVIRONMENT === 'development') {
+            $this->output->enable_profiler(TRUE);
+        }
     }
 }
 
