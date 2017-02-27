@@ -9,26 +9,21 @@ class MY_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->helper('url');
+        $this->config->load('facebook');
 
-        $this->load->library('twig');
         /** @var Twig_Environment $twig */
         $twig = $this->twig->getTwig();
-        $this->config->load('facebook');
         $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
         $twig->addFilter(new Twig_SimpleFilter('image_url', 'UrlGenerator::generate_original_image_url'));
         $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
         // Twig 관련 글로벌 설정은 이곳 또는 application/libraries/Twig.php 에 작성
         $this->twig->addGlobal('session', $_SESSION);
+        $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
+        $this->twig->addGlobal('FACEBOOK_API_VERSION', $this->config->item('api_version'));
         // 사용자 정의 상수를 Twig global로 등록
         $defined_constants = get_defined_constants(true)['user'];
         foreach ($defined_constants as $constant => $value) {
             $this->twig->addGlobal($constant, $value);
-        }
-
-        if ($this->accountlib->is_login() === false) {
-            redirect('/account/login');
-        } elseif ($this->accountlib->is_auth() === false) {
-            redirect('/account/not_authenticated');
         }
 
         if (ENVIRONMENT === 'development') {
