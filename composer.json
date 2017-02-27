@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.2.4",
-        	"facebook/graph-sdk": "~5.0"
+		"facebook/graph-sdk": "~5.0",
+		"twig/twig": "^2.2"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
