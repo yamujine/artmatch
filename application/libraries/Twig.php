@@ -9,8 +9,10 @@
  */
 
 // If you don't use Composer, uncomment below
+/*
 require_once APPPATH . 'third_party/Twig-1.31.0/lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
+*/
 
 class Twig {
     private $config = [];
