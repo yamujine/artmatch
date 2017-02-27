@@ -26,6 +26,7 @@
  * @property Artwork_pick_model     $artwork_pick_model         pick model
  * @property Place_pick_model       $place_pick_model           pick model
  * @property Apply_model            $apply_model                apply model
+ * @property User_model             $user_model                 user model
  *
  */
 class my_models
