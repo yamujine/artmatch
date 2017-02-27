@@ -31,8 +31,7 @@ class Users extends MY_Controller {
         $exhibition_list = [];
         $total_applied_count = 0;
 
-        $places = $this->place_model->get_all_by_user_id($this->accountlib->get_user_id());
-
+        $places = $this->place_model->get_all_bare_by_user_id($this->accountlib->get_user_id());
         foreach ($places as $place) {
             $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place->id);
 
@@ -46,6 +45,7 @@ class Users extends MY_Controller {
                 }
             }
         }
+
         return [
             'show_applied_list' => true,
             'exhibitions' => $exhibition_list,
@@ -59,7 +59,7 @@ class Users extends MY_Controller {
         if ($user === null) {
             alert_and_redirect('존재하지 않는 회원입니다');
         }
-        
+
         // 내 작품, 장소 리스트
         if ($user->type === USER_TYPE_ARTIST) {
             $mine = $this->artwork_model->get_all_by_user_id($user->id);

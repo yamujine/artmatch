@@ -121,6 +121,11 @@ class Place_model extends CI_Model {
             ->get()->row();
     }
 
+    /**
+     * Heavy한 함수이므로 가급적 사용 자제 (장소, pick 수, 추가 이미지 등 전부 불러옴)
+     * @param $user_id
+     * @return mixed
+     */
     public function get_all_by_user_id($user_id) {
         $places = $this->db
             ->select('places.*, count(user_place_picks.id) as pick_count, IF(P2.id IS NULL, 0, 1) AS is_picked')
@@ -140,6 +145,16 @@ class Place_model extends CI_Model {
         }
 
         return $places;
+    }
+
+    public function get_all_bare_by_user_id($user_id) {
+        return $this->db
+            ->select('places.*')
+            ->from(self::TABLE_NAME)
+            ->join('users', 'users.id = places.user_id')
+            ->where('places.user_id', $user_id)
+            ->order_by('places.id', 'DESC')
+            ->get()->result();
     }
 
     public function get_picked_by_user_id($user_id) {
