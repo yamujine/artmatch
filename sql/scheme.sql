@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
   `ip_address` varchar(45) NOT NULL,
   `timestamp` int(10) unsigned default 0 NOT NULL,
   `data` blob NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id, ip_address)
 )
 ENGINE = InnoDB;
 
