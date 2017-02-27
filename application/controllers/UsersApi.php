@@ -11,7 +11,7 @@ class UsersApi extends API_Controller {
 
     public function register() {
         // Validation
-        if ($this->_is_valid_signup_form()) {
+        if (!$this->_is_valid_signup_form()) {
             $this->return_fail_response('105', ['message' => $this->form_validation->error_string()]);
         }
 
