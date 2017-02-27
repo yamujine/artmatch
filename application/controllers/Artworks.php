@@ -191,7 +191,7 @@ class Artworks extends MY_Controller {
     private function _is_valid_artwork_form() {
         $this->form_validation->set_error_delimiters('', "\r\n");
 
-        $this->form_validation->set_rules('title', '작품명', 'required|trim|max_length[20]', [
+        $this->form_validation->set_rules('title', '작품명', 'trim|required|max_length[20]', [
             'required' => '작품명이 입력되지 않았습니다.',
             'max_length' => '작품명은 최대 20자(공백 포함)까지 입력이 가능합니다.'
         ]);
@@ -204,7 +204,7 @@ class Artworks extends MY_Controller {
         $this->form_validation->set_rules('use_comment', '댓글 허용 여부', 'required', [
             'required' => '댓글 허용 여부를 선택해주세요.'
         ]);
-        $this->form_validation->set_rules('tags', '태그', 'required|trim|max_length[60]', [
+        $this->form_validation->set_rules('tags', '태그', 'trim|required|max_length[60]', [
             'required' => '태그를 입력해주세요.',
             'max_length' => '태그는 최대 60자(공백 포함)까지 입력이 가능합니다.'
         ]);

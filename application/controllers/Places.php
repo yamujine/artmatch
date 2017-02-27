@@ -280,18 +280,18 @@ class Places extends MY_Controller {
     private function _is_valid_place_form() {
         $this->form_validation->set_error_delimiters('', "\r\n");
 
-        $this->form_validation->set_rules('name', '장소명', 'required|trim|max_length[20]', [
+        $this->form_validation->set_rules('name', '장소명', 'trim|required|max_length[20]', [
             'required' => '장소명이 입력되지 않았습니다.',
             'max_length' => '장소명은 최대 20자(공백 포함)까지 입력이 가능합니다.'
         ]);
-        $this->form_validation->set_rules('area', '장소 키워드', 'required|trim|max_length[6]', [
+        $this->form_validation->set_rules('area', '장소 키워드', 'trim|required|max_length[6]', [
             'required' => '장소 대표 키워드를 입력해주세요.',
             'max_length' => '장소 대표 키워드는 최대 6자(공백 포함)까지 입력이 가능합니다.'
         ]);
 
-        $this->form_validation->set_rules('address', '주소', 'required|trim'); // 다음지도 API로 입력 되므로 검증 불필요
+        $this->form_validation->set_rules('address', '주소', 'trim|required'); // 다음지도 API로 입력 되므로 검증 불필요
 
-        $this->form_validation->set_rules('tags', '태그', 'required|trim|max_length[60]', [
+        $this->form_validation->set_rules('tags', '태그', 'trim|required|max_length[60]', [
             'required' => '태그를 입력해주세요.',
             'max_length' => '태그는 최대 60자(공백 포함)까지 입력이 가능합니다.'
         ]);
@@ -301,18 +301,18 @@ class Places extends MY_Controller {
         $this->form_validation->set_rules('use_comment', '댓글 허용 여부', 'required', [
             'required' => '댓글 허용 여부를 선택해주세요.'
         ]);
-        $this->form_validation->set_rules('exhibition_start_date', '전시 시작 날짜', 'required|exact_length[8]|trim', [
+        $this->form_validation->set_rules('exhibition_start_date', '전시 시작 날짜', 'trim|required|exact_length[8]|trim', [
             'required' => '전시 시작 날을 입력해주세요. (예상 날짜도 가능)',
             'exact_length' => '전시 날짜는 YYmmdd 8자로만 구성되어야 합니다.'
         ]);
-        $this->form_validation->set_rules('exhibition_end_date', '전시 종료 날짜', 'required|exact_length[8]|trim', [
+        $this->form_validation->set_rules('exhibition_end_date', '전시 종료 날짜', 'trim|required|exact_length[8]|trim', [
             'required' => '전시 종료 날을 입력해주세요. (예상 날짜도 가능)',
             'exact_length' => '전시 날짜는 YYmmdd 8자로만 구성되어야 합니다.'
         ]);
-        $this->form_validation->set_rules('exhibition_is_free', '전시비 지급 여부', 'required|trim', [
+        $this->form_validation->set_rules('exhibition_is_free', '전시비 지급 여부', 'required', [
             'required' => '전시비 지급 여부를 선택해주세요.'
         ]);
-        $this->form_validation->set_rules('exhibition_artwork_count', '전시 작품 수', 'required|numeric|trim', [
+        $this->form_validation->set_rules('exhibition_artwork_count', '전시 작품 수', 'trim|required|numeric', [
             'required' => '전시를 원하는 작품 수를 입력해 주세요. (예상치도 입력 가능)',
             'numeric' => '전시 작품 수는 숫자로만 입력되어야 합니다.'
         ]);

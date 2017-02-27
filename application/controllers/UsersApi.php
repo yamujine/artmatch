@@ -204,15 +204,15 @@ class UsersApi extends API_Controller {
     private function _is_valid_signup_form() {
         $this->form_validation->set_error_delimiters('', "\r\n");
 
-        $this->form_validation->set_rules('email', '이메일', 'required|valid_email|is_unique[users.email]', [
+        $this->form_validation->set_rules('email', '이메일', 'trim|required|valid_email|is_unique[users.email]', [
             'required' => '이메일 주소가 입력되지 않았습니다.',
             'valid_email' => '유효한 형식의 이메일 주소가 아닙니다.',
             'is_unique' => '이미 사용중인 이메일 주소입니다.'
         ]);
-        $this->form_validation->set_rules('password', '패스워드', 'required', [
+        $this->form_validation->set_rules('password', '패스워드', 'trim|required', [
             'required' => '패스워드가 입력되지 않았습니다.'
         ]);
-        $this->form_validation->set_rules('user_name', '유저 아이디', 'required|alpha_dash|is_unique[users.user_name]|max_length[15]|callback_is_not_prohibitied_user_name', [
+        $this->form_validation->set_rules('user_name', '유저 아이디', 'trim|required|alpha_dash|is_unique[users.user_name]|max_length[15]|callback_is_not_prohibitied_user_name', [
             'required' => '유저 아이디가 입력되지 않았습니다.',
             'alpha_dash' => '아이디에 사용할 수 없는 문자열이 포함되어 있습니다. (영 소문자, 숫자, -, _ 만 가능)',
             'is_unique' => '이미 사용중인 아이디입니다.',
