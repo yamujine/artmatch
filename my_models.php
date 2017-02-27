@@ -28,6 +28,12 @@
  * @property Apply_model            $apply_model                apply model
  * @property User_model             $user_model                 user model
  *
+ * Adds custom libraries
+ * @property Accountlib             $accountlib
+ * @property Applylib               $applylib
+ * @property Tag                    $tag
+ * @property Imageupload            $imageupload
+ *
  */
 class my_models
 {
