@@ -93,11 +93,10 @@ class Account extends CI_Controller {
     }
 
     public function not_authenticated() {
+        $user = $this->accountlib->get_user(true);
         if ($this->accountlib->is_auth()) {
             redirect('/');
         }
-
-        $user = $this->accountlib->get_user();
 
         if ($this->input->method() === 'post' && $this->input->post('resend') === '1') {
             $this->accountlib->send_email_authentication($user->email, $user->id, $user->user_name);

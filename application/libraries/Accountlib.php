@@ -62,7 +62,11 @@ class Accountlib {
         return FALSE;
     }
 
-    public function get_user() {
+    public function get_user($force = false) {
+        if ($force) {
+            $this->generate_user_session($this->CI->session->userdata('id'));
+        }
+
         if ($this->_validate_session()) {
             $user = new stdClass();
             $user->id = $this->CI->session->userdata('id');
