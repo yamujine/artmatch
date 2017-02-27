@@ -86,7 +86,7 @@ class Twig {
         $twig = new \Twig_Environment($this->loader, [
             'cache' => $this->config['cache'],
             'debug' => $debug,
-            'autoescape' => TRUE,
+            'autoescape' => 'html',
         ]);
 
         if ($debug) {
