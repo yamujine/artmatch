@@ -44,6 +44,11 @@ class UrlGenerator {
     }
 
     public static function generate_static_url($filename) {
+        $full_file_path = __DIR__ . '/../../static/' . $filename;
+        if (file_exists($full_file_path)) {
+            $filename .= '?' . filemtime($full_file_path);
+        }
+
         if (ENVIRONMENT === 'production') {
             $host = 'http://static.pickartyou.com/';
         } else {
