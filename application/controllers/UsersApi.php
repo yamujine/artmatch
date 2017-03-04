@@ -7,6 +7,8 @@ class UsersApi extends API_Controller {
         $this->load->library(['email', 'encryption', 'form_validation', 'twig', 'imageupload']);
         $this->load->helper('url');
         $this->load->model('user_model');
+
+        $this->allow_without_login = ['register', 'login', 'check_username', 'check_email', 'reset_password'];
     }
 
     public function register() {

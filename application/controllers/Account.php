@@ -3,24 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 include_once __DIR__ . '/../classes/UrlGenerator.php';
 
-// MY_Controller가 로그인 체크를 하여 /account/login route로 redirect를 하므로, 로그인 컨트롤러는 MY_Controller을 사용하지 않음
-class Account extends CI_Controller {
+class Account extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('user_model');
         $this->load->helper('url');
-        $this->load->library('twig');
-        $this->config->load('facebook');
-        /** @var Twig_Environment $twig */
-        $twig = $this->twig->getTwig();
-        $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
-        $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
-        $this->twig->addGlobal('USER_TYPE_ARTIST', USER_TYPE_ARTIST);
-        $this->twig->addGlobal('USER_TYPE_PLACE_OWNER', USER_TYPE_PLACE_OWNER);
-        $this->twig->addGlobal('FACEBOOK_APP_ID', $this->config->item('app_id'));
-        $this->twig->addGlobal('FACEBOOK_API_VERSION', $this->config->item('api_version'));
-        $this->twig->addGlobal('FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION', FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION);
-        $this->twig->addGlobal('FACEBOOK_NOT_JOINED_USER',FACEBOOK_NOT_JOINED_USER);
+
+        $this->allow_without_login = ['signup', 'login'];
+        $this->allow_without_auth = ['not_authenticated'];
     }
 
     public function signup() {
