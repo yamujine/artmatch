@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class UsersApi extends API_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->library(['email', 'encryption', 'form_validation', 'twig', 'imageupload']);
+        $this->load->library(['email', 'encryption', 'form_validation', 'imageupload']);
         $this->load->helper('url');
         $this->load->model('user_model');
 

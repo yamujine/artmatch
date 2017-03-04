@@ -7,7 +7,7 @@ class Accountlib {
     public function __construct() {
         $this->CI =& get_instance();
         $this->CI->load->model(['user_model']);
-        $this->CI->load->library(['twig', 'encryption', 'email']);
+        $this->CI->load->library(['encryption', 'email']);
     }
 
     public function is_login() {
