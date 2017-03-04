@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 이 컨트롤러를 상속받아 구현하는 컨트롤러는 application/json 타입의 리턴을 기본으로 하고, 로그인 체크를 하지 않음
+ * 이 컨트롤러를 상속받아 구현하는 컨트롤러는 application/json 타입의 리턴을 기본으로 함
  */
 
 class API_Controller extends CI_Controller {
@@ -17,19 +17,11 @@ class API_Controller extends CI_Controller {
         $this->output->set_content_type('application/json');
         $this->result = ['result' => false, 'errorCode' => null, 'body' => null];
         $this->twig->addGlobal('session', $_SESSION);
-        // 사용자 정의 상수를 Twig global로 등록
+        /* @var array $defined_constants 사용자 정의 상수를 Twig global로 등록 */
         $defined_constants = get_defined_constants(true)['user'];
         foreach ($defined_constants as $constant => $value) {
             $this->twig->addGlobal($constant, $value);
         }
-    }
-
-    /**
-     * @deprecated return_success_response 쓰는 방식으로 변경해주세요.
-     */
-    public function set_success_response($body) {
-        $this->result['result'] = true;
-        $this->result['body'] = $body;
     }
 
     public function return_success_response(array $body = []) {
@@ -37,15 +29,6 @@ class API_Controller extends CI_Controller {
         $this->result['body'] = $body;
 
         $this->return_response();
-    }
-
-    /**
-     * @deprecated return_fail_response 쓰는 방식으로 변경해주세요.
-     */
-    public function set_fail_response($error_code, $body) {
-        $this->result['result'] = false;
-        $this->result['errorCode'] = $error_code;
-        $this->result['body'] = $body;
     }
 
     public function return_fail_response($error_code, array $body) {
