@@ -5,6 +5,10 @@
  */
 
 class API_Controller extends CI_Controller {
+    /* @var array 로그인 없이 사용 가능한 함수 이름을 입력 */
+    public $allow_without_login = [];
+    /* @var array 이메일 인증이 필요 없이 사용 가능한 함수 이름을 입력 */
+    public $allow_without_auth = [];
 
     public $result;
 
