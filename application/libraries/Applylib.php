@@ -30,7 +30,6 @@ class Applylib {
 
     /**
      * @param array $to_send_list
-     * @param $exhibition_id
      */
     public function send_accepted_email(array $to_send_list) {
         if (!empty($to_send_list)) {

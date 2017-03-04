@@ -35,7 +35,7 @@ class ExhibitionApi extends API_Controller {
             if ($id === false || $result === false) {
                 $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
             }
-            
+
             $accepted_artwork = $this->artwork_model->get_by_id($unapplied_artwork_id);
             $accepted_artwork_list[] = $accepted_artwork;
         }

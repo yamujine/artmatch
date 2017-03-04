@@ -99,7 +99,7 @@ class ContentsApi extends API_Controller {
         if (empty($deleted_list)) {
             $this->return_fail_response('500', ['message' => '삭제된 이미지가 없습니다']);
         }
-        
+
         $this->return_success_response([
             'message' => 'delete success',
             'deleted_list' => $deleted_list,
