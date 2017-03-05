@@ -9,6 +9,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var clean = require('gulp-clean');
 var filesExist = require('files-exist');
+var imagemin = require('gulp-imagemin');
 
 gulp.task('dist-clean', function () {
   return gulp.src('static/dist/', {read: false})
@@ -108,13 +109,20 @@ gulp.task('font', function () {
     .pipe(gulp.dest('static/dist/fonts'));
 });
 
+gulp.task('image', function() {
+  return gulp.src('static/images/*')
+    .pipe(imagemin())
+    .pipe(gulp.dest('static/images'));
+});
+
 gulp.task('build', sync.sync([
   'dist-clean',
   [
     'dev',
     'uglify',
     'sass',
-    'font'
+    'font',
+    'image'
   ]
 ]));
 
