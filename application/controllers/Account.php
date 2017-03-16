@@ -9,8 +9,8 @@ class Account extends MY_Controller {
         $this->load->model('user_model');
         $this->load->helper('url');
 
-        $this->allow_without_login = ['signup', 'login'];
-        $this->allow_without_auth = ['not_authenticated'];
+        $this->allow_without_login = ['signup', 'login', 'verify'];
+        $this->allow_without_auth = ['not_authenticated', 'verify'];
     }
 
     public function signup() {
