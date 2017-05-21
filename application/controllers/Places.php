@@ -30,7 +30,7 @@ class Places extends MY_Controller {
 
         // 전시 정보
         $place->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_by_place_id($place->id);
-        $place->exhibition = $this->exhibition_model->get_by_place_id($place->id);
+        $place->exhibition = $this->exhibition_model->get_one_by_place_id($place->id);
 
         // 장소정보
         $data['place'] = $place;
@@ -98,7 +98,7 @@ class Places extends MY_Controller {
             $data = array_merge($data, $place_array);
 
             // 전시 데이터 수정
-            $exhibition = $this->exhibition_model->get_by_place_id($place->id);
+            $exhibition = $this->exhibition_model->get_one_by_place_id($place->id);
             $exhibition_array = json_decode(json_encode($exhibition), true);
             $exhibition_data = [];
             if ($exhibition_array !== null) {
@@ -224,7 +224,7 @@ class Places extends MY_Controller {
             $this->place_pick_model->delete_all_picks_by_place_id($place_id);
 
             // 전시
-            $exhibition = $this->exhibition_model->get_by_place_id($place_id);
+            $exhibition = $this->exhibition_model->get_one_by_place_id($place_id);
             $this->exhibition_model->delete_all_by_place_id($place_id);
 
             // 장소 내 작품
@@ -237,13 +237,29 @@ class Places extends MY_Controller {
         alert_and_redirect('장소가 삭제되었습니다.', '/?type=' . TYPE_PLACES);
     }
 
+    public function exhibitions($place_id) {
+        // 장소명 등록된 전시 / 종료된 전시 전시 - 이름 / 일정 / 작품 수 / 상태
+        $place = $this->place_model->get_by_id($place_id);
+        if ($place === NULL) {
+            alert_and_redirect('존재하지 않는 장소입니다.');
+        }
+
+        if ($place->user_id !== $this->accountlib->get_user_id()) {
+            alert_and_redirect('본인의 장소만 수정할 수 있습니다.');
+        }
+
+        $exhibitions = $this->exhibition_model->get_by_place_id($place_id);
+
+        $this->twig->display('places/exhibitions', ['place' => $place, 'exhibitions' => $exhibitions]);
+    }
+
     /**
      * @param $place_id
      */
     public function apply($place_id) {
         $this->load->model('apply_model');
         $this->load->library('applylib');
-        $default_exhibition = $this->exhibition_model->get_by_place_id($place_id);
+        $default_exhibition = $this->exhibition_model->get_one_by_place_id($place_id);
 
         if ($this->accountlib->get_user_type() !== USER_TYPE_ARTIST) {
             alert_and_redirect('창작자 회원만 전시 지원이 가능합니다.');

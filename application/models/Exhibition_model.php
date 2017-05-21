@@ -68,6 +68,17 @@ class Exhibition_model extends CI_Model {
         }
     }
 
+    public function get_one_by_place_id($place_id) {
+        return $this->db
+            ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
+            ->from(self::TABLE_NAME)
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id', 'LEFT')
+            ->where('place_id', $place_id)
+            ->group_by('exhibition_artworks.exhibition_id')
+            ->order_by('id', 'ASC')
+            ->get()->row();
+    }
+
     public function get_by_place_id($place_id) {
         return $this->db
             ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
@@ -76,7 +87,7 @@ class Exhibition_model extends CI_Model {
             ->where('place_id', $place_id)
             ->group_by('exhibition_artworks.exhibition_id')
             ->order_by('id', 'DESC')
-            ->get()->row();
+            ->get()->result();
     }
 
     public function get_artwork_ids_by_exhibition_id($exhibition_id) {
