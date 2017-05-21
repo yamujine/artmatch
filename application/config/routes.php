@@ -89,3 +89,6 @@ $route['api/users/change_password']['POST'] = 'usersApi/change_password';
 $route['api/users/reset_password']['POST'] = 'usersApi/reset_password';
 
 $route['api/exhibition/accept']['POST'] = 'exhibitionApi/accept';
+$route['api/exhibition/create']['POST'] = 'exhibitionApi/create';
+$route['api/exhibition/delete']['POST'] = 'exhibitionApi/delete';
+$route['api/exhibition/update']['POST'] = 'exhibitionApi/update';

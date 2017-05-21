@@ -38,6 +38,22 @@ class Exhibition_model extends CI_Model {
         }
     }
 
+    public function update($exhibition_id, $place_id, $start_date, $end_date, $artwork_count, $is_free) {
+        $data = [
+            'place_id' => $place_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'artwork_count' => $artwork_count,
+            'is_free' => $is_free
+        ];
+
+        if ($this->db->update(self::TABLE_NAME, $data, ['id' => $exhibition_id])) {
+            return $place_id;
+        }
+
+        return $this->db->affected_rows() === 1;
+    }
+
     public function update_by_place_id($place_id, $start_date, $end_date, $artwork_count, $is_free) {
         $data = [
             'start_date' => $start_date,
@@ -181,5 +197,15 @@ class Exhibition_model extends CI_Model {
         }
 
         return $this->db->insert_id();
+    }
+
+    public function delete($exhibition_id): bool {
+        $this->db->delete(self::TABLE_NAME, ['id' => $exhibition_id]);
+
+        return ($this->db->affected_rows() === 1);
+    }
+
+    public function delete_artworks($exhibition_id): bool {
+        return $this->db->delete(self::ARTWORK_TABLE_NAME, ['exhibition_id' => $exhibition_id]);
     }
 }
