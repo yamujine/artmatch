@@ -132,30 +132,21 @@
       </div>
       <!-- //== 대표의 한마디 -->
 
-      {% if place.status == PLACE_STATUS_NEED_ARTWORK %}
-        <!-- == 전시 지원 방법 -->
-        <ul class="contactTo">
-          <!-- == 작가님께 메일로 연락하기 -->
-          <li class="email {% if has_artworks %}half{% endif %}">
-            <a href="mailto:{{ place.user.email }}">
-              이메일로 연락하기
-            </a>
-          </li>
-          <!-- //== 작가님께 메일로 연락하기 -->
-          {% if has_artworks %}
-            <!-- == 전시 지원 하기 -->
-            <li class="apply half">
-              <a href="/places/apply/{{ place.id }}">
-                내 작품 전시지원하기
-              </a>
-            </li>
-            <!-- //== 전시 지원 하기 -->
-          {% endif %}
+      <!-- == 전시목록 -->
+      <div class="exhibitionArea">
+        <div class="title">전시목록</div>
+        <hr class="divider"/>
+        <ul class="exhibitions">
+          {% import 'macro/exhibition.macro.twig' as exhibition_macro %}
+          {% for exhibition in exhibitions %}
+            {{ exhibition_macro.render_exhibition_item(exhibition) }}
+          {% endfor %}
         </ul>
-        <!-- //== 전시 지원 방법 -->
-      {% endif %}
+      </div>
 
-      {% if place.use_comment == 1 %}
+      <!-- // == 전시 목록 -->
+
+     {% if place.use_comment == 1 %}
         <!-- == 댓글 -->
         <div class="commentArea">
           <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>

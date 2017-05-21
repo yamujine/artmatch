@@ -1,0 +1,18 @@
+{% macro render_exhibition_item(exhibition) %}
+  <li id="exhibition_{{ exhibition.id }}">
+    <div class="content">
+      <div>
+        <span class="title">{{ exhibition.title }}임시제목</span> <span class="status">전시중</span>
+      </div>
+      <div class="meta">
+        <span>일정 {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }} | 작품수 {{ exhibition.artwork_count }}개</span>
+        {% if session.type == 0 %}<!-- % if place.status == PLACE_STATUS_NEED_ARTWORK % -->
+        <div class="buttons">
+          <button class="applyBtn" data-id="{{ exhibition.id }}">지원하기 ></button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </li>
+
+{% endmacro %}
