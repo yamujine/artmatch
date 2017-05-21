@@ -1,0 +1,32 @@
+{% extends "base.twig" %}
+
+{% block style %}
+{% endblock %}
+
+{% block buttons %}
+  <ul class="nav navbar-nav navbar-right">
+    <li class="patGnbCancel">
+      <a class="noDivider" href="{% if place.id %}/places/{{ place.id }}{% else %}/{% endif %}">취소</a>
+    </li>
+    <li class="patGnbSubmit">
+      <a class="noDivider" href="#">등록</a>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block contents %}
+  <div id="patDetail">
+    <div class="container">
+      {{ place.name }}
+      {{ exhibitions | length }}
+      {% for exhibition in exhibitions %}
+        전시 이름 필요{{ exhibition.id }}
+        {{ exhibition.start_date | date('Y-m-d') }} ~ {{ exhibition.end_date | date('Y-m-d') }}
+        {{ exhibition.artwork_count }}
+        상태 {{ exhibition.status }}
+
+        <br><br><br><br><br>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

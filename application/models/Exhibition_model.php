@@ -55,17 +55,35 @@ class Exhibition_model extends CI_Model {
     }
 
     public function update_by_place_id($place_id, $start_date, $end_date, $artwork_count, $is_free) {
+        // TODO: 현재 함수는 전시 1개를 가정으로 만들어진 함수이므로 나중에 의존성 제거가 필요함
+        // TODO: 아래는 임시로 처음에 장소 등록시 기본으로 생성되는 전시 정보를 가져오는 코드임
+        $default_exhibition = $this->get_one_by_place_id($place_id);
+        if (!$default_exhibition) {
+            return NULL;
+        }
+
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
             'artwork_count' => $artwork_count,
             'is_free' => $is_free
         ];
-        if ($this->db->update(self::TABLE_NAME, $data, ['place_id' => $place_id])) {
-            return $place_id;
-        } else {
-            return NULL;
+        if ($this->db->update(self::TABLE_NAME, $data, ['id' => $default_exhibition->id])) {
+            return $default_exhibition->id;
         }
+
+        return NULL;
+    }
+
+    public function get_one_by_place_id($place_id) {
+        return $this->db
+            ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
+            ->from(self::TABLE_NAME)
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id', 'LEFT')
+            ->where('place_id', $place_id)
+            ->group_by('exhibition_artworks.exhibition_id')
+            ->order_by('id', 'ASC')
+            ->get()->row();
     }
 
     public function get_by_place_id($place_id) {
@@ -76,7 +94,7 @@ class Exhibition_model extends CI_Model {
             ->where('place_id', $place_id)
             ->group_by('exhibition_artworks.exhibition_id')
             ->order_by('id', 'DESC')
-            ->get()->row();
+            ->get()->result();
     }
 
     public function get_artwork_ids_by_exhibition_id($exhibition_id) {
