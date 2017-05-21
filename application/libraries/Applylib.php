@@ -8,10 +8,6 @@ class Applylib {
         $this->CI =& get_instance();
         $this->CI->load->model(['user_model']);
         $this->CI->load->library(['email']);
-        $twig = $this->CI->twig->getTwig();
-        $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
-        $twig->addFilter(new Twig_SimpleFilter('image_url', 'UrlGenerator::generate_original_image_url'));
-        $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
     }
 
     public function send_apply_email($email, $artwork_ids) {
