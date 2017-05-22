@@ -5,10 +5,12 @@
         <span class="title">{{ exhibition.title }}임시제목</span> <span class="status">전시중</span>
       </div>
       <div class="meta">
-        <span>일정 {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }} | 작품수 {{ exhibition.artwork_count }}개</span>
+        <span class="term">일정 {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}</span>
+        <div class="separator"></div>
+        <span class="count">작품수 {{ exhibition.artwork_count }}개</span>
         {% if session.type == 0 %}<!-- % if place.status == PLACE_STATUS_NEED_ARTWORK % -->
         <div class="buttons">
-          <button class="applyBtn" data-id="{{ exhibition.id }}">지원하기 ></button>
+          <button class="applyBtn" data-id="{{ exhibition.id }}">지원하기 <img src="{{ 'images/apply_arrow.png' | static_url }}" class="arrow" /></button>
         </div>
         {% endif %}
       </div>
