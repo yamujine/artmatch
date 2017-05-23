@@ -5,10 +5,9 @@
 .exhibitionArea {
   position: relative;
   width: 875px;
-  padding: 25px 30px 6px 28px;
-  margin: 48px auto 0 auto;
+  margin: 19px auto 0 auto;
   border: 1px solid $white-nine;
-  min-height: 168px;
+  min-height: 70px;
   @include prefix(border-radius, 2px);
 
   // 타이틀
@@ -17,7 +16,41 @@
     font-size: 16px;
     font-weight: bold;
     color: $black-seven;
-    margin: 0 0 14px 0;
+    margin-top: 24px;
+    margin-left: 28px;
+  }
+
+  // 추가 버튼
+  button {
+    position: absolute;
+    left: 96px;
+    top: 21px;
+    width: 70px;
+    height: 30px;
+    background: none;
+    border: 1px solid $white-eleven;
+    outline: none;
+    @include prefix(border-radius, 30px);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: #222222;
+
+    &:hover {
+      color: $white-two;
+      background: #222222;
+    }
+  }
+
+  // 알림
+  .info {
+    position: absolute;
+    right: 27px;
+    top: 25px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    color: #de3434;
   }
 
   // 구분선
