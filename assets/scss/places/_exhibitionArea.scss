@@ -5,6 +5,7 @@
 .exhibitionArea {
   position: relative;
   width: 875px;
+  padding: 25px 30px 6px 28px;
   margin: 19px auto 0 auto;
   border: 1px solid $white-nine;
   min-height: 70px;
@@ -16,8 +17,7 @@
     font-size: 16px;
     font-weight: bold;
     color: $black-seven;
-    margin-top: 24px;
-    margin-left: 28px;
+    margin: 0 0 14px 0;
   }
 
   // 추가 버튼
