@@ -149,6 +149,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibitions` (
   `place_id` INT NOT NULL COMMENT '장소의 PK',
   `start_date` DATETIME NOT NULL COMMENT '전시 시작 날짜',
   `end_date` DATETIME NOT NULL COMMENT '전시 종료 날짜',
+  `title` VARCHAR(70) NOT NULL COMMENT '전시 제목',
   `artwork_count` SMALLINT UNSIGNED NOT NULL,
   `is_free` TINYINT(1) NOT NULL,
   PRIMARY KEY (`id`),
