@@ -10,13 +10,15 @@ class Apply_model extends CI_Model {
     public $exhibition_id;
     public $artwork_id;
     public $status;
+    public $reason;
     public $registered_at;
 
-    public function insert($exhibition_id, $artwork_id, $status) {
+    public function insert($exhibition_id, $artwork_id, $status, $reason) {
         $data = [
             'exhibition_id' => $exhibition_id,
             'artwork_id' => $artwork_id,
-            'status' => $status
+            'status' => $status,
+            'reason' => $reason
         ];
 
         if (!$this->db->insert(self::TABLE_NAME, $data)) {
