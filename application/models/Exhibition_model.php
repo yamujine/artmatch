@@ -10,6 +10,7 @@ class Exhibition_model extends CI_Model {
     public $place_id;
     public $start_date;
     public $end_date;
+    public $title;
     public $artwork_count;
     public $is_free;
 
@@ -22,27 +23,29 @@ class Exhibition_model extends CI_Model {
     public $exhibition_id;
     public $artwork_id;
 
-    public function insert($place_id, $start_date, $end_date, $artwork_count, $is_free) {
+    public function insert($place_id, $start_date, $end_date, $title, $artwork_count, $is_free) {
         $data = [
             'place_id' => $place_id,
             'start_date' => $start_date,
             'end_date' => $end_date,
+            'title' => $title,
             'artwork_count' => $artwork_count,
             'is_free' => $is_free
         ];
 
         if ($this->db->insert(self::TABLE_NAME, $data)) {
             return $this->db->insert_id();
-        } else {
-            return NULL;
         }
+
+        return NULL;
     }
 
-    public function update($exhibition_id, $place_id, $start_date, $end_date, $artwork_count, $is_free) {
+    public function update($exhibition_id, $place_id, $start_date, $end_date, $title, $artwork_count, $is_free) {
         $data = [
             'place_id' => $place_id,
             'start_date' => $start_date,
             'end_date' => $end_date,
+            'title' => $title,
             'artwork_count' => $artwork_count,
             'is_free' => $is_free
         ];
@@ -54,7 +57,7 @@ class Exhibition_model extends CI_Model {
         return $this->db->affected_rows() === 1;
     }
 
-    public function update_by_place_id($place_id, $start_date, $end_date, $artwork_count, $is_free) {
+    public function update_by_place_id($place_id, $start_date, $end_date, $title, $artwork_count, $is_free) {
         // TODO: 현재 함수는 전시 1개를 가정으로 만들어진 함수이므로 나중에 의존성 제거가 필요함
         // TODO: 아래는 임시로 처음에 장소 등록시 기본으로 생성되는 전시 정보를 가져오는 코드임
         $default_exhibition = $this->get_one_by_place_id($place_id);
@@ -65,6 +68,7 @@ class Exhibition_model extends CI_Model {
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
+            'title' => $title,
             'artwork_count' => $artwork_count,
             'is_free' => $is_free
         ];
