@@ -16,13 +16,13 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "3.1.1",
-    "bootstrap": "3.3.7",
-    "prefixfree": "prefix-free#1.0.10",
-    "slick-carousel": "1.6.0",
-    "magnific-popup": "1.1.0",
-    "magic-check": "1.0.3",
-    "jquery-validation": "1.16.0",
-    "jquery-validation-bootstrap-tooltip": "0.10.2"
+    "jquery": ">=3.1.0",
+    "bootstrap": "^3.3.7",
+    "prefixfree": "prefix-free#^1.0.10",
+    "slick-carousel": "^1.6.0",
+    "magnific-popup": "^1.1.0",
+    "magic-check": "^1.0.3",
+    "jquery-validation": "^1.16.0",
+    "jquery-validation-bootstrap-tooltip": "^0.10.2"
   }
 }
