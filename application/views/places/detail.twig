@@ -143,10 +143,15 @@
           {% endfor %}
         </ul>
       </div>
-
       <!-- // == 전시 목록 -->
 
-     {% if place.use_comment == 1 %}
+      <!-- == 지금 전시중이에요! -->
+      <div class="currentExhibitionArea">
+        지금 전시중이에요!
+      </div>
+      <!-- // == 지금 전시중이에요! -->
+
+      {% if place.use_comment == 1 %}
         <!-- == 댓글 -->
         <div class="commentArea">
           <div class="title">댓글 <span class="number">{{ comment_count }}</span></div>

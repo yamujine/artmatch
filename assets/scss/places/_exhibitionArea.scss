@@ -115,10 +115,16 @@
 }
 // -- 전시목록
 
-// 전시 이력
+// 지금 전시중이에요!
 .currentExhibitionArea {
-  width: 876px;
-  margin: 47px auto 0 auto;
+  position: relative;
+  width: 875px;
+  height: 210px;
+  background-color: $white-fifteen;
+  border: 1px solid $white-fourteen;
+  margin: 21px auto 0 auto;
+  padding-top: 25px;
+  padding-left: 28px;
 
   // 타이틀
   .titleWrap {
@@ -222,4 +228,4 @@
     }
   }
 }
-// -- 전시 이력
+// -- 지금 전시중이에요!
