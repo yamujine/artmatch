@@ -123,108 +123,162 @@
   background-color: $white-fifteen;
   border: 1px solid $white-fourteen;
   margin: 21px auto 0 auto;
-  padding-top: 25px;
-  padding-left: 28px;
+  padding: 25px 28px 30px 31px;
 
-  // 타이틀
   .titleWrap {
-    position: relative;
-    margin: 0 0 15px 0;
-
     .title {
+      float: left;
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 16px;
-      font-weight: bold;
-      color: $black-four;
+      font-size: 14px;
+      color: $dull-orange;
+      margin-bottom: 8px;
     }
+    .artworkPages {
+      list-style: none;
+      float: right;
 
-    .sliderControl {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      padding: 0;
-      margin: 0;
-
-      button {
-        width: 22px;
-        height: 22px;
-        padding: 3px 0 1px 0;
-        display: inline-block;
-        outline: none;
+      .item {
         font-size: 12px;
-        background: $white-two;
-        border: 1px solid $white-eight;
-        color: $warm-grey-two;
+        font-weight: bold;
+        color: $greyish-four;
+        display: inline;
 
         &:not(:first-child) {
-          margin-left: 8px;
+          margin-left: 13px;
         }
 
-        &:hover {
-          border: 1px solid $warm-grey-four;
-          color: $brownish-grey;
+        &.active {
+          color: #be7028;
         }
       }
     }
   }
+
+  // 구분선
+  .divider {
+    width: 100%;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+
+    color: $black-10;
+  }
+
   // -- 타이틀
 
   // 지금 전시중인 전시 카드들
-  .exhibitions {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 252px;
-    overflow: hidden;
+  .exhibition {
+    position: relative;
+    margin-top: 21px;
 
-    .item {
+    .meta {
       float: left;
-      width: 213px;
-      height: 252px;
-      background: $white-two;
-      border: 1px solid $white-nine;
+      text-align: left;
 
-      &:not(:first-child) {
-        margin-left: 8px;
+      .title {
+        font-size: 22px;
+        color: $black-four;
+        margin-bottom: 9px;
+        padding: 0;
       }
 
-      // 전시 카드
-      a {
-        outline: none;
-        text-decoration: none;
+      .term {
+        font-size: 14px;
+        line-height: 1.5;
+        color: $warm-grey-two;
+        margin-bottom: 3px;
+      }
 
-        // 썸네일
-        .imgThumbnail {
-          width: 100%;
-          height: 160px;
+      .artist {
+        font-size: 14px;
+        line-height: 1.5;
+        color: $warm-grey-two;
+        margin-bottom: 3px;
+      }
 
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-        // -- 썸네일
-        .meta {
-          text-align: left;
-          margin: 11px 0 0 14px;
+      .artwork {
+        font-size: 14px;
+        line-height: 1.5;
+        color: $warm-grey-two;
+        margin-bottom: 3px;
+      }
+    }
 
-          .name {
-            font-family: 'Noto Sans KR', sans-serif;
-            font-size: 16px;
-            color: $black;
-            letter-spacing: -0.4px;
-            margin-bottom: 4px;
+    .artworksWrap {
+      position: absolute;
+      left: 290-27px;
+      top: 0px;
+
+      .leftArrow {
+        position: absolute;
+        left: -20px;
+        top: 45px;
+      }
+
+      .rightArrow {
+        position: absolute;
+        right: -20px;
+        top: 45px;
+      }
+
+      .artworks {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 106px;
+        overflow: hidden;
+
+        .item {
+          float: left;
+          width: 105px;
+          height: 105px;
+          background: $white-two;
+          border: 1px solid $white-nine;
+
+          &:not(:first-child) {
+            margin-left: 6px;
           }
-          .date {
-            display: inline-block;
-            font-family: Helvetica Neue, Helvetica, Arial, 'Noto Sans KR', sans-serif;
-            font-size: 12px;
-            color: $greyish;
+
+          // 전시 카드
+          a {
+            outline: none;
+            text-decoration: none;
+
+            // 썸네일
+            .imgThumbnail {
+              width: 100%;
+              height: 106px;
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+            // -- 썸네일
+            .meta {
+              text-align: left;
+              margin: 11px 0 0 14px;
+
+              .name {
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 16px;
+                color: $black;
+                letter-spacing: -0.4px;
+                margin-bottom: 4px;
+              }
+              .date {
+                display: inline-block;
+                font-family: Helvetica Neue, Helvetica, Arial, 'Noto Sans KR', sans-serif;
+                font-size: 12px;
+                color: $greyish;
+              }
+            }
           }
+          // -- 전시 카드
         }
       }
-      // -- 전시 카드
+
     }
   }
 }

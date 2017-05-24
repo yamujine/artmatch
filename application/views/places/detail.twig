@@ -147,7 +147,35 @@
 
       <!-- == 지금 전시중이에요! -->
       <div class="currentExhibitionArea">
-        지금 전시중이에요!
+        <div class="titleWrap">
+          <div class="title">지금 전시중이에요!</div>
+          <ul class="artworkPages">
+            <li class="item active">01</li>
+            <li class="item">02</li>
+          </ul>
+        </div>
+        <hr class="divider"/>
+
+        <div class="exhibition">
+          <div class="meta">
+            <div class="title">나의 서사시</div>
+            <div class="term">일정&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ "170321"|date('y.m.d') }} ~ {{ "170421"|date('y.m.d') }}</div>
+            <div class="artist">작가&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;김연수 유소영</div>
+            <div class="artwork">작품&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총 12개</div>
+          </div>
+
+          <div class="artworksWrap">
+            <img src="{{ 'images/exhibition_left_arrow.png' | static_url }}" class="leftArrow" />
+            <img src="{{ 'images/exhibition_right_arrow.png' | static_url }}" class="rightArrow" />
+            <ul class="artworks">
+              <li class="item"><a href="#"><img src="{{ 'images/tom.jpg' | static_url }}" class="imgThumbnail"></a></li>
+              <li class="item"><a href="#"><img src="{{ 'images/tom.jpg' | static_url }}" class="imgThumbnail"></a></li>
+              <li class="item"><a href="#"><img src="{{ 'images/tom.jpg' | static_url }}" class="imgThumbnail"></a></li>
+              <li class="item"><a href="#"><img src="{{ 'images/tom.jpg' | static_url }}" class="imgThumbnail"></a></li>
+              <li class="item"><a href="#"><img src="{{ 'images/tom.jpg' | static_url }}" class="imgThumbnail"></a></li>
+            </ul>
+          </div>
+        </div>
       </div>
       <!-- // == 지금 전시중이에요! -->
 
