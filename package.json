@@ -21,6 +21,7 @@
     "files-exist": "^1.0.2",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
+    "gulp-clean-css": "^3.4.0",
     "gulp-cli": "^1.2.2",
     "gulp-imagemin": "^3.1.1",
     "gulp-jshint": "^2.0.4",

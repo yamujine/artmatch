@@ -7,7 +7,7 @@ class UrlGenerator {
         }
 
         if (ENVIRONMENT === 'production') {
-            $host = 'http://img.pickartyou.com/';
+            $host = '//img.pickartyou.com/';
         } else {
             $host = '/uploads/';
         }
@@ -31,7 +31,7 @@ class UrlGenerator {
         }
 
         if (ENVIRONMENT === 'production') {
-            $host = 'http://img.pickartyou.com/';
+            $host = '//img.pickartyou.com/';
         } else {
             $host = '/uploads/';
         }
@@ -50,7 +50,7 @@ class UrlGenerator {
         }
 
         if (ENVIRONMENT === 'production') {
-            $host = 'http://static.pickartyou.com/';
+            $host = '//static.pickartyou.com/';
         } else {
             $host = '../../static/';
         }
