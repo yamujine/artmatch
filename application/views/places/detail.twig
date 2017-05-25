@@ -134,7 +134,10 @@
 
       <!-- == 전시목록 -->
       <div class="exhibitionArea">
-        <div class="title">전시목록</div>
+        <div class="title">전시목록</div><button>+ 추가</button>
+        {% if exhibitions|length == 0 %}
+          <span class="info"><i class="glyphicon glyphicon-info-sign"></i> 현재 이 장소의 전시정보가 없습니다. 정보를 등록해보세요.</span>
+        {% else %}
         <hr class="divider"/>
         <ul class="exhibitions">
           {% import 'macro/exhibition.macro.twig' as exhibition_macro %}
@@ -142,6 +145,7 @@
             {{ exhibition_macro.render_exhibition_item(exhibition) }}
           {% endfor %}
         </ul>
+        {% endif %}
       </div>
       <!-- // == 전시 목록 -->
 
