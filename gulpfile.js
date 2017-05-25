@@ -8,6 +8,7 @@ var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var clean = require('gulp-clean');
+var cleanCSS = require('gulp-clean-css');
 var filesExist = require('files-exist');
 var imagemin = require('gulp-imagemin');
 
@@ -80,6 +81,7 @@ gulp.task('extra-assets-js', function () {
 
 gulp.task('extra-assets-css', function () {
   return gulp.src('assets/css/**')
+    .pipe(cleanCSS({compatibility: 'ie9'}))
     .pipe(gulp.dest('static/dist/css'));
 });
 /** For Develop TASK END **/
