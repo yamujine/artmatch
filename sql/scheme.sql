@@ -241,6 +241,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou_dev`.`apply` (
   `exhibition_id` INT NOT NULL COMMENT '전시 PK',
   `artwork_id` INT NOT NULL COMMENT '작품 PK',
   `status` TINYINT NOT NULL COMMENT '지원 상태',
+  `reason` TEXT NOT NULL COMMENT '작품 지원 이유',
   `registered_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '지원 시간',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;

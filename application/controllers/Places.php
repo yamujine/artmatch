@@ -272,12 +272,14 @@ class Places extends MY_Controller {
             );
         } elseif ($this->input->method() === 'post') {
             $artwork_ids = $this->input->post('artwork_id');
+            $reason = $this->input->post('reason');
+
             foreach ($artwork_ids as $artwork_id) {
                 $is_valid_artwork = !empty($this->artwork_model->get_bare_by_id($artwork_id));
                 if ($is_valid_artwork) {
                     $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($default_exhibition->id, $artwork_id);
                     if (empty($result)) {
-                        $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW);
+                        $this->apply_model->insert($default_exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW, $reason);
                     }
                 }
             }
