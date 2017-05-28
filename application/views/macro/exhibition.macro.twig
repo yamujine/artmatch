@@ -2,7 +2,12 @@
   <li id="exhibition_{{ exhibition.id }}">
     <div class="content">
       <div>
-        <span class="title">{{ exhibition.title }}임시제목</span> <span class="status">전시중</span>
+        <span class="title">{{ exhibition.title }}</span>
+        {% if date(exhibition.start_date) < date() and date(exhibition.end_date) > date() %}
+          <span class="status">전시중</span>
+        {% elseif date(exhibition.end_date) < date() %}
+          <span class="status">종료된 전시</span>
+        {% endif %}
       </div>
       <div class="meta">
         <span class="term">일정 {{ exhibition.start_date|date('y.m.d') }} ~ {{ exhibition.end_date|date('y.m.d') }}</span>
