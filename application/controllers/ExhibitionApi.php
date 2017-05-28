@@ -60,10 +60,11 @@ class ExhibitionApi extends API_Controller {
         $place_id = $this->input->post('place_id');
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
+        $title = $this->input->post('title');
         $artwork_count = $this->input->post('artwork_count');
         $is_free = $this->input->post('is_free');
 
-        $result_id = $this->exhibition_model->insert($place_id, $start_date, $end_date, $artwork_count, $is_free);
+        $result_id = $this->exhibition_model->insert($place_id, $start_date, $end_date, $title, $artwork_count, $is_free);
         if ($result_id === NULL) {
             $this->return_fail_response('101', ['message' => $this->db->error()]);
         }
@@ -96,11 +97,11 @@ class ExhibitionApi extends API_Controller {
         $place_id = $this->input->post('place_id');
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
+        $title = $this->input->post('title');
         $artwork_count = $this->input->post('artwork_count');
         $is_free = $this->input->post('is_free');
 
-
-        $result = $this->exhibition_model->update($id, $place_id, $start_date, $end_date, $artwork_count, $is_free);
+        $result = $this->exhibition_model->update($id, $place_id, $start_date, $end_date, $title, $artwork_count, $is_free);
         if (!$result) {
             $this->return_fail_response('101', ['message' => $this->db->error()]);
         }
@@ -134,6 +135,10 @@ class ExhibitionApi extends API_Controller {
                 'required' => '전시 종료 날짜를 입력해주세요.',
                 'max_length' => '전시 종료 날짜가 yyyymmdd 형식이 아닙니다.',
                 'numeric' => '전시 종료 날짜가 yyyymmdd 형식이 아닙니다.'
+            ]);
+            $this->form_validation->set_rules('title', '전시 제목', 'required|max_length[70]', [
+                'required' => '전시 제목을 입력해주세요.',
+                'max_length' => '전시 제목을 70자 이내로 입력해 주세요.'
             ]);
 
             // TODO: 기획 확인 - 기존 무료 전시 여부 제거해야하는지, 전시 상태 새로 추가되는 것인지

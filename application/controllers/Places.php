@@ -77,6 +77,7 @@ class Places extends MY_Controller {
 
         $exhibition_start_date = $this->input->post('exhibition_start_date');
         $exhibition_end_date = $this->input->post('exhibition_end_date');
+        $exhibition_title = $this->input->post('exhibition_title');
         $exhibition_artwork_count = $this->input->post('exhibition_artwork_count');
         $exhibition_is_free = $this->input->post('exhibition_is_free');
 
@@ -150,6 +151,7 @@ class Places extends MY_Controller {
                         $result_id,
                         $exhibition_start_date,
                         $exhibition_end_date,
+                        $exhibition_title,
                         $exhibition_artwork_count,
                         $exhibition_is_free
                     );
@@ -170,6 +172,7 @@ class Places extends MY_Controller {
                         $result_id,
                         $exhibition_start_date,
                         $exhibition_end_date,
+                        $exhibition_title,
                         $exhibition_artwork_count,
                         $exhibition_is_free
                     );
