@@ -95,9 +95,9 @@ class Exhibition_model extends CI_Model {
             ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
             ->from(self::TABLE_NAME)
             ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id', 'LEFT')
-            ->where('place_id', $place_id)
-            ->group_by('exhibition_artworks.exhibition_id')
-            ->order_by('id', 'DESC')
+            ->where('exhibitions.place_id', $place_id)
+            ->group_by('exhibitions.id')
+            ->order_by('exhibitions.id', 'DESC')
             ->get()->result();
     }
 
