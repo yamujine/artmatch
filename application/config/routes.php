@@ -56,15 +56,15 @@ $route['translate_uri_dashes'] = FALSE;
 // Route for our service
 $route['artworks/(:num)'] = 'artworks/detail/$1';
 $route['artworks/upload'] = 'artworks/edit';
-$route['artworks/edit/(:num)'] = 'artworks/edit/$1';
-$route['artworks/delete/(:num)'] = 'artworks/delete/$1';
+$route['artworks/(:num)/edit'] = 'artworks/edit/$1';
+$route['artworks/(:num)/delete'] = 'artworks/delete/$1';
 
 $route['places/(:num)'] = 'places/detail/$1';
 $route['places/upload'] = 'places/edit';
-$route['places/edit/(:num)'] = 'places/edit/$1';
-$route['places/delete/(:num)'] = 'places/delete/$1';
-$route['places/apply/(:num)'] = 'places/apply/$1';
-$route['places/exhibitions/(:num)'] = 'places/exhibitions/$1';
+$route['places/(:num)/edit'] = 'places/edit/$1';
+$route['places/(:num)/delete'] = 'places/delete/$1';
+$route['places/(:num)/apply'] = 'places/apply/$1';
+$route['places/(:num)/exhibitions'] = 'places/exhibitions/$1';
 
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering

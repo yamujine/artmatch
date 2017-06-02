@@ -134,7 +134,7 @@
 
       <!-- == 전시목록 -->
       <div class="exhibitionArea">
-        <div class="title">전시목록</div><a class="addExhibitionBtn" href="/places/exhibitions/{{ place.id }}"><span>+ 추가</span></a>
+        <div class="title">전시목록</div><a class="addExhibitionBtn" href="/places/{{ place.id }}/exhibitions"><span>+ 추가</span></a>
         {% if exhibitions|length == 0 %}
           <span class="info"><i class="glyphicon glyphicon-info-sign"></i> 현재 이 장소의 전시정보가 없습니다. 정보를 등록해보세요.</span>
         {% else %}
