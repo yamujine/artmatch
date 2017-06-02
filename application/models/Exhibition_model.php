@@ -116,6 +116,20 @@ class Exhibition_model extends CI_Model {
     }
 
     /**
+     * 현재 진행중인 전시를 리턴하는 함수
+     * @param $place_id
+     */
+    public function get_now_exhibiting_by_place_id($place_id) {
+        $today = date('Y-m-d');
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('exhibitions.place_id', $place_id)
+            ->where('exhibitions.start_date <=', $today)
+            ->where('exhibitions.end_date >=', $today)
+            ->get()->result();
+    }
+
+    /**
      * 해당 작품이 전시중인지 리턴하는 함수
      * @param $artwork_id
      * @return bool

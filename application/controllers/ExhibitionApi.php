@@ -109,6 +109,29 @@ class ExhibitionApi extends API_Controller {
         $this->return_success_response(['message' => '전시가 수정되었습니다.']);
     }
 
+    public function now_exhibiting() {
+        $place_id = $this->input->get('place_id');
+        if ($place_id === null) {
+            $this->return_fail_response('101', ['message' => '장소 ID가 제공되지 않았습니다.']);
+        }
+
+        $exhibitions = $this->exhibition_model->get_now_exhibiting_by_place_id($place_id);
+        if (count($exhibitions) === 0) {
+            $this->return_fail_response('102', ['message' => '전시 정보가 없습니다.']);
+        }
+
+        foreach ($exhibitions as $exhibition) {
+            $artwork_id_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
+            $artwork_ids = array_map(function ($value) {
+                return $value->artwork_id;
+            }, $artwork_id_objects);
+
+            $exhibition->artwork = $this->artwork_model->get_by_ids($artwork_ids);
+        }
+
+        return $this->return_success_response(['data' => $exhibitions]);
+    }
+
     private function _is_valid_exhibition_form($type) {
         $this->form_validation->set_error_delimiters('', "\r\n");
 
