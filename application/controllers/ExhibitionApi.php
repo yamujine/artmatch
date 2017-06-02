@@ -10,7 +10,7 @@ class ExhibitionApi extends API_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(['apply_model', 'exhibition_model', 'place_model', 'artwork_model']);
-        $this->load->library('applylib');
+        $this->load->library(['applylib', 'form_validation']);
     }
 
     public function accept() {
