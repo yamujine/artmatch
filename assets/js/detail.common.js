@@ -46,7 +46,7 @@ $(function () {
     var type = $this.data('type');
     var typeId = $this.data('id');
 
-    location.replace('/' + type + '/edit/' + typeId);
+    location.replace('/' + type + '/' + typeId + '/edit');
     return false;
   });
 
@@ -59,7 +59,7 @@ $(function () {
     var type = $this.data('type');
     var typeId = $this.data('id');
 
-    location.replace('/' + type + '/delete/' + typeId);
+    location.replace('/' + type + '/' + typeId + '/delete');
     return false;
   });
 
