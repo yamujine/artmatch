@@ -290,7 +290,7 @@ class Places extends MY_Controller {
             $place = $this->place_model->get_bare_by_id($place_id);
             $place_owner = $this->user_model->get_by_id($place->user_id);
 
-            $this->applylib->send_apply_email($place_owner->email, $artwork_ids);
+            $this->applylib->send_apply_email($place_owner->email, $artwork_ids, $this->accountlib->get_user_name());
 
             alert_and_redirect('지원이 완료되었습니다.', '/places/' . $place_id);
         }
