@@ -84,7 +84,12 @@ class Accountlib {
     }
 
     public function get_facebook_access_token() {
-        return $this->CI->session->userdata('facebook_access_token');
+        $longLivedToken = $this->CI->session->userdata('facebook_access_token');
+
+        if ($longLivedToken->isExpired()) {
+            return null;
+        }
+        return $longLivedToken;
     }
 
     public function set_profile_image($profile_image) {
