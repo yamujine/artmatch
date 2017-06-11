@@ -1,32 +1,62 @@
 {% extends "base.twig" %}
 
 {% block style %}
+
+  <link rel="stylesheet" type="text/css" href="/static/dist/css/places/exhibitions.min.css">
+
+  <style>
+    #patDetail .container .placeDetail .preview {
+      background: url("{{ place.image | image_url }}") center center;
+      background-size: 100% auto;
+    }
+
+
+  </style>
 {% endblock %}
 
 {% block buttons %}
-  <ul class="nav navbar-nav navbar-right">
-    <li class="patGnbCancel">
-      <a class="noDivider" href="{% if place.id %}/places/{{ place.id }}{% else %}/{% endif %}">취소</a>
-    </li>
-    <li class="patGnbSubmit">
-      <a class="noDivider" href="#">등록</a>
-    </li>
-  </ul>
 {% endblock %}
 
 {% block contents %}
+
   <div id="patDetail">
     <div class="container">
-      {{ place.name }}
-      {{ exhibitions | length }}
-      {% for exhibition in exhibitions %}
-        전시 이름 필요{{ exhibition.id }}
-        {{ exhibition.start_date | date('Y-m-d') }} ~ {{ exhibition.end_date | date('Y-m-d') }}
-        {{ exhibition.artwork_count }}
-        상태 {{ exhibition.status }}
+      <div class="placeDetail">
 
-        <br><br><br><br><br>
-      {% endfor %}
+        <div class="dimm"></div>
+        <div class="preview"></div>
+
+        <div class="meta">
+          <div class="title">{{ place.name }}</div>
+          <div class="additionalInfo">총 등록된 전시 {{ exhibitions | length }}개 | 종료된 전시 {{ exhibitions | length }}개 (TODO 나눠서 카운트)</div>
+        </div>
+
+      </div>
+
+      TODO 입력/수정 모드 블록
+
+      <div class="exhibitions">
+        <div class="addExhibition">
+          <img src="{{ 'images/plus.png' | static_url }}"/> <span class="addExhibitionText">새로운 전시 등록하기</span>
+        </div>
+
+        <hr class="divider" />
+
+        {% for exhibition in exhibitions %}
+        <div class="exhibition">
+          <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
+          <span class="title">{{ exhibition.title }}</span> <span class="status">상태 TODO {{ exhibition.status }}</span>
+          <span class="pull-right">TODO 버튼 수정 삭제 완료</span>
+          <hr class="divider">
+          <div class="meta">
+            <span class="title">전시일정</span> {{ exhibition.start_date | date('Y-m-d') }} ~ {{ exhibition.end_date | date('Y-m-d') }}<br>
+            <span class="title">작품수</span> {{ exhibition.artwork_count }}<br>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+
     </div>
   </div>
 {% endblock %}
