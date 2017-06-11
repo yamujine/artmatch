@@ -10,11 +10,11 @@ class Applylib {
         $this->CI->load->library(['email']);
     }
 
-    public function send_apply_email($email, $artwork_ids) {
+    public function send_apply_email($email, $artwork_ids, $user_name) {
         $this->CI->load->model('artwork_model');
         $artworks = $this->CI->artwork_model->get_by_ids($artwork_ids);
 
-        $email_html = $this->CI->twig->render('email/apply', ['artworks' => $artworks]);
+        $email_html = $this->CI->twig->render('email/apply', ['artworks' => $artworks, 'user_name' => $user_name]);
 
         $this->CI->email->initialize(['mailtype' => 'html']);
         $this->CI->email->from('no-reply@pickartyou.com', 'pickartyou');
