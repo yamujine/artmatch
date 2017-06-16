@@ -181,10 +181,13 @@
         font-size: 12px;
         font-weight: bold;
         color: $greyish-four;
+        background-color: $white-fifteen;
         display: inline;
+        border: none;
+        outline: none;
 
         &:not(:first-child) {
-          margin-left: 13px;
+          margin-left: 5px;
         }
 
         &.active {
@@ -210,6 +213,11 @@
   .exhibition {
     position: relative;
     margin-top: 21px;
+    display: none;
+
+    &.active {
+      display: block;
+    }
 
     .meta {
       float: left;

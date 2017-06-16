@@ -1,0 +1,23 @@
+{% macro render_exhibitionNow_item(exhibition, index) %}
+    <div class="exhibition" id="exhibition_{{ index }}">
+      <div class="meta">
+        <div class="title">{{ exhibition.title }}</div>
+        <div class="term">일정&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ exhibition.start_date | date("y.m.d") }} ~ {{ exhibition.end_date | date("y.m.d") }}</div>
+        <div class="artist">작가&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for artwork in exhibition.artworks %}{{ artwork.user.user_name }} {% endfor %}</div>
+        <div class="artwork">작품&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총 {{ exhibition.artworks|length }}개</div>
+      </div>
+
+      <div class="artworksWrap">
+        {% if exhibition.artworks|length > 5 %}
+          <img src="{{ 'images/exhibition_left_arrow.png' | static_url }}" class="leftArrow" />
+          <img src="{{ 'images/exhibition_right_arrow.png' | static_url }}" class="rightArrow" />
+        {% endif %}
+        <ul class="artworks">
+          {% for artwork in exhibition.artworks %}
+            <li class="item"><a href="/artworks/{{ artwork.id }}"><img src="{{ artwork.image | thumb_url }}" class="imgThumbnail"></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+{% endmacro %}
