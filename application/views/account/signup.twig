@@ -136,10 +136,10 @@
 
     {% if facebook_error %}
     (function redirectFacebookException() {
-        alert("서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.");
-        location.href = '/';
-      })();
-    {%  endif %}
+      alert("서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.");
+      location.href = '/';
+    })();
+    {% endif %}
   </script>
 {% endblock %}
 
