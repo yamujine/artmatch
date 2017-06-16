@@ -188,8 +188,18 @@ class UsersApi extends API_Controller {
 
         // JS에서 전달된 페이스북 Access Token으로 로그인
         $fb->setDefaultAccessToken($longLivedAccessToken);
-        $response = $fb->get('/me?fields=id,email');
-        $userNode = $response->getGraphUser();
+
+        //Facebook 예외처리
+        try {
+            $response = $fb->get('/me?fields=id,email');
+            $userNode = $response->getGraphUser();
+            if ($userNode === NULL) {
+                $response->throwException();
+            }
+        } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+            log_message("error", "FaceBook SDK Exception : " . $e->getMessage());
+            $this->return_fail_response(FACEBOOK_NOT_DEFINED_EXCEPTION, ['message' => '페이스북 API에 오류가 있습니다. 잠시 후 다시 시도해주세요.']);
+        }
 
         //long lived accesstoken 세션 저장
         $this->accountlib->generate_facebook_access_token_session($longLivedAccessToken);
