@@ -22,10 +22,10 @@ class Account extends MY_Controller {
                 'default_graph_version' => $this->config->item('api_version')
             ]);
 
-            $accessToken = $this->accountlib->get_facebook_access_token();
+            $longLivedAccessToken = $this->accountlib->get_facebook_access_token();
 
-            if ($accessToken !== NULL) {
-                $fb->setDefaultAccessToken($accessToken);
+            if ($longLivedAccessToken !== NULL) {
+                $fb->setDefaultAccessToken($longLivedAccessToken);
                 $response = $fb->get('/me?fields=id,name,picture.type(large),email');
                 $userNode = $response->getGraphUser();
                 $data['email'] = $userNode->getEmail();

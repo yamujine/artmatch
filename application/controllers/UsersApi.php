@@ -178,15 +178,21 @@ class UsersApi extends API_Controller {
         ]);
         $helper = $fb->getJavaScriptHelper();
         $accessToken = $helper->getAccessToken();
-        if ($accessToken === NULL) {
+
+        //long lived accesstoken 발급
+        $oAuth2Client = $fb->getOAuth2Client();
+        $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
+        if ($longLivedAccessToken === NULL) {
             $this->return_fail_response('500', ['message' => '페이스북 로그인 정보를 가져오는 중에 오류가 발생했습니다.']);
         }
 
         // JS에서 전달된 페이스북 Access Token으로 로그인
-        $fb->setDefaultAccessToken($accessToken);
+        $fb->setDefaultAccessToken($longLivedAccessToken);
         $response = $fb->get('/me?fields=id,email');
         $userNode = $response->getGraphUser();
-        $this->accountlib->generate_facebook_access_token_session($accessToken);
+
+        //long lived accesstoken 세션 저장
+        $this->accountlib->generate_facebook_access_token_session($longLivedAccessToken);
 
         // 페이스북 이메일 권한 체크, 권한 재요청 페이지로 이동
         if (empty($userNode->getEmail())) {
