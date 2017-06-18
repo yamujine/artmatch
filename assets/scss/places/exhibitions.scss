@@ -1,0 +1,227 @@
+@import "../helper/colorchips";
+@import "../helper/mixins";
+
+body {
+  #patDetail {
+    .container {
+      margin: 0;
+
+      .placeDetail {
+        position:absolute;
+        width: 100%;
+        top: 52px;
+        height: 168px;
+        left: 0;
+        right: 0;
+        
+        .dimm {
+          z-index: 4;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(34, 34, 34, 0.6);
+        }
+
+        .preview {
+          z-index: 3;
+          position: absolute;
+          top: 0;
+          color: $white-two;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 16px;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+        }
+
+        .meta {
+          z-index: 5;
+          position: absolute;
+          top: 0;
+          left: 0;
+          margin-left: 100px;
+          margin-top: 46px;
+
+          .title {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            color: $white-two;
+            margin-bottom: 7px;
+            height: 36px;
+
+            a {
+              color: $white-two;
+            }
+          }
+
+          .additionalInfo {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            height: 24px;
+            letter-spacing: -0.3px;
+            color: rgba(255, 255, 255, 0.6);
+          }
+        }
+      }
+
+      .exhibitions {
+        margin-top: 188px;
+        margin-left: -15px;
+
+        .divider {
+          width: 100%;
+          height: 1px;
+          margin-top: 14.5px;
+          background: #a3a3a3;
+        }
+
+        .addExhibition {
+          a {
+            text-decoration: none;
+          }
+
+          .addExhibitionText {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            color: $black-seven;
+            vertical-align: middle;
+            margin-left: 9px;
+          }
+        }
+
+        .exhibition {
+          background-color: $white-two;
+          border: solid 1px $white-eleven;
+          padding: 26px 32px 25px 28px;
+          margin-bottom: 13.5px;
+
+          .modifyBtn, .deleteBtn, .confirmBtn {
+            padding: 3px 8px;
+            margin: 1px;
+            text-align: center;
+            width: 52px;
+            height: 26px;
+            opacity: 0.4;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 12px;
+            text-decoration: none;
+            float: left;
+            outline: none;
+            list-style: none;
+            @include prefix(border-radius, 30px);
+          }
+
+          .modifyBtn {
+            color: $greyish-brown;
+            border: 1px solid $brownish-grey;
+          }
+
+          .deleteBtn {
+            color: #de3434;
+            border: 1px solid #de3434;
+          }
+
+          .confirmBtn {
+            margin-left: 13px;
+            color: $black;
+            border: 1px solid $black;
+          }
+
+          .title {
+            vertical-align: -5%;
+
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: $black-seven;
+
+            input {
+              width: 700px;
+              border: none;
+              outline: none;
+            }
+          }
+
+          .status {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 13px;
+            color: #be7028;
+          }
+
+          .divider {
+            width: 100%;
+            height: 1px;
+            margin-top: 14.5px;
+            background: $white-eight;
+          }
+
+          .meta {
+            font-size: 14px;
+            line-height: 1.5;
+            color: $greyish-brown;
+
+            // 왼쪽 패널
+            .leftPane {
+              vertical-align: top;
+              display: inline-block;
+              width: 49%;
+
+              // 구분선
+              border-right: solid 1px #d8d8d8;
+            }
+            // -- 왼쪽 패널
+
+            // 오른쪽 패널
+            .rightPane {
+              display: inline-block;
+              width: 40%;
+              padding-left: 40px;
+            }
+            // -- 오른쪽 패널
+
+            .radio {
+              display: inline-block;
+              vertical-align: middle;
+              margin: 0;
+
+              input[type=radio], label {
+                float: left;
+              }
+
+              label {
+                margin-right: 20px;
+              }
+            }
+            .column_name {
+              font-size: 14px;
+              color: $brownish-grey;
+              width: 57px;
+              display: inline-block;
+            }
+
+            .start_date {
+              width: 96px;
+              height: 30px;
+            }
+
+            .end_date {
+              width: 96px;
+              height: 30px;
+            }
+
+            .artwork_count {
+              width: 38px;
+              height: 30px;
+            }
+          }
+        }
+      }
+
+
+    }
+  }
+}
