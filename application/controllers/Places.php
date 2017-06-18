@@ -49,6 +49,14 @@ class Places extends MY_Controller {
         }
         $data['exhibitions'] = $exhibitions;
 
+        $exhibitions_now = array();
+        foreach ($exhibitions as $exhibition) {
+            if (strtotime($exhibition->start_date) < time() && strtotime($exhibition->end_date) > time()) {
+                array_push($exhibitions_now, $exhibition);
+            }
+        }
+        $data['exhibitions_now'] = $exhibitions_now;
+
         // 올린 작품 여부
         $data['has_artworks'] = $this->artwork_model->is_exists_by_user_id($user_id);
 
