@@ -105,9 +105,9 @@ class UsersApi extends API_Controller {
             $this->return_fail_response('103', ['message' => '아이디에 사용할 수 없는 단어가 포함되어 있습니다.']);
         }
 
-        $pattern = '/^[A-Za-z0-9-_\.]{1,15}$/';
+        $pattern = '/^[A-Za-z0-9-_\.]{5,15}$/';
         if (!preg_match($pattern, $username)) {
-            $this->return_fail_response('104', ['message' => '아이디는 영어, 숫자, _-. 만 15자 이내로 입력 가능합니다.']);
+            $this->return_fail_response('104', ['message' => '아이디는 5~15자의 영어, 숫자와 특수기호(_),(-),(.) 만 입력 가능합니다.']);
         }
 
         $result = $this->user_model->get_by_user_name($username);
