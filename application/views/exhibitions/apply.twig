@@ -1,0 +1,83 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/exhibitions/apply.min.css' | static_url }}">
+{% endblock %}
+
+{% block contents %}
+  <form id="applyForm" method="POST">
+    <!-- == 작품 지원 -->
+    <div class="apply">
+      <div class="message">
+        전시를 원하는 작품을 선택하신 후<br>
+        <span class="underline">지원하기 버튼을 누르시면 해당 장소 대표님께 전달</span>됩니다!
+      </div>
+      <div class="buttons">
+        <a href="/places/{{ place_id }}" class="cancelBtn">취소하기</a>
+        <button type="submit" class="registerBtn" disabled>지원하기</button>
+      </div>
+    </div>
+    <!-- //== 작품 지원 -->
+
+    {# TODO: 지원 이유 입력 폼 마크업 #}
+    이유
+    <textarea name="reason"></textarea>
+
+    <!-- == 지원 작품 목록 -->
+    <div class="patItemList">
+      <div class="container">
+        <ul class="itemList artworkList">
+          {% for artwork in artworks %}
+            <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW %}in_review{% elseif artwork.apply_status == APPLY_STATUS_ACCEPTED %}accepted{% endif %}">
+              <div class="dimm"></div>
+              <div class="inReviewStatus">
+                <div class="icon"></div>
+                <div class="status">전시요청중</div>
+              </div>
+              <div class="acceptedStatus">
+                <div class="icon"></div>
+                <div class="status">채택완료</div>
+              </div>
+
+              <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"
+                     {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}/>
+              <label for="artwork_{{ artwork.id }}">
+                <img class="imageThumb" src="{{ artwork.image | thumb_url }}"/>
+              </label>
+              <div class="box">✔</div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <!-- //== 지원 작품 목록 -->
+  </form>
+{% endblock %}
+
+{% block script %}
+  <script>
+    $(function () {
+      $("#applyForm").validate({
+        rules: {
+          'artwork_id[]': {
+            required: true
+          }
+        },
+        messages: {
+          'artwork_id[]': {
+            required: "지원할 작품을 선택해 주세요."
+          }
+        }
+      });
+
+      $("#applyForm").find("input[type=checkbox]").click(function () {
+        if (!$("input[type=checkbox]").is(":checked")) {
+          $("#applyForm").find(".registerBtn").attr("disabled", "disabled");
+        } else {
+          $("#applyForm").find(".registerBtn").removeAttr("disabled");
+        }
+      });
+
+    });
+  </script>
+{% endblock %}
