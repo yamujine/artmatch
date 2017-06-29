@@ -151,6 +151,7 @@ CREATE TABLE IF NOT EXISTS `pickartyou`.`exhibitions` (
   `title` VARCHAR(70) NOT NULL COMMENT '전시 제목',
   `artwork_count` SMALLINT UNSIGNED NOT NULL,
   `is_free` TINYINT(1) NOT NULL,
+  `is_applicable` TINYINT(1) NOT NULL COMMENT '전시 지원 가능 여부',
   PRIMARY KEY (`id`),
   INDEX `fk_exhibitions_place_id_idx` (`place_id` ASC))
 ENGINE = InnoDB;
