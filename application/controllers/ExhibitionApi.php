@@ -63,8 +63,9 @@ class ExhibitionApi extends API_Controller {
         $title = $this->input->post('title');
         $artwork_count = $this->input->post('artwork_count');
         $is_free = $this->input->post('is_free');
+        $is_applicable = $this->input->post('is_applicable');
 
-        $result_id = $this->exhibition_model->insert($place_id, $start_date, $end_date, $title, $artwork_count, $is_free);
+        $result_id = $this->exhibition_model->insert($place_id, $start_date, $end_date, $title, $artwork_count, $is_free, $is_applicable);
         if ($result_id === NULL) {
             $this->return_fail_response('101', ['message' => $this->db->error()]);
         }
@@ -100,8 +101,9 @@ class ExhibitionApi extends API_Controller {
         $title = $this->input->post('title');
         $artwork_count = $this->input->post('artwork_count');
         $is_free = $this->input->post('is_free');
+        $is_applicable = $this->input->post('is_applicable');
 
-        $result = $this->exhibition_model->update($id, $place_id, $start_date, $end_date, $title, $artwork_count, $is_free);
+        $result = $this->exhibition_model->update($id, $place_id, $start_date, $end_date, $title, $artwork_count, $is_free, $is_applicable);
         if (!$result) {
             $this->return_fail_response('101', ['message' => $this->db->error()]);
         }
@@ -163,15 +165,13 @@ class ExhibitionApi extends API_Controller {
                 'required' => '전시 제목을 입력해주세요.',
                 'max_length' => '전시 제목을 70자 이내로 입력해 주세요.'
             ]);
-
-            // TODO: 기획 확인 - 기존 무료 전시 여부 제거해야하는지, 전시 상태 새로 추가되는 것인지
             $this->form_validation->set_rules('is_free', '무료 전시 여부', 'required|numeric', [
                 'required' => '무료 전시 여부를 입력해주세요.',
                 'integer' => '무료 전시 여부는 숫자로만 입력이 가능합니다.'
             ]);
-            $this->form_validation->set_rules('status', '전시 상태', 'required|numeric', [
-                'required' => '전시 상태를 입력해주세요.',
-                'integer' => '전시 상태는 숫자로만 입력이 가능합니다.'
+            $this->form_validation->set_rules('is_applicable', '전시 지원 가능 여부', 'required|numeric', [
+                'required' => '전시 지원 가능 여부를 입력해주세요.',
+                'integer' => '전시 지원 가능 여부는 숫자로만 입력이 가능합니다.'
             ]);
         }
 
