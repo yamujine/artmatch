@@ -64,7 +64,6 @@ DROP TABLE IF EXISTS `pickartyou`.`places` ;
 CREATE TABLE IF NOT EXISTS `pickartyou`.`places` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL COMMENT '장소 소유자의 user PK',
-  `status` TINYINT UNSIGNED NOT NULL COMMENT '작품 모집중 / 모집완료',
   `name` VARCHAR(20) NOT NULL COMMENT '장소 이름',
   `description` TEXT NULL COMMENT '장소 설명',
   `image` VARCHAR(45) NOT NULL COMMENT '장소 대표 이미지',
