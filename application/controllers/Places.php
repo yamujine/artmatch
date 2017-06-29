@@ -75,7 +75,6 @@ class Places extends MY_Controller {
         $this->load->library(['form_validation', 'upload', 'tag', 'imageupload']);
 
         $user_id = $this->accountlib->get_user_id();
-        $status = $this->input->post('status');
         $name = $this->input->post('name');
         $area = $this->input->post('area');
         $address = $this->input->post('address');
@@ -145,7 +144,6 @@ class Places extends MY_Controller {
                     $result_id = $this->place_model->update(
                         $place_id,
                         $user_id,
-                        $status,
                         $name,
                         $area,
                         $address,
@@ -166,7 +164,6 @@ class Places extends MY_Controller {
                 } else { // 작품 신규 등록
                     $result_id = $this->place_model->insert(
                         $user_id,
-                        $status,
                         $name,
                         $area,
                         $address,
@@ -323,9 +320,6 @@ class Places extends MY_Controller {
         $this->form_validation->set_rules('tags', '태그', 'trim|required|max_length[60]', [
             'required' => '태그를 입력해주세요.',
             'max_length' => '태그는 최대 60자(공백 포함)까지 입력이 가능합니다.'
-        ]);
-        $this->form_validation->set_rules('status', '전시 여부', 'required', [
-            'required' => '전시 여부를 선택해주세요.'
         ]);
         $this->form_validation->set_rules('use_comment', '댓글 허용 여부', 'required', [
             'required' => '댓글 허용 여부를 선택해주세요.'
