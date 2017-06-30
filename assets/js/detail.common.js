@@ -117,6 +117,36 @@ $(function () {
     return false;
   });
 
+  // 지금 전시중이에요
+  // 추가 이미지 Carousel 구현은 5개가 넘어갈 경우
+  var additionalImageCount = $('.artworksWrap .slider .item').length;
+  if (additionalImageCount > 5) {
+    // Carousel 시작
+    $('.slider').slick({
+      infinite: false,
+      variableWidth: true,
+
+      slidesToShow: 5,
+      slidesToScroll: 1,
+
+      prevArrow: false,
+      nextArrow: false
+    });
+
+    // 슬라이더 컨트롤
+    $('.leftArrow').click(function () {
+      $('.artworksWrap .slider').slick('slickPrev');
+
+      return false;
+    });
+
+    $('.rightArrow').click(function () {
+      $('.artworksWrap .slider').slick('slickNext');
+
+      return false;
+    });
+  }
+
   // 전시 이력 Carousel 구현은 4개가 넘는 경우
   var exhibitionCount = $('.exhibitions .item').length;
   if (exhibitionCount > 4) {

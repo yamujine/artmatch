@@ -7,17 +7,33 @@
         <div class="artwork">작품&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총 {{ exhibition.artworks|length }}개</div>
       </div>
 
-      <div class="artworksWrap">
-        {% if exhibition.artworks|length > 5 %}
-          <img src="{{ 'images/exhibition_left_arrow.png' | static_url }}" class="leftArrow" />
-          <img src="{{ 'images/exhibition_right_arrow.png' | static_url }}" class="rightArrow" />
-        {% endif %}
-        <ul class="artworks">
-          {% for artwork in exhibition.artworks %}
-            <li class="item"><a href="/artworks/{{ artwork.id }}"><img src="{{ artwork.image | thumb_url }}" class="imgThumbnail"></a></li>
-          {% endfor %}
-        </ul>
-      </div>
+      {% if exhibition.artworks|length > 0 %}
+        <div class="artworksWrap">
+          <div class="slider{% if exhibition.artworks|length <= 5 %} deactivate{% endif %}">
+            {% for artwork in exhibition.artworks %}
+              <div class="item">
+                <a href="/artworks/{{ artwork.id }}"><img src="{{ artwork.image | thumb_url }}" class="imgThumbnail"></a>
+              </div>
+            {% endfor %}
+          </div>
+          {% if exhibition.artworks|length > 5 %}
+            <button class="leftArrow"></button>
+            <button class="rightArrow"></button>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {#<div class="artworksWrap">#}
+        {#{% if exhibition.artworks|length > 5 %}#}
+          {#<img src="{{ 'images/exhibition_left_arrow.png' | static_url }}" class="leftArrow" />#}
+          {#<img src="{{ 'images/exhibition_right_arrow.png' | static_url }}" class="rightArrow" />#}
+        {#{% endif %}#}
+        {#<ul class="artworks">#}
+          {#{% for artwork in exhibition.artworks %}#}
+            {#<li class="item"><a href="/artworks/{{ artwork.id }}"><img src="{{ artwork.image | thumb_url }}" class="imgThumbnail"></a></li>#}
+          {#{% endfor %}#}
+        {#</ul>#}
+      {#</div>#}
     </div>
 
 {% endmacro %}
