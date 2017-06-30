@@ -22,18 +22,6 @@
           {% endif %}
         </div>
       {% endif %}
-
-      {#<div class="artworksWrap">#}
-        {#{% if exhibition.artworks|length > 5 %}#}
-          {#<img src="{{ 'images/exhibition_left_arrow.png' | static_url }}" class="leftArrow" />#}
-          {#<img src="{{ 'images/exhibition_right_arrow.png' | static_url }}" class="rightArrow" />#}
-        {#{% endif %}#}
-        {#<ul class="artworks">#}
-          {#{% for artwork in exhibition.artworks %}#}
-            {#<li class="item"><a href="/artworks/{{ artwork.id }}"><img src="{{ artwork.image | thumb_url }}" class="imgThumbnail"></a></li>#}
-          {#{% endfor %}#}
-        {#</ul>#}
-      {#</div>#}
     </div>
 
 {% endmacro %}
