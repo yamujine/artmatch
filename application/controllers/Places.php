@@ -82,12 +82,6 @@ class Places extends MY_Controller {
         $use_comment = $this->input->post('use_comment');
         $tags = $this->tag->refine_tags($this->input->post('tags'));
 
-        $exhibition_start_date = $this->input->post('exhibition_start_date');
-        $exhibition_end_date = $this->input->post('exhibition_end_date');
-        $exhibition_title = $this->input->post('exhibition_title');
-        $exhibition_artwork_count = $this->input->post('exhibition_artwork_count');
-        $exhibition_is_free = $this->input->post('exhibition_is_free');
-
         $data = [];
 
         if (empty($place_id)) {
@@ -104,18 +98,6 @@ class Places extends MY_Controller {
 
             $place_array = json_decode(json_encode($place), true); // StdClass to Array conversion
             $data = array_merge($data, $place_array);
-
-            // 전시 데이터 수정
-            $exhibition = $this->exhibition_model->get_one_by_place_id($place->id);
-            $exhibition_array = json_decode(json_encode($exhibition), true);
-            $exhibition_data = [];
-            if ($exhibition_array !== null) {
-                foreach (array_keys($exhibition_array) as $key) {
-                    $new_key = 'exhibition_' . $key;
-                    $exhibition_data[$new_key] = $exhibition_array[$key];
-                }
-                $data = array_merge($data, $exhibition_data);
-            }
         }
 
         if ($this->input->method() === 'post') {
@@ -152,15 +134,6 @@ class Places extends MY_Controller {
                         $use_comment,
                         $tags
                     );
-
-                    $result_exhibition_id = $this->exhibition_model->update_by_place_id(
-                        $result_id,
-                        $exhibition_start_date,
-                        $exhibition_end_date,
-                        $exhibition_title,
-                        $exhibition_artwork_count,
-                        $exhibition_is_free
-                    );
                 } else { // 작품 신규 등록
                     $result_id = $this->place_model->insert(
                         $user_id,
@@ -172,18 +145,9 @@ class Places extends MY_Controller {
                         $use_comment,
                         $tags
                     );
-
-                    $result_exhibition_id = $this->exhibition_model->insert(
-                        $result_id,
-                        $exhibition_start_date,
-                        $exhibition_end_date,
-                        $exhibition_title,
-                        $exhibition_artwork_count,
-                        $exhibition_is_free
-                    );
                 }
 
-                if ($result_id !== NULL && $result_exhibition_id !== NULL) {
+                if ($result_id !== NULL) {
                     // Upload extra images
                     $uploaded_image_names = $this->imageupload->upload_bulk_images('extra_images');
                     if (!empty($uploaded_image_names)) {
@@ -232,14 +196,22 @@ class Places extends MY_Controller {
             $this->place_pick_model->delete_all_picks_by_place_id($place_id);
 
             // 전시
-            $exhibition = $this->exhibition_model->get_one_by_place_id($place_id);
             $this->exhibition_model->delete_all_by_place_id($place_id);
 
             // 장소 내 작품
             $this->exhibition_model->delete_all_artworks_by_place_id($place_id);
 
             // 지원 내역
-            $this->apply_model->delete_by_exhibition_id($exhibition->id);
+            $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
+            $exhibition_ids = array_map(function ($value) {
+                return $value->id;
+            }, $exhibitions);
+
+            if (!empty($exhibition_ids)) {
+                foreach ($exhibition_ids as $exhibition_id) {
+                    $this->apply_model->delete_by_exhibition_id($exhibition_id);
+                }
+            }
         }
 
         alert_and_redirect('장소가 삭제되었습니다.', '/?type=' . TYPE_PLACES);
@@ -281,21 +253,6 @@ class Places extends MY_Controller {
         ]);
         $this->form_validation->set_rules('use_comment', '댓글 허용 여부', 'required', [
             'required' => '댓글 허용 여부를 선택해주세요.'
-        ]);
-        $this->form_validation->set_rules('exhibition_start_date', '전시 시작 날짜', 'trim|required|exact_length[8]|trim', [
-            'required' => '전시 시작 날을 입력해주세요. (예상 날짜도 가능)',
-            'exact_length' => '전시 날짜는 YYmmdd 8자로만 구성되어야 합니다.'
-        ]);
-        $this->form_validation->set_rules('exhibition_end_date', '전시 종료 날짜', 'trim|required|exact_length[8]|trim', [
-            'required' => '전시 종료 날을 입력해주세요. (예상 날짜도 가능)',
-            'exact_length' => '전시 날짜는 YYmmdd 8자로만 구성되어야 합니다.'
-        ]);
-        $this->form_validation->set_rules('exhibition_is_free', '전시비 지급 여부', 'required', [
-            'required' => '전시비 지급 여부를 선택해주세요.'
-        ]);
-        $this->form_validation->set_rules('exhibition_artwork_count', '전시 작품 수', 'trim|required|numeric', [
-            'required' => '전시를 원하는 작품 수를 입력해 주세요. (예상치도 입력 가능)',
-            'numeric' => '전시 작품 수는 숫자로만 입력되어야 합니다.'
         ]);
 
         return $this->form_validation->run();
