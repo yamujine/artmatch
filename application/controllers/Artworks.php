@@ -35,7 +35,7 @@ class Artworks extends MY_Controller {
         $data['artwork'] = $artwork;
 
         // 전시 이력
-        $exhibitions = $this->exhibition_model->get_exhibitions_by_artwork_id($artwork_id);
+        $exhibitions = $this->exhibition_model->get_by_artwork_id($artwork_id);
         foreach ($exhibitions as $exhibition) {
             $exhibition_place = $this->place_model->get_bare_by_id($exhibition->place_id);
 

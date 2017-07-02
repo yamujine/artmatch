@@ -42,6 +42,19 @@ class Exhibition_model extends CI_Model {
         return NULL;
     }
 
+    public function insert_exhibition_artworks($exhibition_id, $artwork_id) {
+        $data = [
+            'exhibition_id' => $exhibition_id,
+            'artwork_id' => $artwork_id
+        ];
+
+        if (!$this->db->insert(self::ARTWORK_TABLE_NAME, $data)) {
+            return false;
+        }
+
+        return $this->db->insert_id();
+    }
+
     public function update($exhibition_id, $place_id, $start_date, $end_date, $title, $artwork_count, $is_free, $is_applicable) {
         $data = [
             'place_id' => $place_id,
@@ -60,6 +73,11 @@ class Exhibition_model extends CI_Model {
         return $this->db->affected_rows() === 1;
     }
 
+    /**
+     * @deprecated 장소별 전시는 여러개 존재하므로 이런 함수는 사용을 하면 안됨
+     * @param $place_id
+     * @return mixed
+     */
     public function get_one_by_place_id($place_id) {
         return $this->db
             ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
@@ -71,7 +89,31 @@ class Exhibition_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_by_id($exhibition_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('id', $exhibition_id)
+            ->get()->row();
+    }
+
+    public function get_by_artwork_id($artwork_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id')
+            ->where('exhibition_artworks.artwork_id', $artwork_id)
+            ->order_by('exhibitions.end_date', 'DESC')
+            ->get()->result();
+    }
+
     public function get_by_place_id($place_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('place_id', $place_id)
+            ->order_by('start_date', 'ASC')
+            ->get()->result();
+    }
+
+    public function get_with_artwork_count_by_place_id($place_id) {
         return $this->db
             ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
             ->from(self::TABLE_NAME)
@@ -89,12 +131,20 @@ class Exhibition_model extends CI_Model {
             ->get()->result();
     }
 
-    public function get_by_id($exhibition_id) {
+    /**
+     * 해당 장소에 전시된 모든 작품 갯수
+     */
+    public function get_exhibit_artwork_count_by_place_id($place_id) {
         return $this->db
             ->from(self::TABLE_NAME)
-            ->where('id', $exhibition_id)
-            ->get()->row();
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id')
+            ->where('exhibitions.place_id', $place_id)
+            ->get()->num_rows();
     }
+
+    /**
+     * 진행 중인 전시 관련
+     */
 
     /**
      * 현재 진행중인 전시를 리턴하는 함수
@@ -145,40 +195,16 @@ class Exhibition_model extends CI_Model {
         return $query->num_rows() > 0;
     }
 
-    public function get_exhibitions_by_artwork_id($artwork_id) {
-        return $this->db
-            ->from(self::TABLE_NAME)
-            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id')
-            ->where('exhibition_artworks.artwork_id', $artwork_id)
-            ->order_by('exhibitions.end_date', 'DESC')
-            ->get()->result();
-    }
-
-    public function get_exhibitions_by_place_id($place_id) {
-        return $this->db
-            ->from(self::TABLE_NAME)
-            ->where('place_id', $place_id)
-            ->order_by('start_date', 'ASC')
-            ->get()->result();
-    }
-
     /**
-     * 해당 장소에 전시된 모든 작품 갯수
+     * 삭제 관련 함수들
      */
-    public function get_exhibit_artwork_count_by_place_id($place_id) {
-        return $this->db
-            ->from(self::TABLE_NAME)
-            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id')
-            ->where('exhibitions.place_id', $place_id)
-            ->get()->num_rows();
-    }
 
     public function delete_all_artworks_by_artwork_id($artwork_id) {
         return $this->db->delete(self::ARTWORK_TABLE_NAME, ['artwork_id' => $artwork_id]);
     }
 
     public function delete_all_by_place_id($place_id) {
-        $exhibitions = $this->get_exhibitions_by_place_id($place_id);
+        $exhibitions = $this->get_by_place_id($place_id);
         $exhibition_ids = array_map(function ($value) {
             return $value->id;
         }, $exhibitions);
@@ -191,7 +217,7 @@ class Exhibition_model extends CI_Model {
     }
 
     public function delete_all_artworks_by_place_id($place_id) {
-        $exhibitions = $this->get_exhibitions_by_place_id($place_id);
+        $exhibitions = $this->get_by_place_id($place_id);
         $exhibition_ids = array_map(function ($value) {
             return $value->id;
         }, $exhibitions);
@@ -201,19 +227,6 @@ class Exhibition_model extends CI_Model {
         }
 
         return true;
-    }
-
-    public function insert_exhibition_artworks($exhibition_id, $artwork_id) {
-        $data = [
-            'exhibition_id' => $exhibition_id,
-            'artwork_id' => $artwork_id
-        ];
-
-        if (!$this->db->insert(self::ARTWORK_TABLE_NAME, $data)) {
-            return false;
-        }
-
-        return $this->db->insert_id();
     }
 
     public function delete($exhibition_id): bool {

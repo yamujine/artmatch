@@ -36,7 +36,7 @@ class Places extends MY_Controller {
         $data['place'] = $place;
 
         // 전시 작품 이력
-        $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
+        $exhibitions = $this->exhibition_model->get_by_place_id($place_id);
         foreach ($exhibitions as $exhibition) {
             $exhibition_artwork_id_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
             $exhibition_artwork_ids = array_map(function ($value) {
@@ -203,7 +203,7 @@ class Places extends MY_Controller {
             $this->exhibition_model->delete_all_artworks_by_place_id($place_id);
 
             // 지원 내역
-            $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place_id);
+            $exhibitions = $this->exhibition_model->get_by_place_id($place_id);
             $exhibition_ids = array_map(function ($value) {
                 return $value->id;
             }, $exhibitions);
@@ -229,7 +229,7 @@ class Places extends MY_Controller {
             alert_and_redirect('본인의 장소만 수정할 수 있습니다.');
         }
 
-        $exhibitions = $this->exhibition_model->get_by_place_id($place_id);
+        $exhibitions = $this->exhibition_model->get_with_artwork_count_by_place_id($place_id);
 
         $this->twig->display('places/exhibitions', ['place' => $place, 'exhibitions' => $exhibitions]);
     }
