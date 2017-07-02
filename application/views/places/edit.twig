@@ -174,11 +174,7 @@
           tags: {
             required: true,
             maxlength: 60
-          },
-          exhibition_artwork_count: "required",
-          exhibition_title: "required",
-          exhibition_start_date: "required",
-          exhibition_end_date: "required"
+          }
         },
         messages: {
           name: {
@@ -328,6 +324,26 @@
           </div>
         </div>
         <!-- //== 작품 설명 -->
+        <!-- == 옵션 선택 -->
+        <div class="options">
+          <div class="leftPane">
+            <!-- == 댓글 옵션 -->
+            <div class="comment clear">
+              <div class="title">댓글</div>
+              <div class="radio">
+                <input id="comment" class="magic-radio" type="radio" name="use_comment" value="{{ TYPE_USE_COMMENT }}"
+                       {% if use_comment is not defined or use_comment == TYPE_USE_COMMENT %}checked="checked"{% endif %}/>
+                <label for="comment">댓글 허용</label>
+                <input id="noComment" class="magic-radio" type="radio" name="use_comment" value="{{ TYPE_NO_COMMENT }}"
+                       {% if use_comment is defined and use_comment == TYPE_NO_COMMENT %}checked="checked"{% endif %}/>
+                <label for="noComment">댓글 허용 안함</label>
+              </div>
+            </div>
+          </div>
+          <div class="rightPane">
+          </div>
+        </div>
+        <!-- //== 옵션 선택 -->
         <!-- == 취소, 등록 -->
         <div class="buttons">
           <a href="/" class="cancelBtn">취소</a>
