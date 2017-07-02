@@ -63,8 +63,9 @@ $route['places/(:num)'] = 'places/detail/$1';
 $route['places/upload'] = 'places/edit';
 $route['places/(:num)/edit'] = 'places/edit/$1';
 $route['places/(:num)/delete'] = 'places/delete/$1';
-$route['places/(:num)/apply'] = 'places/apply/$1';
 $route['places/(:num)/exhibitions'] = 'places/exhibitions/$1';
+
+$route['exhibitions/(:num)/apply'] = 'exhibitions/apply/$1';
 
 $route['users/me'] = 'users/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
