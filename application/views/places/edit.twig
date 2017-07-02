@@ -1,16 +1,16 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="/static/dist/slick/slick.css">
-  <link rel="stylesheet" type="text/css" href="/static/dist/magic-check/magic-check.min.css">
-  <link rel="stylesheet" type="text/css" href="/static/dist/css/places/edit.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/slick/slick.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/magic-check/magic-check.min.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/places/edit.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
   <script src="{{ 'dist/js/jquery-ui.min.js' | static_url }}"></script>
   <script src="{{ 'dist/js/datepicker-ko.js' | static_url }}"></script>
 
-  <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
+  <script type="text/javascript" src="{{ 'dist/slick/slick.min.js' | static_url }}"></script>
   <script type="text/javascript">
     $(function () {
       // 추가 이미지 슬라이더

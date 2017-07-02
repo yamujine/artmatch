@@ -1,17 +1,14 @@
 {% extends "base.twig" %}
 
 {% block style %}
-
-  <link rel="stylesheet" type="text/css" href="/static/dist/css/places/exhibitions.min.css">
-  <link rel="stylesheet" type="text/css" href="/static/dist/magic-check/magic-check.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/places/exhibitions.min.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/magic-check/magic-check.min.css' | static_url }}">
 
   <style>
     #patDetail .container .placeDetail .preview {
       background: url("{{ place.image | image_url }}") center center;
       background-size: 100% auto;
     }
-
-
   </style>
 {% endblock %}
 
