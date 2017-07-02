@@ -49,10 +49,11 @@ class Places extends MY_Controller {
         }
         $data['exhibitions'] = $exhibitions;
 
-        $exhibitions_now = array();
+        $exhibitions_now = [];
         foreach ($exhibitions as $exhibition) {
-            if (strtotime($exhibition->start_date) < time() && strtotime($exhibition->end_date) > time()) {
-                array_push($exhibitions_now, $exhibition);
+            $today = date('yyyymmdd');
+            if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
+                $exhibitions_now[] = $exhibition;
             }
         }
         $data['exhibitions_now'] = $exhibitions_now;
