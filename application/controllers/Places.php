@@ -51,7 +51,7 @@ class Places extends MY_Controller {
 
         $exhibitions_now = [];
         foreach ($exhibitions as $exhibition) {
-            $today = date('yyyymmdd');
+            $today = date('Y-m-d 00:00:00');
             if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
                 $exhibitions_now[] = $exhibition;
             }
