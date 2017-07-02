@@ -13,6 +13,7 @@ class Exhibition_model extends CI_Model {
     public $title;
     public $artwork_count;
     public $is_free;
+    public $is_applicable;
 
     /**
      * table_name: exhibitions
@@ -23,14 +24,15 @@ class Exhibition_model extends CI_Model {
     public $exhibition_id;
     public $artwork_id;
 
-    public function insert($place_id, $start_date, $end_date, $title, $artwork_count, $is_free) {
+    public function insert($place_id, $start_date, $end_date, $title, $artwork_count, $is_free, $is_applicable) {
         $data = [
             'place_id' => $place_id,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'title' => $title,
             'artwork_count' => $artwork_count,
-            'is_free' => $is_free
+            'is_free' => $is_free,
+            'is_applicable' => $is_applicable
         ];
 
         if ($this->db->insert(self::TABLE_NAME, $data)) {
@@ -40,14 +42,15 @@ class Exhibition_model extends CI_Model {
         return NULL;
     }
 
-    public function update($exhibition_id, $place_id, $start_date, $end_date, $title, $artwork_count, $is_free) {
+    public function update($exhibition_id, $place_id, $start_date, $end_date, $title, $artwork_count, $is_free, $is_applicable) {
         $data = [
             'place_id' => $place_id,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'title' => $title,
             'artwork_count' => $artwork_count,
-            'is_free' => $is_free
+            'is_free' => $is_free,
+            'is_applicable' => $is_applicable
         ];
 
         if ($this->db->update(self::TABLE_NAME, $data, ['id' => $exhibition_id])) {
