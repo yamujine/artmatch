@@ -12,11 +12,14 @@
         {# 장소 타입인 경우 #}
         {% if type == TYPE_PLACES %}
           {# 모집중인지 아닌지 여부 #}
+          {# TODO: 모집 여부 확인 필요 / PLACE_STATUS_NEED_ARTWORK 상수 삭제됨 #}
+          {#
           {% if item.status == PLACE_STATUS_NEED_ARTWORK %}
             <div class="placeStatusTag recruit"></div>
           {% else %}
             <div class="placeStatusTag recruitFinish"></div>
           {% endif %}
+          #}
         {% endif %}
         <button class="pickBtn"></button>
       </div>

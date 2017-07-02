@@ -114,8 +114,11 @@
           <ul class="status">
             {% if place.is_now_exhibiting %}
               <li class="exhibition display">현재 전시중</li>
+              {# TODO: 작품 모집중 상태 결정 필요
             {% elseif place.status == PLACE_STATUS_NEED_ARTWORK %}
               <li class="exhibition">작품 모집중</li>
+            {% endif %}
+            #}
             {% endif %}
             {% if place.exhibition.is_free == EXHIBITION_FOR_FREE %}
               <li class="fee">대관료 없음</li>
