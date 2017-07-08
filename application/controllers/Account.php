@@ -28,23 +28,23 @@ class Account extends MY_Controller {
                 $fb->setDefaultAccessToken($longLivedAccessToken);
                 try {
                     $response = $fb->get('/me?fields=id,name,picture.type(large),email');
-                    $userNode = $response->getGraphUser();
 
-                    if ($userNode === NULL) {
+                    if ($response->isError()) {
                         $response->throwException();
                     }
 
-                    $data['email'] = $userNode->getEmail();
-                    $data['facebook_profile_image_url'] = $userNode->getPicture()->getUrl();
-                    $data['facebook_id'] = $userNode->getId();
+                    $user_node = $response->getGraphUser();
+                    $data['email'] = $user_node->getEmail();
+                    $data['facebook_profile_image_url'] = $user_node->getPicture()->getUrl();
+                    $data['facebook_id'] = $user_node->getId();
 
-                    $is_already_used = $this->user_model->check_email($userNode->getEmail());
+                    $is_already_used = $this->user_model->check_email($user_node->getEmail());
 
                     if ($is_already_used) {
                         $data['duplicated_email'] = TRUE;
                     }
                 } catch (\Facebook\Exceptions\FacebookResponseException $e) {
-                    log_message("error", "FaceBook SDK Exception : " . $e->getMessage());
+                    log_message('error', 'FaceBook SDK Exception : ' . $e->getMessage());
                     $data['facebook_error'] = TRUE;
                 }
             }
