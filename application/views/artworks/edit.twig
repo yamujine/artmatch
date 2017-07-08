@@ -60,6 +60,11 @@
           previewElement.removeClass('hidden').attr('src', src);
           wrapElement.addClass('imageSelected').css({width: previewElement.width()});
         }
+
+        // 메인 이미지 사이즈 재조정
+        if ($(this).hasClass('mainImage')) {
+          $('.mainImage.imageSelected').css({width: $('.mainImage.imageSelected .preview').width()});
+        }
       });
 
       // 설명 및 태그 입력 시 포커스 이벤트
