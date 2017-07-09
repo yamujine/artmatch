@@ -1,14 +1,20 @@
 #!/bin/bash
-echo -e "\e[1m>>> Resetting \e[32mgit\e[39m repository to HEAD\n\e[0m"
+BOLD='\033[1m'
+GREEN='\033[1;32m'
+RESET='\033[0m'
+NC='\033[39m' # Default Color
+
+echo -e "${BOLD}>>> Resetting ${GREEN}git${NC} repository to HEAD\n${RESET}"
 git reset HEAD --hard
-echo -e "\n\e[0m\e[1m>>> Install \e[32mnode\e[39m packages...\e[0m"
+
+echo -e "\n${NC}${BOLD}>>> Install ${GREEN}node${NC} packages...${RESET}"
 npm install
-echo -e "\n\e[0m\e[1m>>> Install \e[32mbower\e[39m packages...\e[0m"
+echo -e "\n${NC}${BOLD}>>> Install ${GREEN}bower${NC} packages...${RESET}"
 bower install
-echo -e "\n\e[0m\e[1m>>> Running \e[32mgulp:build\e[39m...\e[0m"
+echo -e "\n${NC}${BOLD}>>> Running ${GREEN}gulp:build${NC}...${RESET}"
 ./node_modules/gulp/bin/gulp.js build
 
-echo -e "\n\e[0m\e[1m>>> Adding ownership to \e[32mwww-data\e[39m...\e[0m"
+echo -e "\n${NC}${BOLD}>>> Adding ownership to ${GREEN}www-data${NC}...${RESET}"
 chown -R :www-data ./*
 
-echo -e "\n\n\e[0m\e[1m>>> Successfully Deployed!!!\n\n\e[0m"
+echo -e "\n\n${NC}${BOLD}>>> Successfully Deployed!!!\n\n${RESET}"
