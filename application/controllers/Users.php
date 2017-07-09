@@ -33,7 +33,7 @@ class Users extends MY_Controller {
 
         $places = $this->place_model->get_all_bare_by_user_id($this->accountlib->get_user_id());
         foreach ($places as $place) {
-            $exhibitions = $this->exhibition_model->get_exhibitions_by_place_id($place->id);
+            $exhibitions = $this->exhibition_model->get_by_place_id($place->id);
 
             foreach ($exhibitions as $exhibition) {
                 $applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);

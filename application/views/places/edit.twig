@@ -1,17 +1,15 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="{{ 'dist/slick/slick.css' | static_url }}">
-  <link rel="stylesheet" type="text/css" href="{{ 'dist/magic-check/magic-check.min.css' | static_url }}">
-  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/places/edit.min.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/slick/slick.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/magic-check/magic-check.min.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/css/places/edit.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
   <script src="{{ 'dist/js/jquery-ui.min.js' | static_url }}"></script>
-  <script src="{{ 'dist/js/datepicker-ko.js' | static_url }}"></script>
-
-  <script type="text/javascript" src="{{ 'dist/slick/slick.min.js' | static_url }}"></script>
-  <script type="text/javascript">
+  <script src="{{ 'dist/slick/slick.min.js' | static_url }}"></script>
+  <script>
     $(function () {
       // 추가 이미지 슬라이더
       $('.slider').slick({
@@ -176,11 +174,7 @@
           tags: {
             required: true,
             maxlength: 60
-          },
-          exhibition_artwork_count: "required",
-          exhibition_title: "required",
-          exhibition_start_date: "required",
-          exhibition_end_date: "required"
+          }
         },
         messages: {
           name: {
@@ -204,25 +198,9 @@
           tags: {
             required: "태그를 입력해 주세요.",
             maxlength: "태그는 60자 까지 입력 가능 합니다."
-          },
-          exhibition_artwork_count: {
-            required: "전시 가능한 작품 수를 입력해 주세요."
-          },
-          exhibition_title: {
-            required: "전시 제목을 입력해 주세요."
-          },
-          exhibition_start_date: {
-            required: "전시 시작일을 입력해 주세요."
-          },
-          exhibition_end_date: {
-            required: "전시 종료일을 입력해 주세요."
           }
         }
       });
-
-      // datepicker
-      $("#exhibitionStartDate").datepicker();
-      $("#exhibitionEndDate").datepicker();
 
       $('.patGnbSubmit').click(function() {
         $("#patUploadForm").submit();
@@ -348,54 +326,7 @@
         <!-- //== 작품 설명 -->
         <!-- == 옵션 선택 -->
         <div class="options">
-          {# TODO: 전시명 입력란 마크업 #}
-          <div class="exhibition clear">
-            <div class="title">전시명</div>
-            <div class="field">
-              <input type="text" name="exhibition_title" maxlength="70" placeholder="0"
-                     value="{{ exhibition_title }}" />
-            </div>
-          </div>
           <div class="leftPane">
-            <!-- == 공간 옵션 -->
-            <div class="exhibition clear">
-              <div class="title">전시</div>
-              <div class="radio">
-                <input id="statusNeed" class="magic-radio" type="radio" name="status"
-                       value="{{ PLACE_STATUS_NEED_ARTWORK }}"
-                       {% if status is not defined or status == PLACE_STATUS_NEED_ARTWORK %}checked="checked"{% endif %}/>
-                <label for="statusNeed">작품구함</label>
-                <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
-                       value="{{ PLACE_STATUS_NOT_NEED_ARTWORK }}"
-                       {% if status is defined and status == PLACE_STATUS_NOT_NEED_ARTWORK %}checked="checked"{% endif %}/>
-                <label for="statusNotNeed">작품 구하지 않음</label>
-              </div>
-            </div>
-            <!-- //== 공간 옵션 -->
-            <!-- == 전시 일정 -->
-            <div class="exhibitionDate clear">
-              <div class="title">전시일정</div>
-              <div class="field">
-                <input type="text" name="exhibition_start_date" id="exhibitionStartDate" maxlength="8" placeholder="{{ now|date('Ymd') }}"
-                       value="{% if exhibition_start_date is not null %}{{ exhibition_start_date|date('Ymd') }}{% endif %}"/>
-                부터
-                <input type="text" name="exhibition_end_date" id="exhibitionEndDate" maxlength="8" placeholder="{{ now|date('Ymd') }}"
-                       value="{% if exhibition_end_date is not null %}{{ exhibition_end_date|date('Ymd') }}{% endif %}"/>
-                까지
-              </div>
-            </div>
-            <!-- //== 전시 일정 -->
-            <!-- == 작품 수 -->
-            <div class="exhibitionNumber clear">
-              <div class="title">작품 수</div>
-              <div class="field">
-                <input type="text" name="exhibition_artwork_count" min="0" max="100" placeholder="0"
-                       value="{{ exhibition_artwork_count }}" /> 점
-              </div>
-            </div>
-            <!-- //== 작품 수 -->
-          </div>
-          <div class="rightPane">
             <!-- == 댓글 옵션 -->
             <div class="comment clear">
               <div class="title">댓글</div>
@@ -408,29 +339,14 @@
                 <label for="noComment">댓글 허용 안함</label>
               </div>
             </div>
-            <!-- //== 판매 옵션 -->
-            <!-- == 전시비 옵션 -->
-            <div class="isFree clear">
-              <div class="title">전시비</div>
-              <div class="radio">
-                <input id="isFree" class="magic-radio" type="radio" name="exhibition_is_free"
-                       value="{{ EXHIBITION_PAID }}"
-                       {% if exhibition_is_free is not defined or exhibition_is_free == EXHIBITION_PAID %}checked="checked"{% endif %}/>
-                <label for="isFree">지급</label>
-                <input id="isNotFree" class="magic-radio" type="radio" name="exhibition_is_free"
-                       value="{{ EXHIBITION_FOR_FREE }}"
-                       {% if exhibition_is_free is defined and exhibition_is_free == EXHIBITION_FOR_FREE %}checked="checked"{% endif %}/>
-                <label for="isNotFree">지급 안함</label>
-              </div>
-            </div>
-            <!-- //== 전시비 옵션 -->
+          </div>
+          <div class="rightPane">
           </div>
         </div>
         <!-- //== 옵션 선택 -->
         <!-- == 취소, 등록 -->
         <div class="buttons">
-          {# TODO: 취소시 어디로 ROUTE? #}
-          <a href="#" class="cancelBtn">취소</a>
+          <a href="/" class="cancelBtn">취소</a>
           <button type="submit" class="registerBtn">등록</button>
         </div>
         <!-- //== 취소, 등록 버튼 -->
