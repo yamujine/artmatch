@@ -146,7 +146,7 @@ class UsersApi extends API_Controller {
         $this->user_model->update_password($user->id, $hashed_password);
         $this->accountlib->send_email_temp_password($email, $temp_password);
 
-        $this->return_success_response(['message' => '입력하신 이메일로 임시 비밀번호를 보내드렸습니다.\n메일함을 확인해주세요.']);
+        $this->return_success_response(['message' => "입력하신 이메일로 임시 비밀번호를 보내드렸습니다.\n메일함을 확인해주세요."]);
     }
 
     private function _simple_login() {
