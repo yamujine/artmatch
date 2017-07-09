@@ -94,16 +94,17 @@
             <div class="rightPane">
               <!-- == 전시 상태 옵션 시작 -->
               <div class="fields clear">
-              <div class="column_name">전시</div>
-              <div class="radio">
-                <input id="statusNeed" class="magic-radio" type="radio" name="status"
-                       value="{{ EXHIBITION_APPLICABLE }}"
-                       {% if exhibition.is_applicable is not defined or exhibition.is_applicable == EXHIBITION_APPLICABLE %}checked="checked"{% endif %}/>
-                <label for="statusNeed">작품모집중</label>
-                <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
-                       value="{{ EXHIBITION_NOT_APPLICABLE }}"
-                       {% if exhibition.is_applicable is defined and exhibition.is_applicable == EXHIBITION_NOT_APPLICABLE %}checked="checked"{% endif %}/>
-                <label for="statusNotNeed">모집완료</label>
+                <div class="column_name">전시</div>
+                <div class="radio">
+                  <input id="statusNeed" class="magic-radio" type="radio" name="status"
+                         value="{{ EXHIBITION_APPLICABLE }}"
+                         {% if exhibition.is_applicable is not defined or exhibition.is_applicable == EXHIBITION_APPLICABLE %}checked="checked"{% endif %}/>
+                  <label for="statusNeed">작품모집중</label>
+                  <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
+                         value="{{ EXHIBITION_NOT_APPLICABLE }}"
+                         {% if exhibition.is_applicable is defined and exhibition.is_applicable == EXHIBITION_NOT_APPLICABLE %}checked="checked"{% endif %}/>
+                  <label for="statusNotNeed">모집완료</label>
+                </div>
               </div>
               <!-- //== 전시 상태 옵션 종료 -->
               <!-- == 전시비 옵션 시작 -->
