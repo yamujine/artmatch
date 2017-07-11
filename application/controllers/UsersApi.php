@@ -230,11 +230,10 @@ class UsersApi extends API_Controller {
         $this->form_validation->set_rules('password', '패스워드', 'trim|required', [
             'required' => '패스워드가 입력되지 않았습니다.'
         ]);
-        $this->form_validation->set_rules('user_name', '유저 아이디', 'trim|required|alpha_dash|is_unique[users.user_name]|max_length[15]|callback_is_not_prohibitied_user_name', [
+        $this->form_validation->set_rules('user_name', '유저 아이디', 'trim|required|regex_match[/^[A-Za-z0-9-_\.]{5,15}$/]|is_unique[users.user_name]|callback_is_not_prohibitied_user_name', [
             'required' => '유저 아이디가 입력되지 않았습니다.',
-            'alpha_dash' => '아이디에 사용할 수 없는 문자열이 포함되어 있습니다. (영 소문자, 숫자, -, _ 만 가능)',
-            'is_unique' => '이미 사용중인 아이디입니다.',
-            'max_length' => '유저 아이디는 최대 15자까지 입력이 가능합니다.'
+            'regex_match' => '아이디에 사용할 수 없는 문자열이 포함되어 있습니다. (5~15자의 영 소문자, 숫자, (-), (_), (.) 만 가능)',
+            'is_unique' => '이미 사용중인 아이디입니다.'
         ]);
         $this->form_validation->set_rules('type', '회원 구분', 'required|in_list[0,1]', [
             'required' => '회원 구분이 입력되지 않았습니다.',
