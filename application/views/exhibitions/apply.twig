@@ -1,34 +1,82 @@
-{% extends "base.twig" %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- ======================== 메타 영역 ======================== -->
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>PickArtYou</title>
 
-{% block style %}
+  <!-- ======================== 리소스 영역 ======================== -->
+  <!-- ======================== 스타일 ======================== -->
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/fonts/fonts.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/bootstrap/css/bootstrap.min.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/base.min.css' | static_url }}">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/jquery-bootstrap-datepicker.css' | static_url }}">
+  <link href="https://maxcdn.bootstrapcdn.com/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+  <!-- == 공용 모달 == -->
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/modal.min.css' | static_url }}">
+
   <link rel="stylesheet" type="text/css" href="{{ 'dist/css/exhibitions/apply.min.css' | static_url }}">
-{% endblock %}
 
-{% block contents %}
+  <!-- ======================== 스크립트 ======================== -->
+  <script src="{{ 'dist/jquery/jquery.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/bootstrap/js/bootstrap.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/jquery-validation/jquery.validate.js' | static_url }}"></script>
+  <script src="{{ 'dist/jquery-validation-bootstrap-tooltip/jquery-validate.bootstrap-tooltip.js' | static_url }}"></script>
+
+  <script src="{{ 'dist/prefixfree/prefixfree.js' | static_url }}"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
+
+  <!-- == 공용 == -->
+  <script src="{{ 'dist/js/common.modal.js' | static_url }}"></script>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+
+<!-- ======================== 컨텐츠 영역 ======================== -->
+<div id="patContents" class="container">
+
   <form id="applyForm" method="POST">
     <!-- == 작품 지원 -->
     <div class="apply">
+      <span class="title">지원하는 전시</span>
+      <span class="exhibitionTitle">{{ exhibition.title }}</span>
+
       <div class="message">
-        전시를 원하는 작품을 선택하신 후<br>
-        <span class="underline">지원하기 버튼을 누르시면 해당 장소 대표님께 전달</span>됩니다!
       </div>
       <div class="buttons">
-        <a href="/places/{{ place_id }}" class="cancelBtn">취소하기</a>
+        <a href="/places/{{ place_id }}" class="cancelBtn">취소</a>
         <button type="submit" class="registerBtn" disabled>지원하기</button>
       </div>
     </div>
     <!-- //== 작품 지원 -->
 
-    {# TODO: 지원 이유 입력 폼 마크업 #}
-    이유
-    <textarea name="reason"></textarea>
+    <hr class="divider">
+
+    <div class="reasonInput">
+      <textarea name="reason" placeholder="지원하는 이유를 작성해주세요.">작성후 컬러</textarea>
+    </div>
+
+    <br>
+
+    <span class="applyTitle">지원작품</span>
+    <span class="selected"><span id="selectedCount">2</span>개 선택</span>
+
+    <span class="pull-right"><span class="select">선택</span> <img src="{{ 'images/arrow_down.png' | static_url }}" class="arrow" /></span>
 
     <!-- == 지원 작품 목록 -->
     <div class="patItemList">
       <div class="container">
         <ul class="itemList artworkList">
           {% for artwork in artworks %}
-            <li class="item {% if (loop.index % 3) == 0 %}third{% endif %} {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW %}in_review{% elseif artwork.apply_status == APPLY_STATUS_ACCEPTED %}accepted{% endif %}">
+            <li class="item {% if (loop.index % 5) == 0 %}fifth{% endif %} {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW %}in_review{% elseif artwork.apply_status == APPLY_STATUS_ACCEPTED %}accepted{% endif %}">
               <div class="dimm"></div>
               <div class="inReviewStatus">
                 <div class="icon"></div>
@@ -52,10 +100,10 @@
     </div>
     <!-- //== 지원 작품 목록 -->
   </form>
-{% endblock %}
+</div>
 
-{% block script %}
-  <script>
+
+<script>
     $(function () {
       $("#applyForm").validate({
         rules: {
@@ -79,5 +127,7 @@
       });
 
     });
-  </script>
-{% endblock %}
+</script>
+
+</body>
+</html>

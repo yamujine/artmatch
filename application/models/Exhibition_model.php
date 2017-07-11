@@ -90,6 +90,14 @@ class Exhibition_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_one_by_exhibition_id($exhibition_id) {
+        return $this->db
+            ->select('exhibitions.*')
+            ->from(self::TABLE_NAME)
+            ->where('id', $exhibition_id)
+            ->get()->row();
+    }
+
     public function get_by_place_id($place_id) {
         return $this->db
             ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
