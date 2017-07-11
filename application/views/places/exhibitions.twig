@@ -1,18 +1,27 @@
 {% extends "base.twig" %}
 
 {% block style %}
-
-  <link rel="stylesheet" type="text/css" href="/static/dist/css/places/exhibitions.min.css">
-  <link rel="stylesheet" type="text/css" href="/static/dist/magic-check/magic-check.min.css">
+  <link rel="stylesheet" href="{{ 'dist/css/places/exhibitions.min.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/magic-check/magic-check.min.css' | static_url }}">
 
   <style>
     #patDetail .container .placeDetail .preview {
       background: url("{{ place.image | image_url }}") center center;
       background-size: 100% auto;
     }
-
-
   </style>
+{% endblock %}
+
+{% block script %}
+  <script>
+    $(function () {
+      $('input[type=text]').focus(function () {
+        $(this).closest('.exhibition').addClass('active');
+      }).blur(function () {
+        $(this).closest('.exhibition').removeClass('active');
+      });
+    });
+  </script>
 {% endblock %}
 
 {% block buttons %}
@@ -29,7 +38,9 @@
 
         <div class="meta">
           <div class="title"><a href="/places/{{ place.id }}">{{ place.name }}</a></div>
-          <div class="additionalInfo">총 등록된 전시 {{ exhibitions | length }}개 | 종료된 전시 {{ exhibitions | length }}개 (TODO 나눠서 카운트)</div>
+          <div class="additionalInfo">총 등록된 전시 {{ exhibitions | length }}개 | 종료된 전시 {{ exhibitions | length }}개 (TODO
+            나눠서 카운트)
+          </div>
         </div>
 
       </div>
@@ -42,85 +53,102 @@
           </a>
         </div>
 
-        <hr class="divider" />
+        <hr class="divider"/>
 
         <!-- 입력/수정 블록 -->
         <div class="exhibition">
           <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
           <span class="title">
-            <input class="input" value="입력중이거나 수정중인 전시" placeholder="전시명을 입력해주세요.">
+            <input type="text" name="exhibition_title" class="input" placeholder="전시명을 입력해주세요.">
           </span>
           <span class="pull-right">
-            <ul>
-              <li class="deleteBtn">삭제</li>
-              <li class="confirmBtn">완료</li>
-            </ul>
+            <a href="#" class="deleteBtn">삭제</a>
+            <a href="#" class="confirmBtn">완료</a>
           </span>
           <hr class="divider">
           <div class="meta">
-
+            <!-- == 왼쪽 패널 -->
             <div class="leftPane">
-              <div class="column_name">전시일정</div>
-              <input class="start_date" value="{{ exhibition.start_date | date('Y.m.d') }}"> 부터
-              <input class="end_date" value="{{ exhibition.end_date | date('Y.m.d') }}"> 까지
+              <div class="fields exhibitionDate clear">
+                <div class="column_name">전시일정</div>
+                <div class="field">
+                  <input type="text" class="exhibition_start_date" placeholder="{{ now|date('Ymd') }}"
+                         value="{% if exhibition.start_date is not null %}{{ exhibition.start_date|date('Ymd') }}{% endif %}"
+                         title="전시 시작 일정"> 부터
+                  <input type="text" class="exhibition_end_date" placeholder="{{ now|date('Ymd') }}"
+                         value="{% if exhibition.end_date is not null %}{{ exhibition.end_date|date('Ymd') }}{% endif %}"
+                         title="전시 종료 일정"> 까지
+                </div>
+              </div>
 
-              <br>
-
-              <div class="column_name">작품수</div>
-              <input class="artwork_count" value="{{ exhibition.artwork_count }}">개<br>
-
+              <div class="fields exhibitionNumber clear">
+                <div class="column_name">작품수</div>
+                <div class="field">
+                  <input type="text" name="exhibition_artwork_count" min="0" max="100" placeholder="0"
+                         value="{{ exhibition.artwork_count }}" /> 점
+                </div>
+              </div>
             </div>
-
-
+            <!-- //== 왼쪽 패널 종료 -->
+            <!-- == 오른쪽 패널 -->
             <div class="rightPane">
-              <div class="column_name">전시</div>
-              <div class="radio">
-                <input id="statusNeed" class="magic-radio" type="radio" name="status"
-                       value="{{ PLACE_STATUS_NEED_ARTWORK }}"
-                       {% if status is not defined or status == PLACE_STATUS_NEED_ARTWORK %}checked="checked"{% endif %}/>
-                <label for="statusNeed">작품모집중</label>
-                <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
-                       value="{{ PLACE_STATUS_NOT_NEED_ARTWORK }}"
-                       {% if status is defined and status == PLACE_STATUS_NOT_NEED_ARTWORK %}checked="checked"{% endif %}/>
-                <label for="statusNotNeed">모집완료</label>
+              <!-- == 전시 상태 옵션 시작 -->
+              <div class="fields clear">
+                <div class="column_name">전시</div>
+                <div class="radio">
+                  <input id="statusNeed" class="magic-radio" type="radio" name="status"
+                         value="{{ EXHIBITION_APPLICABLE }}"
+                         {% if exhibition.is_applicable is not defined or exhibition.is_applicable == EXHIBITION_APPLICABLE %}checked="checked"{% endif %}/>
+                  <label for="statusNeed">작품모집중</label>
+                  <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
+                         value="{{ EXHIBITION_NOT_APPLICABLE }}"
+                         {% if exhibition.is_applicable is defined and exhibition.is_applicable == EXHIBITION_NOT_APPLICABLE %}checked="checked"{% endif %}/>
+                  <label for="statusNotNeed">모집완료</label>
+                </div>
               </div>
-
-              <br>
-
-              <div class="column_name">전시비</div>
-              <div class="radio">
-                <input id="isFree" class="magic-radio" type="radio" name="exhibition_is_free"
-                       value="{{ EXHIBITION_PAID }}"
-                       {% if exhibition_is_free is not defined or exhibition_is_free == EXHIBITION_PAID %}checked="checked"{% endif %}/>
-                <label for="isFree">지급</label>
-                <input id="isNotFree" class="magic-radio" type="radio" name="exhibition_is_free"
-                       value="{{ EXHIBITION_FOR_FREE }}"
-                       {% if exhibition_is_free is defined and exhibition_is_free == EXHIBITION_FOR_FREE %}checked="checked"{% endif %}/>
-                <label for="isNotFree">지급 안함</label>
+              <!-- //== 전시 상태 옵션 종료 -->
+              <!-- == 전시비 옵션 시작 -->
+              <div class="fields clear">
+                <div class="column_name">전시비</div>
+                <div class="radio">
+                  <input id="isFree" class="magic-radio" type="radio" name="exhibition_is_free"
+                         value="{{ EXHIBITION_PAID }}"
+                         {% if exhibition_is_free is not defined or exhibition_is_free == EXHIBITION_PAID %}checked="checked"{% endif %}/>
+                  <label for="isFree">지급</label>
+                  <input id="isNotFree" class="magic-radio" type="radio" name="exhibition_is_free"
+                         value="{{ EXHIBITION_FOR_FREE }}"
+                         {% if exhibition_is_free is defined and exhibition_is_free == EXHIBITION_FOR_FREE %}checked="checked"{% endif %}/>
+                  <label for="isNotFree">지급 안함</label>
+                </div>
               </div>
+              <!-- //== 전시비 옵션 종료 -->
             </div>
-            <br>
-
+            <!-- //== 오른쪽 패널 종료 -->
           </div>
         </div>
 
         {% for exhibition in exhibitions %}
-        <div class="exhibition">
-          <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
-          <span class="title">{{ exhibition.title }}</span>
-          <span class="status">상태 TODO {{ exhibition.status }}</span>
-          <span class="pull-right">
-            <ul>
-              <li class="modifyBtn">수정</li>
-            </ul>
-          </span>
-          <hr class="divider">
-          <div class="meta">
-            <span class="column_name">전시일정</span>
-            {{ exhibition.start_date | date('Y.m.d') }} ~ {{ exhibition.end_date | date('Y.m.d') }}<br>
-            <span class="column_name">작품수</span> {{ exhibition.artwork_count }}<br>
+          <div class="exhibition">
+            <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
+            <span class="title">{{ exhibition.title }}</span>
+            <span class="status">상태 TODO {{ exhibition.status }}</span>
+            <span class="pull-right">
+              <a href="#" class="modifyBtn">수정</a>
+            </span>
+            <hr class="divider">
+            <div class="meta">
+              <div class="fields clear">
+                <span class="title_name">전시일정</span>
+                <div class="field noInput">
+                  {{ exhibition.start_date | date('Y.m.d') }} ~ {{ exhibition.end_date | date('Y.m.d') }}
+                </div>
+              </div>
+              <div class="fields clear">
+                <span class="title_name">작품수</span>
+                <div class="field noInput">{{ exhibition.artwork_count }}</div>
+              </div>
+            </div>
           </div>
-        </div>
         {% endfor %}
       </div>
 

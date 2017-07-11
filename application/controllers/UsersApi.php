@@ -188,18 +188,28 @@ class UsersApi extends API_Controller {
 
         // JS에서 전달된 페이스북 Access Token으로 로그인
         $fb->setDefaultAccessToken($longLivedAccessToken);
-        $response = $fb->get('/me?fields=id,email');
-        $userNode = $response->getGraphUser();
+
+        //Facebook 예외처리
+        try {
+            $response = $fb->get('/me?fields=id,email');
+            $user_node = $response->getGraphUser();
+            if ($user_node === NULL) {
+                $response->throwException();
+            }
+        } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+            log_message('error', 'FaceBook SDK Exception : ' . $e->getMessage());
+            $this->return_fail_response(FACEBOOK_NOT_DEFINED_EXCEPTION, ['message' => '페이스북 API에 오류가 있습니다. 잠시 후 다시 시도해주세요.']);
+        }
 
         //long lived accesstoken 세션 저장
         $this->accountlib->generate_facebook_access_token_session($longLivedAccessToken);
 
         // 페이스북 이메일 권한 체크, 권한 재요청 페이지로 이동
-        if (empty($userNode->getEmail())) {
+        if (empty($user_node->getEmail())) {
             $this->return_fail_response(FACEBOOK_NOT_GRANTED_EMAIL_PERMISSION, ['message' => '페이스북으로 로그인하기 위해서는 이메일 주소를 제공해주셔야 합니다.']);
         }
 
-        $user = $this->user_model->get_by_fb_id($userNode->getId());
+        $user = $this->user_model->get_by_fb_id($user_node->getId());
         // 페이스북 아이디 없음, 로그인 페이지로 이동
         if ($user === NULL) {
             $this->return_fail_response(FACEBOOK_NOT_JOINED_USER, ['message' => '페이스북으로 가입된 회원이 아닙니다.']);
@@ -220,11 +230,10 @@ class UsersApi extends API_Controller {
         $this->form_validation->set_rules('password', '패스워드', 'trim|required', [
             'required' => '패스워드가 입력되지 않았습니다.'
         ]);
-        $this->form_validation->set_rules('user_name', '유저 아이디', 'trim|required|alpha_dash|is_unique[users.user_name]|max_length[15]|callback_is_not_prohibitied_user_name', [
+        $this->form_validation->set_rules('user_name', '유저 아이디', 'trim|required|regex_match[/^[A-Za-z0-9-_\.]{5,15}$/]|is_unique[users.user_name]|callback_is_not_prohibitied_user_name', [
             'required' => '유저 아이디가 입력되지 않았습니다.',
-            'alpha_dash' => '아이디에 사용할 수 없는 문자열이 포함되어 있습니다. (영 소문자, 숫자, -, _ 만 가능)',
-            'is_unique' => '이미 사용중인 아이디입니다.',
-            'max_length' => '유저 아이디는 최대 15자까지 입력이 가능합니다.'
+            'regex_match' => '아이디에 사용할 수 없는 문자열이 포함되어 있습니다. (5~15자의 영 소문자, 숫자, (-), (_), (.) 만 가능)',
+            'is_unique' => '이미 사용중인 아이디입니다.'
         ]);
         $this->form_validation->set_rules('type', '회원 구분', 'required|in_list[0,1]', [
             'required' => '회원 구분이 입력되지 않았습니다.',

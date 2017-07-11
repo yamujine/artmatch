@@ -1,18 +1,18 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="/static/dist/magnific-popup/magnific-popup.css">
-  <link rel="stylesheet" type="text/css" href="/static/dist/slick/slick.css">
-  <link rel="stylesheet" type="text/css" href="/static/dist/css/places/detail.min.css">
-  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/main/main.min.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/magnific-popup/magnific-popup.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/slick/slick.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/css/places/detail.min.css' | static_url }}">
+  <link rel="stylesheet" href="{{ 'dist/css/main/main.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}
-  <script type="text/javascript" src="/static/dist/magnific-popup/jquery.magnific-popup.min.js"></script>
-  <script type="text/javascript" src="/static/dist/slick/slick.min.js"></script>
-  <script type="text/javascript" src="{{ 'dist/js/detail.common.js' | static_url }}"></script>
-  <script type="text/javascript" src="{{ 'dist/js/detail.comment.js' | static_url }}"></script>
-  <script type="text/javascript">
+  <script src="{{ 'dist/magnific-popup/jquery.magnific-popup.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/slick/slick.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/js/detail.common.js' | static_url }}"></script>
+  <script src="{{ 'dist/js/detail.comment.js' | static_url }}"></script>
+  <script>
     $(function(){
       $('.artworkPages .item[id=1]').trigger('click');
     });
@@ -57,8 +57,8 @@
             <div class="icon"></div>
           </button>
           <ul class="dropdown-menu dropdown-menu-right">
-            <li><a class="placeEditBtn" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">글 수정하기</a></li>
-            <li><a class="placeDeleteBtn" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">글 삭제하기</a></li>
+            <li><a class="placeEditBtn" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">장소 수정하기</a></li>
+            <li><a class="placeDeleteBtn" data-type="{{ TYPE_PLACES }}" data-id="{{ place.id }}">장소 삭제하기</a></li>
             <li><a class="placeCommentToggleBtn" data-type="{{ TYPE_PLACES }}" data-type-id="{{ place.id }}">댓글 {% if place.use_comment == TYPE_NO_COMMENT %}허용{% else %}비허용{% endif %}</a></li>
           </ul>
         </div>
@@ -114,8 +114,11 @@
           <ul class="status">
             {% if place.is_now_exhibiting %}
               <li class="exhibition display">현재 전시중</li>
+              {# TODO: 작품 모집중 상태 결정 필요
             {% elseif place.status == PLACE_STATUS_NEED_ARTWORK %}
               <li class="exhibition">작품 모집중</li>
+            {% endif %}
+            #}
             {% endif %}
             {% if place.exhibition.is_free == EXHIBITION_FOR_FREE %}
               <li class="fee">대관료 없음</li>

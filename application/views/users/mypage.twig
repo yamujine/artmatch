@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="/static/dist/css/users/mypage.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/users/mypage.min.css' | static_url }}">
 {% endblock %}
 
 {% block script %}

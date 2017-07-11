@@ -9,7 +9,6 @@ class Place_model extends CI_Model {
 
     //public $id; -- Ignore PK
     public $user_id;
-    public $status;
     public $name;
     public $area;
     public $address;
@@ -178,13 +177,13 @@ class Place_model extends CI_Model {
             ->get()->result();
     }
 
-    public function insert($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {
-        $this->_fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags);
-        if ($this->db->insert(self::TABLE_NAME, $this)) {
-            return $this->db->insert_id();
-        } else {
+    public function insert($user_id, $name, $area, $address, $description, $image, $use_comment, $tags) {
+        $this->_fill_class_variable_with_params($user_id, $name, $area, $address, $description, $image, $use_comment, $tags);
+        if (!$this->db->insert(self::TABLE_NAME, $this)) {
             return NULL;
         }
+
+        return $this->db->insert_id();
     }
 
     public function insert_images($place_id, array $images) {
@@ -195,13 +194,13 @@ class Place_model extends CI_Model {
         return true;
     }
 
-    public function update($id, $user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {
-        $this->_fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags);
-        if ($this->db->update(self::TABLE_NAME, $this, ['id' => $id])) {
-            return $id;
-        } else {
+    public function update($id, $user_id, $name, $area, $address, $description, $image, $use_comment, $tags) {
+        $this->_fill_class_variable_with_params($user_id, $name, $area, $address, $description, $image, $use_comment, $tags);
+        if (!$this->db->update(self::TABLE_NAME, $this, ['id' => $id])) {
             return NULL;
         }
+
+        return $id;
     }
 
     public function update_view_count_by_id($id) {
@@ -229,9 +228,8 @@ class Place_model extends CI_Model {
         return $this->db->affected_rows() === 1;
     }
 
-    private function _fill_class_variable_with_params($user_id, $status, $name, $area, $address, $description, $image, $use_comment, $tags) {
+    private function _fill_class_variable_with_params($user_id, $name, $area, $address, $description, $image, $use_comment, $tags) {
         $this->user_id = $user_id;
-        $this->status = $status;
         $this->name = $name;
         $this->area = $area;
         $this->address = $address;
