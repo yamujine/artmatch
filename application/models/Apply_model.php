@@ -28,6 +28,16 @@ class Apply_model extends CI_Model {
         return $this->db->insert_id();
     }
 
+    public function get_by_user_id($user_id) {
+        return $this->db
+            ->select('apply.exhibition_id')
+            ->from('artworks')
+            ->join(self::TABLE_NAME, 'artworks.id = apply.artwork_id')
+            ->where('artworks.user_id', $user_id)
+            ->order_by('apply.id', 'DESC')
+            ->get()->result();
+    }
+
     public function get_by_exhibition_id_and_artwork_id($exhibition_id, $artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)

@@ -36,29 +36,57 @@ class Users extends MY_Controller {
     public function apply_status() {
         $user_details = $this->_get_user_details($this->accountlib->get_user_name());
 
-        $this->load->model('exhibition_model');
+        $this->load->model(['exhibition_model', 'apply_model']);
         $exhibition_list = [];
         $total_applied_count = 0;
 
-        $places = $this->place_model->get_all_bare_by_user_id($this->accountlib->get_user_id());
-        foreach ($places as $place) {
-            $exhibitions = $this->exhibition_model->get_by_place_id($place->id);
+        $type = ($user_details['user']->type === USER_TYPE_ARTIST) ? 'apply' : 'applicant';
 
+        $data = ['type' => $type];
+        if ($type === 'apply') {
+            $exhibition_objects = $this->apply_model->get_by_user_id($user_details['user']->id);
+            $exhibition_ids = array_unique(array_map(function ($value) {
+                return $value->exhibition_id;
+            }, $exhibition_objects));
+
+            $exhibitions = $this->exhibition_model->get_by_ids($exhibition_ids);
+
+            $exhibition_list = [];
             foreach ($exhibitions as $exhibition) {
                 $applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);
 
                 if (!empty($applied_artworks)) {
                     $exhibition->applied_artworks = $applied_artworks;
-                    $total_applied_count += count($applied_artworks);
                     $exhibition_list[] = $exhibition;
                 }
             }
+
+            $data = array_merge($data, [
+                'exhibitions' => $exhibition_list
+            ]);
+
+        } elseif ($type === 'applicant') {
+            $places = $this->place_model->get_all_bare_by_user_id($this->accountlib->get_user_id());
+            foreach ($places as $place) {
+                $exhibitions = $this->exhibition_model->get_by_place_id($place->id);
+
+                foreach ($exhibitions as $exhibition) {
+                    $applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);
+
+                    if (!empty($applied_artworks)) {
+                        $exhibition->applied_artworks = $applied_artworks;
+                        $total_applied_count += count($applied_artworks);
+                        $exhibition_list[] = $exhibition;
+                    }
+                }
+            }
+
+            $data = array_merge($data, [
+                'exhibitions' => $exhibition_list,
+                'total_applied_count' => $total_applied_count
+            ]);
         }
 
-        $data = [
-            'exhibitions' => $exhibition_list,
-            'total_applied_count' => $total_applied_count
-        ];
         $data = array_merge($data, $user_details);
 
         $this->twig->display('users/apply_status', $data);

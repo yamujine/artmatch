@@ -96,6 +96,17 @@ class Exhibition_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_by_ids(array $exhibition_ids) {
+        if (empty($exhibition_ids)) {
+            return NULL;
+        }
+
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where_in('id', $exhibition_ids)
+            ->get()->result();
+    }
+
     public function get_by_artwork_id($artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)
