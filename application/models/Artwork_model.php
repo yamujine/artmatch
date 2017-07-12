@@ -148,6 +148,13 @@ class Artwork_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_count_by_user_id($user_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('user_id', $user_id)
+            ->count_all_results();
+    }
+
     public function get_all_by_user_id($user_id) {
         $query = $this->db
             ->select('artworks.*, count(user_artwork_picks.id) as pick_count, IF(P2.id IS NULL, 0, 1) AS is_picked')

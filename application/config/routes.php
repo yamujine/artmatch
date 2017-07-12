@@ -67,8 +67,10 @@ $route['places/(:num)/exhibitions'] = 'places/exhibitions/$1';
 
 $route['exhibitions/(:num)/apply'] = 'exhibitions/apply/$1';
 
-$route['users/me'] = 'users/me'; // Don't change ordering
+$route['users/me'] = 'users/detail/me'; // Don't change ordering
 $route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
+$route['users/(:any)/picks'] = 'users/picks'; // Don't change ordering
+$route['users/(:any)/apply_status'] = 'users/apply_status'; // Don't change ordering
 
 $route['api/comments'] = 'commentApi';
 $route['api/comments/delete'] = 'commentApi/delete';

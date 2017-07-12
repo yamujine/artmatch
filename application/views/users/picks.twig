@@ -1,0 +1,55 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/users/mypage.min.css' | static_url }}">
+{% endblock %}
+
+{% block script %}
+  <script src="{{ 'dist/js/mypage.common.js' | static_url }}"></script>
+{% endblock %}
+
+{% block contents %}
+  {% import 'macro/mypage.macro.twig' as mypage_macro %}
+  {{ mypage_macro.render_profile(user, is_my_page, total_object_count, given_pick_count) }}
+  {% if is_my_page %}
+    {{ mypage_macro.render_tabs(user, 'pick', pick_type) }}
+    {{ mypage_macro.render_password_change_modal() }}
+  {% endif %}
+
+  <!-- == 픽 탭 -->
+  <div id="pickTab">
+    <div class="pickTypeButtons">
+      <a class="{% if pick_type == TYPE_ARTWORKS %}active{% endif %}" href="?type=artworks">작품</a>
+      <a class="{% if pick_type == TYPE_PLACES %}active{% endif %}" href="?type=places">공간</a>
+    </div>
+  </div>
+  <!-- //== 픽 탭 -->
+  {% if my_picks|length > 0 %}
+    <!-- == 작품 또는 장소 아이템 -->
+    <div class="patItemList">
+      <div class="container">
+        <!-- == 아이템 목록 -->
+        <ul class="itemList">
+          {% import 'macro/mypage.macro.twig' as mypage_macro %}
+          {% for item in my_picks %}
+            {{ mypage_macro.render_mypage_grid_item(item, pick_type, loop.index) }}
+          {% endfor %}
+        </ul>
+        <!-- //== 아이템 목록 -->
+      </div>
+    </div>
+    <!-- //== 작품 또는 장소 아이템 -->
+  {% else %}
+    <!-- == 아이템 없음 -->
+    <div class="itemEmpty">
+      <div class="container">
+        {% if pick_type == TYPE_ARTWORKS %}
+          <p class="empty">아직 PICK한 작품이 없습니다 :)</p>
+        {% elseif pick_type == TYPE_PLACES %}
+          <p class="empty">아직 PICK한 공간이 없습니다 :)</p>
+        {% endif %}
+      </div>
+    </div>
+    <!-- == 아이템 없음 -->
+  {% endif %}
+{% endblock %}
