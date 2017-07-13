@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: BrianPark
- * Date: 2017-02-01
- * Time: 오후 12:09
+ * codeigniter3-sentry-core-extending-version: https://github.com/UnRyongPark/codeigniter3-sentry-core-extending-version
  */
 class MY_Log extends CI_Log
 {
