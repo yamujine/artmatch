@@ -26,6 +26,7 @@ body {
         line-height: 2.14;
         letter-spacing: -0.3px;
         color: $greyish-brown;
+        margin-left: 5px;
       }
 
       // 메시지
@@ -79,7 +80,7 @@ body {
           border: none;
 
           &:hover:enabled {
-            background: $black-seven;
+            background: $greyish-brown;
           }
         }
       }
@@ -87,7 +88,7 @@ body {
     } // .apply
 
     .divider {
-      height: 0px;
+      height: 0;
       border: solid 1px $warm-grey-five;
     }
 
@@ -102,10 +103,14 @@ body {
         font-family: 'Noto Sans KR', sans-serif;
         font-size: 14px;
         line-height: 1.5;
-        color: #262626;
+        color: $black;
         resize: none;
         outline: none;
         border: none;
+
+        @include placeholder {
+          color: $warm-grey-four;
+        }
       }
     }
 
@@ -122,7 +127,8 @@ body {
       font-size: 15px;
       line-height: 2.0;
       letter-spacing: -0.3px;
-      color: #5376f3;
+      color: $cornflower;
+      margin-left: 4px;
     }
 
     // 선택 텍스트
