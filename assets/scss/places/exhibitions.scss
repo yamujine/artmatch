@@ -122,17 +122,32 @@ body {
           .modifyBtn {
             color: $greyish-brown;
             border: 1px solid $brownish-grey-40;
+
+            &:hover {
+              background: $brownish-grey;
+              color: $white;
+            }
           }
 
           .deleteBtn {
             color: #de3434;
             border: 1px solid $pale-red-40;
+
+            &:hover {
+              background: $pale-red;
+              color: $white;
+            }
           }
 
           .confirmBtn {
             margin-left: 13px;
             color: $black;
             border: 1px solid $black-40;
+
+            &:hover {
+              background: $black;
+              color: $white;
+            }
           }
 
           .title {
@@ -157,7 +172,14 @@ body {
           .status {
             font-family: 'Noto Sans KR', sans-serif;
             font-size: 13px;
-            color: #be7028;
+            margin-left: 6px;
+
+            &.now {
+              color: $copper;
+            }
+            &.ended {
+              color: $warm-grey-four;
+            }
           }
 
           .divider {
