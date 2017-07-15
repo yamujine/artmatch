@@ -112,9 +112,9 @@
 
 
   {% if type == 'apply' %} {# 지원한 전시 #}
-  <div class="patAppliedExhibitions">
-    <div class="container">
-      <span class="appliedCount">지원한 전시 총 {{ exhibitions | length }}개</span>
+    <div class="patAppliedExhibitions">
+      <div class="container">
+        <span class="appliedCount">지원한 전시 총 {{ exhibitions | length }}개</span>
 
       <table class="exhibitions">
       <thead>
@@ -186,57 +186,71 @@
               <img src="{{ artwork.image | thumb_url() }}" class="imgThumb pull-left" />
             {% endfor %}
             </div>
-          </div>
 
-        </td>
-      </tr>
-    {% endfor %}
-        </tbody>
-      </table>
+          </td>
+        </tr>
+      {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
   {% elseif type == 'applicant' %} {# 지원작가 #}
-    {# 모든 전시 리스트 #}
-    <form name="exhibition_id_frm" method="GET">
-      <select name="exhibition_id">
-        <option value="">== 전시를 선택해주세요 ==</option>
-        {% for exhibition in exhibitions %}
-          <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.id }}{{ exhibition.title }}</option>
-        {% endfor %}
-      </select>
-    </form>
-
-    {% if exhibition_id %}
-      현재 전시 {{ selected_exhibition.title }}
-
-      {# 전시에 지원한 작품 #}
-      {% if selected_exhibition.applied_artworks | length > 0 %}
-        <div class="exhibitionApply">
-          <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ selected_exhibition.applied_artworks | length }}</span></div>
-          <div class="rightSection">
-            <div class="selectedCount">선택된 작품 <span class="number selectedCnt">0</span></div>
-            <button class="selectBtn">채택</button>
-          </div>
+    <div class="patApplyExhibition container">
+      {# 모든 전시 리스트 #}
+      <form id="exhibition_id_frm" method="GET">
+        <div class="leftSection pull-left">
+          <label>전시명</label>
+          <select name="exhibition_id">
+            <option value="">전시를 선택해주세요.</option>
+            {% for exhibition in exhibitions %}
+              <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.id }}{{ exhibition.title }}</option>
+            {% endfor %}
+          </select>
+          <label>전시 기간</label>
+          <span class="date">2017.05.05 ~ 2017.05.06</span>
         </div>
-
-        {% for artwork in selected_exhibition.applied_artworks %}
-          <li class="item applied">
-            <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}"/>
-            <div class="meta">
-              <div class="title">{{ artwork.title }}</div>
-              <div class="name">{{ artwork.user_name }}</div>
+        {% if exhibition_id %}
+          {% if selected_exhibition.applied_artworks | length > 0 %}
+            <div class="rightSection">
+              <div class="exhibitionApplySelect">
+                <button class="cancelBtn">선택취소</button>
+                <button class="selectBtn">작가확정</button>
+              </div>
             </div>
-            <button class="button selectItemBtn {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}checked{% endif %}" data-exhibition-id="{{ exhibition.id }}"
-                    data-artwork-id="{{ artwork.id }}" {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}></button>
-          </li>
+          {% endif %}
+        {% endif %}
+      </form>
+
+      <div class="divider" style="clear: both;"></div>
+
+      <div class="applyMetadata">
+        <div class="totalApplyLabel">총 지원작품 <span class="selected">작품 <span class="number">8</span>개 선택</span></div>
+      </div>
+
+      <div class="applyArtists">
+        {% for artist_artworks in artists %}
+          <div class="artistItem">
+            <div class="metadata">
+              <div class="name">{{ artist_artworks[0].user_name }}</div>
+              <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
+              <div class="rightSection">
+                <button class="mailSendBtn"><img src="{{ 'images/mail.png' | static_url }}" /></button>
+                <button class="allSelectBtn active">이 작가 전체 작품 선택</button>
+              </div>
+            </div>
+            <div class="artworks">
+              {% for artwork in artist_artworks %}
+                <div class="artworkItem selected">
+                  <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}" />
+                </div>
+              {% endfor %}
+            </div>
+          </div>
         {% endfor %}
-      {% else %}
-        지원한 작품이 없습니다.
-      {% endif %}
-    {% else %}
-      전시를 선택해주세요.
-    {% endif %}
+      </div>
+
+    </div>
 
   {% endif %}
 
