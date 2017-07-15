@@ -72,13 +72,10 @@ class Users extends MY_Controller {
             $selected_exhibition = NULL;
             $exhibition_id = $this->input->get('exhibition_id');
 
-            // 장소 소유자의 모든 장소에서 전시 목록 가져오기
+            // 장소 소유자 모든 장소의 전시 중 일치하는 전시를 찾음
             $exhibitions = $this->exhibition_model->get_by_user_id($user_id);
             foreach ($exhibitions as $exhibition) {
-                // 해당 전시 ID의 지원 작품 가져오기
                 if (!empty($exhibition_id) && $exhibition_id === $exhibition->id) {
-                    $exhibition->applied_artworks = $this->apply_model->get_users_with_artworks_by_exhibition_id($exhibition->id);
-
                     $selected_exhibition = $exhibition;
                     break;
                 }
@@ -86,7 +83,9 @@ class Users extends MY_Controller {
 
             $artists = [];
             if ($selected_exhibition !== NULL) {
-                foreach ($selected_exhibition->applied_artworks as $artwork) {
+                // 해당 전시 ID의 지원 작품 가져와 작가 별로 분리
+                $applied_artworks = $this->apply_model->get_users_with_artworks_by_exhibition_id($selected_exhibition->id);
+                foreach ($applied_artworks as $artwork) {
                     $artists[$artwork->user_id][] = $artwork;
                 }
             }
