@@ -251,7 +251,13 @@
               <div class="artworks">
                 {% for artwork in artist_artworks %}
                   <div class="artworkItem selected">
-                    <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}" />
+
+                    <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}" />
+                    <label for="artwork_{{ artwork.id }}">
+                      <img class="imageThumb" src="{{ artwork.image | thumb_url }}" class="crop artworkImage" data-id="{{ artwork.id }} "/>
+                    </label>
+                    <div class="box">✔</div>
+
                   </div>
                 {% endfor %}
               </div>

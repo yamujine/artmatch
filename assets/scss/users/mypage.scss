@@ -889,6 +889,7 @@
   }
   // --
 
+  // 지원현황
   .patApplyExhibition {
     position: relative;
 
@@ -1049,6 +1050,7 @@
         }
 
         .artworks {
+          list-style: none;
           margin-left: 6px;
           margin-top: 17px;
 
@@ -1060,6 +1062,84 @@
             margin-top: 8px;
             margin-right: 8px;
             border: 1px solid $black-10;
+
+
+            // -------------
+            label {
+              cursor: pointer;
+              position: relative;
+              width: 138px;
+              height: 138px;
+              margin: 0;
+
+              .imageThumb {
+                z-index: 2;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 138px;
+                height: 138px;
+                border: solid 1px $black-10;
+              }
+            }
+
+            .box {
+              display: none;
+            }
+
+            input[type=checkbox] {
+              position: absolute;
+              width: 1px;
+              height: 1px;
+              padding: 0;
+              margin: -1px;
+              overflow: hidden;
+              clip: rect(0, 0, 0, 0);
+              border: 0;
+            }
+
+            input[type=checkbox]:checked + label {
+              display: inline-block;
+              position: relative;
+              cursor: pointer;
+              @include prefix(user-select, none);
+            }
+
+            input[type=checkbox] + label:before {
+              position: absolute;
+              z-index: 3;
+              content: '';
+              display: inline-block;
+              width: 138px;
+              height: 138px;
+            }
+
+            input[type=checkbox] + label:hover {
+              &:before {
+                outline: 4px solid #5082e2;
+              }
+            }
+
+            input[type=checkbox]:checked + label:before {
+              z-index: 3;
+              outline: 4px solid #5082e2;
+            }
+
+            input[type=checkbox]:checked + label + .box {
+              z-index: 4;
+              position: absolute;
+              display: block;
+              top: 0;
+              right: 0;
+              width: 36px;
+              height: 36px;
+              padding: 8px 0 8px 2px;
+              background: #5082e2;
+              color: $white-two;
+              text-align: center;
+            }
+
+            // -----------
 
             &.selected {
               border: none;
@@ -1083,5 +1163,5 @@
         }
       }
     }
-  }
+  } // -- 지원현황
 }
