@@ -50,7 +50,7 @@
             var src = e.target.result;
 
             previewElement.removeClass('hidden').attr('src', src);
-            wrapElement.addClass('imageSelected').css({width: previewElement.width()});
+            wrapElement.addClass('imageSelected');
           };
 
           reader.readAsDataURL($(this)[0].files[0]);
@@ -58,13 +58,18 @@
           var src = document.selection.createRange().text;
 
           previewElement.removeClass('hidden').attr('src', src);
-          wrapElement.addClass('imageSelected').css({width: previewElement.width()});
+          wrapElement.addClass('imageSelected');
         }
 
         // 메인 이미지 사이즈 재조정
         if ($(this).hasClass('mainImage')) {
           $('.mainImage.imageSelected').css({width: $('.mainImage.imageSelected .preview').width()});
         }
+      });
+
+      // 메인 이미지 변경시 사이즈 재조정
+      $('.mainImagePreview').on('load', function() {
+        $('.mainImage.imageSelected').css({width: $(this).width()});
       });
 
       // 설명 및 태그 입력 시 포커스 이벤트
@@ -238,7 +243,7 @@
               </p>
             </div>
           {% endif %}
-          <img src="{{ image | image_url }}" class="preview{% if image is null %} hidden{% endif %}"/>
+          <img src="{{ image | image_url }}" class="preview mainImagePreview{% if image is null %} hidden{% endif %}"/>
           <input type="file" name="image" id="mainImageFile" accept="image/*" value="{{ image }}"/>
         </div>
         <!-- //== 대표 이미지 선택 -->
