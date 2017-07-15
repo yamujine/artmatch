@@ -84,10 +84,18 @@ class Users extends MY_Controller {
                 }
             }
 
+            $artists = [];
+            if ($selected_exhibition !== NULL) {
+                foreach ($selected_exhibition->applied_artworks as $artwork) {
+                    $artists[$artwork->user_id][] = $artwork;
+                }
+            }
+
             $data = array_merge($data, [
                 'exhibition_id' => $exhibition_id,
                 'exhibitions' => $exhibitions,
-                'selected_exhibition' => $selected_exhibition
+                'selected_exhibition' => $selected_exhibition,
+                'artists' => $artists
             ]);
         }
 
