@@ -65,7 +65,7 @@
   {% if type == 'apply' %} {# 지원한 전시 #}
   <div class="patAppliedExhibitions">
     <div class="container">
-      <span class="appliedCount">지원한 전시 총 n개</span>
+      <span class="appliedCount">지원한 전시 총 {{ exhibitions | length }}개</span>
 
       <table class="exhibitions">
       <thead>
@@ -85,8 +85,6 @@
 
         <td class="status {# TODO ex) need #}need">
           {# 진행상황 #}
-          {{ exhibition.status }}
-
           {% if date(exhibition.start_date) >= date() %}
             작품 모집중?
           {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
@@ -105,7 +103,6 @@
           {% elseif status == APPLY_STATUS_ACCEPTED %}
             전시확정
           {% endif %}
-
           <button class="button">지원취소</button>
         </td>
 
