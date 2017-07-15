@@ -80,6 +80,10 @@
     // 지원 취소
     function cancel_apply(e) {
 
+      if (confirm("지원을 취소하시겠습니까?") === false) {
+        return false;
+      }
+
       var exhibition_id = $(e).data("id");
 
       $.ajax({
