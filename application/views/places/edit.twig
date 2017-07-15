@@ -285,7 +285,6 @@
             </div>
           {% endif %}
           <img src="{{ image | image_url }}" class="preview mainImagePreview{% if image is null %} hidden{% endif %}"/>
-          {#<input type="file" name="image" class="mainImage" id="mainImageFile" accept="image/*" value="{{ image }}"/>#}
           <input type="file" name="image" id="mainImageFile" accept="image/*" value="{{ image }}"/>
         </div>
         <!-- //== 대표 이미지 선택 -->
