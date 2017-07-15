@@ -884,4 +884,199 @@
     }
   }
   // --
+
+  .patApplyExhibition {
+    position: relative;
+
+    #exhibition_id_frm {
+      .leftSection {
+        label {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 2.14;
+          letter-spacing: -0.3px;
+          margin-right: 5px;
+        }
+        select {
+          width: 300px;
+          height: 36px;
+          background-color: $white-two;
+          border: 1px solid $pinkish-grey-five;
+          outline: none;
+          margin-right: 8px;
+        }
+
+        span.date {
+          font-size: 14px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 2.14;
+          letter-spacing: -0.3px;
+          color: $warm-grey-seven;
+        }
+      }
+      .rightSection {
+        position: absolute;
+        right: 0;
+
+        .exhibitionApplySelect {
+          text-align: right;
+          width: 300px;
+          height: 40px;
+          padding-right: 15px;
+
+          button {
+            width: 90px;
+            height: 40px;
+            border-radius: 30px;
+            outline: none;
+
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+
+            &.cancelBtn {
+              color: $black;
+              background: $white-two;
+              border: 1px solid $greyish-six;
+            }
+
+            &.selectBtn {
+              color: $white-two;
+              background: $greyish-brown;
+              border: 1px solid $greyish-brown;
+            }
+          }
+        }
+      }
+    }
+
+    .divider {
+      padding-top: 15px;
+      border-bottom: 2px solid $brownish-grey;
+    }
+
+    .applyMetadata {
+      width: 100%;
+      margin-top: 6px;
+
+      .totalApplyLabel {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.88;
+        letter-spacing: -0.3px;
+        color: $black;
+        padding-left: 2px;
+
+        .selected {
+          padding-left: 4px;
+          font-size: 16px;
+          line-height: 1.88;
+          letter-spacing: -0.3px;
+          color: $cornflower;
+        }
+      }
+    }
+
+    .applyArtists {
+      margin-top: 14px;
+      width: 100%;
+
+      .artistItem {
+        width: 100%;
+        min-height: 270px;
+        background: $white-two;
+        padding: 17px;
+        border: 1px solid $white-eight;
+
+        .metadata {
+          position: relative;
+
+          .rightSection {
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            button {
+              display: inline-block;
+              float: left;
+            }
+
+            .mailSendBtn {
+              width: 52px;
+              height: 26px;
+              border-radius: 30px;
+              border: solid 1px $brownish-grey-40;
+              background: $white-two;
+              margin-right: 10px;
+            }
+            .allSelectBtn {
+              width: 144px;
+              height: 26px;
+              border-radius: 30px;
+              border: 1px solid $brownish-grey-40;
+              padding-top: 4px;
+              font-size: 12px;
+
+              &.active {
+                background-color: $dark-sky-blue;
+                border: none;
+                color: $white-two;
+              }
+            }
+          }
+          .name {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.67;
+            letter-spacing: -0.3px;
+            color: $black;
+          }
+          .reason {
+            width: 500px;
+            margin-top: 4px;
+            font-size: 12px;
+            line-height: 1.5;
+            letter-spacing: -0.2px;
+            color: $warm-grey-five;
+          }
+        }
+
+        .artworks {
+          margin-left: 6px;
+          margin-top: 17px;
+
+          .artworkItem {
+            position: relative;
+            display: inline-block;
+            width: 138px;
+            height: 138px;
+            margin-top: 8px;
+            margin-right: 8px;
+            border: 1px solid $black-10;
+
+            &.selected {
+              border: none;
+
+              &:after {
+                content: '';
+                position: absolute;
+                width: 138px;
+                height: 138px;
+                border: 4px solid $dark-sky-blue;
+                left: 0;
+                top: 0;
+              }
+            }
+
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
 }
