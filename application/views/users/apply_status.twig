@@ -129,8 +129,6 @@
       <tbody>
     {% for exhibition in exhibitions %}
       <tr data-id="{{ exhibition.id }}">
-        <td><span class="title">{{ exhibition.title }}</span></td>
-        <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
 
         {% set status_class = "" %}
         {% set status_text = "" %}
@@ -143,9 +141,13 @@
         {% else %}
           {% set status_class = "" %}
           {% set status_text = "전시종료" %}
+          {% set disabled = "disabled" %}
         {% endif %}
 
-        <td class="status {{ status }}">
+        <td><span class="title {{ disabled }}">{{ exhibition.title }}</span></td>
+        <td class="term {{ disabled }}">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
+
+        <td class="status {{ status }} {{ disabled }}">
           {{ status_text }}
         </td>
 
@@ -161,10 +163,10 @@
           {% set status_text = "전시확정" %}
         {% endif %}
 
-        <td class="isApplied {{ status_class }}">
+        <td class="isApplied {{ status_class }} {{ disabled }}">
           {{ status_text }}
           {% if status == APPLY_STATUS_IN_REVIEW %}
-          <button class="button" data-id="{{ exhibition.id }}" onclick="cancel_apply(this)">지원취소</button>
+          <button class="button {{ disabled }}" {{ disabled }} data-id="{{ exhibition.id }}" onclick="cancel_apply(this)">지원취소</button>
           {% endif %}
         </td>
 
