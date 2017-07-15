@@ -38,12 +38,13 @@ class Apply_model extends CI_Model {
             ->get()->result();
     }
 
-    public function get_status_with_artworks_by_exhibition_id($exhibition_id) {
+    public function get_status_with_artworks_by_exhibition_id_and_user_id($exhibition_id, $user_id) {
         return $this->db
             ->select('artworks.*, apply.status AS apply_status')
             ->from(self::TABLE_NAME)
             ->join('artworks', 'apply.artwork_id = artworks.id')
             ->where('apply.exhibition_id', $exhibition_id)
+            ->where('artworks.user_id', $user_id)
             ->order_by('apply.registered_at', 'DESC')
             ->get()->result();
     }

@@ -63,16 +63,24 @@
 
   {% if type == 'apply' %}
     {% for exhibition in exhibitions %}
-      {{ exhibition.title }} {{ exhibition.start_date }} {{ exhibition.end_date }} {{ exhibition.status }}
-      {% if exhibition.status == APPLY_STATUS_IN_REVIEW %}
+      {{ exhibition.title }} {{ exhibition.start_date | date('Y.m.d') }} ~ {{ exhibition.end_date | date('Y.m.d') }}
+      {% if date(exhibition.start_date) >= date() %}
+        작품 모집중?
+      {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
+        모집 종료
+      {% else %}
+        전시종료
+      {% endif %}
+      {% set status = exhibition.applied_artworks[0].apply_status %}
+      {% if status == APPLY_STATUS_IN_REVIEW %}
         지원완료
-      {% elseif exhibition.status == APPLY_STATUS_REJECTED %}
+      {% elseif status == APPLY_STATUS_REJECTED %}
         선택안됨
-      {% elseif exhibition.status == APPLY_STATUS_ACCEPTED %}
+      {% elseif status == APPLY_STATUS_ACCEPTED %}
         전시확정
       {% endif %}
       {% for artwork in exhibition.applied_artworks %}
-        {{ artwork.image }}
+        <img src="{{ artwork.image | thumb_url }}" width="50" height="50"/>
       {% endfor %}
       <br><br>
     {% endfor %}
