@@ -50,7 +50,7 @@ class Apply_model extends CI_Model {
         return $this->db
             ->select('apply.*')
             ->from(self::TABLE_NAME)
-            ->join('artworks', 'apply.artwork_id == artworks.id')
+            ->join('artworks', 'apply.artwork_id = artworks.id')
             ->where('artworks.user_id', $user_id)
             ->where('apply.exhibition_id', $exhibition_id)
             ->get()->result();
