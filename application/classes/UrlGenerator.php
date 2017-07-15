@@ -52,7 +52,7 @@ class UrlGenerator {
         if (ENVIRONMENT === 'production') {
             $host = '//static.pickartyou.com/';
         } else {
-            $host = '../../static/';
+            $host = '/static/';
         }
 
         return $host . $filename;

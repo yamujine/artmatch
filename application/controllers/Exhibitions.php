@@ -4,6 +4,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Exhibitions extends MY_Controller {
     public function __construct() {
         parent::__construct();
+        $this->load->model(['place_model', 'artwork_model', 'exhibition_model', 'artwork_comment_model', 'place_comment_model', 'place_pick_model', 'apply_model']);
+        $this->load->library('tag');
+        $this->load->helper('url');
+    }
+
+    /**
+     * /exhibitions 주소는 메인으로 리다이렉트
+     */
+    public function index() {
+        redirect('/');
     }
 
     /**
@@ -46,6 +56,6 @@ class Exhibitions extends MY_Controller {
             alert_and_redirect('지원이 완료되었습니다.', '/places/' . $exhibition->place_id);
         }
 
-        $this->twig->display('places/apply', ['exhibition' => $exhibition, 'artworks' => $artworks, 'place_id' => $exhibition->place_id]);
+        $this->twig->display('exhibitions/apply', ['exhibition' => $exhibition, 'artworks' => $artworks, 'place_id' => $exhibition->place_id]);
     }
 }
