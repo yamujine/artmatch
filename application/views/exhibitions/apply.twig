@@ -159,11 +159,12 @@
             if (!data.result) {
               alert(data.body.message);
               return false;
+            } else {
+              console.log(data.body);
+              alert(data.body.message);
             }
-            alert(data.body.message);
-            self.close();
           })
-          .fail(function () {
+          .fail(function (data) {
             alert(data.body.message);
           });
       });
