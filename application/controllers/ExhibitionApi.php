@@ -96,6 +96,10 @@ class ExhibitionApi extends API_Controller {
             $this->return_fail_response('501', ['message' => '본인의 지원서만 취소할 수 있습니다.']);
         }
 
+        if ($apply->status === APPLY_STATUS_ACCEPTED) {
+            $this->return_fail_response('502', ['message' => '이미 확정된 작품은 취소할 수 없습니다.']);
+        }
+
         $result = $this->apply_model->delete($apply_id);
         if (!$result) {
             $this->return_fail_response('500', ['message' => '데이터베이스 삭제 에러']);
