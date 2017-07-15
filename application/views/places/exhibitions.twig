@@ -68,6 +68,12 @@
       $(document).on('click', '.modifyBtn', function () {
         var exhibitionDiv = $(this).closest('div.exhibition');
         var exhibitionData = eval($(exhibitionDiv).data('exhibition-value'));
+
+        // 중복 추가 방지
+        if ($('.exhibitionForm[data-exhibition-id="' + exhibitionData.id +'"]').length > 0) {
+          return false;
+        }
+
         var clone = $('.addExhibitionForm').clone();
 
         clone.removeClass('addExhibitionForm');

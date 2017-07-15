@@ -9,7 +9,7 @@
   <script type="text/javascript">
     $(function () {
       $('select[name="exhibition_id"]').change(function() {
-        $('form[name="exhibition_id_frm"]').submit();
+        $('#exhibition_id_frm').submit();
       });
       // 작품 수락하기
       $('.selectBtn').click(function () {
@@ -142,10 +142,10 @@
         {% set status_text = "" %}
         {% if date(exhibition.start_date) >= date() %}
           {% set status_class = "need" %}
-          {% set status_text = "작품모집중" %}
+          {% set status_text = "모집진행" %}
         {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
           {% set status_class = "" %}
-          {% set status_text = "모집 종료" %}
+          {% set status_text = "모집종료" %}
         {% else %}
           {% set status_class = "" %}
           {% set status_text = "전시종료" %}
@@ -192,9 +192,10 @@
               <img src="{{ artwork.image | thumb_url() }}" class="imgThumb pull-left" />
             {% endfor %}
             </div>
+          </div>
 
-          </td>
-        </tr>
+        </td>
+      </tr>
       {% endfor %}
           </tbody>
         </table>
@@ -212,8 +213,10 @@
               <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.title }}</option>
             {% endfor %}
           </select>
-          <label>전시 기간</label>
-          <span class="date">{{ selected_exhibition.start_date | date('Y.m.d') }} ~ {{ selected_exhibition.end_date | date('Y.m.d') }}</span>
+          {% if exhibition_id %}
+            <label>전시 기간</label>
+            <span class="date">{{ selected_exhibition.start_date | date('Y.m.d') }} ~ {{ selected_exhibition.end_date | date('Y.m.d') }}</span>
+          {% endif %}
         </div>
         {% if exhibition_id %}
           {% if selected_exhibition.applied_artworks | length > 0 %}
@@ -227,36 +230,36 @@
         {% endif %}
       </form>
 
-      <div class="divider" style="clear: both;"></div>
+      {% if exhibition_id %}
+        <div class="divider" style="clear: both;"></div>
 
-      <div class="applyMetadata">
-        <div class="totalApplyLabel">총 지원작품 <span class="selected">작품 <span class="number">8</span>개 선택</span></div>
-      </div>
+        <div class="applyMetadata">
+          <div class="totalApplyLabel">총 지원작품 <span class="selected">작품 <span class="number">8</span>개 선택</span></div>
+        </div>
 
-      <div class="applyArtists">
-        {% for artist_artworks in artists %}
-          <div class="artistItem">
-            <div class="metadata">
-              <div class="name">{{ artist_artworks[0].user_name }}</div>
-              <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
-              <div class="rightSection">
-                <button class="mailSendBtn"><img src="{{ 'images/mail.png' | static_url }}" /></button>
-                <button class="allSelectBtn active">이 작가 전체 작품 선택</button>
+        <div class="applyArtists">
+          {% for artist_artworks in artists %}
+            <div class="artistItem">
+              <div class="metadata">
+                <div class="name">{{ artist_artworks[0].user_name }}</div>
+                <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
+                <div class="rightSection">
+                  <button class="mailSendBtn"><a href="mailto:{{ artist_artworks[0].email }}"><img src="{{ 'images/mail.png' | static_url }}" /></a></button>
+                  <button class="allSelectBtn active">이 작가 전체 작품 선택</button>
+                </div>
+              </div>
+              <div class="artworks">
+                {% for artwork in artist_artworks %}
+                  <div class="artworkItem selected">
+                    <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}" />
+                  </div>
+                {% endfor %}
               </div>
             </div>
-            <div class="artworks">
-              {% for artwork in artist_artworks %}
-                <div class="artworkItem selected">
-                  <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}" />
-                </div>
-              {% endfor %}
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
-
   {% endif %}
 
 {% endblock %}
