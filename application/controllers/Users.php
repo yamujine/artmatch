@@ -43,6 +43,7 @@ class Users extends MY_Controller {
         $type = ($user_details['user']->type === USER_TYPE_ARTIST) ? 'apply' : 'applicant';
 
         $data = ['type' => $type];
+        // 지원한 전시
         if ($type === 'apply') {
             $exhibition_objects = $this->apply_model->get_by_user_id($user_id);
             $exhibition_ids = array_unique(array_map(function ($value) {

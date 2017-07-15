@@ -65,7 +65,7 @@
   {% if type == 'apply' %} {# 지원한 전시 #}
   <div class="patAppliedExhibitions">
     <div class="container">
-      <span class="appliedCount">지원한 전시 총 n개</span>
+      <span class="appliedCount">지원한 전시 총 {{ exhibitions|length }}개</span>
 
       <table class="exhibitions">
       <thead>
@@ -111,8 +111,8 @@
 
         <td class="artworks">
         {# 지원작품 #}
-          총 n개의 작품 보기 <img src="{{ 'images/applied_arrow_down.png' | static_url }}" /><br>
-          총 n개의 작품 닫기 <img src="{{ 'images/applied_arrow_up.png' | static_url }}" />
+          총 {{ exhibition.applied_artworks|length }}개의 작품 보기 <img src="{{ 'images/applied_arrow_down.png' | static_url }}" /><br>
+          총 {{ exhibition.applied_artworks|length }}개의 작품 닫기 <img src="{{ 'images/applied_arrow_up.png' | static_url }}" />
 
           <div class="appliedArtworks"> {# TODO show/hide #}
             <div class="pull-left">
@@ -121,7 +121,7 @@
 
             <div class="pull-left" style="margin-left: 5px">
             {% for artwork in exhibition.applied_artworks %}
-              <img src="{{ artwork.image | thumb_url() }}" class="imgThumb" class="pull-left"/>
+              <img src="{{ artwork.image | thumb_url() }}" class="imgThumb pull-left" />
             {% endfor %}
             </div>
           </div>
