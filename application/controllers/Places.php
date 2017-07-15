@@ -52,7 +52,6 @@ class Places extends MY_Controller {
                     $exhibition->artists = array_unique(array_map(function ($value) {
                         return $value->user->user_name;
                     }, $exhibition->artworks));
-                    //shuffle($exhibition->artists);
                     $exhibitions_now[] = $exhibition;
                 }
             }
