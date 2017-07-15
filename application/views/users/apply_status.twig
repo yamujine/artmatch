@@ -50,6 +50,55 @@
         return false;
       });
     });
+
+    function show_and_hide(e) {
+      var type;
+      var tr = $(e).closest("tr");
+
+      var is_show = tr.hasClass("showAppliedArtworks") ? true : false;
+
+      var appliedArtworksDiv = tr.find(".appliedArtworks");
+
+      var arrowImagePath = "";
+
+      if (is_show) {
+        type = "보기";
+        appliedArtworksDiv.hide();
+        tr.removeClass("showAppliedArtworks");
+        arrowImagePath = "{{ 'images/applied_arrow_down.png' | static_url }}";
+      } else {
+        type = "닫기";
+        appliedArtworksDiv.show();
+        tr.addClass("showAppliedArtworks");
+        arrowImagePath = "{{ 'images/applied_arrow_up.png' | static_url }}";
+      }
+
+      $(e).find(".text").text(type);
+      tr.find(".arrow").attr("src", arrowImagePath);
+    }
+
+    // 지원 취소
+    function cancel_apply(e) {
+
+      if (confirm("지원을 취소하시겠습니까?") === false) {
+        return false;
+      }
+
+      var exhibition_id = $(e).data("id");
+
+      $.ajax({
+        method: 'POST',
+        url: '/api/exhibition/cancel_apply',
+        data: {
+          exhibition_id: exhibition_id,
+        }
+      }).done(function (data) {
+        alert(data.body.message);
+        location.reload(true);
+      });
+
+    }
+
   </script>
 {% endblock %}
 
@@ -67,60 +116,75 @@
       <div class="container">
         <span class="appliedCount">지원한 전시 총 {{ exhibitions | length }}개</span>
 
-        <table class="exhibitions">
-        <thead>
-          <tr>
-            <th class="title">전시명</th>
-            <th class="term">전시기간</th>
-            <th class="status">진행상황</th>
-            <th class="isApplied">지원여부</th>
-            <th>지원작품</th>
-          </tr>
-        </thead>
-        <tbody>
-      {% for exhibition in exhibitions %}
-        <tr class="showAppliedArtworks"> {# TODO 보기 누르면 showAppliedArtworks 로 변경 #}
-          <td><span class="title">{{ exhibition.title }}</span></td>
-          <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
+      <table class="exhibitions">
+      <thead>
+        <tr>
+          <th class="title">전시명</th>
+          <th class="term">전시기간</th>
+          <th class="status">진행상황</th>
+          <th class="isApplied">지원여부</th>
+          <th>지원작품</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for exhibition in exhibitions %}
+      <tr data-id="{{ exhibition.id }}">
+        <td><span class="title">{{ exhibition.title }}</span></td>
+        <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
 
-          <td class="status {# TODO ex) need #}need">
-            {# 진행상황 #}
-            {% if date(exhibition.start_date) >= date() %}
-              작품 모집중?
-            {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
-              모집 종료
-            {% else %}
-              전시종료
-            {% endif %}
-          </td>
+        {% set status_class = "" %}
+        {% set status_text = "" %}
+        {% if date(exhibition.start_date) >= date() %}
+          {% set status_class = "need" %}
+          {% set status_text = "작품모집중" %}
+        {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
+          {% set status_class = "" %}
+          {% set status_text = "모집 종료" %}
+        {% else %}
+          {% set status_class = "" %}
+          {% set status_text = "전시종료" %}
+        {% endif %}
 
-          <td class="isApplied {# TODO ex) applied, confirmed, canceled #}confirmed">
-            {% set status = exhibition.applied_artworks[0].apply_status %}
-            {% if status == APPLY_STATUS_IN_REVIEW %}
-              지원완료
-            {% elseif status == APPLY_STATUS_REJECTED %}
-              선택안됨
-            {% elseif status == APPLY_STATUS_ACCEPTED %}
-              전시확정
-            {% endif %}
-            <button class="button">지원취소</button>
-          </td>
+        <td class="status {{ status }}">
+          {{ status_text }}
+        </td>
 
-          <td class="artworks">
-          {# 지원작품 #}
-            총 n개의 작품 보기 <img src="{{ 'images/applied_arrow_down.png' | static_url }}" /><br>
-            총 n개의 작품 닫기 <img src="{{ 'images/applied_arrow_up.png' | static_url }}" />
+        {% set status = exhibition.applied_artworks[0].apply_status %}
+        {% if status_class == APPLY_STATUS_IN_REVIEW %}
+          {% set status_class = "applied" %}
+          {% set status_text = "지원완료" %}
+        {% elseif status == APPLY_STATUS_REJECTED %}
+          {% set status_class = "" %}
+          {% set status_text = "선택안됨" %}
+        {% elseif status == APPLY_STATUS_ACCEPTED %}
+          {% set status_class = "confirmed" %}
+          {% set status_text = "전시확정" %}
+        {% endif %}
 
-            <div class="appliedArtworks"> {# TODO show/hide #}
-              <div class="pull-left">
-                <img src="{{ 'images/applied_sub.png' | static_url }}" class="sub" /> <span style="margin-left: 3px">지원작품</span>
-              </div>
+        <td class="isApplied {{ status_class }}">
+          {{ status_text }}
+          {% if status == APPLY_STATUS_IN_REVIEW %}
+          <button class="button" data-id="{{ exhibition.id }}" onclick="cancel_apply(this)">지원취소</button>
+          {% endif %}
+        </td>
 
-              <div class="pull-left" style="margin-left: 5px">
-              {% for artwork in exhibition.applied_artworks %}
-                <img src="{{ artwork.image | thumb_url() }}" class="imgThumb" class="pull-left"/>
-              {% endfor %}
-              </div>
+        <td class="artworks">
+        {# 지원작품 #}
+          총 {{ exhibition.applied_artworks|length }}개의 작품
+          <span onclick="show_and_hide(this)">
+            <span class="text">보기</span>
+            <img src="{{ 'images/applied_arrow_down.png' | static_url }}" class="arrow" />
+          </span>
+
+          <div class="appliedArtworks">
+            <div class="pull-left">
+              <img src="{{ 'images/applied_sub.png' | static_url }}" class="sub" /> <span style="margin-left: 3px">지원작품</span>
+            </div>
+
+            <div class="pull-left" style="margin-left: 5px">
+            {% for artwork in exhibition.applied_artworks %}
+              <img src="{{ artwork.image | thumb_url() }}" class="imgThumb pull-left" />
+            {% endfor %}
             </div>
 
           </td>

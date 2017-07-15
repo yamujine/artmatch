@@ -43,21 +43,24 @@ class Users extends MY_Controller {
         $type = ($user_details['user']->type === USER_TYPE_ARTIST) ? 'apply' : 'applicant';
 
         $data = ['type' => $type];
+        // 지원한 전시
         if ($type === 'apply') {
+            $exhibition_list = [];
+
             $exhibition_objects = $this->apply_model->get_by_user_id($user_id);
             $exhibition_ids = array_unique(array_map(function ($value) {
                 return $value->exhibition_id;
             }, $exhibition_objects));
 
-            $exhibitions = $this->exhibition_model->get_by_ids($exhibition_ids);
+            if (!empty($exhibition_ids)) {
+                $exhibitions = $this->exhibition_model->get_by_ids($exhibition_ids);
+                foreach ($exhibitions as $exhibition) {
+                    $applied_artworks = $this->apply_model->get_status_with_artworks_by_exhibition_id_and_user_id($exhibition->id, $user_id);
 
-            $exhibition_list = [];
-            foreach ($exhibitions as $exhibition) {
-                $applied_artworks = $this->apply_model->get_status_with_artworks_by_exhibition_id_and_user_id($exhibition->id, $user_id);
-
-                if (!empty($applied_artworks)) {
-                    $exhibition->applied_artworks = $applied_artworks;
-                    $exhibition_list[] = $exhibition;
+                    if (!empty($applied_artworks)) {
+                        $exhibition->applied_artworks = $applied_artworks;
+                        $exhibition_list[] = $exhibition;
+                    }
                 }
             }
 
@@ -69,22 +72,29 @@ class Users extends MY_Controller {
             $selected_exhibition = NULL;
             $exhibition_id = $this->input->get('exhibition_id');
 
-            // 장소 소유자의 모든 장소에서 전시 목록 가져오기
+            // 장소 소유자 모든 장소의 전시 중 일치하는 전시를 찾음
             $exhibitions = $this->exhibition_model->get_by_user_id($user_id);
             foreach ($exhibitions as $exhibition) {
-                // 해당 전시 ID의 지원 작품 가져오기
                 if (!empty($exhibition_id) && $exhibition_id === $exhibition->id) {
-                    $exhibition->applied_artworks = $this->apply_model->get_users_with_artworks_by_exhibition_id($exhibition->id);
-
                     $selected_exhibition = $exhibition;
                     break;
+                }
+            }
+
+            $artists = [];
+            if ($selected_exhibition !== NULL) {
+                // 해당 전시 ID의 지원 작품 가져와 작가 별로 분리
+                $applied_artworks = $this->apply_model->get_users_with_artworks_by_exhibition_id($selected_exhibition->id);
+                foreach ($applied_artworks as $artwork) {
+                    $artists[$artwork->user_id][] = $artwork;
                 }
             }
 
             $data = array_merge($data, [
                 'exhibition_id' => $exhibition_id,
                 'exhibitions' => $exhibitions,
-                'selected_exhibition' => $selected_exhibition
+                'selected_exhibition' => $selected_exhibition,
+                'artists' => $artists
             ]);
         }
 

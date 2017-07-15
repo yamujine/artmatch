@@ -46,6 +46,16 @@ class Apply_model extends CI_Model {
             ->get()->result();
     }
 
+    public function get_by_exhibition_id_and_user_id($exhibition_id, $user_id) {
+        return $this->db
+            ->select('apply.*')
+            ->from(self::TABLE_NAME)
+            ->join('artworks', 'apply.artwork_id = artworks.id')
+            ->where('artworks.user_id', $user_id)
+            ->where('apply.exhibition_id', $exhibition_id)
+            ->get()->result();
+    }
+
     public function get_status_with_artworks_by_exhibition_id_and_user_id($exhibition_id, $user_id) {
         return $this->db
             ->select('artworks.*, apply.status AS apply_status')
@@ -59,7 +69,7 @@ class Apply_model extends CI_Model {
 
     public function get_users_with_artworks_by_exhibition_id($exhibition_id) {
         return $this->db
-            ->select('artworks.*, apply.status AS apply_status, users.*')
+            ->select('artworks.*, apply.status AS apply_status, apply.reason AS apply_reason, users.*')
             ->from(self::TABLE_NAME)
             ->join('artworks', 'apply.artwork_id = artworks.id')
             ->join('users', 'users.id = artworks.user_id')

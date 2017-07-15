@@ -67,7 +67,7 @@ class ExhibitionApi extends API_Controller {
             }
 
             $result = $this->_is_applied_artworks($exhibition->id, [$artwork_id]);
-            if (!$result) {
+            if ($result) {
                 $this->return_fail_response('503', ['message' => '이미 지원한 작품입니다.']);
             }
 
@@ -86,23 +86,29 @@ class ExhibitionApi extends API_Controller {
     }
 
     public function cancel_apply() {
-        $apply_id = $this->input->post('apply_id');
-        if (empty($apply_id)) {
-            $this->return_fail_response('100', ['message' => '존재하지 않는 지원서입니다.']);
+        $exhibition_id = $this->input->post('exhibition_id');
+        if (empty($exhibition_id)) {
+            $this->return_fail_response('100', ['message' => '전시 아이디가 입력되지 않았습니다.']);
         }
 
-        $apply = $this->apply_model->get_by_user_id_and_apply_id($this->accountlib->get_user_id(), $apply_id);
-        if (!$apply) {
-            $this->return_fail_response('501', ['message' => '본인의 지원서만 취소할 수 있습니다.']);
+        $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
+        if (!$exhibition) {
+            $this->return_fail_response('501', ['message' => '존재하지 않는 전시 입니다.']);
         }
 
-        if ($apply->status === APPLY_STATUS_ACCEPTED) {
-            $this->return_fail_response('502', ['message' => '이미 확정된 작품은 취소할 수 없습니다.']);
+        $applies = $this->apply_model->get_by_exhibition_id_and_user_id($exhibition->id, $this->accountlib->get_user_id());
+        $apply_ids = [];
+        foreach ($applies as $apply) {
+            if ($apply->status !== APPLY_STATUS_ACCEPTED) {
+                $apply_ids[] = $apply->id;
+            }
         }
 
-        $result = $this->apply_model->delete($apply_id);
-        if (!$result) {
-            $this->return_fail_response('500', ['message' => '데이터베이스 삭제 에러']);
+        foreach ($apply_ids as $apply_id) {
+            $result = $this->apply_model->delete($apply_id);
+            if (!$result) {
+                $this->return_fail_response('500', ['message' => '취소 중 데이터베이스 에러']);
+            }
         }
 
         $this->return_success_response(['message' => '지원이 취소되었습니다.']);

@@ -98,7 +98,7 @@ class Exhibition_model extends CI_Model {
 
     public function get_by_ids(array $exhibition_ids) {
         if (empty($exhibition_ids)) {
-            return NULL;
+            return [];
         }
 
         return $this->db
