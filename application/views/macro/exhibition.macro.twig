@@ -13,7 +13,7 @@
         <span class="count">작품수 {{ exhibition.artworks|length }}개</span>
         <div class="separator"></div>
         <span class="count">모집수 {{ exhibition.artwork_count }}개</span>
-        {% if session.type == 0 %}<!-- and exhibition.status == 0 -->
+        {% if session.type == 0 and exhibition.is_applicable == 1 and exhibition.status != EXHIBITION_END %}
         <div class="buttons">
           <button onclick="window.open('/exhibitions/'+ {{ exhibition.id }} +'/apply', 'applyPopup', 'width=1002,height=702');">지원하기 <img src="{{ 'images/apply_arrow.png' | static_url }}" class="arrow" /></button>
         </div>
