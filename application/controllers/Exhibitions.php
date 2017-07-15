@@ -30,7 +30,7 @@ class Exhibitions extends MY_Controller {
 
         $artworks = [];
         if ($this->input->method() === 'get') {
-            $artworks = $this->artwork_model->get_apply_status_by_user_id_and_exhibition_id(
+            $artworks = $this->apply_model->get_by_user_id_and_exhibition_id(
                 $this->accountlib->get_user_id(),
                 $exhibition->id
             );

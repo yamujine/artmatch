@@ -38,6 +38,39 @@ class Apply_model extends CI_Model {
             ->get()->result();
     }
 
+    public function get_status_with_artworks_by_exhibition_id($exhibition_id) {
+        return $this->db
+            ->select('artworks.*, apply.status AS apply_status')
+            ->from(self::TABLE_NAME)
+            ->join('artworks', 'apply.artwork_id = artworks.id')
+            ->where('apply.exhibition_id', $exhibition_id)
+            ->order_by('apply.registered_at', 'DESC')
+            ->get()->result();
+    }
+
+    public function get_users_with_artworks_by_exhibition_id($exhibition_id) {
+        return $this->db
+            ->select('artworks.*, apply.status AS apply_status, users.*')
+            ->from(self::TABLE_NAME)
+            ->join('artworks', 'apply.artwork_id = artworks.id')
+            ->join('users', 'users.id = artworks.user_id')
+            ->where('apply.exhibition_id', $exhibition_id)
+            ->order_by('users.id', 'DESC')
+            ->order_by('apply.registered_at', 'DESC')
+            ->get()->result();
+    }
+
+    public function get_by_user_id_and_exhibition_id($user_id, $exhibition_id) {
+        return $this->db
+            ->select('artworks.*, apply.status AS apply_status')
+            ->from(self::TABLE_NAME)
+            ->join('artworks', 'apply.artwork_id = artworks.id')
+            ->where('apply.exhibition_id', $exhibition_id)
+            ->where('artworks.user_id', $user_id)
+            ->order_by('artworks.id', 'DESC')
+            ->get()->result();
+    }
+
     public function get_by_exhibition_id_and_artwork_id($exhibition_id, $artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)

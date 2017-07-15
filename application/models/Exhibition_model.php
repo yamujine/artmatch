@@ -124,6 +124,17 @@ class Exhibition_model extends CI_Model {
             ->get()->result();
     }
 
+    public function get_by_user_id($user_id) {
+        return $this->db
+            ->select('exhibitions.*')
+            ->from(self::TABLE_NAME)
+            ->join('places', 'exhibitions.place_id = places.id')
+            ->join('users', 'places.user_id = users.id')
+            ->where('users.id', $user_id)
+            ->order_by('exhibitions.start_date', 'ASC')
+            ->get()->result();
+    }
+
     public function get_with_artwork_count_by_place_id($place_id) {
         return $this->db
             ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
