@@ -236,7 +236,12 @@ class Places extends MY_Controller {
         $closed_exhibition_count = 0;
         foreach ($exhibitions as $exhibition) {
             $today = date('Y-m-d 00:00:00');
-            if ($today > $exhibition->end_date) {
+            if ($today < $exhibition->start_date) {
+                $exhibition->status = EXHIBITION_NOT_STARTED;
+            } else if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
+                $exhibition->status = EXHIBITION_NOW_EXHIBITING;
+            } else if ($today > $exhibition->end_date) {
+                $exhibition->status = EXHIBITION_END;
                 $closed_exhibition_count++;
             }
         }

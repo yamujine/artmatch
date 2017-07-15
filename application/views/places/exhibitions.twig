@@ -128,12 +128,12 @@
           <div class="exhibition">
             <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
             <span class="title">{{ exhibition.title }}</span>
-            {% if date(exhibition.start_date) < date() and date(exhibition.end_date) > date() %}
+            {% if exhibition.status == EXHIBITION_NOW_EXHIBITING %}
               <span class="status now">전시중</span>
-            {% elseif date(exhibition.end_date) < date() %}
+            {% elseif exhibition.status == EXHIBITION_END %}
               <span class="status ended">종료된 전시</span>
             {% endif %}
-            {% if date(exhibition.end_date) > date() %}
+            {% if exhibition.status != EXHIBITION_END %}
               <span class="pull-right">
                 <a href="#" class="modifyBtn">수정</a>
               </span>
