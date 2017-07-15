@@ -127,7 +127,7 @@
   <div id="patTab">
     <ul class="selectTab">
       <li class="my">
-        <a {% if page_type == 'mypage' %}class="active"{% endif %} href="/users/me">
+        <a {% if page_type == 'mypage' %}class="active"{% endif %} href="/users/{{ user.user_name }}">
           {% if user.type == USER_TYPE_ARTIST %}
             내작품
           {% elseif user.type == USER_TYPE_PLACE_OWNER %}
@@ -136,15 +136,15 @@
         </a>
       </li>
       <li class="pick">
-        <a {% if pick_type is not null %}class="active"{% endif %} href="/users/me/picks?type={{ TYPE_ARTWORKS }}">나의 PICK</a>
+        <a {% if pick_type is not null %}class="active"{% endif %} href="/users/{{ user.user_name }}/picks?type={{ TYPE_ARTWORKS }}">나의 PICK</a>
       </li>
       {% if user.type == USER_TYPE_PLACE_OWNER %}
         <li class="apply">
-          <a {% if page_type == 'apply' %}class="active"{% endif %} href="/users/me/apply_status">지원현황</a>
+          <a {% if page_type == 'apply' %}class="active"{% endif %} href="/users/{{ user.user_name }}/apply_status">지원현황</a>
         </li>
       {% elseif user.type == USER_TYPE_ARTIST %}
         <li class="apply">
-          <a {% if page_type == 'apply' %}class="active"{% endif %} href="/users/me/apply_status">지원한 전시</a>
+          <a {% if page_type == 'apply' %}class="active"{% endif %} href="/users/{{ user.user_name }}/apply_status">지원한 전시</a>
         </li>
       {% endif %}
     </ul>

@@ -12,19 +12,20 @@ class Users extends MY_Controller {
      * 마이페이지 메인
      */
     public function detail($user_name) {
-        if ($user_name === 'me') {
-            $user_name = $this->accountlib->get_user_name();
-        }
+        $user_details = $this->_get_user_details($user_name);
 
-        $data = $this->_get_user_details($user_name);
         // 내 작품, 장소 리스트
         $objects = [];
-        if ($data['user']->type === USER_TYPE_ARTIST) {
-            $objects = $this->artwork_model->get_all_by_user_id($data['user']->id);
-        } else if ($data['user']->type === USER_TYPE_PLACE_OWNER) {
-            $objects = $this->place_model->get_all_by_user_id($data['user']->id);
+        if ($user_details['user']->type === USER_TYPE_ARTIST) {
+            $objects = $this->artwork_model->get_all_by_user_id($user_details['user']->id);
+        } else if ($user_details['user']->type === USER_TYPE_PLACE_OWNER) {
+            $objects = $this->place_model->get_all_by_user_id($user_details['user']->id);
         }
-        $data['my_objects'] = $objects;
+
+        $data = [
+            'my_objects' => $objects
+        ];
+        $data = array_merge($data, $user_details);
 
         $this->twig->display('users/mypage', $data);
     }

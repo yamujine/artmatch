@@ -63,7 +63,7 @@
         <ul class="nav navbar-nav navbar-right">
           {# 마이 페이지 #}
           <li class="patUserProfile">
-            <a href="/users/me">
+            <a href="/users/{{ session.user_name }}">
               {% if session.profile_image is empty %}
                 <img src="{{ 'images/avatar.png' | static_url }}" class="img-circle" />
               {% else %}
