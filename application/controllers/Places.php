@@ -30,11 +30,11 @@ class Places extends MY_Controller {
 
         // 전시 정보
         $place->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_by_place_id($place->id);
-        $place->exhibition = $this->exhibition_model->get_one_by_place_id($place->id);
 
         // 장소정보
         $data['place'] = $place;
 
+        $exhibitions_now = [];
         // 전시 작품 이력
         $exhibitions = $this->exhibition_model->get_by_place_id($place_id);
         foreach ($exhibitions as $exhibition) {
@@ -44,18 +44,21 @@ class Places extends MY_Controller {
             }, $exhibition_artwork_id_objects);
             if (!empty($exhibition_artwork_ids)) {
                 $exhibition->artworks = $this->artwork_model->get_by_ids($exhibition_artwork_ids);
+
+                // 지금 전시중
+                $today = date('Y-m-d 00:00:00');
+                if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
+                    shuffle($exhibition->artworks);
+                    $exhibition->artists = array_unique(array_map(function ($value) {
+                        return $value->user->user_name;
+                    }, $exhibition->artworks));
+                    //shuffle($exhibition->artists);
+                    $exhibitions_now[] = $exhibition;
+                }
             }
             $data['exhibition_artwork_count'] = count($exhibition_artwork_ids);
         }
         $data['exhibitions'] = $exhibitions;
-
-        $exhibitions_now = [];
-        foreach ($exhibitions as $exhibition) {
-            $today = date('Y-m-d 00:00:00');
-            if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
-                $exhibitions_now[] = $exhibition;
-            }
-        }
         $data['exhibitions_now'] = $exhibitions_now;
 
         // 올린 작품 여부

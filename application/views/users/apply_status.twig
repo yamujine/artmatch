@@ -8,6 +8,9 @@
   <script src="{{ 'dist/js/mypage.common.js' | static_url }}"></script>
   <script type="text/javascript">
     $(function () {
+      $('select[name="exhibition_id"]').change(function() {
+        $('form[name="exhibition_id_frm"]').submit();
+      });
       // 작품 수락하기
       $('.selectBtn').click(function () {
         var exhibitionId;
@@ -81,21 +84,28 @@
         <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
 
         <td class="status {# TODO ex) need #}need">
-          진행상황 테스트
           {# 진행상황 #}
           {{ exhibition.status }}
+
+          {% if date(exhibition.start_date) >= date() %}
+            작품 모집중?
+          {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
+            모집 종료
+          {% else %}
+            전시종료
+          {% endif %}
         </td>
 
-        {# 지원여부 TODO #}
-        {% if exhibition.status == APPLY_STATUS_IN_REVIEW %}
-          지원완료
-        {% elseif exhibition.status == APPLY_STATUS_REJECTED %}
-          선택안됨
-        {% elseif exhibition.status == APPLY_STATUS_ACCEPTED %}
-          전시확정
-        {% endif %}
         <td class="isApplied {# TODO ex) applied, confirmed, canceled #}confirmed">
-          지원여부
+          {% set status = exhibition.applied_artworks[0].apply_status %}
+          {% if status == APPLY_STATUS_IN_REVIEW %}
+            지원완료
+          {% elseif status == APPLY_STATUS_REJECTED %}
+            선택안됨
+          {% elseif status == APPLY_STATUS_ACCEPTED %}
+            전시확정
+          {% endif %}
+
           <button class="button">지원취소</button>
         </td>
 
@@ -124,33 +134,48 @@
     </div>
   </div>
 
-
   {% elseif type == 'applicant' %} {# 지원작가 #}
-  <div class="patAppliedArtist">
-    <div class="exhibitionApply">
-      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ total_applied_count }}</span></div>
-      <div class="rightSection">
-        <div class="selectedCount">선택된 작품 <span class="number selectedCnt">0</span></div>
-        <button class="selectBtn">채택</button>
-      </div>
-    </div>
+    {# 모든 전시 리스트 #}
+    <form name="exhibition_id_frm" method="GET">
+      <select name="exhibition_id">
+        <option value="">== 전시를 선택해주세요 ==</option>
+        {% for exhibition in exhibitions %}
+          <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.id }}{{ exhibition.title }}</option>
+        {% endfor %}
+      </select>
+    </form>
 
-    {# 전시 #}
-    {% for exhibition in exhibitions %}
+    {% if exhibition_id %}
+      현재 전시 {{ selected_exhibition.title }}
+
       {# 전시에 지원한 작품 #}
-      {% for artwork in exhibition.applied_artworks %}
-        <li class="item applied">
-          <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}"/>
-          <div class="meta">
-            <div class="title">{{ artwork.title }}</div>
-            <div class="name">{{ artwork.user.user_name }}</div>
+      {% if selected_exhibition.applied_artworks | length > 0 %}
+        <div class="exhibitionApply">
+          <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ selected_exhibition.applied_artworks | length }}</span></div>
+          <div class="rightSection">
+            <div class="selectedCount">선택된 작품 <span class="number selectedCnt">0</span></div>
+            <button class="selectBtn">채택</button>
           </div>
-          <button class="button selectItemBtn {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}checked{% endif %}" data-exhibition-id="{{ exhibition.id }}"
-                  data-artwork-id="{{ artwork.id }}" {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}></button>
-        </li>
-      {% endfor %}
-    {% endfor %} {# 전시 #}
-  </div>
+        </div>
+
+        {% for artwork in selected_exhibition.applied_artworks %}
+          <li class="item applied">
+            <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}"/>
+            <div class="meta">
+              <div class="title">{{ artwork.title }}</div>
+              <div class="name">{{ artwork.user_name }}</div>
+            </div>
+            <button class="button selectItemBtn {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}checked{% endif %}" data-exhibition-id="{{ exhibition.id }}"
+                    data-artwork-id="{{ artwork.id }}" {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}></button>
+          </li>
+        {% endfor %}
+      {% else %}
+        지원한 작품이 없습니다.
+      {% endif %}
+    {% else %}
+      전시를 선택해주세요.
+    {% endif %}
+
   {% endif %}
 
 {% endblock %}

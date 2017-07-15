@@ -120,17 +120,17 @@
             {% endif %}
             #}
             {% endif %}
-            {% if place.exhibition.is_free == EXHIBITION_FOR_FREE %}
+            {% if place.exhibitions[0].is_free == EXHIBITION_FOR_FREE %}
               <li class="fee">대관료 없음</li>
             {% else %}
               <li class="fee">대관료 있음</li>
             {% endif %}
             <li class="exhibition_available_count">
-              {{ place.exhibition.start_date|date('Y.m.d') }} ~ {{ place.exhibition.end_date|date('Y.m.d') }}까지
+              {{ place.exhibitions[0].start_date|date('Y.m.d') }} ~ {{ place.exhibitions[0].end_date|date('Y.m.d') }}까지
               {% if place.is_now_exhibiting %}
-                {{ place.exhibition.real_artwork_count }}개의 작품 전시중
+                {{ place.exhibitions[0].real_artwork_count }}개의 작품 전시중
               {% else %}
-                {{ place.exhibition.artwork_count }}개의 작품 전시 가능함
+                {{ place.exhibitions[0].artwork_count }}개의 작품 전시 가능함
               {% endif %}
             </li>
           </ul>

@@ -35,17 +35,16 @@ class Users extends MY_Controller {
      * 장소 소유자의 지원자 확인 / 작품 소유자의 지원 현황 페이지
      */
     public function apply_status() {
+        $user_id = $this->accountlib->get_user_id();
         $user_details = $this->_get_user_details($this->accountlib->get_user_name());
 
         $this->load->model(['exhibition_model', 'apply_model']);
-        $exhibition_list = [];
-        $total_applied_count = 0;
 
         $type = ($user_details['user']->type === USER_TYPE_ARTIST) ? 'apply' : 'applicant';
 
         $data = ['type' => $type];
         if ($type === 'apply') {
-            $exhibition_objects = $this->apply_model->get_by_user_id($user_details['user']->id);
+            $exhibition_objects = $this->apply_model->get_by_user_id($user_id);
             $exhibition_ids = array_unique(array_map(function ($value) {
                 return $value->exhibition_id;
             }, $exhibition_objects));
@@ -54,7 +53,7 @@ class Users extends MY_Controller {
 
             $exhibition_list = [];
             foreach ($exhibitions as $exhibition) {
-                $applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);
+                $applied_artworks = $this->apply_model->get_status_with_artworks_by_exhibition_id_and_user_id($exhibition->id, $user_id);
 
                 if (!empty($applied_artworks)) {
                     $exhibition->applied_artworks = $applied_artworks;
@@ -67,24 +66,25 @@ class Users extends MY_Controller {
             ]);
 
         } elseif ($type === 'applicant') {
-            $places = $this->place_model->get_all_bare_by_user_id($this->accountlib->get_user_id());
-            foreach ($places as $place) {
-                $exhibitions = $this->exhibition_model->get_by_place_id($place->id);
+            $selected_exhibition = NULL;
+            $exhibition_id = $this->input->get('exhibition_id');
 
-                foreach ($exhibitions as $exhibition) {
-                    $applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);
+            // 장소 소유자의 모든 장소에서 전시 목록 가져오기
+            $exhibitions = $this->exhibition_model->get_by_user_id($user_id);
+            foreach ($exhibitions as $exhibition) {
+                // 해당 전시 ID의 지원 작품 가져오기
+                if (!empty($exhibition_id) && $exhibition_id === $exhibition->id) {
+                    $exhibition->applied_artworks = $this->apply_model->get_users_with_artworks_by_exhibition_id($exhibition->id);
 
-                    if (!empty($applied_artworks)) {
-                        $exhibition->applied_artworks = $applied_artworks;
-                        $total_applied_count += count($applied_artworks);
-                        $exhibition_list[] = $exhibition;
-                    }
+                    $selected_exhibition = $exhibition;
+                    break;
                 }
             }
 
             $data = array_merge($data, [
-                'exhibitions' => $exhibition_list,
-                'total_applied_count' => $total_applied_count
+                'exhibition_id' => $exhibition_id,
+                'exhibitions' => $exhibitions,
+                'selected_exhibition' => $selected_exhibition
             ]);
         }
 
