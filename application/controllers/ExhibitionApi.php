@@ -58,22 +58,28 @@ class ExhibitionApi extends API_Controller {
         $reason = $this->input->post('reason');
 
         $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
+
+        $today = date('Y-m-d 00:00:00');
+        if ($today > $exhibition->end_date) {
+            $this->return_fail_response('501', ['message' => '이미 종료된 전시에는 지원할 수 없습니다.']);
+        }
+
         foreach ($artwork_ids as $artwork_id) {
             $artwork = $this->artwork_model->get_bare_by_id($artwork_id);
             if ($artwork === NULL) {
-                $this->return_fail_response('501', ['message' => '존재하지 않는 작품입니다.']);
+                $this->return_fail_response('502', ['message' => '존재하지 않는 작품입니다.']);
             } else if ($artwork->user_id !== $this->accountlib->get_user_id()) {
-                $this->return_fail_response('502', ['message' => '본인의 작품으로만 지원할 수 있습니다.']);
+                $this->return_fail_response('503', ['message' => '본인의 작품으로만 지원할 수 있습니다.']);
             }
 
             $result = $this->_is_applied_artworks($exhibition->id, [$artwork_id]);
             if ($result) {
-                $this->return_fail_response('503', ['message' => '이미 지원한 작품입니다.']);
+                $this->return_fail_response('504', ['message' => '이미 지원한 작품입니다.']);
             }
 
             $result = $this->apply_model->insert($exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW, $reason);
             if (!$result) {
-                $this->return_fail_response('504', ['message' => '데이터베이스 인서트 에러']);
+                $this->return_fail_response('505', ['message' => '데이터베이스 인서트 에러']);
             }
         }
 
