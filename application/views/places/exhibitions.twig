@@ -15,12 +15,125 @@
 {% block script %}
   <script>
     $(function () {
+      // 포커싱 UI를 위한 처리
       $('input[type=text]').focus(function () {
         $(this).closest('.exhibition').addClass('active');
       }).blur(function () {
         $(this).closest('.exhibition').removeClass('active');
       });
+
+      // 전시 추가
+      $('.addExhibitionBtn').click(function () {
+        var exhibitionForm = $('.addExhibitionForm');
+
+        initializeExhibitionForm(exhibitionForm);
+        exhibitionForm.show();
+
+        return false;
+      });
+
+      // 전시 삭제
+      $('.addExhibitionForm .deleteBtn').click(function () {
+        var exhibitionForm = $(this).closest('.exhibitionForm');
+
+        initializeExhibitionForm(exhibitionForm);
+        exhibitionForm.hide();
+
+        clearValidation();
+
+        return false;
+      });
+
+      validator = constructValidation($('.exhibitionForm'));
+
+      // 확인 버튼
+      $('.confirmBtn').click(function () {
+        var form = $(this).closest('.exhibitionForm');
+
+        var result = form.valid();
+        if (!result) {
+          return false;
+        }
+
+        createExhibition(form);
+      });
     });
+
+    function initializeExhibitionForm(elem) {
+      $(elem).find('input[type=text]').val('');
+
+      resetRadioElementWithName(elem, 'status');
+      resetRadioElementWithName(elem, 'exhibition_is_free');
+    }
+
+    function resetRadioElementWithName(elem, name) {
+      $(elem).find('input[type=radio][name=' + name + ']').removeAttr('checked', '')
+        .filter(':first-child').attr('checked', 'checked');
+    }
+
+    function constructValidation(form) {
+      return $(form).validate({
+        rules: {
+          exhibition_title: {
+            required: true,
+            maxlength: 70
+          },
+          exhibition_start_date: {
+            required: true
+          },
+          exhibition_end_date: {
+            required: true
+          },
+          exhibition_artwork_count: {
+            required: true
+          }
+        },
+        messages: {
+          exhibition_title: {
+            required: '전시명을 입력해 주세요.',
+            maxlength: '작품명은 70자 까지 입력 가능 합니다.'
+          },
+          exhibition_start_date: {
+            required: '전시 시작 일자를 입력해 주세요.'
+          },
+          exhibition_end_date: {
+            required: '전시 종료 일자를 입력해 주세요.'
+          },
+          exhibition_artwork_count: {
+            required: '작품 수를 입력해 주세요.'
+          }
+        }
+      });
+    }
+
+    function clearValidation() {
+      $('.tooltip').hide();
+    }
+
+    function createExhibition(form) {
+      $.ajax({
+        type: "POST",
+        url: '/api/exhibition/create',
+        data: {
+          place_id: {{ place.id }},
+          start_date: form.find('input[name=exhibition_start_date]').val(),
+          end_date: form.find('input[name=exhibition_end_date]').val(),
+          title: form.find('input[name=exhibition_title]').val(),
+          artwork_count: form.find('input[name=exhibition_artwork_count]').val(),
+          is_free: form.find('input[name=exhibition_is_free]').val(),
+          is_applicable: form.find('input[name=status]').val()
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (!response.result) {
+            alert(response.message);
+            return false;
+          }
+
+          location.reload();
+        }
+      });
+    }
   </script>
 {% endblock %}
 
@@ -45,7 +158,7 @@
 
       <div class="exhibitions">
         <div class="addExhibition">
-          <a href="#" onclick="alert('haha');">
+          <a href="#" class="addExhibitionBtn">
             <img src="{{ 'images/plus.png' | static_url }}"/> <span class="addExhibitionText">새로운 전시 등록하기</span>
           </a>
         </div>
@@ -53,8 +166,8 @@
         <hr class="divider"/>
 
         <!-- 입력/수정 블록 -->
-        <div class="exhibition">
-          <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
+        <form class="exhibition exhibitionForm addExhibitionForm" style="display: none;">
+          {#<input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">#}
           <span class="title">
             <input type="text" name="exhibition_title" class="input" placeholder="전시명을 입력해주세요.">
           </span>
@@ -69,10 +182,10 @@
               <div class="fields exhibitionDate clear">
                 <div class="column_name">전시일정</div>
                 <div class="field">
-                  <input type="text" class="exhibition_start_date" placeholder="{{ now|date('Ymd') }}"
+                  <input type="text" class="exhibition_start_date" name="exhibition_start_date" placeholder="{{ now|date('Ymd') }}"
                          value="{% if exhibition.start_date is not null %}{{ exhibition.start_date|date('Ymd') }}{% endif %}"
                          title="전시 시작 일정"> 부터
-                  <input type="text" class="exhibition_end_date" placeholder="{{ now|date('Ymd') }}"
+                  <input type="text" class="exhibition_end_date" name="exhibition_end_date" placeholder="{{ now|date('Ymd') }}"
                          value="{% if exhibition.end_date is not null %}{{ exhibition.end_date|date('Ymd') }}{% endif %}"
                          title="전시 종료 일정"> 까지
                 </div>
@@ -122,7 +235,7 @@
             </div>
             <!-- //== 오른쪽 패널 종료 -->
           </div>
-        </div>
+        </form>
 
         {% for exhibition in exhibitions %}
           <div class="exhibition">
