@@ -81,6 +81,7 @@ class Users extends MY_Controller {
                 }
             }
 
+            // 작품들 조회
             $artists = [];
             if ($selected_exhibition !== NULL) {
                 // 해당 전시 ID의 지원 작품 가져와 작가 별로 분리

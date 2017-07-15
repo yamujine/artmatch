@@ -99,6 +99,12 @@
 
     }
 
+
+    //////// 지원작가
+    function change_exhibition(e) {
+      location.href = "?exhibition_id=" + e.value;
+    }
+
   </script>
 {% endblock %}
 
@@ -201,14 +207,13 @@
       <form id="exhibition_id_frm" method="GET">
         <div class="leftSection pull-left">
           <label>전시명</label>
-          <select name="exhibition_id">
-            <option value="">전시를 선택해주세요.</option>
+          <select name="exhibition_id" onchange="change_exhibition(this)">
             {% for exhibition in exhibitions %}
-              <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.id }}{{ exhibition.title }}</option>
+              <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.title }}</option>
             {% endfor %}
           </select>
           <label>전시 기간</label>
-          <span class="date">2017.05.05 ~ 2017.05.06</span>
+          <span class="date">{{ selected_exhibition.start_date | date('Y.m.d') }} ~ {{ selected_exhibition.end_date | date('Y.m.d') }}</span>
         </div>
         {% if exhibition_id %}
           {% if selected_exhibition.applied_artworks | length > 0 %}
