@@ -238,7 +238,11 @@ $config['log_threshold'] = 1;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = 'sentry';
+if (ENVIRONMENT === 'production') {
+    $config['log_path'] = 'sentry';
+} else {
+    $config['log_path'] = '';
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -536,5 +540,7 @@ $config['sentry_path'] = BASEPATH . '../vendor/sentry/sentry/lib/Raven/Autoloade
 $config['sentry_logging_levels'] = ['INFO', 'WARNING', 'DEBUG', 'ERROR', 'FATAL'];
 $config['sentry_logging_level'] = 4 - $config['log_threshold'];
 $config['sentry_log_threshold'] = $config['sentry_logging_levels'][$config['sentry_logging_level']];
-$config['sentry_client'] = 'https://d8897159b7d64d5d90cc1bce87644aad:4e9e3104c3894742ae85909fb7c880c8@sentry.io/191139';
 $config['sentry_config'] = [];
+if (ENVIRONMENT === 'production') {
+    $config['sentry_client'] = $_ENV['CI_SENTRY_DSN'];
+}
