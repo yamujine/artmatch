@@ -52,7 +52,7 @@
       <div class="message">
       </div>
       <div class="buttons">
-        <a href="/places/{{ place_id }}" class="cancelBtn">취소</a>
+        <a class="cancelBtn">취소</a>
         <button type="submit" class="registerBtn" disabled>지원하기</button>
       </div>
     </div>
@@ -70,6 +70,7 @@
     <span class="selected"><span id="selectedCount">0</span>개 선택</span>
 
     <span class="pull-right"><span class="select">선택</span> <img src="{{ 'images/arrow_down.png' | static_url }}" class="arrow" /></span>
+    <input name="exhibition_id" type="hidden" value="{{ exhibition.id }}">
 
     <!-- == 지원 작품 목록 -->
     <div class="patItemList">
@@ -129,6 +130,42 @@
 
         var selectedCount = $('input[type=checkbox]:checked').length;
         $('#selectedCount').html(selectedCount);
+      });
+
+      $('.cancelBtn').click(function() {
+         self.close();
+      });
+
+      $('.registerBtn').click(function() {
+
+        var exhibition_id = $(this).closest('form').find('input[name=exhibition_id]').val();
+        var artwork_id = [];
+        var checkedList = $(this).closest('form').find('input[type=checkbox]:checked');
+        for(var i=0; i<checkedList.length; i++) {
+          artwork_id.push(checkedList[i].value);
+        }
+        var reason = $(this).closest('form').find('textarea[name=reason]').val();
+
+        $.ajax({
+          method: 'POST',
+          url: '/api/exhibition/apply',
+          data: {
+            exhibition_id: exhibition_id,
+            artwork_id: artwork_id,
+            reason: reason
+          }
+        })
+          .done(function (data) {
+            if (!data.result) {
+              alert(data.body.message);
+              return false;
+            }
+            alert(data.body.message);
+            self.close();
+          })
+          .fail(function () {
+            alert(data.body.message);
+          });
       });
 
     });
