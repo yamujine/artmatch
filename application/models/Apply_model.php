@@ -63,9 +63,8 @@ class Apply_model extends CI_Model {
     public function get_by_user_id_and_exhibition_id($user_id, $exhibition_id) {
         return $this->db
             ->select('artworks.*, apply.status AS apply_status')
-            ->from(self::TABLE_NAME)
-            ->join('artworks', 'apply.artwork_id = artworks.id')
-            ->where('apply.exhibition_id', $exhibition_id)
+            ->from('artworks')
+            ->join(self::TABLE_NAME, "apply.artwork_id = artworks.id AND apply.exhibition_id = ${exhibition_id}", 'left')
             ->where('artworks.user_id', $user_id)
             ->order_by('artworks.id', 'DESC')
             ->get()->result();
