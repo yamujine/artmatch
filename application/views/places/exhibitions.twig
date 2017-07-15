@@ -16,9 +16,11 @@
   <script>
     $(function () {
       // 포커싱 UI를 위한 처리
-      $('input[type=text]').focus(function () {
+      $(document).on('focus', 'input[type=text]', function () {
         $(this).closest('.exhibition').addClass('active');
-      }).blur(function () {
+      });
+
+      $(document).on('blur', 'input[type=text]', function () {
         $(this).closest('.exhibition').removeClass('active');
       });
 
@@ -47,7 +49,7 @@
       validator = constructValidation($('.exhibitionForm'));
 
       // 확인 버튼
-      $('.confirmBtn').click(function () {
+      $(document).on('click', '.confirmBtn', function () {
         var form = $(this).closest('.exhibitionForm');
 
         var result = form.valid();
@@ -55,7 +57,60 @@
           return false;
         }
 
-        createExhibition(form);
+        if (form.hasClass('addExhibitionForm')) {
+          createExhibition(form);
+        } else {
+          updateExhibition(form);
+        }
+      });
+
+      // 수정 버튼
+      $(document).on('click', '.modifyBtn', function () {
+        var exhibitionDiv = $(this).closest('div.exhibition');
+        var exhibitionData = eval($(exhibitionDiv).data('exhibition-value'));
+        var clone = $('.addExhibitionForm').clone();
+
+        clone.removeClass('addExhibitionForm');
+        clone.addClass('editExhibitionForm');
+
+        clone.find('input[name=exhibitionId]').val(exhibitionData.id);
+        clone.find('input[name=exhibition_start_date]').val(exhibitionDiv.data('exhibition-start'));
+        clone.find('input[name=exhibition_end_date]').val(exhibitionDiv.data('exhibition-end'));
+        clone.find('input[name=exhibition_title]').val(exhibitionData.title);
+        clone.find('input[name=exhibition_artwork_count]').val(exhibitionData.artwork_count);
+
+        clone.find('input[name=exhibition_is_free]').attr('name', 'exhibition_is_free_' + exhibitionData.id);
+        clone.find('input[name=status]').attr('name', 'status_' + exhibitionData.id);
+
+        clone.find('input[type=radio]').each(function (key, value) {
+          var elemId = $(value).attr('id');
+          elemId += '_' + exhibitionData.id;
+
+          $(value).attr('id', elemId);
+        });
+
+        clone.find('label').each(function (key, value) {
+          var elemFor = $(value).attr('for');
+          elemFor += '_' + exhibitionData.id;
+
+          $(value).attr('for', elemFor);
+        });
+
+        clone.insertAfter(exhibitionDiv);
+        clone.show();
+
+        clone.find('input[name=exhibition_title]').focus();
+
+        constructValidation(clone);
+
+        return false;
+      });
+
+      $(document).on('click', '.editExhibitionForm .deleteBtn', function () {
+        var form = $(this).closest('.exhibitionForm');
+        deleteExhibition(form);
+
+        return false;
       });
     });
 
@@ -126,10 +181,60 @@
         dataType: 'json',
         success: function (response) {
           if (!response.result) {
-            alert(response.message);
+            alert(response.body.message);
             return false;
           }
 
+          alert(response.body.message);
+          location.reload();
+        }
+      });
+    }
+
+    function updateExhibition(form) {
+      var id = form.find('input[name=exhibitionId]').val();
+      $.ajax({
+        type: "POST",
+        url: '/api/exhibition/update',
+        data: {
+          id: id,
+          place_id: {{ place.id }},
+          start_date: form.find('input[name=exhibition_start_date]').val(),
+          end_date: form.find('input[name=exhibition_end_date]').val(),
+          title: form.find('input[name=exhibition_title]').val(),
+          artwork_count: form.find('input[name=exhibition_artwork_count]').val(),
+          is_free: form.find('input[name=exhibition_is_free_' + id + ']').val(),
+          is_applicable: form.find('input[name=status_' + id + ']').val()
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (!response.result) {
+            alert(response.body.message);
+            return false;
+          }
+
+          alert(response.body.message);
+          location.reload();
+        }
+      });
+    }
+
+    function deleteExhibition(form) {
+      var id = form.find('input[name=exhibitionId]').val();
+      $.ajax({
+        type: "POST",
+        url: '/api/exhibition/delete',
+        data: {
+          id: id
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (!response.result) {
+            alert(response.body.message);
+            return false;
+          }
+
+          alert(response.body.message);
           location.reload();
         }
       });
@@ -167,7 +272,7 @@
 
         <!-- 입력/수정 블록 -->
         <form class="exhibition exhibitionForm addExhibitionForm" style="display: none;">
-          {#<input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">#}
+          <input type="hidden" name="exhibitionId" value="">
           <span class="title">
             <input type="text" name="exhibition_title" class="input" placeholder="전시명을 입력해주세요.">
           </span>
@@ -238,7 +343,8 @@
         </form>
 
         {% for exhibition in exhibitions %}
-          <div class="exhibition">
+          <div class="exhibition" data-exhibition-value="{{ exhibition|json_encode }}"
+               data-exhibition-start="{{  exhibition.start_date|date('Ymd') }}" data-exhibition-end="{{  exhibition.end_date|date('Ymd') }}">
             <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
             <span class="title">{{ exhibition.title }}</span>
             {% if exhibition.status == EXHIBITION_NOW_EXHIBITING %}
