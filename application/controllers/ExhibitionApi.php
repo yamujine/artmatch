@@ -19,7 +19,7 @@ class ExhibitionApi extends API_Controller {
         $accepted_artwork_list = [];
         $to_send_list = [];
 
-        if (!$this->_is_my_exhibition($exhibition_id)) {
+        if (!$this->_is_my_exhibition_and_place($exhibition_id)) {
             $this->return_fail_response('501', ['message' => '본인의 전시만 수락 할 수 있습니다.']);
         }
         if (!$this->_is_applied_artworks($exhibition_id, $applied_artwork_ids)) {
@@ -59,12 +59,21 @@ class ExhibitionApi extends API_Controller {
 
         $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
         foreach ($artwork_ids as $artwork_id) {
-            $is_valid_artwork = !empty($this->artwork_model->get_bare_by_id($artwork_id));
-            if ($is_valid_artwork) {
-                $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition->id, $artwork_id);
-                if (empty($result)) {
-                    $this->apply_model->insert($exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW, $reason);
-                }
+            $artwork = $this->artwork_model->get_bare_by_id($artwork_id);
+            if ($artwork === NULL) {
+                $this->return_fail_response('501', ['message' => '존재하지 않는 작품입니다.']);
+            } else if ($artwork->user_id !== $this->accountlib->get_user_id()) {
+                $this->return_fail_response('502', ['message' => '본인의 작품만 지원할 수 있습니다.']);
+            }
+
+            $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition->id, $artwork_id);
+            if (!empty($result)) {
+                $this->return_fail_response('503', ['message' => '이미 지원한 작품입니다.']);
+            }
+
+            $result = $this->apply_model->insert($exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW, $reason);
+            if (!$result) {
+                $this->return_fail_response('504', ['message' => '데이터베이스 인서트 에러']);
             }
         }
 
@@ -198,7 +207,7 @@ class ExhibitionApi extends API_Controller {
      * @param $exhibition_id
      * @return bool
      */
-    private function _is_my_exhibition($exhibition_id) {
+    private function _is_my_exhibition_and_place($exhibition_id) {
         $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
         if ($exhibition === NULL) {
             return false;
