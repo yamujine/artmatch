@@ -63,7 +63,7 @@ class ExhibitionApi extends API_Controller {
             if ($artwork === NULL) {
                 $this->return_fail_response('501', ['message' => '존재하지 않는 작품입니다.']);
             } else if ($artwork->user_id !== $this->accountlib->get_user_id()) {
-                $this->return_fail_response('502', ['message' => '본인의 작품만 지원할 수 있습니다.']);
+                $this->return_fail_response('502', ['message' => '본인의 작품으로만 지원할 수 있습니다.']);
             }
 
             $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition->id, $artwork_id);
@@ -88,12 +88,17 @@ class ExhibitionApi extends API_Controller {
     public function cancel_apply() {
         $apply_id = $this->input->post('apply_id');
         if (empty($apply_id)) {
-            $this->return_fail_response('100', ['message' => '존재 하지 않는 지원서입니다.']);
+            $this->return_fail_response('100', ['message' => '존재하지 않는 지원서입니다.']);
+        }
+
+        $apply = $this->apply_model->get_by_user_id_and_apply_id($this->accountlib->get_user_id(), $apply_id);
+        if (!$apply) {
+            $this->return_fail_response('501', ['message' => '본인의 지원서만 취소할 수 있습니다.']);
         }
 
         $result = $this->apply_model->delete($apply_id);
         if (!$result) {
-            $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
+            $this->return_fail_response('500', ['message' => '데이터베이스 삭제 에러']);
         }
 
         $this->return_success_response(['message' => '지원이 취소되었습니다.']);
