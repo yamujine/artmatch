@@ -45,20 +45,22 @@ class Users extends MY_Controller {
         $data = ['type' => $type];
         // 지원한 전시
         if ($type === 'apply') {
+            $exhibition_list = [];
+
             $exhibition_objects = $this->apply_model->get_by_user_id($user_id);
             $exhibition_ids = array_unique(array_map(function ($value) {
                 return $value->exhibition_id;
             }, $exhibition_objects));
 
-            $exhibitions = $this->exhibition_model->get_by_ids($exhibition_ids);
+            if (!empty($exhibition_ids)) {
+                $exhibitions = $this->exhibition_model->get_by_ids($exhibition_ids);
+                foreach ($exhibitions as $exhibition) {
+                    $applied_artworks = $this->apply_model->get_status_with_artworks_by_exhibition_id_and_user_id($exhibition->id, $user_id);
 
-            $exhibition_list = [];
-            foreach ($exhibitions as $exhibition) {
-                $applied_artworks = $this->apply_model->get_status_with_artworks_by_exhibition_id_and_user_id($exhibition->id, $user_id);
-
-                if (!empty($applied_artworks)) {
-                    $exhibition->applied_artworks = $applied_artworks;
-                    $exhibition_list[] = $exhibition;
+                    if (!empty($applied_artworks)) {
+                        $exhibition->applied_artworks = $applied_artworks;
+                        $exhibition_list[] = $exhibition;
+                    }
                 }
             }
 
