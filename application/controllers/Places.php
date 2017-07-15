@@ -233,8 +233,21 @@ class Places extends MY_Controller {
         }
 
         $exhibitions = $this->exhibition_model->get_with_artwork_count_by_place_id($place_id);
+        $closed_exhibition_count = 0;
+        foreach ($exhibitions as $exhibition) {
+            $today = date('Y-m-d 00:00:00');
+            if ($today > $exhibition->end_date) {
+                $closed_exhibition_count++;
+            }
+        }
 
-        $this->twig->display('places/exhibitions', ['place' => $place, 'exhibitions' => $exhibitions]);
+        $data = [
+            'place' => $place,
+            'exhibitions' => $exhibitions,
+            'closed_exhibition_count' => $closed_exhibition_count
+        ];
+
+        $this->twig->display('places/exhibitions', $data);
     }
 
     private function _is_valid_place_form() {
