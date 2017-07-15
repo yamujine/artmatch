@@ -135,12 +135,14 @@
         {% if date(exhibition.start_date) >= date() %}
           {% set status_class = "need" %}
           {% set status_text = "작품모집중" %}
+          {% set disabled = "" %}
         {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
           {% set status_class = "" %}
           {% set status_text = "모집 종료" %}
+          {% set disabled = "" %}
         {% else %}
           {% set status_class = "" %}
-          {% set status_text = "전시종료" %}
+          {% set status_text = "전시 종료" %}
           {% set disabled = "disabled" %}
         {% endif %}
 
