@@ -67,7 +67,7 @@ class ExhibitionApi extends API_Controller {
             }
 
             $result = $this->_is_applied_artworks($exhibition->id, [$artwork_id]);
-            if (!$result) {
+            if ($result) {
                 $this->return_fail_response('503', ['message' => '이미 지원한 작품입니다.']);
             }
 
