@@ -52,6 +52,44 @@ class ExhibitionApi extends API_Controller {
         $this->return_success_response(['message' => '선정이 완료되었습니다.']);
     }
 
+    public function apply() {
+        $exhibition_id = $this->input->post('exhibition_id');
+        $artwork_ids = $this->input->post('artwork_id');
+        $reason = $this->input->post('reason');
+
+        $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
+        foreach ($artwork_ids as $artwork_id) {
+            $is_valid_artwork = !empty($this->artwork_model->get_bare_by_id($artwork_id));
+            if ($is_valid_artwork) {
+                $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition->id, $artwork_id);
+                if (empty($result)) {
+                    $this->apply_model->insert($exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW, $reason);
+                }
+            }
+        }
+
+        $place = $this->place_model->get_bare_by_id($exhibition->place_id);
+        $place_owner = $this->user_model->get_by_id($place->user_id);
+
+        $this->applylib->send_apply_email($place_owner->email, $artwork_ids, $this->accountlib->get_user_name());
+
+        $this->return_success_response(['message' => '지원이 완료되었습니다.']);
+    }
+
+    public function cancel_apply() {
+        $apply_id = $this->input->post('apply_id');
+        if (empty($apply_id)) {
+            $this->return_fail_response('100', ['message' => '존재 하지 않는 지원서입니다.']);
+        }
+
+        $result = $this->apply_model->delete($apply_id);
+        if (!$result) {
+            $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
+        }
+
+        $this->return_success_response(['message' => '지원이 취소되었습니다.']);
+    }
+
     public function create() {
         if (!$this->_is_valid_exhibition_form(self::TYPE_CREATE)) {
             $this->return_fail_response('100', ['message' => validation_errors()]);
