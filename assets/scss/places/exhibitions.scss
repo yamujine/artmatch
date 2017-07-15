@@ -2,75 +2,81 @@
 @import "../helper/mixins";
 
 body {
-  #patDetail {
-    .container {
+  #patContents {
+    &.container {
+      width: 100%;
+      padding: 0;
       margin: 0;
+    }
+  }
+  .exhibitionMeta {
+    position: relative;
+    width: 100%;
+    height: 168px;
 
-      .placeDetail {
-        position:absolute;
-        width: 100%;
-        top: 52px;
-        height: 168px;
-        left: 0;
-        right: 0;
-        
-        .dimm {
-          z-index: 4;
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(34, 34, 34, 0.6);
+    .dimm {
+      z-index: 4;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(34, 34, 34, 0.6);
+    }
+
+    .preview {
+      z-index: 3;
+      position: absolute;
+      top: 0;
+      color: $white-two;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 16px;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+
+    .container {
+      position: relative;
+      display: block;
+      margin: 0 auto;
+      z-index: 5;
+
+      .meta {
+        margin-top: 46px;
+
+        .title {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 24px;
+          font-weight: 500;
+          letter-spacing: -0.5px;
+          color: $white-two;
+          margin-bottom: 7px;
+          height: 36px;
+
+          a {
+            color: $white-two;
+          }
         }
 
-        .preview {
-          z-index: 3;
-          position: absolute;
-          top: 0;
-          color: $white-two;
+        .additionalInfo {
           font-family: 'Noto Sans KR', sans-serif;
           font-size: 16px;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-        }
-
-        .meta {
-          z-index: 5;
-          position: absolute;
-          top: 0;
-          left: 0;
-          margin-left: 100px;
-          margin-top: 46px;
-
-          .title {
-            font-family: 'Noto Sans KR', sans-serif;
-            font-size: 24px;
-            font-weight: 500;
-            letter-spacing: -0.5px;
-            color: $white-two;
-            margin-bottom: 7px;
-            height: 36px;
-
-            a {
-              color: $white-two;
-            }
-          }
-
-          .additionalInfo {
-            font-family: 'Noto Sans KR', sans-serif;
-            font-size: 16px;
-            height: 24px;
-            letter-spacing: -0.3px;
-            color: rgba(255, 255, 255, 0.6);
-          }
+          height: 24px;
+          letter-spacing: -0.3px;
+          color: $white-60;
         }
       }
+    }
+  }
+
+  #patDetail {
+    .container {
+      margin: 0 auto;
+      padding: 0;
 
       .exhibitions {
-        margin-top: 188px;
-        margin-left: -15px;
+        margin-top: 20px;
 
         .divider {
           width: 100%;
@@ -122,17 +128,32 @@ body {
           .modifyBtn {
             color: $greyish-brown;
             border: 1px solid $brownish-grey-40;
+
+            &:hover {
+              background: $brownish-grey;
+              color: $white;
+            }
           }
 
           .deleteBtn {
             color: #de3434;
             border: 1px solid $pale-red-40;
+
+            &:hover {
+              background: $pale-red;
+              color: $white;
+            }
           }
 
           .confirmBtn {
             margin-left: 13px;
             color: $black;
             border: 1px solid $black-40;
+
+            &:hover {
+              background: $black;
+              color: $white;
+            }
           }
 
           .title {
@@ -157,7 +178,14 @@ body {
           .status {
             font-family: 'Noto Sans KR', sans-serif;
             font-size: 13px;
-            color: #be7028;
+            margin-left: 6px;
+
+            &.now {
+              color: $copper;
+            }
+            &.ended {
+              color: $warm-grey-four;
+            }
           }
 
           .divider {
