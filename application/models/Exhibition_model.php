@@ -202,19 +202,23 @@ class Exhibition_model extends CI_Model {
 
     /**
      * 해당 장소에 전시중인 전시가 있는지 리턴하는 함수
+     * 전시 날짜에 오늘을 포함하고, 실제로 작품이 1개 이상 존재하는 경우를 전시중으로 체크
      * @param $place_id
      * @return bool
      */
     public function is_now_exhibiting_by_place_id($place_id) {
         $today = date('Y-m-d');
         $query = $this->db
+            ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
             ->from(self::TABLE_NAME)
-            ->where('place_id', $place_id)
-            ->where('start_date <=', $today)
-            ->where('end_date >=', $today)
-            ->get();
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id', 'LEFT')
+            ->where('exhibitions.place_id', $place_id)
+            ->where('exhibitions.start_date <=', $today)
+            ->where('exhibitions.end_date >=', $today)
+            ->group_by('exhibitions.id')
+            ->get()->row();
 
-        return $query->num_rows() > 0;
+        return $query !== NULL && (int)$query->real_artwork_count > 0;
     }
 
     /**
