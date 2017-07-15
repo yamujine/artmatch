@@ -50,6 +50,33 @@
         return false;
       });
     });
+
+    function show_and_hide(e) {
+      var type;
+      var tr = $(e).closest("tr");
+
+      var is_show = tr.hasClass("showAppliedArtworks") ? true : false;
+
+      var appliedArtworksDiv = tr.find(".appliedArtworks");
+
+      var arrowImagePath = "";
+
+      if (is_show) {
+        type = "보기";
+        appliedArtworksDiv.hide();
+        tr.removeClass("showAppliedArtworks");
+        arrowImagePath = "{{ 'images/applied_arrow_down.png' | static_url }}";
+      } else {
+        type = "닫기";
+        appliedArtworksDiv.show();
+        tr.addClass("showAppliedArtworks");
+        arrowImagePath = "{{ 'images/applied_arrow_up.png' | static_url }}";
+      }
+
+      $(e).find(".text").text(type);
+      tr.find(".arrow").attr("src", arrowImagePath);
+    }
+
   </script>
 {% endblock %}
 
@@ -79,7 +106,7 @@
       </thead>
       <tbody>
     {% for exhibition in exhibitions %}
-      <tr class="showAppliedArtworks"> {# TODO 보기 누르면 showAppliedArtworks 로 변경 #}
+      <tr data-id="{{ exhibition.id }}"> {# TODO 보기 누르면 showAppliedArtworks 로 변경 #}
         <td><span class="title">{{ exhibition.title }}</span></td>
         <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
 
@@ -111,10 +138,13 @@
 
         <td class="artworks">
         {# 지원작품 #}
-          총 {{ exhibition.applied_artworks|length }}개의 작품 보기 <img src="{{ 'images/applied_arrow_down.png' | static_url }}" /><br>
-          총 {{ exhibition.applied_artworks|length }}개의 작품 닫기 <img src="{{ 'images/applied_arrow_up.png' | static_url }}" />
+          총 {{ exhibition.applied_artworks|length }}개의 작품
+          <span onclick="show_and_hide(this)">
+            <span class="text">보기</span>
+            <img src="{{ 'images/applied_arrow_down.png' | static_url }}" class="arrow" />
+          </span>
 
-          <div class="appliedArtworks"> {# TODO show/hide #}
+          <div class="appliedArtworks">
             <div class="pull-left">
               <img src="{{ 'images/applied_sub.png' | static_url }}" class="sub" /> <span style="margin-left: 3px">지원작품</span>
             </div>
