@@ -120,7 +120,7 @@ class Exhibition_model extends CI_Model {
         return $this->db
             ->from(self::TABLE_NAME)
             ->where('place_id', $place_id)
-            ->order_by('start_date', 'ASC')
+            ->order_by('start_date', 'DESC')
             ->get()->result();
     }
 

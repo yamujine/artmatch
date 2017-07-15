@@ -3,7 +3,7 @@
       <div class="meta">
         <div class="title">{{ exhibition.title }}</div>
         <div class="term">일정&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ exhibition.start_date | date("y.m.d") }} ~ {{ exhibition.end_date | date("y.m.d") }}</div>
-        <div class="artist">작가&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for artwork in exhibition.artworks %}{{ artwork.user.user_name }} {% endfor %}</div>
+        <div class="artist">작가&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for artist in exhibition.artists|slice(0,2) %}{{ artist }}{% endfor %} 외 {{ exhibition.artists|length - 2 }}명</div>
         <div class="artwork">작품&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총 {{ exhibition.artworks|length }}개</div>
       </div>
 
