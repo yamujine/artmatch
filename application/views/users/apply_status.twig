@@ -1,0 +1,102 @@
+{% extends "base.twig" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{{ 'dist/css/users/mypage.min.css' | static_url }}">
+{% endblock %}
+
+{% block script %}
+  <script src="{{ 'dist/js/mypage.common.js' | static_url }}"></script>
+  <script type="text/javascript">
+    $(function () {
+      // 작품 수락하기
+      $('.selectBtn').click(function () {
+        var exhibitionId;
+        var artworkIds = [];
+        $('.checked:enabled').each(function () {
+          exhibitionId = $(this).data('exhibition-id');
+          artworkIds.push($(this).data('artwork-id'));
+        });
+
+        artworkIds = $.unique(artworkIds);
+        if (artworkIds.length === 0) {
+          alert('선택된 작품이 없습니다.');
+          return false;
+        }
+
+        $.ajax({
+          method: 'POST',
+          url: '/api/exhibition/accept',
+          data: {
+            exhibition_id: exhibitionId,
+            applied_artwork_ids: artworkIds
+          }
+        }).done(function (data) {
+          alert(data.body.message);
+          location.reload(true);
+        });
+
+        return false;
+      });
+
+      $('.selectItemBtn').click(function () {
+        $(this).toggleClass('checked');
+
+        var selectedCnt = $('.checked').length;
+        $('.selectedCnt').text(selectedCnt);
+
+        return false;
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block contents %}
+  {% import 'macro/mypage.macro.twig' as mypage_macro %}
+  {{ mypage_macro.render_profile(user, is_my_page, total_object_count, given_pick_count) }}
+  {% if is_my_page %}
+    {{ mypage_macro.render_tabs(user, 'apply', pick_type) }}
+    {{ mypage_macro.render_password_change_modal() }}
+  {% endif %}
+
+  {% if type == 'apply' %}
+    {% for exhibition in exhibitions %}
+      {{ exhibition.title }} {{ exhibition.start_date }} {{ exhibition.end_date }} {{ exhibition.status }}
+      {% if exhibition.status == APPLY_STATUS_IN_REVIEW %}
+        지원완료
+      {% elseif exhibition.status == APPLY_STATUS_REJECTED %}
+        선택안됨
+      {% elseif exhibition.status == APPLY_STATUS_ACCEPTED %}
+        전시확정
+      {% endif %}
+      {% for artwork in exhibition.applied_artworks %}
+        {{ artwork.image }}
+      {% endfor %}
+      <br><br>
+    {% endfor %}
+
+  {% elseif type == 'applicant' %}
+    <div class="exhibitionApply">
+      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ total_applied_count }}</span></div>
+      <div class="rightSection">
+        <div class="selectedCount">선택된 작품 <span class="number selectedCnt">0</span></div>
+        <button class="selectBtn">채택</button>
+      </div>
+    </div>
+
+    {# 전시 #}
+    {% for exhibition in exhibitions %}
+      {# 전시에 지원한 작품 #}
+      {% for artwork in exhibition.applied_artworks %}
+        <li class="item applied">
+          <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}"/>
+          <div class="meta">
+            <div class="title">{{ artwork.title }}</div>
+            <div class="name">{{ artwork.user.user_name }}</div>
+          </div>
+          <button class="button selectItemBtn {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}checked{% endif %}" data-exhibition-id="{{ exhibition.id }}"
+                  data-artwork-id="{{ artwork.id }}" {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}></button>
+        </li>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+{% endblock %}

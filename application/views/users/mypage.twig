@@ -5,282 +5,31 @@
 {% endblock %}
 
 {% block script %}
-  <script type="text/javascript">
-    $(function () {
-      // 그리드 아이템 클릭
-      $(document).on('click', '.item .wrap', function () {
-        var type = $(this).data('type');
-        var id = $(this).data('id');
-
-        location.href = '/' + type + '/' + id;
-
-        return false;
-      })
-        // 카드 클릭 이벤트와 안겹치도록 이벤트 버블링 방지
-        .on('click', '.grid .wrap a', function (event) {
-          event.stopPropagation();
-        });
-
-      // 비밀번호 변경
-      $('#passwordChangeForm').submit(function (event) {
-        event.preventDefault();
-
-        var currentPasswordElement = $("input[name=currentPassword]");
-        var newPasswordElement = $("input[name=newPassword]");
-
-        if (!currentPasswordElement.val()) {
-          alert('기존 비밀번호를 입력해 주세요');
-          currentPasswordElement.focus();
-
-          return false;
-        }
-
-        if (!newPasswordElement.val()) {
-          alert('새로운 비밀번호를 입력해 주세요');
-          newPasswordElement.focus();
-
-          return false;
-        }
-
-        $.ajax({
-          method: "POST",
-          url: "/api/users/change_password",
-          data: {
-            current_password: currentPasswordElement.val(),
-            new_password: newPasswordElement.val()
-          }
-        }).done(function (data) {
-          if (!data.result) {
-            alert(data.body.message);
-
-            return false;
-          }
-
-          alert('비밀번호가 성공적으로 변경되었습니다');
-          $('#passwordChangeModal').modal('hide');
-        }).fail(function () {
-          alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-        });
-
-        return false;
-      });
-
-      // 프로필 이미지 등록 변경
-      $('input[type=file]').change(function () {
-        if (!confirm('프로필 이미지를 변경하시겠습니까?')) {
-          return false;
-        }
-
-        var $this = $(this);
-
-        // 이미지 파일 업로드를 위한 FormData 생성
-        var formData = new FormData();
-        formData.append("profile_image", $this[0].files[0]);
-
-        $.ajax({
-          method: "POST",
-          url: "/api/users/update_image",
-          processData: false, // To send file
-          contentType: false, // To send file
-          data: formData
-        })
-          .done(function (data) {
-            if (!data.result) {
-              alert(data.body.message);
-
-              return false;
-            }
-            location.reload(true);
-          })
-          .fail(function () {
-            alert('서버에 문제가 있어 정상적으로 처리되지 않았습니다. \r\n잠시 후에 다시 시도해주세요.');
-          });
-      });
-
-      $('.artworkImage').click(function () {
-        location.href = '/artworks/' + $(this).data('id');
-        return false;
-      });
-
-      $('.selectItemBtn').click(function () {
-        $(this).toggleClass('checked');
-
-        var selectedCnt = $('.checked').length;
-        $('.selectedCnt').text(selectedCnt);
-
-        return false;
-      });
-
-      $('.selectBtn').click(function () {
-        var exhibitionId;
-        var artworkIds = [];
-        $('.checked:enabled').each(function () {
-          exhibitionId = $(this).data('exhibition-id');
-          artworkIds.push($(this).data('artwork-id'));
-        });
-
-        artworkIds = $.unique(artworkIds);
-        if (artworkIds.length === 0) {
-          alert('선택된 작품이 없습니다.');
-          return false;
-        }
-
-        $.ajax({
-          method: 'POST',
-          url: '/api/exhibition/accept',
-          data: {
-            exhibition_id: exhibitionId,
-            applied_artwork_ids: artworkIds
-          }
-        }).done(function (data) {
-          alert(data.body.message);
-          location.reload(true);
-        });
-
-        return false;
-      });
-
-    });
-  </script>
+  <script src="{{ 'dist/js/mypage.common.js' | static_url }}"></script>
 {% endblock %}
 
 {% block contents %}
-  <!-- == 프로필 -->
-  <div id="patProfile">
-    <!-- == 유저 정보 -->
-    <div class="userInfo">
-      {# 나의 페이지인 경우 수정 버튼 표시 #}
-      {% if is_my_page %}
-        <!-- == 유저 수정 버튼 -->
-        <div class="editButtons">
-          <button class="passwordEditBtn" data-toggle="modal" data-backdrop="static" data-keyboard="false"  data-target="#passwordChangeModal">비밀번호 변경</button>
-        </div>
-        <!-- //== 유저 수정 버튼 -->
-      {% endif %}
-      <!-- == 프로필 이미지 -->
-      <div class="profileImage">
-        {% if is_my_page %}
-          <div class="dimm"></div>
-          <div class="editBtn">
-            <input type="file" name="profileImage" accept="image/*" />
-          </div>
-        {% endif %}
-        {% if user.profile_image is empty %}
-          <img src="{{ 'images/avatar@2x.png' | static_url }}" class="img-circle"/>
-        {% else %}
-          <img src="{{ user.profile_image | thumb_url('profile') }}" class="img-circle"/>
-        {% endif %}
-      </div>
-      <!-- //== 프로필 이미지 -->
-      <!-- == 유저 이름 -->
-      <div class="name">{{ user.user_name }}</div>
-      <!-- // == 유저 이름 -->
-      <!-- == 유저 메타 정보 -->
-      <ul class="metadata">
-        {% if user.type == USER_TYPE_ARTIST %}
-          <li class="artwork">작품수 <span class="number">{{ mine|length }}</span></li>
-        {% elseif user.type == USER_TYPE_PLACE_OWNER %}
-          <li class="place">공간수 <span class="number">{{ mine|length }}</span></li>
-        {% endif %}
-        <li class="pick">PICK <span class="number">{{ given_pick_count }}</span></li>
-      </ul>
-      <!-- //== 유저 메타 정보 -->
-    </div>
-    <!-- //== 유저 정보 -->
-  </div>
-  <!-- //== 프로필 -->
-
+  {% import 'macro/mypage.macro.twig' as mypage_macro %}
+  {{ mypage_macro.render_profile(user, is_my_page, total_object_count, given_pick_count) }}
   {% if is_my_page %}
-    <!-- == 탭 -->
-    <div id="patTab">
-      <ul class="selectTab">
-        <li class="my">
-          <a {% if pick_type is null and show_applied_list is null %}class="active"{% endif %} href="/users/me">
-            {% if user.type == USER_TYPE_ARTIST %}
-              WORK
-            {% elseif user.type == USER_TYPE_PLACE_OWNER %}
-              SPACE
-            {% endif %}
-          </a>
-        </li>
-        <li class="pick">
-          <a {% if pick_type is not null %}class="active"{% endif %} href="?type=artworks">PICK</a>
-        </li>
-        {% if user.type == USER_TYPE_PLACE_OWNER %}
-          <li class="apply">
-            <a {% if show_applied_list %}class="active"{% endif %} href="?show_applied_list=1">APPLY</a>
-          </li>
-        {% endif %}
-      </ul>
-      <div class="divider"></div>
-    </div>
-    <!-- //== 탭 -->
-    {% if pick_type is not null %}
-      <!-- == 픽 탭 -->
-      <div id="pickTab">
-        <div class="pickTypeButtons">
-          <a class="{% if pick_type == TYPE_ARTWORKS %}active{% endif %}" href="?type=artworks">작품</a>
-          <a class="{% if pick_type == TYPE_PLACES %}active{% endif %}" href="?type=places">공간</a>
-        </div>
-      </div>
-      <!-- //== 픽 탭 -->
-    {% endif %}
+    {{ mypage_macro.render_tabs(user, 'mypage', pick_type) }}
+    {{ mypage_macro.render_password_change_modal() }}
   {% endif %}
 
-  {% if not is_my_page or (is_my_page and pick_type is empty) %}
-    {% set items = mine %}
-  {% else %}
-    {% set items = my_picks %}
-  {% endif %}
-
-  {% if show_applied_list is not empty %}
-    <div class="exhibitionApply">
-      <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ total_applied_count }}</span></div>
-      <div class="rightSection">
-        <div class="selectedCount">선택된 작품 <span class="number selectedCnt">0</span></div>
-        <button class="selectBtn">채택</button>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if items|length > 0 %}
+  {% if my_objects|length > 0 %}
     <!-- == 작품 또는 장소 아이템 -->
-    <div class="patItemList {% if show_applied_list %} applied{% endif %}">
+    <div class="patItemList">
       <div class="container">
         <!-- == 아이템 목록 -->
         <ul class="itemList">
-          {% import 'macro/mypage.macro.twig' as mypage_macro %}
-          {% if show_applied_list is empty %}
-            {% for item in items %}
-              {% if not is_my_page or (is_my_page and pick_type is empty) %}
-                {# 마이페이지 내 나의 작품/장소 #}
-                {% if user.type == USER_TYPE_ARTIST %}
-                  {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
-                {% elseif user.type == USER_TYPE_PLACE_OWNER and show_applied_list is empty %}
-                  {{ mypage_macro.render_mypage_place_item(item) }}
-                {% endif %}
-              {% else %}
-                {# 나의 공간을 표시해야하는게 아닌 경우 공통 디자인의 아이템을 사용 #}
-                {{ mypage_macro.render_mypage_grid_item(item, pick_type, loop.index) }}
-              {% endif %}
-            {% endfor %}
-          {% elseif show_applied_list %}
-            {# 전시 #}
-            {% for exhibition in exhibitions %}
-              {# 전시에 지원한 작품 #}
-              {% for artwork in exhibition.applied_artworks %}
-                <li class="item applied">
-                  <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}"/>
-                  <div class="meta">
-                    <div class="title">{{ artwork.title }}</div>
-                    <div class="name">{{ artwork.user.user_name }}</div>
-                  </div>
-                  <button class="button selectItemBtn {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}checked{% endif %}" data-exhibition-id="{{ exhibition.id }}"
-                          data-artwork-id="{{ artwork.id }}" {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}></button>
-                </li>
-              {% endfor %}
-            {% endfor %}
-          {% endif %}
+          {% for item in my_objects %}
+            {# 마이페이지 내 나의 작품/장소 #}
+            {% if user.type == USER_TYPE_ARTIST %}
+              {{ mypage_macro.render_mypage_grid_item(item, TYPE_ARTWORKS, loop.index) }}
+            {% elseif user.type == USER_TYPE_PLACE_OWNER and show_applied_list is empty %}
+              {{ mypage_macro.render_mypage_place_item(item) }}
+            {% endif %}
+          {% endfor %}
         </ul>
         <!-- //== 아이템 목록 -->
       </div>
@@ -290,46 +39,19 @@
     <!-- == 아이템 없음 -->
     <div class="itemEmpty">
       <div class="container">
-        {% if (user.type == USER_TYPE_ARTIST and pick_type is empty) or (pick_type == TYPE_ARTWORKS) %}
-          <p class="empty">아직 작품이 없습니다 :)</p>
-          {% if pick_type is null and user.id == session.id %}
+        {% if user.type == USER_TYPE_ARTIST %}
+          <p class="empty">아직 등록된 작품이 없습니다 :)</p>
+          {% if is_my_page %}
             <a href="/artworks/upload">작품 등록하러 가기 <i class="glyphicon glyphicon-menu-right"></i></a>
           {% endif %}
-        {% elseif user.type == USER_TYPE_PLACE_OWNER and show_applied_list %}
-          <p class="empty">아직 지원된 작품이 없습니다 :)</p>
-        {% else %}
-          <p class="empty">아직 공간이 없습니다 :)</p>
-          {% if pick_type is empty and user.id == session.id %}
-            <a href="/places/upload">장소 등록하러 가기 <i class="glyphicon glyphicon-menu-right"></i></a>
+        {% elseif user.type == USER_TYPE_PLACE_OWNER %}
+          <p class="empty">아직 등록된 공간이 없습니다 :)</p>
+          {% if is_my_page %}
+            <a href="/places/upload">공간 등록하러 가기 <i class="glyphicon glyphicon-menu-right"></i></a>
           {% endif %}
         {% endif %}
       </div>
     </div>
     <!-- == 아이템 없음 -->
   {% endif %}
-
-  <!-- == 비밀번호 변경 모달 -->
-  <div class="patModal modal" id="passwordChangeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-              aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body">
-          <form id="passwordChangeForm" method="POST">
-            <div class="title">비밀번호 변경</div>
-            <div class="field first">
-              <input type="password" title="text" name="currentPassword" placeholder="기존 비밀번호를 입력해주세요." />
-            </div>
-            <div class="field">
-              <input type="password" title="text" name="newPassword" placeholder="새로운 비밀번호를 입력해주세요." />
-            </div>
-            <button type="submit">비밀번호 변경</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- //== 비밀번호 변경 모달 -->
 {% endblock %}

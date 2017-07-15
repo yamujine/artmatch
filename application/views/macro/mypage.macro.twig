@@ -74,3 +74,108 @@
     </div>
   </li>
 {% endmacro %}
+
+{% macro render_profile(user, is_my_page, total_object_count, given_pick_count) %}
+  <!-- == 프로필 -->
+  <div id="patProfile">
+    <!-- == 유저 정보 -->
+    <div class="userInfo">
+      {# 나의 페이지인 경우 수정 버튼 표시 #}
+      {% if is_my_page %}
+        <!-- == 유저 수정 버튼 -->
+        <div class="editButtons">
+          <button class="passwordEditBtn" data-toggle="modal" data-backdrop="static" data-keyboard="false"  data-target="#passwordChangeModal">비밀번호 변경</button>
+        </div>
+        <!-- //== 유저 수정 버튼 -->
+      {% endif %}
+      <!-- == 프로필 이미지 -->
+      <div class="profileImage">
+        {% if is_my_page %}
+          <div class="dimm"></div>
+          <div class="editBtn">
+            <input type="file" name="profileImage" accept="image/*" />
+          </div>
+        {% endif %}
+        {% if user.profile_image is empty %}
+          <img src="{{ 'images/avatar@2x.png' | static_url }}" class="img-circle"/>
+        {% else %}
+          <img src="{{ user.profile_image | thumb_url('profile') }}" class="img-circle"/>
+        {% endif %}
+      </div>
+      <!-- //== 프로필 이미지 -->
+      <!-- == 유저 이름 -->
+      <div class="name">{{ user.user_name }}</div>
+      <!-- // == 유저 이름 -->
+      <!-- == 유저 메타 정보 -->
+      <ul class="metadata">
+        {% if user.type == USER_TYPE_ARTIST %}
+          <li class="artwork">작품수 <span class="number">{{ total_object_count }}</span></li>
+        {% elseif user.type == USER_TYPE_PLACE_OWNER %}
+          <li class="place">공간수 <span class="number">{{ total_object_count }}</span></li>
+        {% endif %}
+        <li class="pick">PICK <span class="number">{{ given_pick_count }}</span></li>
+      </ul>
+      <!-- //== 유저 메타 정보 -->
+    </div>
+    <!-- //== 유저 정보 -->
+  </div>
+  <!-- //== 프로필 -->
+{% endmacro %}
+
+{% macro render_tabs(user, page_type, pick_type) %}
+  <!-- == 탭 -->
+  <div id="patTab">
+    <ul class="selectTab">
+      <li class="my">
+        <a {% if page_type == 'mypage' %}class="active"{% endif %} href="/users/{{ user.user_name }}">
+          {% if user.type == USER_TYPE_ARTIST %}
+            내작품
+          {% elseif user.type == USER_TYPE_PLACE_OWNER %}
+            내공간
+          {% endif %}
+        </a>
+      </li>
+      <li class="pick">
+        <a {% if pick_type is not null %}class="active"{% endif %} href="/users/{{ user.user_name }}/picks?type={{ TYPE_ARTWORKS }}">나의 PICK</a>
+      </li>
+      {% if user.type == USER_TYPE_PLACE_OWNER %}
+        <li class="apply">
+          <a {% if page_type == 'apply' %}class="active"{% endif %} href="/users/{{ user.user_name }}/apply_status">지원현황</a>
+        </li>
+      {% elseif user.type == USER_TYPE_ARTIST %}
+        <li class="apply">
+          <a {% if page_type == 'apply' %}class="active"{% endif %} href="/users/{{ user.user_name }}/apply_status">지원한 전시</a>
+        </li>
+      {% endif %}
+    </ul>
+    <div class="divider"></div>
+  </div>
+  <!-- //== 탭 -->
+{% endmacro %}
+
+{% macro render_password_change_modal() %}
+  <!-- == 비밀번호 변경 모달 -->
+  <div class="patModal modal" id="passwordChangeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <form id="passwordChangeForm" method="POST">
+            <div class="title">비밀번호 변경</div>
+            <div class="field first">
+              <input type="password" title="text" name="currentPassword" placeholder="기존 비밀번호를 입력해주세요." />
+            </div>
+            <div class="field">
+              <input type="password" title="text" name="newPassword" placeholder="새로운 비밀번호를 입력해주세요." />
+            </div>
+            <button type="submit">비밀번호 변경</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- //== 비밀번호 변경 모달 -->
+{% endmacro %}
