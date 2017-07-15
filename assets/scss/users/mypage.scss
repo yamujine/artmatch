@@ -766,21 +766,25 @@
         width: 927px;
         border-top: solid 2px $brownish-grey;
 
-        th {
-          border-bottom: solid 1px $pinkish-grey-two;
-          height: 49px;
+        thead {
+          th {
+            border-bottom: solid 1px $pinkish-grey-two;
+            height: 49px;
+            color: $greyish;
+            font-weight: 500;
 
-          &.title {
-            width: 327px;
-          }
-          &.term {
-            width: 190px;
-          }
-          &.status {
-            width: 111px;
-          }
-          &.isApplied {
-            width: 170px;
+            &.title {
+              width: 327px;
+            }
+            &.term {
+              width: 190px;
+            }
+            &.status {
+              width: 111px;
+            }
+            &.isApplied {
+              width: 170px;
+            }
           }
         }
 
@@ -791,97 +795,97 @@
             &.showAppliedArtworks {
               height: 148px;
             }
-          }
 
-          td {
-            position: relative;
-
-            vertical-align: top;
-            padding-top: 21px;
-
-            border-bottom: solid 1px #e8e8e8;
-            font-size: 14px;
-
-            &.title {
+            td {
               font-size: 16px;
-              color: $black;
-            }
 
-            &.term {
-              color: $brownish-grey;
-            }
+              position: relative;
 
-            &.status {
-              color: $brownish-grey;
+              vertical-align: top;
+              padding-top: 15px;
 
-              &.need { // 모집중
-                color: #425cf0;
+              border-bottom: solid 1px #e8e8e8;
+
+              &.title {
+                font-size: 16px;
+                color: $black;
               }
 
-            }
+              &.term {
+                color: $brownish-grey;
+                font-size: 14px;
+              }
 
-            &.isApplied { // 지원여부
-              color: $brownish-grey;
+              &.status {
+                color: $brownish-grey;
+                font-size: 14px;
 
-              .button {
-                position: relative;
-                top: -2px;
-                width: 66px;
-                height: 26px;
+                &.need { // 모집중
+                  color: #425cf0;
+                }
+              }
+
+              &.isApplied { // 지원여부
+                color: $brownish-grey;
+                font-size: 14px;
+
+                .button {
+                  position: relative;
+                  top: -2px;
+                  width: 66px;
+                  height: 26px;
+                  font-size: 12px;
+                  text-decoration: none;
+                  color: $greyish-brown;
+                  outline: none;
+                  background-color: rgba(0, 0, 0, 0.0);
+                  border: 1px solid $brownish-grey;
+                  @include prefix(border-radius, 30px);
+                }
+
+                &.applied { // 지원완료
+                  color: #425cf0;
+                }
+
+                &.confirmed { // 전시확정
+                  color: $dull-orange;
+                }
+
+                &:disabled { // 비활성 ex) 전시완료, 선택안됨
+                  color: $warm-grey-four;
+                }
+              }
+
+              .appliedArtworks {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: -790px;
+
                 font-size: 12px;
-                text-decoration: none;
-                color: $greyish-brown;
-                outline: none;
-                background-color: rgba(0, 0, 0, 0.0);
-                border: 1px solid $brownish-grey;
-                @include prefix(border-radius, 30px);
+                color: $brownish-grey;
+
+                .sub {
+                  margin-top: -15px;
+                }
+                .imgThumb {
+                  width: 57px;
+                  height: 57px;
+                  border: solid 1px $black-10;
+                }
+
               }
 
-              &.applied { // 지원완료
-                color: #425cf0;
+              &.artworks {
+                font-size: 14px;
+                color: $brownish-grey;
               }
 
-              &.confirmed { // 전시확정
-                color: $dull-orange;
-              }
-
-              &.canceled { // 취소완료
-                color: $pale-red-40;
-              }
-
-              &:disabled { // 비활성 ex) 전시완료, 선택안됨
-                color: $warm-grey-four;
-              }
-            }
-
-            .appliedArtworks {
-              position: absolute;
-              top: 80px;
-              left: -790px;
-
-              font-size: 12px;
-              color: $brownish-grey;
-
-              .sub {
-                margin-top: -15px;
-              }
-              .imgThumb {
-                width: 57px;
-                height: 57px;
-                border: solid 1px $black-10;
-              }
-
-            }
-
-            .artworks {
-              font-size: 14px;
-              color: $brownish-grey;
-            }
-
-          }
-        }
-      }
-    }
+            } // -- td
+          } // -- tr
+        } // -- tbody
+      } // -- .exhibitions
+    } // -- .container
   }
   // --
 }
