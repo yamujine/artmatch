@@ -53,7 +53,7 @@ class Users extends MY_Controller {
 
             $exhibition_list = [];
             foreach ($exhibitions as $exhibition) {
-                $applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);
+                $applied_artworks = $this->apply_model->get_status_with_artworks_by_exhibition_id($exhibition->id);
 
                 if (!empty($applied_artworks)) {
                     $exhibition->applied_artworks = $applied_artworks;
@@ -74,7 +74,7 @@ class Users extends MY_Controller {
             foreach ($exhibitions as $exhibition) {
                 // 해당 전시 ID의 지원 작품 가져오기
                 if (!empty($exhibition_id) && $exhibition_id === $exhibition->id) {
-                    $exhibition->applied_artworks = $this->artwork_model->get_apply_status_by_exhibition_id($exhibition->id);
+                    $exhibition->applied_artworks = $this->apply_model->get_users_with_artworks_by_exhibition_id($exhibition->id);
 
                     $selected_exhibition = $exhibition;
                     break;
