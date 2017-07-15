@@ -58,23 +58,75 @@
     {{ mypage_macro.render_password_change_modal() }}
   {% endif %}
 
-  {% if type == 'apply' %}
-    {% for exhibition in exhibitions %}
-      {{ exhibition.title }} {{ exhibition.start_date }} {{ exhibition.end_date }} {{ exhibition.status }}
-      {% if exhibition.status == APPLY_STATUS_IN_REVIEW %}
-        지원완료
-      {% elseif exhibition.status == APPLY_STATUS_REJECTED %}
-        선택안됨
-      {% elseif exhibition.status == APPLY_STATUS_ACCEPTED %}
-        전시확정
-      {% endif %}
-      {% for artwork in exhibition.applied_artworks %}
-        {{ artwork.image }}
-      {% endfor %}
-      <br><br>
-    {% endfor %}
 
-  {% elseif type == 'applicant' %}
+  {% if type == 'apply' %} {# 지원한 전시 #}
+  <div class="patAppliedExhibitions">
+    <div class="container">
+      <span class="appliedCount">지원한 전시 총 n개</span>
+
+      <table class="exhibitions">
+      <thead>
+        <tr>
+          <th class="title">전시명</th>
+          <th class="term">전시기간</th>
+          <th class="status">진행상황</th>
+          <th class="isApplied">지원여부</th>
+          <th>지원작품</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for exhibition in exhibitions %}
+      <tr class="showAppliedArtworks"> {# TODO 보기 누르면 showAppliedArtworks 로 변경 #}
+        <td><span class="title">{{ exhibition.title }}</span></td>
+        <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
+
+        <td class="status {# TODO ex) need #}need">
+          진행상황 테스트
+          {# 진행상황 #}
+          {{ exhibition.status }}
+        </td>
+
+        {# 지원여부 TODO #}
+        {% if exhibition.status == APPLY_STATUS_IN_REVIEW %}
+          지원완료
+        {% elseif exhibition.status == APPLY_STATUS_REJECTED %}
+          선택안됨
+        {% elseif exhibition.status == APPLY_STATUS_ACCEPTED %}
+          전시확정
+        {% endif %}
+        <td class="isApplied {# TODO ex) applied, confirmed, canceled #}confirmed">
+          지원여부
+          <button class="button">지원취소</button>
+        </td>
+
+        <td class="artworks">
+        {# 지원작품 #}
+          총 n개의 작품 보기 <img src="{{ 'images/applied_arrow_down.png' | static_url }}" /><br>
+          총 n개의 작품 닫기 <img src="{{ 'images/applied_arrow_up.png' | static_url }}" />
+
+          <div class="appliedArtworks"> {# TODO show/hide #}
+            <div class="pull-left">
+              <img src="{{ 'images/applied_sub.png' | static_url }}" class="sub" /> <span style="margin-left: 3px">지원작품</span>
+            </div>
+
+            <div class="pull-left" style="margin-left: 5px">
+            {% for artwork in exhibition.applied_artworks %}
+              <img src="{{ artwork.image | thumb_url() }}" class="imgThumb" class="pull-left"/>
+            {% endfor %}
+            </div>
+          </div>
+
+        </td>
+      </tr>
+    {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  {% elseif type == 'applicant' %} {# 지원작가 #}
+  <div class="patAppliedArtist">
     <div class="exhibitionApply">
       <div class="exhibitionExpectCount">전시를 원하는 총 작품 <span class="number">{{ total_applied_count }}</span></div>
       <div class="rightSection">
@@ -97,6 +149,8 @@
                   data-artwork-id="{{ artwork.id }}" {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %}disabled{% endif %}></button>
         </li>
       {% endfor %}
-    {% endfor %}
+    {% endfor %} {# 전시 #}
+  </div>
   {% endif %}
+
 {% endblock %}
