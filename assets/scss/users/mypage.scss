@@ -851,10 +851,6 @@
                   color: $dull-orange;
                 }
 
-                &.canceled { // 취소완료
-                  color: $pale-red-40;
-                }
-
                 &:disabled { // 비활성 ex) 전시완료, 선택안됨
                   color: $warm-grey-four;
                 }

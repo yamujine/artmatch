@@ -127,16 +127,20 @@
           {{ status_text }}
         </td>
 
-        <td class="isApplied confirmed"> {# TODO ex) applied, confirmed, canceled #}
-          {% set status = exhibition.applied_artworks[0].apply_status %}
-          {% if status == APPLY_STATUS_IN_REVIEW %}
-            지원완료
-          {% elseif status == APPLY_STATUS_REJECTED %}
-            선택안됨
-          {% elseif status == APPLY_STATUS_ACCEPTED %}
-            전시확정
-          {% endif %}
+        {% set status = exhibition.applied_artworks[0].apply_status %}
+        {% if status == APPLY_STATUS_IN_REVIEW %}
+          {% set status = "applied" %}
+          {% set status_text = "지원완료" %}
+        {% elseif status == APPLY_STATUS_REJECTED %}
+          {% set status = "" %}
+          {% set status_text = "선택안됨" %}
+        {% elseif status == APPLY_STATUS_ACCEPTED %}
+          {% set status = "confirmed" %}
+          {% set status_text = "전시확정" %}
+        {% endif %}
 
+        <td class="isApplied {{ status }}"> {# TODO ex) applied, confirmed #}
+          {{ status_text }}
           <button class="button">지원취소</button>
         </td>
 
