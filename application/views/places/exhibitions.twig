@@ -38,9 +38,7 @@
 
         <div class="meta">
           <div class="title"><a href="/places/{{ place.id }}">{{ place.name }}</a></div>
-          <div class="additionalInfo">총 등록된 전시 {{ exhibitions | length }}개 | 종료된 전시 {{ exhibitions | length }}개 (TODO
-            나눠서 카운트)
-          </div>
+          <div class="additionalInfo">총 등록된 전시 {{ exhibitions | length }}개 | 종료된 전시 {{ closed_exhibition_count }}개</div>
         </div>
 
       </div>

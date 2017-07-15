@@ -19,7 +19,7 @@ class ExhibitionApi extends API_Controller {
         $accepted_artwork_list = [];
         $to_send_list = [];
 
-        if (!$this->_is_my_exhibition($exhibition_id)) {
+        if (!$this->_is_my_exhibition_and_place($exhibition_id)) {
             $this->return_fail_response('501', ['message' => '본인의 전시만 수락 할 수 있습니다.']);
         }
         if (!$this->_is_applied_artworks($exhibition_id, $applied_artwork_ids)) {
@@ -59,12 +59,21 @@ class ExhibitionApi extends API_Controller {
 
         $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
         foreach ($artwork_ids as $artwork_id) {
-            $is_valid_artwork = !empty($this->artwork_model->get_bare_by_id($artwork_id));
-            if ($is_valid_artwork) {
-                $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition->id, $artwork_id);
-                if (empty($result)) {
-                    $this->apply_model->insert($exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW, $reason);
-                }
+            $artwork = $this->artwork_model->get_bare_by_id($artwork_id);
+            if ($artwork === NULL) {
+                $this->return_fail_response('501', ['message' => '존재하지 않는 작품입니다.']);
+            } else if ($artwork->user_id !== $this->accountlib->get_user_id()) {
+                $this->return_fail_response('502', ['message' => '본인의 작품으로만 지원할 수 있습니다.']);
+            }
+
+            $result = $this->_is_applied_artworks($exhibition->id, [$artwork_id]);
+            if (!$result) {
+                $this->return_fail_response('503', ['message' => '이미 지원한 작품입니다.']);
+            }
+
+            $result = $this->apply_model->insert($exhibition->id, $artwork_id, APPLY_STATUS_IN_REVIEW, $reason);
+            if (!$result) {
+                $this->return_fail_response('504', ['message' => '데이터베이스 인서트 에러']);
             }
         }
 
@@ -77,14 +86,29 @@ class ExhibitionApi extends API_Controller {
     }
 
     public function cancel_apply() {
-        $apply_id = $this->input->post('apply_id');
-        if (empty($apply_id)) {
-            $this->return_fail_response('100', ['message' => '존재 하지 않는 지원서입니다.']);
+        $exhibition_id = $this->input->post('exhibition_id');
+        if (empty($exhibition_id)) {
+            $this->return_fail_response('100', ['message' => '전시 아이디가 입력되지 않았습니다.']);
         }
 
-        $result = $this->apply_model->delete($apply_id);
-        if (!$result) {
-            $this->return_fail_response('500', ['message' => '데이터베이스 업데이트 에러']);
+        $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
+        if (!$exhibition) {
+            $this->return_fail_response('501', ['message' => '존재하지 않는 전시 입니다.']);
+        }
+
+        $applies = $this->apply_model->get_by_exhibition_id_and_user_id($exhibition->id, $this->accountlib->get_user_id());
+        $apply_ids = [];
+        foreach ($applies as $apply) {
+            if ($apply->status !== APPLY_STATUS_ACCEPTED) {
+                $apply_ids[] = $apply->id;
+            }
+        }
+
+        foreach ($apply_ids as $apply_id) {
+            $result = $this->apply_model->delete($apply_id);
+            if (!$result) {
+                $this->return_fail_response('500', ['message' => '취소 중 데이터베이스 에러']);
+            }
         }
 
         $this->return_success_response(['message' => '지원이 취소되었습니다.']);
@@ -198,7 +222,7 @@ class ExhibitionApi extends API_Controller {
      * @param $exhibition_id
      * @return bool
      */
-    private function _is_my_exhibition($exhibition_id) {
+    private function _is_my_exhibition_and_place($exhibition_id) {
         $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
         if ($exhibition === NULL) {
             return false;
@@ -218,7 +242,7 @@ class ExhibitionApi extends API_Controller {
      * @param $applied_artworks_ids
      * @return bool
      */
-    private function _is_applied_artworks($exhibition_id, $applied_artworks_ids) {
+    private function _is_applied_artworks($exhibition_id, array $applied_artworks_ids) {
         foreach ($applied_artworks_ids as $applied_artworks_id) {
             $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition_id, $applied_artworks_id);
             if ($result === NULL) {
