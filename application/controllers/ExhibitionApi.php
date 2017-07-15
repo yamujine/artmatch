@@ -66,8 +66,8 @@ class ExhibitionApi extends API_Controller {
                 $this->return_fail_response('502', ['message' => '본인의 작품으로만 지원할 수 있습니다.']);
             }
 
-            $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition->id, $artwork_id);
-            if (!empty($result)) {
+            $result = $this->_is_applied_artworks($exhibition->id, [$artwork_id]);
+            if (!$result) {
                 $this->return_fail_response('503', ['message' => '이미 지원한 작품입니다.']);
             }
 
@@ -232,7 +232,7 @@ class ExhibitionApi extends API_Controller {
      * @param $applied_artworks_ids
      * @return bool
      */
-    private function _is_applied_artworks($exhibition_id, $applied_artworks_ids) {
+    private function _is_applied_artworks($exhibition_id, array $applied_artworks_ids) {
         foreach ($applied_artworks_ids as $applied_artworks_id) {
             $result = $this->apply_model->get_by_exhibition_id_and_artwork_id($exhibition_id, $applied_artworks_id);
             if ($result === NULL) {
