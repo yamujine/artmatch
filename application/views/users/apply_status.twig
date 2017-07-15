@@ -106,24 +106,28 @@
       </thead>
       <tbody>
     {% for exhibition in exhibitions %}
-      <tr data-id="{{ exhibition.id }}"> {# TODO 보기 누르면 showAppliedArtworks 로 변경 #}
+      <tr data-id="{{ exhibition.id }}">
         <td><span class="title">{{ exhibition.title }}</span></td>
         <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
 
-        <td class="status {# TODO ex) need #}need">
-          {# 진행상황 #}
-          {{ exhibition.status }}
+        {% set status = '' %}
+        {% set status_text = '' %}
+        {% if date(exhibition.start_date) >= date() %}
+          {% set status = "need" %}
+          {% set status_text = "작품모집중" %}
+        {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
+          {% set status = "" %}
+          {% set status_text = "모집 종료" %}
+        {% else %}
+          {% set status = "" %}
+          {% set status_text = "전시종료" %}
+        {% endif %}
 
-          {% if date(exhibition.start_date) >= date() %}
-            작품 모집중?
-          {% elseif date(exhibition.start_date) <= date() and date(exhibition.end_date) >= date() %}
-            모집 종료
-          {% else %}
-            전시종료
-          {% endif %}
+        <td class="status {{ status }}">
+          {{ status_text }}
         </td>
 
-        <td class="isApplied {# TODO ex) applied, confirmed, canceled #}confirmed">
+        <td class="isApplied confirmed"> {# TODO ex) applied, confirmed, canceled #}
           {% set status = exhibition.applied_artworks[0].apply_status %}
           {% if status == APPLY_STATUS_IN_REVIEW %}
             지원완료
