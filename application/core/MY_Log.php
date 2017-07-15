@@ -23,6 +23,10 @@ class MY_Log extends CI_Log
                 require_once $config['sentry_path'];
                 Raven_Autoloader::register();
             }
+            if (empty($config['sentry_client'])) {
+                throw new Exception('No Sentry DSN found.');
+            }
+
             if (empty($config['sentry_config'])) {
                 $this->_sentry_client = new Raven_Client($config['sentry_client']);
             } else {
@@ -48,7 +52,7 @@ class MY_Log extends CI_Log
 
     public function write_log($level, $msg)
     {
-        if ($this->_enabled === false) {
+        if ($this->_enabled === false || !$this->_sentry_client) {
             return false;
         }
         // make upper case
@@ -58,8 +62,8 @@ class MY_Log extends CI_Log
         if (in_array($level_upper, $this->_sentry_options['sentry_logging_levels']) === false
             OR $this->_sentry_options['sentry_logging_level_names'][$level_upper] < $this->_sentry_options['sentry_logging_level_names'][$this->_sentry_options['sentry_log_threshold']]) {
             return false;
-        } else {
-            $this->_sentry_client->captureMessage($msg, array(), $level, true);
         }
+
+        $this->_sentry_client->captureMessage($msg, array(), $level, true);
     }
 }
