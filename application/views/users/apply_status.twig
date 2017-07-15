@@ -229,44 +229,25 @@
       </div>
 
       <div class="applyArtists">
-        <div class="artistItem">
-          <div class="metadata">
-            <div class="name">유슬기</div>
-            <div class="reason">
-자개를 파는 일을 합니다.자개를 파는 일을 합니다.자개를 파는 일을 합니다.자개를 파는 일을 합니다.자개를 파는 일을 합니다.자개를 파는 일을 합니다.자개를 파는 일을 합니다.자개를 파는 일을 합니다.
+        {% for artist_artworks in artists %}
+          <div class="artistItem">
+            <div class="metadata">
+              <div class="name">{{ artist_artworks[0].user_name }}</div>
+              <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
+              <div class="rightSection">
+                <button class="mailSendBtn"><img src="{{ 'images/mail.png' | static_url }}" /></button>
+                <button class="allSelectBtn active">이 작가 전체 작품 선택</button>
+              </div>
             </div>
-            <div class="rightSection">
-              <button class="mailSendBtn"><img src="{{ 'images/mail.png' | static_url }}" /></button>
-              <button class="allSelectBtn active">이 작가 전체 작품 선택</button>
-            </div>
-          </div>
-          <div class="artworks">
-            <div class="artworkItem selected">
-              <img src="{{ 'images/mail.png' | static_url }}" />
-            </div>
-            <div class="artworkItem">
-              <img src="{{ 'images/mail.png' | static_url }}" />
-            </div>
-            <div class="artworkItem">
-              <img src="{{ 'images/mail.png' | static_url }}" />
-            </div>
-            <div class="artworkItem">
-              <img src="{{ 'images/mail.png' | static_url }}" />
-            </div>
-            <div class="artworkItem">
-              <img src="{{ 'images/mail.png' | static_url }}" />
-            </div>
-            <div class="artworkItem">
-              <img src="{{ 'images/mail.png' | static_url }}" />
-            </div>
-            <div class="artworkItem">
-              <img src="{{ 'images/mail.png' | static_url }}" />
-            </div>
-            <div class="artworkItem">
-              <img src="{{ 'images/mail.png' | static_url }}" />
+            <div class="artworks">
+              {% for artwork in artist_artworks %}
+                <div class="artworkItem selected">
+                  <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}" />
+                </div>
+              {% endfor %}
             </div>
           </div>
-        </div>
+        {% endfor %}
       </div>
 
     </div>
