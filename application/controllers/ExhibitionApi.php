@@ -127,8 +127,9 @@ class ExhibitionApi extends API_Controller {
             $artwork_ids = array_map(function ($value) {
                 return $value->artwork_id;
             }, $artwork_id_objects);
+            $artworks = $this->artwork_model->get_by_ids($artwork_ids);
 
-            $exhibition->artwork = $this->artwork_model->get_by_ids($artwork_ids);
+            $exhibition->artwork = shuffle($artworks);
         }
 
         return $this->return_success_response(['data' => $exhibitions]);
