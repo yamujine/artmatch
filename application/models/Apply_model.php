@@ -28,6 +28,49 @@ class Apply_model extends CI_Model {
         return $this->db->insert_id();
     }
 
+    public function get_by_user_id($user_id) {
+        return $this->db
+            ->select('apply.exhibition_id')
+            ->from('artworks')
+            ->join(self::TABLE_NAME, 'artworks.id = apply.artwork_id')
+            ->where('artworks.user_id', $user_id)
+            ->order_by('apply.id', 'DESC')
+            ->get()->result();
+    }
+
+    public function get_status_with_artworks_by_exhibition_id_and_user_id($exhibition_id, $user_id) {
+        return $this->db
+            ->select('artworks.*, apply.status AS apply_status')
+            ->from(self::TABLE_NAME)
+            ->join('artworks', 'apply.artwork_id = artworks.id')
+            ->where('apply.exhibition_id', $exhibition_id)
+            ->where('artworks.user_id', $user_id)
+            ->order_by('apply.registered_at', 'DESC')
+            ->get()->result();
+    }
+
+    public function get_users_with_artworks_by_exhibition_id($exhibition_id) {
+        return $this->db
+            ->select('artworks.*, apply.status AS apply_status, users.*')
+            ->from(self::TABLE_NAME)
+            ->join('artworks', 'apply.artwork_id = artworks.id')
+            ->join('users', 'users.id = artworks.user_id')
+            ->where('apply.exhibition_id', $exhibition_id)
+            ->order_by('users.id', 'DESC')
+            ->order_by('apply.registered_at', 'DESC')
+            ->get()->result();
+    }
+
+    public function get_by_user_id_and_exhibition_id($user_id, $exhibition_id) {
+        return $this->db
+            ->select('artworks.*, apply.status AS apply_status')
+            ->from('artworks')
+            ->join(self::TABLE_NAME, "apply.artwork_id = artworks.id AND apply.exhibition_id = ${exhibition_id}", 'left')
+            ->where('artworks.user_id', $user_id)
+            ->order_by('artworks.id', 'DESC')
+            ->get()->result();
+    }
+
     public function get_by_exhibition_id_and_artwork_id($exhibition_id, $artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)
@@ -43,6 +86,12 @@ class Apply_model extends CI_Model {
         } else {
             return FALSE;
         }
+    }
+
+    public function delete($apply_id) {
+        $this->db->delete(self::TABLE_NAME, ['id' => $apply_id]);
+
+        return $this->db->affected_rows() > 0;
     }
 
     public function delete_by_exhibition_id($exhibition_id) {

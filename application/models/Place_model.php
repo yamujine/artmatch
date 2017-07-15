@@ -120,6 +120,13 @@ class Place_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_count_by_user_id($user_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('user_id', $user_id)
+            ->count_all_results();
+    }
+
     /**
      * Heavy한 함수이므로 가급적 사용 자제 (장소, pick 수, 추가 이미지 등 전부 불러옴)
      * @param $user_id

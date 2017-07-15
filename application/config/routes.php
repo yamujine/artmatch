@@ -67,8 +67,9 @@ $route['places/(:num)/exhibitions'] = 'places/exhibitions/$1';
 
 $route['exhibitions/(:num)/apply'] = 'exhibitions/apply/$1';
 
-$route['users/me'] = 'users/me'; // Don't change ordering
-$route['users/(:any)'] = 'users/detail/$1'; // Don't change ordering
+$route['users/(:any)'] = 'users/detail/$1';
+$route['users/(:any)/picks'] = 'users/picks';
+$route['users/(:any)/apply_status'] = 'users/apply_status';
 
 $route['api/comments'] = 'commentApi';
 $route['api/comments/delete'] = 'commentApi/delete';
@@ -91,7 +92,8 @@ $route['api/users/change_password']['POST'] = 'usersApi/change_password';
 $route['api/users/reset_password']['POST'] = 'usersApi/reset_password';
 
 $route['api/exhibition/accept']['POST'] = 'exhibitionApi/accept';
+$route['api/exhibition/apply']['POST'] = 'exhibitionApi/apply';
+$route['api/exhibition/cancel_apply']['POST'] = 'exhibitionApi/cancel_apply';
 $route['api/exhibition/create']['POST'] = 'exhibitionApi/create';
 $route['api/exhibition/delete']['POST'] = 'exhibitionApi/delete';
 $route['api/exhibition/update']['POST'] = 'exhibitionApi/update';
-$route['api/exhibition/now_exhibiting']['GET'] = 'exhibitionApi/now_exhibiting';

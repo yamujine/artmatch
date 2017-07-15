@@ -227,7 +227,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 2;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
@@ -238,7 +238,11 @@ $config['log_threshold'] = 2;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+if (ENVIRONMENT === 'production') {
+    $config['log_path'] = 'sentry';
+} else {
+    $config['log_path'] = '';
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -525,3 +529,18 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+/*
+| -------------------------------------------------------------------------
+| Sentry
+| -------------------------------------------------------------------------
+*/
+//Do not edit if possible, since this is the default setting.
+$config['sentry_path'] = BASEPATH . '../vendor/sentry/sentry/lib/Raven/Autoloader.php';
+$config['sentry_logging_levels'] = ['INFO', 'WARNING', 'DEBUG', 'ERROR', 'FATAL'];
+$config['sentry_logging_level'] = 4 - $config['log_threshold'];
+$config['sentry_log_threshold'] = $config['sentry_logging_levels'][$config['sentry_logging_level']];
+$config['sentry_config'] = [];
+if (ENVIRONMENT === 'production') {
+    $config['sentry_client'] = $_ENV['CI_SENTRY_DSN'];
+}

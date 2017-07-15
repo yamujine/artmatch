@@ -148,6 +148,13 @@ class Artwork_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_count_by_user_id($user_id) {
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where('user_id', $user_id)
+            ->count_all_results();
+    }
+
     public function get_all_by_user_id($user_id) {
         $query = $this->db
             ->select('artworks.*, count(user_artwork_picks.id) as pick_count, IF(P2.id IS NULL, 0, 1) AS is_picked')
@@ -194,34 +201,6 @@ class Artwork_model extends CI_Model {
             ->get()->result();
 
         return $picks;
-    }
-
-    public function get_apply_status_by_user_id_and_exhibition_id($user_id, $exhibition_id) {
-        return $this->db
-            ->select('artworks.*, apply.status AS apply_status')
-            ->from(self::TABLE_NAME)
-            ->join('apply', "apply.artwork_id = artworks.id AND apply.exhibition_id = ${exhibition_id}", 'left')
-            ->where('artworks.user_id', $user_id)
-            ->order_by('artworks.id', 'DESC')
-            ->get()->result();
-    }
-
-    public function get_apply_status_by_exhibition_id($exhibition_id) {
-        $result = $this->db
-            ->select('artworks.*, apply.status AS apply_status, apply.registered_at AS apply_registered_at')
-            ->from('apply')
-            ->join(self::TABLE_NAME, 'apply.artwork_id = artworks.id')
-            ->where('apply.exhibition_id',$exhibition_id)
-            ->order_by('apply_registered_at', 'DESC')
-            ->get()->result();
-
-        if (!empty($result)) {
-            foreach ($result as $item) {
-                $item->user = $this->db->from('users')->where('id', $item->user_id)->get()->row();
-            }
-        }
-
-        return $result;
     }
 
     public function get_images_by_id($artwork_id) {

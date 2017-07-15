@@ -96,6 +96,17 @@ class Exhibition_model extends CI_Model {
             ->get()->row();
     }
 
+    public function get_by_ids(array $exhibition_ids) {
+        if (empty($exhibition_ids)) {
+            return NULL;
+        }
+
+        return $this->db
+            ->from(self::TABLE_NAME)
+            ->where_in('id', $exhibition_ids)
+            ->get()->result();
+    }
+
     public function get_by_artwork_id($artwork_id) {
         return $this->db
             ->from(self::TABLE_NAME)
@@ -109,7 +120,18 @@ class Exhibition_model extends CI_Model {
         return $this->db
             ->from(self::TABLE_NAME)
             ->where('place_id', $place_id)
-            ->order_by('start_date', 'ASC')
+            ->order_by('start_date', 'DESC')
+            ->get()->result();
+    }
+
+    public function get_by_user_id($user_id) {
+        return $this->db
+            ->select('exhibitions.*')
+            ->from(self::TABLE_NAME)
+            ->join('places', 'exhibitions.place_id = places.id')
+            ->join('users', 'places.user_id = users.id')
+            ->where('users.id', $user_id)
+            ->order_by('exhibitions.start_date', 'ASC')
             ->get()->result();
     }
 
