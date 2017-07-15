@@ -117,6 +117,7 @@
         max-width: 875px;
         height: 462px;
         outline: 1px solid $white-eleven;
+        overflow: hidden;
 
         &:hover {
           outline: 4px solid $warm-grey-five;
