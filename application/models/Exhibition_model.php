@@ -218,6 +218,23 @@ class Exhibition_model extends CI_Model {
     }
 
     /**
+     * 해당 장소에 전시중인 전시가 있는지 리턴하는 함수
+     * @param $place_id
+     * @return bool
+     */
+    public function is_applicable_by_place_id($place_id) {
+        $today = date('Y-m-d');
+        $query = $this->db
+            ->from(self::TABLE_NAME)
+            ->where('place_id', $place_id)
+            ->where('start_date >', $today)
+            ->where('is_applicable = 1')
+            ->get();
+
+        return $query->num_rows() > 0;
+    }
+
+    /**
      * 삭제 관련 함수들
      */
 
