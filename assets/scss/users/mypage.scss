@@ -766,21 +766,25 @@
         width: 927px;
         border-top: solid 2px $brownish-grey;
 
-        th {
-          border-bottom: solid 1px $pinkish-grey-two;
-          height: 49px;
+        thead {
+          th {
+            border-bottom: solid 1px $pinkish-grey-two;
+            height: 49px;
+            color: $greyish;
+            font-weight: 500;
 
-          &.title {
-            width: 327px;
-          }
-          &.term {
-            width: 190px;
-          }
-          &.status {
-            width: 111px;
-          }
-          &.isApplied {
-            width: 170px;
+            &.title {
+              width: 327px;
+            }
+            &.term {
+              width: 190px;
+            }
+            &.status {
+              width: 111px;
+            }
+            &.isApplied {
+              width: 170px;
+            }
           }
         }
 
