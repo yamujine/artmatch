@@ -77,6 +77,24 @@
       tr.find(".arrow").attr("src", arrowImagePath);
     }
 
+    // 지원 취소
+    function cancel_apply(e) {
+
+      var exhibition_id = $(e).data("id");
+
+      $.ajax({
+        method: 'POST',
+        url: '/api/exhibition/cancel_apply',
+        data: {
+          exhibition_id: exhibition_id,
+        }
+      }).done(function (data) {
+        alert(data.body.message);
+        location.reload(true);
+      });
+
+    }
+
   </script>
 {% endblock %}
 
@@ -142,7 +160,7 @@
         <td class="isApplied {{ status_class }}">
           {{ status_text }}
           {% if status == APPLY_STATUS_IN_REVIEW %}
-          <button class="button">지원취소</button>
+          <button class="button" data-id="{{ exhibition.id }}" onclick="cancel_apply(this)">지원취소</button>
           {% endif %}
         </td>
 
