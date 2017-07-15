@@ -133,9 +133,11 @@
             {% elseif date(exhibition.end_date) < date() %}
               <span class="status ended">종료된 전시</span>
             {% endif %}
-            <span class="pull-right">
-              <a href="#" class="modifyBtn">수정</a>
-            </span>
+            {% if date(exhibition.end_date) > date() %}
+              <span class="pull-right">
+                <a href="#" class="modifyBtn">수정</a>
+              </span>
+            {% endif %}
             <hr class="divider">
             <div class="meta">
               <div class="fields clear">
