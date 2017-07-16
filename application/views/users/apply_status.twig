@@ -8,16 +8,36 @@
   <script src="{{ 'dist/js/mypage.common.js' | static_url }}"></script>
   <script type="text/javascript">
     $(function () {
+      //////// 장소제공자 - 지원작가
+      // 전시명 선택
       $('select[name="exhibition_id"]').change(function() {
         $('#exhibition_id_frm').submit();
       });
-      // 작품 수락하기
+
+
+      $('button[name=select_all]').click(function() {
+        var user = $(this).data("user");
+
+        var div = $("div [data-user=" + user + "]");
+        $.each(div.find("input[type=checkbox]"), function(index, checkbox) {
+          $(checkbox).attr('checked', 'checked');
+        });
+      });
+
+
+      // 작가확정
       $('.selectBtn').click(function () {
-        var exhibitionId;
+
+        if (confirm("확정 후 취소가 안되니 신중히 선택해 주시기 바랍니다") === false) {
+          return false;
+        }
+
+        var exhibitionId = $("#exhibition_id_frm").find("select[name=exhibition_id]").val();
+
+        // selected artworks
         var artworkIds = [];
-        $('.checked:enabled').each(function () {
-          exhibitionId = $(this).data('exhibition-id');
-          artworkIds.push($(this).data('artwork-id'));
+        $('input:checkbox[type=checkbox]:checked').each(function () {
+          artworkIds.push($(this).val());
         });
 
         artworkIds = $.unique(artworkIds);
@@ -51,6 +71,7 @@
       });
     });
 
+    //////// 작가 - 지원한전시
     function show_and_hide(e) {
       var type;
       var tr = $(e).closest("tr");
@@ -98,6 +119,7 @@
       });
 
     }
+
 
   </script>
 {% endblock %}
@@ -186,9 +208,10 @@
               <img src="{{ artwork.image | thumb_url() }}" class="imgThumb pull-left" />
             {% endfor %}
             </div>
+          </div>
 
-          </td>
-        </tr>
+        </td>
+      </tr>
       {% endfor %}
           </tbody>
         </table>
@@ -213,14 +236,14 @@
           {% endif %}
         </div>
         {% if exhibition_id %}
-          {% if selected_exhibition.applied_artworks | length > 0 %}
+          {#{% if selected_exhibition.applied_artworks | length > 0 %}#}
             <div class="rightSection">
               <div class="exhibitionApplySelect">
                 <button class="cancelBtn">선택취소</button>
                 <button class="selectBtn">작가확정</button>
               </div>
             </div>
-          {% endif %}
+          {#{% endif %}#}
         {% endif %}
       </form>
 
@@ -232,6 +255,7 @@
         </div>
 
         <div class="applyArtists">
+          {# 작가 loop #}
           {% for artist_artworks in artists %}
             <div class="artistItem">
               <div class="metadata">
@@ -239,13 +263,32 @@
                 <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
                 <div class="rightSection">
                   <button class="mailSendBtn"><a href="mailto:{{ artist_artworks[0].email }}"><img src="{{ 'images/mail.png' | static_url }}" /></a></button>
-                  <button class="allSelectBtn active">이 작가 전체 작품 선택</button>
+                  <button name="select_all" class="allSelectBtn active" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
                 </div>
               </div>
-              <div class="artworks">
+              <div class="artworks" data-user="{{ artist_artworks[0].user_name }}">
+                {# 작가의 작품 loop #}
                 {% for artwork in artist_artworks %}
-                  <div class="artworkItem selected">
-                    <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}" />
+                  <div class="artworkItem">
+                    {% set status = artwork.apply_status %}
+                    {% if status == APPLY_STATUS_ACCEPTED %}
+                      {% set status_class = "confirmed" %}
+                      {% set status_text = "전시확정" %}
+                      {% set disabled = "disabled" %}
+                      {% set checked = "checked" %}
+                    {% else %}
+                      {% set status_class = "confirmed" %}
+                      {% set status_text = "전시확정" %}
+                      {% set disabled = "" %}
+                      {% set checked = "" %}
+                    {% endif %}
+
+                    <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}" {{ disabled }} {{ checked }}/>
+                    <label for="artwork_{{ artwork.id }}">
+                      <img class="imageThumb" src="{{ artwork.image | thumb_url }}" class="crop artworkImage" data-id="{{ artwork.id }} "/>
+                    </label>
+                    <div class="box">✔</div>
+
                   </div>
                 {% endfor %}
               </div>
