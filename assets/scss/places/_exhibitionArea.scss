@@ -94,6 +94,10 @@
           line-height: 1.31;
           color: $black-seven;
           padding-bottom: 3px;
+
+          &.ended {
+            color: $warm-grey-two;
+          }
         }
 
         .status {
@@ -102,6 +106,10 @@
           letter-spacing: -0.3px;
           color: #be7028;
           padding-bottom: 5px;
+
+          &.ended {
+            color: $warm-grey-four;
+          }
         }
 
         .meta {
