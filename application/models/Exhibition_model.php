@@ -73,6 +73,12 @@ class Exhibition_model extends CI_Model {
         return $this->db->affected_rows() === 1;
     }
 
+    public function set_not_applicable($exhibition_id) {
+        $this->db->update(self::TABLE_NAME, ['is_applicable' => EXHIBITION_NOT_APPLICABLE], ['id' => $exhibition_id]);
+
+        return $this->db->affected_rows() === 1;
+    }
+
     /**
      * @deprecated 장소별 전시는 여러개 존재하므로 이런 함수는 사용을 하면 안됨
      * @param $place_id

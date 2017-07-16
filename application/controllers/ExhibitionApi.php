@@ -44,8 +44,11 @@ class ExhibitionApi extends API_Controller {
             $accepted_artwork_list[] = $accepted_artwork;
         }
 
+        // 전시의 지원 가능 상태를 지원 불가능으로 변경 (NOT_APPLICABLE)
+        $this->exhibition_model->set_not_applicable($exhibition_id);
+
         foreach ($accepted_artwork_list as $accepted_artwork) {
-            //같은 유저의 작품은 하나의 dept로 합침
+            // 같은 유저의 작품은 하나의 dept로 합침
             $to_send_list[$accepted_artwork->user->email][] = $accepted_artwork;
         }
         $this->applylib->send_accepted_email($to_send_list);
