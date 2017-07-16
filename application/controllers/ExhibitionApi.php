@@ -26,11 +26,6 @@ class ExhibitionApi extends API_Controller {
             $this->return_fail_response('502', ['message' => '본인의 전시에 지원한 작품만 수락할 수 있습니다.']);
         }
 
-        $all_applied_artwork_ids_object = $this->apply_model->get_by_exhibition_id($exhibition_id);
-        $all_applied_artwork_ids = array_map(function ($value) {
-            return $value->artwork_id;
-        }, $all_applied_artwork_ids_object);
-
         $already_applied_artwork_ids_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition_id);
         $already_applied_artwork_ids = array_map(function ($value) {
             return $value->artwork_id;
@@ -48,6 +43,12 @@ class ExhibitionApi extends API_Controller {
             $accepted_artwork = $this->artwork_model->get_by_id($unapplied_artwork_id);
             $accepted_artwork_list[] = $accepted_artwork;
         }
+
+        // 지원 내역 중 수락된 작품을 제외한 모든 작품을 거절 상태로 변경
+        $all_applied_artwork_ids_object = $this->apply_model->get_by_exhibition_id($exhibition_id);
+        $all_applied_artwork_ids = array_map(function ($value) {
+            return $value->artwork_id;
+        }, $all_applied_artwork_ids_object);
 
         $dropout_artwork_ids = array_diff($all_applied_artwork_ids, $unapplied_artwork_ids);
         foreach ($dropout_artwork_ids as $dropout_artwork_id) {
