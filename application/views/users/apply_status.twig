@@ -248,14 +248,14 @@
           {% endif %}
         </div>
         {% if exhibition_id %}
-          {#{% if selected_exhibition.applied_artworks | length > 0 %}#}
+          {% if selected_exhibition.is_applicable %}
             <div class="rightSection">
               <div class="exhibitionApplySelect">
                 <button class="cancelBtn">선택취소</button>
                 <button class="selectBtn">작가확정</button>
               </div>
             </div>
-          {#{% endif %}#}
+          {% endif %}
         {% endif %}
       </form>
 
