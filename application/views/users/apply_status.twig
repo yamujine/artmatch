@@ -12,6 +12,7 @@
 
       // recount
       count_selected_artworks();
+      count_total_artworks();
 
       // 전시명 선택
       $('select[name="exhibition_id"]').change(function() {
@@ -35,6 +36,10 @@
 
       function count_selected_artworks() {
         $("#countSelectedArtworks").text($("input:checkbox:checked").length);
+      }
+
+      function count_total_artworks() {
+        $("#countAllArtworks").text($("input:checkbox").length);
       }
 
       // 작가확정
@@ -264,7 +269,12 @@
 
         <div class="applyMetadata">
           <div class="totalApplyLabel pull-left">
-            총 지원작품 <span class="selected">작품 <span class="number" id="countSelectedArtworks"></span>개 선택</span>
+            총 지원작품 <span id="countAllArtworks"></span>
+            {% if selected_exhibition.is_applicable %}
+              <span class="selected">작품 <span class="number" id="countSelectedArtworks"></span>개 선택</span>
+            {% else %}
+              <span class="selected">총 전시할 작품 <span class="number" id="countSelectedArtworks"></span>개 확정</span>
+            {% endif %}
           </div>
           <div class="pull-right">
             {% set emails = [] %}
