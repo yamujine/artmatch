@@ -59,6 +59,16 @@ class Users extends MY_Controller {
 
                     if (!empty($applied_artworks)) {
                         $exhibition->applied_artworks = $applied_artworks;
+
+                        $today = date('Y-m-d 00:00:00');
+                        if ($today < $exhibition->start_date) {
+                            $exhibition->status = EXHIBITION_NOT_STARTED;
+                        } else if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
+                            $exhibition->status = EXHIBITION_NOW_EXHIBITING;
+                        } else if ($today > $exhibition->end_date) {
+                            $exhibition->status = EXHIBITION_END;
+                        }
+
                         $exhibition_list[] = $exhibition;
                     }
                 }
