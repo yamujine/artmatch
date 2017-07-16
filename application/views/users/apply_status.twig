@@ -9,6 +9,10 @@
   <script type="text/javascript">
     $(function () {
       //////// 장소제공자 - 지원작가
+
+      // recount
+      count_selected_artworks();
+
       // 전시명 선택
       $('select[name="exhibition_id"]').change(function() {
         $('#exhibition_id_frm').submit();
@@ -24,11 +28,19 @@
         });
       });
 
+      $("input:checkbox").click(function() {
+        // count selected checkbox
+        count_selected_artworks();
+      });
+
+      function count_selected_artworks() {
+        $("#countSelectedArtworks").text($("input:checkbox:checked").length);
+      }
 
       // 작가확정
       $('.selectBtn').click(function () {
 
-        if (confirm("확정 후 취소가 안되니 신중히 선택해 주시기 바랍니다") === false) {
+        if (confirm("확정 후 취소 및 추가 지원이 불가능 합니다. 신중히 선택해 주시기 바랍니다.") === false) {
           return false;
         }
 
@@ -251,7 +263,7 @@
         <div class="divider" style="clear: both;"></div>
 
         <div class="applyMetadata">
-          <div class="totalApplyLabel">총 지원작품 <span class="selected">작품 <span class="number">8</span>개 선택</span></div>
+          <div class="totalApplyLabel">총 지원작품 <span class="selected">작품 <span class="number" id="countSelectedArtworks"></span>개 선택</span></div>
         </div>
 
         <div class="applyArtists">
