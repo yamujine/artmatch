@@ -13,6 +13,8 @@
 {% endblock %}
 
 {% block script %}
+  <script src="{{ 'dist/js/jquery-ui.min.js' | static_url }}"></script>
+  <script src="{{ 'dist/js/datepicker-ko.js' | static_url }}"></script>
   <script>
     $(function () {
       // 포커싱 UI를 위한 처리
@@ -33,6 +35,10 @@
 
         return false;
       });
+
+      // datepicker
+      $("input[name=exhibition_start_date]").datepicker();
+      $("input[name=exhibition_end_date]").datepicker();
 
       // 전시 삭제
       $('.addExhibitionForm .deleteBtn').click(function () {
@@ -68,14 +74,20 @@
       $(document).on('click', '.modifyBtn', function () {
         var exhibitionDiv = $(this).closest('div.exhibition');
         var exhibitionData = eval($(exhibitionDiv).data('exhibition-value'));
+
+        // 중복 추가 방지
+        if ($('.exhibitionForm[data-exhibition-id="' + exhibitionData.id +'"]').length > 0) {
+          return false;
+        }
+
         var clone = $('.addExhibitionForm').clone();
 
         clone.removeClass('addExhibitionForm');
         clone.addClass('editExhibitionForm');
 
         clone.find('input[name=exhibitionId]').val(exhibitionData.id);
-        clone.find('input[name=exhibition_start_date]').val(exhibitionDiv.data('exhibition-start'));
-        clone.find('input[name=exhibition_end_date]').val(exhibitionDiv.data('exhibition-end'));
+        clone.find('input[name=exhibition_start_date]').val(exhibitionDiv.data('exhibition-start')).attr('id', 'exhibition_start_date_' + exhibitionData.id);
+        clone.find('input[name=exhibition_end_date]').val(exhibitionDiv.data('exhibition-end')).attr('id', 'exhibition_end_date_' + exhibitionData.id);
         clone.find('input[name=exhibition_title]').val(exhibitionData.title);
         clone.find('input[name=exhibition_artwork_count]').val(exhibitionData.artwork_count);
 
@@ -100,8 +112,12 @@
         clone.show();
 
         clone.find('input[name=exhibition_title]').focus();
+        clone.attr('data-exhibition-id', exhibitionData.id);
 
         constructValidation(clone);
+
+        $(document).find("input[name=exhibition_start_date]").removeClass('hasDatepicker').datepicker();
+        $(document).find("input[name=exhibition_end_date]").removeClass('hasDatepicker').datepicker();
 
         return false;
       });

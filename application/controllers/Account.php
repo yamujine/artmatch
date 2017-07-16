@@ -10,7 +10,7 @@ class Account extends MY_Controller {
         $this->load->helper('url');
 
         $this->allow_without_login = ['signup', 'login', 'verify'];
-        $this->allow_without_auth = ['not_authenticated', 'verify'];
+        $this->allow_without_auth = ['not_authenticated', 'verify', 'logout'];
     }
 
     public function signup() {
@@ -75,6 +75,10 @@ class Account extends MY_Controller {
 
         $code = preg_split('#/#', $this->encryption->decrypt($this->input->get('key', FALSE)));
         list($email, $id) = $code;
+
+        if ($this->accountlib->get_user_id() !== $id) {
+            alert_and_redirect('현재 로그인 된 사용자의 인증 메일이 아닙니다. 로그인 후 다시 시도해주세요.', '/account/logout');
+        }
 
         $user = $this->user_model->get_by_id($id);
         if ($user->email === $email && $user->id === $id) {

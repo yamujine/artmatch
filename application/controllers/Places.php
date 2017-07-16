@@ -30,14 +30,25 @@ class Places extends MY_Controller {
 
         // 전시 정보
         $place->is_now_exhibiting = $this->exhibition_model->is_now_exhibiting_by_place_id($place->id);
+        $place->is_applicable = $this->exhibition_model->is_applicable_by_place_id($place->id);
 
         // 장소정보
         $data['place'] = $place;
 
         $exhibitions_now = [];
         // 전시 작품 이력
-        $exhibitions = $this->exhibition_model->get_by_place_id($place_id);
+        $exhibitions = $this->exhibition_model->get_with_artwork_count_by_place_id($place_id);
         foreach ($exhibitions as $exhibition) {
+            // 전시 기간 상태
+            $today = date('Y-m-d 00:00:00');
+            if ($today < $exhibition->start_date) {
+                $exhibition->status = EXHIBITION_NOT_STARTED;
+            } else if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
+                $exhibition->status = EXHIBITION_NOW_EXHIBITING;
+            } else if ($today > $exhibition->end_date) {
+                $exhibition->status = EXHIBITION_END;
+            }
+
             $exhibition_artwork_id_objects = $this->exhibition_model->get_artwork_ids_by_exhibition_id($exhibition->id);
             $exhibition_artwork_ids = array_map(function ($value) {
                 return $value->artwork_id;
@@ -46,15 +57,17 @@ class Places extends MY_Controller {
                 $exhibition->artworks = $this->artwork_model->get_by_ids($exhibition_artwork_ids);
 
                 // 지금 전시중
-                $today = date('Y-m-d 00:00:00');
                 if ($today >= $exhibition->start_date && $today <= $exhibition->end_date) {
-                    shuffle($exhibition->artworks);
-                    $exhibition->artists = array_unique(array_map(function ($value) {
-                        return $value->user->user_name;
-                    }, $exhibition->artworks));
+                    if (isset($exhibition->artworks)) {
+                        shuffle($exhibition->artworks);
+                        $exhibition->artists = array_unique(array_map(function ($value) {
+                            return $value->user->user_name;
+                        }, $exhibition->artworks));
+                    }
                     $exhibitions_now[] = $exhibition;
                 }
             }
+
             $data['exhibition_artwork_count'] = count($exhibition_artwork_ids);
         }
         $data['exhibitions'] = $exhibitions;

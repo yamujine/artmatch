@@ -45,14 +45,6 @@ class User_model extends CI_Model {
         return $query->row();
     }
 
-    public function get_password($email) {
-        $this->db->select('password');
-        $this->db->where('email', $email);
-        $query = $this->db->get(self::TABLE_NAME);
-
-        return $query->row()->password;
-    }
-
     public function authorize($id) {
         return $this->db->update(self::TABLE_NAME, ['is_auth' => 1], ['id' => $id]);
     }

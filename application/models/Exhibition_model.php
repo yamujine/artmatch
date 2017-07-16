@@ -73,20 +73,10 @@ class Exhibition_model extends CI_Model {
         return $this->db->affected_rows() === 1;
     }
 
-    /**
-     * @deprecated 장소별 전시는 여러개 존재하므로 이런 함수는 사용을 하면 안됨
-     * @param $place_id
-     * @return mixed
-     */
-    public function get_one_by_place_id($place_id) {
-        return $this->db
-            ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
-            ->from(self::TABLE_NAME)
-            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id', 'LEFT')
-            ->where('place_id', $place_id)
-            ->group_by('exhibition_artworks.exhibition_id')
-            ->order_by('id', 'ASC')
-            ->get()->row();
+    public function set_not_applicable($exhibition_id) {
+        $this->db->update(self::TABLE_NAME, ['is_applicable' => EXHIBITION_NOT_APPLICABLE], ['id' => $exhibition_id]);
+
+        return $this->db->affected_rows() === 1;
     }
 
     public function get_by_id($exhibition_id) {
@@ -169,20 +159,6 @@ class Exhibition_model extends CI_Model {
      */
 
     /**
-     * 현재 진행중인 전시를 리턴하는 함수
-     * @param $place_id
-     */
-    public function get_now_exhibiting_by_place_id($place_id) {
-        $today = date('Y-m-d');
-        return $this->db
-            ->from(self::TABLE_NAME)
-            ->where('exhibitions.place_id', $place_id)
-            ->where('exhibitions.start_date <=', $today)
-            ->where('exhibitions.end_date >=', $today)
-            ->get()->result();
-    }
-
-    /**
      * 해당 작품이 전시중인지 리턴하는 함수
      * @param $artwork_id
      * @return bool
@@ -202,16 +178,37 @@ class Exhibition_model extends CI_Model {
 
     /**
      * 해당 장소에 전시중인 전시가 있는지 리턴하는 함수
+     * 전시 날짜에 오늘을 포함하고, 실제로 작품이 1개 이상 존재하는 경우를 전시중으로 체크
      * @param $place_id
      * @return bool
      */
     public function is_now_exhibiting_by_place_id($place_id) {
         $today = date('Y-m-d');
         $query = $this->db
+            ->select('exhibitions.*, COUNT(exhibition_artworks.id) AS real_artwork_count')
+            ->from(self::TABLE_NAME)
+            ->join(self::ARTWORK_TABLE_NAME, 'exhibition_artworks.exhibition_id = exhibitions.id', 'LEFT')
+            ->where('exhibitions.place_id', $place_id)
+            ->where('exhibitions.start_date <=', $today)
+            ->where('exhibitions.end_date >=', $today)
+            ->group_by('exhibitions.id')
+            ->get()->row();
+
+        return $query !== NULL && (int)$query->real_artwork_count > 0;
+    }
+
+    /**
+     * 해당 장소에 전시중인 전시가 있는지 리턴하는 함수
+     * @param $place_id
+     * @return bool
+     */
+    public function is_applicable_by_place_id($place_id) {
+        $today = date('Y-m-d');
+        $query = $this->db
             ->from(self::TABLE_NAME)
             ->where('place_id', $place_id)
-            ->where('start_date <=', $today)
-            ->where('end_date >=', $today)
+            ->where('start_date >', $today)
+            ->where('is_applicable = 1')
             ->get();
 
         return $query->num_rows() > 0;

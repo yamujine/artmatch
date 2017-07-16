@@ -8,16 +8,53 @@
   <script src="{{ 'dist/js/mypage.common.js' | static_url }}"></script>
   <script type="text/javascript">
     $(function () {
+      //////// 장소제공자 - 지원작가
+
+      // recount
+      count_selected_artworks();
+      count_total_artworks();
+
+      // 전시명 선택
       $('select[name="exhibition_id"]').change(function() {
-        $('form[name="exhibition_id_frm"]').submit();
+        $('#exhibition_id_frm').submit();
       });
-      // 작품 수락하기
+
+
+      $('button[name=select_all]').click(function() {
+        var user = $(this).data("user");
+
+        var div = $("div [data-user=" + user + "]");
+        $.each(div.find("input[type=checkbox]"), function(index, checkbox) {
+          $(checkbox).attr('checked', 'checked');
+        });
+      });
+
+      $("input:checkbox").click(function() {
+        // count selected checkbox
+        count_selected_artworks();
+      });
+
+      function count_selected_artworks() {
+        $("#countSelectedArtworks").text($("input:checkbox:checked").length);
+      }
+
+      function count_total_artworks() {
+        $("#countAllArtworks").text($("input:checkbox").length);
+      }
+
+      // 작가확정
       $('.selectBtn').click(function () {
-        var exhibitionId;
+
+        if (confirm("확정 후 취소 및 추가 지원이 불가능 합니다. 신중히 선택해 주시기 바랍니다.") === false) {
+          return false;
+        }
+
+        var exhibitionId = $("#exhibition_id_frm").find("select[name=exhibition_id]").val();
+
+        // selected artworks
         var artworkIds = [];
-        $('.checked:enabled').each(function () {
-          exhibitionId = $(this).data('exhibition-id');
-          artworkIds.push($(this).data('artwork-id'));
+        $('input:checkbox[type=checkbox]:checked').each(function () {
+          artworkIds.push($(this).val());
         });
 
         artworkIds = $.unique(artworkIds);
@@ -51,6 +88,7 @@
       });
     });
 
+    //////// 작가 - 지원한전시
     function show_and_hide(e) {
       var type;
       var tr = $(e).closest("tr");
@@ -99,6 +137,7 @@
 
     }
 
+
   </script>
 {% endblock %}
 
@@ -129,6 +168,9 @@
       <tbody>
     {% for exhibition in exhibitions %}
       <tr data-id="{{ exhibition.id }}">
+        <td><span class="title">{{ exhibition.title }}</span></td>
+        <td class="term">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
+
         {% set status_class = '' %}
         {% set status_text = '' %}
         {% if exhibition.status == EXHIBITION_END %}
@@ -192,9 +234,10 @@
               <img src="{{ artwork.image | thumb_url() }}" class="imgThumb pull-left" />
             {% endfor %}
             </div>
+          </div>
 
-          </td>
-        </tr>
+        </td>
+      </tr>
       {% endfor %}
           </tbody>
         </table>
@@ -210,14 +253,16 @@
           <select name="exhibition_id">
             <option value="">전시를 선택해주세요.</option>
             {% for exhibition in exhibitions %}
-              <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.id }}{{ exhibition.title }}</option>
+              <option value="{{ exhibition.id }}" {% if exhibition_id == exhibition.id %}selected="selected"{% endif %}>{{ exhibition.title }}</option>
             {% endfor %}
           </select>
-          <label>전시 기간</label>
-          <span class="date">2017.05.05 ~ 2017.05.06</span>
+          {% if exhibition_id %}
+            <label>전시 기간</label>
+            <span class="date">{{ selected_exhibition.start_date | date('Y.m.d') }} ~ {{ selected_exhibition.end_date | date('Y.m.d') }}</span>
+          {% endif %}
         </div>
         {% if exhibition_id %}
-          {% if selected_exhibition.applied_artworks | length > 0 %}
+          {% if selected_exhibition.is_applicable %}
             <div class="rightSection">
               <div class="exhibitionApplySelect">
                 <button class="cancelBtn">선택취소</button>
@@ -228,36 +273,72 @@
         {% endif %}
       </form>
 
-      <div class="divider" style="clear: both;"></div>
+      {% if exhibition_id %}
+        <div class="divider" style="clear: both;"></div>
 
-      <div class="applyMetadata">
-        <div class="totalApplyLabel">총 지원작품 <span class="selected">작품 <span class="number">8</span>개 선택</span></div>
-      </div>
+        <div class="applyMetadata">
+          <div class="totalApplyLabel pull-left">
+            총 지원작품 <span id="countAllArtworks"></span>
+            {% if selected_exhibition.is_applicable %}
+              <span class="selected">작품 <span class="number" id="countSelectedArtworks"></span>개 선택</span>
+            {% else %}
+              <span class="selected">총 전시할 작품 <span class="number" id="countSelectedArtworks"></span>개 확정</span>
+            {% endif %}
+          </div>
+          <div class="pull-right">
+            {% set emails = [] %}
+            {% for artist_artworks in artists %}
+              {% set emails = emails|merge([artist_artworks[0].email]) %}
+            {% endfor %}
+            {% set emails_str = emails|join(',') %}
+            <a href="mailto:{{ emails_str }}" class="emailToAll"><img src="{{ 'images/mail.png' | static_url }}" /> 메일쓰기</a>
+          </div>
+          <br>
+        </div>
 
-      <div class="applyArtists">
-        {% for artist_artworks in artists %}
-          <div class="artistItem">
-            <div class="metadata">
-              <div class="name">{{ artist_artworks[0].user_name }}</div>
-              <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
-              <div class="rightSection">
-                <button class="mailSendBtn"><img src="{{ 'images/mail.png' | static_url }}" /></button>
-                <button class="allSelectBtn active">이 작가 전체 작품 선택</button>
+        <div class="applyArtists">
+          {# 작가 loop #}
+          {% for artist_artworks in artists %}
+            <div class="artistItem">
+              <div class="metadata">
+                <div class="name">{{ artist_artworks[0].user_name }}</div>
+                <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
+                <div class="rightSection">
+                  <button class="mailSendBtn"><a href="mailto:{{ artist_artworks[0].email }}"><img src="{{ 'images/mail.png' | static_url }}" /></a></button>
+                  <button name="select_all" class="allSelectBtn active" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
+                </div>
+              </div>
+              <div class="artworks" data-user="{{ artist_artworks[0].user_name }}">
+                {# 작가의 작품 loop #}
+                {% for artwork in artist_artworks %}
+                  <div class="artworkItem">
+                    {% set status = artwork.apply_status %}
+                    {% if status == APPLY_STATUS_ACCEPTED %}
+                      {% set status_class = "confirmed" %}
+                      {% set status_text = "전시확정" %}
+                      {% set disabled = "disabled" %}
+                      {% set checked = "checked" %}
+                    {% else %}
+                      {% set status_class = "confirmed" %}
+                      {% set status_text = "전시확정" %}
+                      {% set disabled = "" %}
+                      {% set checked = "" %}
+                    {% endif %}
+
+                    <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}" {{ disabled }} {{ checked }}/>
+                    <label for="artwork_{{ artwork.id }}">
+                      <img src="{{ artwork.image | thumb_url }}" class="crop imageThumb artworkImage" data-id="{{ artwork.id }} "/>
+                    </label>
+                    <div class="box">✔</div>
+
+                  </div>
+                {% endfor %}
               </div>
             </div>
-            <div class="artworks">
-              {% for artwork in artist_artworks %}
-                <div class="artworkItem selected">
-                  <img src="{{ artwork.image | image_url }}" class="crop artworkImage" data-id="{{ artwork.id }}" />
-                </div>
-              {% endfor %}
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
-
   {% endif %}
 
 {% endblock %}

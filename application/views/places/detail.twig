@@ -114,25 +114,22 @@
           <ul class="status">
             {% if place.is_now_exhibiting %}
               <li class="exhibition display">현재 전시중</li>
-              {# TODO: 작품 모집중 상태 결정 필요
-            {% elseif place.status == PLACE_STATUS_NEED_ARTWORK %}
+              {% if exhibitions_now[0].is_free == EXHIBITION_FOR_FREE %}
+                <li class="fee">대관료 없음</li>
+              {% else %}
+                <li class="fee">대관료 있음</li>
+              {% endif %}
+              <li class="exhibition_available_count">
+                {{ exhibitions_now[0].start_date|date('Y.m.d') }} ~ {{ exhibitions_now[0].end_date|date('Y.m.d') }}까지
+                {% if place.is_now_exhibiting and exhibitions_now[0].real_artwork_count > 0 %}
+                  {{ exhibitions_now[0].real_artwork_count }}개의 작품 전시중
+                {% else %}
+                  {{ exhibitions_now[0].artwork_count }}개의 작품 전시 가능함
+                {% endif %}
+              </li>
+            {% elseif place.is_applciable %}
               <li class="exhibition">작품 모집중</li>
             {% endif %}
-            #}
-            {% endif %}
-            {% if place.exhibitions[0].is_free == EXHIBITION_FOR_FREE %}
-              <li class="fee">대관료 없음</li>
-            {% else %}
-              <li class="fee">대관료 있음</li>
-            {% endif %}
-            <li class="exhibition_available_count">
-              {{ place.exhibitions[0].start_date|date('Y.m.d') }} ~ {{ place.exhibitions[0].end_date|date('Y.m.d') }}까지
-              {% if place.is_now_exhibiting %}
-                {{ place.exhibitions[0].real_artwork_count }}개의 작품 전시중
-              {% else %}
-                {{ place.exhibitions[0].artwork_count }}개의 작품 전시 가능함
-              {% endif %}
-            </li>
           </ul>
         </div>
         <div class="commentary">
@@ -152,7 +149,7 @@
       <!-- == 전시목록 -->
       <div class="exhibitionArea">
         <div class="title">전시목록</div>{% if session.id == place.user_id %}<a class="addExhibitionBtn" href="/places/{{ place.id }}/exhibitions"><span>+ 추가</span></a>{% endif %}
-        {% if exhibitions|length == 0 %}
+        {% if exhibitions|length == 0 and session.id == place.user_id %}
           <span class="info"><i class="glyphicon glyphicon-info-sign"></i> 현재 이 장소의 전시정보가 없습니다. 정보를 등록해보세요.</span>
         {% else %}
         <hr class="divider"/>
