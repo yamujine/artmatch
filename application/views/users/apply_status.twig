@@ -263,7 +263,18 @@
         <div class="divider" style="clear: both;"></div>
 
         <div class="applyMetadata">
-          <div class="totalApplyLabel">총 지원작품 <span class="selected">작품 <span class="number" id="countSelectedArtworks"></span>개 선택</span></div>
+          <div class="totalApplyLabel pull-left">
+            총 지원작품 <span class="selected">작품 <span class="number" id="countSelectedArtworks"></span>개 선택</span>
+          </div>
+          <div class="pull-right">
+            {% set emails = [] %}
+            {% for artist_artworks in artists %}
+              {% set emails = emails|merge([artist_artworks[0].email]) %}
+            {% endfor %}
+            {% set emails_str = emails|join(',') %}
+            <a href="mailto:{{ emails_str }}" class="emailToAll"><img src="{{ 'images/mail.png' | static_url }}" /> 메일쓰기</a>
+          </div>
+          <br>
         </div>
 
         <div class="applyArtists">
