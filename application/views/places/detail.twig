@@ -176,9 +176,9 @@
           </div>
           <hr class="divider"/>
 
-          {% import 'macro/exhibitionNow.macro.twig' as exhibitionNow_macro %}
+          {% import 'macro/exhibition_now.macro.twig' as exhibition_now_macro %}
           {% for exhibition in exhibitions_now %}
-            {{ exhibitionNow_macro.render_exhibitionNow_item(exhibition, loop.index) }}
+            {{ exhibition_now_macro.render_exhibition_now_item(exhibition, loop.index) }}
           {% endfor %}
         </div>
       {% endif %}

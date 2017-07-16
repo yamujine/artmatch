@@ -163,7 +163,7 @@
   background-color: $white-fifteen;
   border: 1px solid $white-fourteen;
   margin: 21px auto 0 auto;
-  padding: 25px 28px 30px 31px;
+  padding: 27px;
 
   .titleWrap {
     .title {
@@ -249,6 +249,10 @@
         line-height: 1.5;
         color: $warm-grey-two;
         margin-bottom: 3px;
+      }
+
+      .detail {
+        padding-left: 14px;
       }
     }
 

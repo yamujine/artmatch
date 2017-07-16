@@ -1,10 +1,10 @@
-{% macro render_exhibitionNow_item(exhibition, index) %}
+{% macro render_exhibition_now_item(exhibition, index) %}
     <div class="exhibition" id="exhibition_{{ index }}">
       <div class="meta">
         <div class="title">{{ exhibition.title }}</div>
-        <div class="term">일정&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ exhibition.start_date | date("y.m.d") }} ~ {{ exhibition.end_date | date("y.m.d") }}</div>
-        <div class="artist">작가&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ exhibition.artists|slice(0,2)|join(', ') }} 외 {{ exhibition.artists|length - 2 }}명</div>
-        <div class="artwork">작품&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총 {{ exhibition.artworks|length }}개</div>
+        <div class="term">일정<span class="detail">{{ exhibition.start_date | date("Y.m.d") }} ~ {{ exhibition.end_date | date("Y.m.d") }}</span></div>
+        <div class="artist">작가<span class="detail">{{ exhibition.artists|slice(0,2)|join(', ') }} {% if exhibition.artists|length > 2 %}외 {{ exhibition.artists|length - 2 }}명{% endif %}</span></div>
+        <div class="artwork">작품<span class="detail">총 {{ exhibition.artworks|length }}개</span></div>
       </div>
 
       {% if exhibition.artworks|length > 0 %}
