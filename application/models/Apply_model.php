@@ -38,14 +38,6 @@ class Apply_model extends CI_Model {
             ->get()->result();
     }
 
-    public function get_by_user_id_and_apply_id($user_id, $apply_id) {
-        return $this->db
-            ->from(self::TABLE_NAME)
-            ->where('user_id', $user_id)
-            ->where('id', $apply_id)
-            ->get()->result();
-    }
-
     public function get_by_exhibition_id_and_user_id($exhibition_id, $user_id) {
         return $this->db
             ->select('apply.*')

@@ -17,20 +17,6 @@ class Place_model extends CI_Model {
     public $use_comment;
     public $tags;
 
-    public function is_exists($id) {
-        $result = $this->db
-            ->from(self::TABLE_NAME)
-            ->where('id', $id)
-            ->limit(1)
-            ->get();
-
-        if ($result->num_rows() > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
     public function gets($limit = null, $offset = null, $search = null, $user_id = null) {
         $query = $this->db
             ->select('places.*, users.user_name, count(user_place_picks.id) as pick_count')
@@ -151,16 +137,6 @@ class Place_model extends CI_Model {
         }
 
         return $places;
-    }
-
-    public function get_all_bare_by_user_id($user_id) {
-        return $this->db
-            ->select('places.*')
-            ->from(self::TABLE_NAME)
-            ->join('users', 'users.id = places.user_id')
-            ->where('places.user_id', $user_id)
-            ->order_by('places.id', 'DESC')
-            ->get()->result();
     }
 
     public function get_picked_by_user_id($user_id) {
