@@ -37,10 +37,8 @@
         // selected artworks
         var artworkIds = [];
         $('input:checkbox[type=checkbox]:checked').each(function () {
-//          artworkIds.push($(this).data('artwork-id'));
           artworkIds.push($(this).val());
         });
-        console.log(artworkIds);
 
         artworkIds = $.unique(artworkIds);
         if (artworkIds.length === 0) {
