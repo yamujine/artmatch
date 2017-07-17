@@ -167,7 +167,7 @@
             {# 전시 기간 #}
             <td class="term {{ disabled }}">{{ exhibition.start_date|date('Y.m.d') }} ~ {{ exhibition.end_date|date('Y.m.d') }}</td>
             {# 진행 상황 #}
-            <td class="status {{ status }} {{ disabled }}">{{ status_text }}</td>
+            <td class="status {{ status_class }} {{ disabled }}">{{ status_text }}</td>
 
             {% set apply_status = exhibition.applied_artworks[0].apply_status %}
             {% if apply_status == APPLY_STATUS_IN_REVIEW %}

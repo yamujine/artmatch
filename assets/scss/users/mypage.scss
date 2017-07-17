@@ -5,6 +5,7 @@
   width: 100%;
   padding: 0;
   margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
 
   // 프로필
   #patProfile {
@@ -758,7 +759,11 @@
 
       .appliedCount {
         font-size: 16px;
+        font-weight: 500;
+        line-height: 1.88;
+        letter-spacing: -0.3px;
         color: $black;
+        padding-left: 2px;
       }
 
       .exhibitions {
@@ -769,12 +774,12 @@
         thead {
           th {
             border-bottom: solid 1px $pinkish-grey-two;
-            height: 49px;
+            height: 48px;
             color: $greyish;
-            font-weight: 500;
+            font-weight: 400;
 
             &.title {
-              width: 317px;
+              width: 330px;
             }
             &.term {
               width: 190px;
@@ -797,17 +802,17 @@
             }
 
             td {
+              height: 63px;
               font-size: 16px;
-
+              font-weight: 300;
               position: relative;
-
               vertical-align: top;
-              padding-top: 15px;
-
+              padding-top: 19px;
               border-bottom: solid 1px #e8e8e8;
 
               &.disabled {
                 color: $greyish !important;
+                font-weight: 300;
               }
 
               .title {
@@ -839,8 +844,9 @@
 
                 .button {
                   position: relative;
-                  top: -2px;
+                  top: -1px;
                   width: 66px;
+                  margin-left: 6px;
                   height: 26px;
                   font-size: 12px;
                   text-decoration: none;
@@ -861,7 +867,7 @@
                 }
 
                 &.confirmed { // 전시확정
-                  color: $dull-orange;
+                  color: $dull-orange !important;
                 }
 
                 &:disabled { // 비활성 ex) 전시완료, 선택안됨
@@ -873,7 +879,7 @@
                 display: none;
                 position: absolute;
                 top: 60px;
-                left: -790px;
+                left: -794px;
 
                 font-size: 12px;
                 color: $brownish-grey;
@@ -885,6 +891,7 @@
                   width: 57px;
                   height: 57px;
                   border: solid 1px $black-10;
+                  margin-left: 3px;
                 }
 
               }
@@ -892,6 +899,11 @@
               &.artworks {
                 font-size: 14px;
                 color: $brownish-grey;
+
+                .arrow {
+                  vertical-align: top;
+                  margin: 6px 0 0 3px;
+                }
               }
 
             } // -- td
