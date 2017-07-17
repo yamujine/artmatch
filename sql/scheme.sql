@@ -235,9 +235,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `pickartyou`.`apply`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `pickartyou_dev`.`apply` ;
+DROP TABLE IF EXISTS `pickartyou`.`apply` ;
 
-CREATE TABLE IF NOT EXISTS `pickartyou_dev`.`apply` (
+CREATE TABLE IF NOT EXISTS `pickartyou`.`apply` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `exhibition_id` INT NOT NULL COMMENT '전시 PK',
   `artwork_id` INT NOT NULL COMMENT '작품 PK',
