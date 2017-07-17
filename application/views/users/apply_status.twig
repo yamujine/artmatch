@@ -19,13 +19,15 @@
         $('#exhibition_id_frm').submit();
       });
 
-
+      // 이 작가 작품 전체 선택
       $('button[name=select_all]').click(function() {
         var user = $(this).data("user");
-
         var div = $("div [data-user=" + user + "]");
+        $(this).toggleClass('active');
+
+        var checkStatus = $(this).hasClass('active');
         $.each(div.find("input[type=checkbox]"), function(index, checkbox) {
-          $(checkbox).attr('checked', 'checked');
+          $(checkbox).prop('checked', checkStatus);
         });
       });
 
@@ -44,13 +46,6 @@
 
       // 작가확정
       $('.selectBtn').click(function () {
-
-        if (confirm("확정 후 취소 및 추가 지원이 불가능 합니다. 신중히 선택해 주시기 바랍니다.") === false) {
-          return false;
-        }
-
-        var exhibitionId = $("#exhibition_id_frm").find("select[name=exhibition_id]").val();
-
         // selected artworks
         var artworkIds = [];
         $('input:checkbox[type=checkbox]:checked').each(function () {
@@ -62,6 +57,12 @@
           alert('선택된 작품이 없습니다.');
           return false;
         }
+
+        if (confirm("확정 후 취소 및 추가 지원이 불가능 합니다. 신중히 선택해 주시기 바랍니다.") === false) {
+          return false;
+        }
+
+        var exhibitionId = $("#exhibition_id_frm").find("select[name=exhibition_id]").val();
 
         $.ajax({
           method: 'POST',
@@ -93,7 +94,7 @@
       var type;
       var tr = $(e).closest("tr");
 
-      var is_show = tr.hasClass("showAppliedArtworks") ? true : false;
+      var is_show = tr.hasClass("showAppliedArtworks");
 
       var appliedArtworksDiv = tr.find(".appliedArtworks");
 
@@ -299,7 +300,7 @@
                 <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
                 <div class="rightSection">
                   <button class="mailSendBtn"><a href="mailto:{{ artist_artworks[0].email }}"><img src="{{ 'images/mail.png' | static_url }}" /></a></button>
-                  <button name="select_all" class="allSelectBtn active" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
+                  <button name="select_all" class="allSelectBtn" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
                 </div>
               </div>
               <div class="artworks" data-user="{{ artist_artworks[0].user_name }}">
