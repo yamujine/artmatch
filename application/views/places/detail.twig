@@ -147,20 +147,22 @@
       <!-- //== 대표의 한마디 -->
 
       <!-- == 전시목록 -->
-      <div class="exhibitionArea">
-        <div class="title">전시목록</div>{% if session.id == place.user_id %}<a class="addExhibitionBtn" href="/places/{{ place.id }}/exhibitions"><span>+ 추가</span></a>{% endif %}
-        {% if exhibitions|length == 0 and session.id == place.user_id %}
-          <span class="info"><i class="glyphicon glyphicon-info-sign"></i> 현재 이 장소의 전시정보가 없습니다. 정보를 등록해보세요.</span>
-        {% else %}
-        <hr class="divider"/>
-        <ul class="exhibitions">
-          {% import 'macro/exhibition.macro.twig' as exhibition_macro %}
-          {% for exhibition in exhibitions %}
-            {{ exhibition_macro.render_exhibition_item(exhibition) }}
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </div>
+      {% if exhibitions|length != 0 or session.id == place.user_id %}
+        <div class="exhibitionArea">
+          <div class="title">전시목록</div>{% if session.id == place.user_id %}<a class="addExhibitionBtn" href="/places/{{ place.id }}/exhibitions"><span>+ 추가</span></a>{% endif %}
+          {% if exhibitions|length == 0 %}
+            <span class="info"><i class="glyphicon glyphicon-info-sign"></i> 현재 이 장소의 전시정보가 없습니다. 정보를 등록해보세요.</span>
+          {% else %}
+            <hr class="divider"/>
+            <ul class="exhibitions">
+              {% import 'macro/exhibition.macro.twig' as exhibition_macro %}
+              {% for exhibition in exhibitions %}
+                {{ exhibition_macro.render_exhibition_item(exhibition) }}
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endif %}
       <!-- // == 전시 목록 -->
 
       <!-- == 지금 전시중이에요! -->
