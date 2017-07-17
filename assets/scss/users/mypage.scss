@@ -958,12 +958,18 @@
               color: $black;
               background: $white-two;
               border: 1px solid $greyish-six;
+              letter-spacing: -0.3px;
+              font-size: 14px;
+              font-weight: 300;
             }
 
             &.selectBtn {
               color: $white-two;
               background: $greyish-brown;
               border: 1px solid $greyish-brown;
+              letter-spacing: -0.3px;
+              font-size: 14px;
+              font-weight: 300;
             }
           }
         }
@@ -977,7 +983,7 @@
 
     .applyMetadata {
       width: 100%;
-      margin-top: 6px;
+      margin-top: 12px;
 
       .emailToAll {
         color: $warm-grey-two;
@@ -1007,16 +1013,16 @@
     }
 
     .applyArtists {
-      margin-top: 14px;
+      margin-top: 20px;
       width: 100%;
 
       .artistItem {
         width: 100%;
         min-height: 270px;
         background: $white-two;
-        padding: 17px;
+        padding: 17px 29px;
         border: 1px solid $white-eight;
-        margin-top: 20px;
+        margin-top: 15px;
 
         .metadata {
           position: relative;
@@ -1063,7 +1069,6 @@
             color: $black;
           }
           .reason {
-            width: 500px;
             margin-top: 4px;
             font-size: 12px;
             line-height: 1.5;
@@ -1074,7 +1079,6 @@
 
         .artworks {
           list-style: none;
-          margin-left: 6px;
           margin-top: 17px;
 
           .artworkItem {
@@ -1083,7 +1087,7 @@
             width: 138px;
             height: 138px;
             margin-top: 8px;
-            margin-right: 8px;
+            margin-right: 5px;
             border: none;
 
             label {

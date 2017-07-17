@@ -93,11 +93,16 @@ class Users extends MY_Controller {
 
             // 작품들 조회
             $artists = [];
+            $accepted_artwork_count = $total_artwork_count = 0;
             if ($selected_exhibition !== NULL) {
                 // 해당 전시 ID의 지원 작품 가져와 작가 별로 분리
                 $applied_artworks = $this->apply_model->get_users_with_artworks_by_exhibition_id($selected_exhibition->id);
+                $total_artwork_count += count($applied_artworks);
                 foreach ($applied_artworks as $artwork) {
                     $artists[$artwork->user_id][] = $artwork;
+                    if ($artwork->apply_status === APPLY_STATUS_ACCEPTED) {
+                        $accepted_artwork_count++;
+                    }
                 }
             }
 
@@ -105,7 +110,9 @@ class Users extends MY_Controller {
                 'exhibition_id' => $exhibition_id,
                 'exhibitions' => $exhibitions,
                 'selected_exhibition' => $selected_exhibition,
-                'artists' => $artists
+                'artists' => $artists,
+                'accepted_artwork_count' => $accepted_artwork_count,
+                'total_artwork_count' => $total_artwork_count
             ]);
         }
 

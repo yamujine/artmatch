@@ -9,11 +9,6 @@
   <script type="text/javascript">
     $(function () {
       //////// 장소제공자 - 지원작가
-
-      // recount
-      count_selected_artworks();
-      count_total_artworks();
-
       // 전시명 선택
       $('select[name="exhibition_id"]').change(function() {
         $('#exhibition_id_frm').submit();
@@ -31,17 +26,13 @@
         });
       });
 
-      $("input:checkbox").click(function() {
-        // count selected checkbox
-        count_selected_artworks();
+      // 작품 선택
+      $("input[type=checkbox]").click(function() {
+          countSelectedArtworks();
       });
 
-      function count_selected_artworks() {
+      function countSelectedArtworks() {
         $("#countSelectedArtworks").text($("input:checkbox:checked").length);
-      }
-
-      function count_total_artworks() {
-        $("#countAllArtworks").text($("input:checkbox").length);
       }
 
       // 작가확정
@@ -58,7 +49,7 @@
           return false;
         }
 
-        if (confirm("확정 후 취소 및 추가 지원이 불가능 합니다. 신중히 선택해 주시기 바랍니다.") === false) {
+        if (confirm("선택된 " + artworkIds.length + "개의 작품을 확정하시겠습니까?\n확정 후 취소 및 추가 지원이 불가능 합니다. 신중히 선택해 주시기 바랍니다.") === false) {
           return false;
         }
 
@@ -78,15 +69,6 @@
 
         return false;
       });
-
-      $('.selectItemBtn').click(function () {
-        $(this).toggleClass('checked');
-
-        var selectedCnt = $('.checked').length;
-        $('.selectedCnt').text(selectedCnt);
-
-        return false;
-      });
     });
 
     //////// 작가 - 지원한전시
@@ -94,13 +76,13 @@
       var type;
       var tr = $(e).closest("tr");
 
-      var is_show = tr.hasClass("showAppliedArtworks");
+      var isShow = tr.hasClass("showAppliedArtworks");
 
       var appliedArtworksDiv = tr.find(".appliedArtworks");
 
       var arrowImagePath = "";
 
-      if (is_show) {
+      if (isShow) {
         type = "보기";
         appliedArtworksDiv.hide();
         tr.removeClass("showAppliedArtworks");
@@ -118,27 +100,23 @@
 
     // 지원 취소
     function cancel_apply(e) {
-
       if (confirm("지원을 취소하시겠습니까?") === false) {
         return false;
       }
 
-      var exhibition_id = $(e).data("id");
+      var exhibitionId = $(e).data("id");
 
       $.ajax({
         method: 'POST',
         url: '/api/exhibition/cancel_apply',
         data: {
-          exhibition_id: exhibition_id,
+          exhibition_id: exhibitionId
         }
       }).done(function (data) {
         alert(data.body.message);
         location.reload(true);
       });
-
     }
-
-
   </script>
 {% endblock %}
 
@@ -260,8 +238,8 @@
           {% if selected_exhibition.is_applicable %}
             <div class="rightSection">
               <div class="exhibitionApplySelect">
-                <button class="cancelBtn">선택취소</button>
-                <button class="selectBtn">작가확정</button>
+                <button class="cancelBtn">선택 취소</button>
+                <button class="selectBtn">작가 확정</button>
               </div>
             </div>
           {% endif %}
@@ -273,11 +251,11 @@
 
         <div class="applyMetadata">
           <div class="totalApplyLabel pull-left">
-            총 지원작품 <span id="countAllArtworks"></span>
+            총 지원작품 <span id="countAllArtworks">{{ total_artwork_count }}개</span>
             {% if selected_exhibition.is_applicable %}
-              <span class="selected">작품 <span class="number" id="countSelectedArtworks"></span>개 선택</span>
+              <span class="selected">작품 <span class="number" id="countSelectedArtworks">0</span>개 선택</span>
             {% else %}
-              <span class="selected">총 전시할 작품 <span class="number" id="countSelectedArtworks"></span>개 확정</span>
+              <span class="selected">총 전시할 작품 <span class="number">{{ accepted_artwork_count }}</span>개 확정</span>
             {% endif %}
           </div>
           <div class="pull-right">
