@@ -154,7 +154,7 @@
             <span class="info"><i class="glyphicon glyphicon-info-sign"></i> 현재 이 장소의 전시정보가 없습니다. 정보를 등록해보세요.</span>
           {% else %}
             <hr class="divider"/>
-            <ul class="exhibitions">
+            <ul class="exhibitionItems">
               {% import 'macro/exhibition.macro.twig' as exhibition_macro %}
               {% for exhibition in exhibitions %}
                 {{ exhibition_macro.render_exhibition_item(exhibition) }}
@@ -218,7 +218,7 @@
       {% endif %}
       {% if exhibition_artwork_count > 0 %}
         <!-- == 전시 이력 -->
-        <div class="exhibitionArea">
+        <div class="exhibitionHistoryArea">
           <div class="titleWrap">
             <div class="title">전시했던 작가</div>
             {% if exhibition_artwork_count|length > 4 %}
