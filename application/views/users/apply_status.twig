@@ -317,6 +317,12 @@
                       <img src="{{ artwork.image | thumb_url }}" class="crop imageThumb artworkImage" data-id="{{ artwork.id }} "/>
                     </label>
                     <div class="box">✔</div>
+                    {# TODO: 채택되지 않은 상태인 경우 위 부분이 아닌 아래의 부분을 출력시키도록 #}
+                    {#<div class="imgThumb">#}
+                      {#<div class="dimm"></div>#}
+                      {#<div class="label">채택되지 않음</div>#}
+                      {#<img src="{{ artwork.image | thumb_url }}" />#}
+                    {#</div>#}
 
                   </div>
                 {% endfor %}

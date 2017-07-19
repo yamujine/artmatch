@@ -1205,7 +1205,37 @@
             height: 138px;
             margin-top: 8px;
             margin-right: 5px;
-            border: none;
+            border: 1px solid $black-10;
+
+            // dimm 처리된 아이템이 필요한 경우 스타일
+            .imgThumb {
+              width: 138px;
+              height: 138px;
+              position: relative;
+
+              .dimm {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                left: 0;
+                top: 0;
+                opacity: 0.6;
+                background: $black-five;
+                z-index: 3;
+              }
+              .label {
+                z-index: 4;
+                position: absolute;
+                top: 50%;
+                font-size: 12px;
+                font-weight: 300;
+                font-family: 'Noto Sans KR', sans-serif;
+                width: 100%;
+                text-align: center;
+                margin-top: -10px;
+                color: $white-two;
+              }
+            }
 
             label {
               cursor: pointer;
