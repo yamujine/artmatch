@@ -1044,9 +1044,10 @@
             right: 0;
             top: 0;
 
-            button {
+            .mailSendBtn, .allSelectBtn {
               display: inline-block;
               float: left;
+              outline: none;
             }
 
             .mailSendBtn {
@@ -1056,7 +1057,9 @@
               border: solid 1px $brownish-grey-40;
               background: $white-two;
               margin-right: 10px;
+              text-align: center;
             }
+
             .allSelectBtn {
               width: 144px;
               height: 26px;
@@ -1067,6 +1070,12 @@
               background-color: $white-two;
 
               &.active {
+                background-color: $dark-sky-blue;
+                border: none;
+                color: $white-two;
+              }
+
+              &:hover {
                 background-color: $dark-sky-blue;
                 border: none;
                 color: $white-two;

@@ -277,7 +277,9 @@
                 <div class="name">{{ artist_artworks[0].user_name }}</div>
                 <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
                 <div class="rightSection">
-                  <button class="mailSendBtn"><a href="mailto:{{ artist_artworks[0].email }}"><img src="{{ 'images/mail.png' | static_url }}" /></a></button>
+                  <a href="mailto:{{ artist_artworks[0].email }}" class="mailSendBtn">
+                    <img src="{{ 'images/mail.png' | static_url }}" />
+                  </a>
                   <button name="select_all" class="allSelectBtn" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
                 </div>
               </div>
