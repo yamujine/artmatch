@@ -264,7 +264,19 @@
               {% set emails = emails|merge([artist_artworks[0].email]) %}
             {% endfor %}
             {% set emails_str = emails|join(',') %}
-            <a href="mailto:{{ emails_str }}" class="emailToAll"><img src="{{ 'images/mail.png' | static_url }}" /> 메일쓰기</a>
+            <a href="mailto:{{ emails_str }}" class="emailToAll">
+              <img src="{{ 'images/mail.png' | static_url }}" /> 메일쓰기
+            </a>
+            <div class="buttonDivider"></div>
+            <div class="dropdown">
+              <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" {% if not selected_exhibition.is_applicable %}disabled{% endif %}>
+                선택 <span class="icon"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a class="selectAllBtn">전체선택</a></li>
+                <li><a class="resetBtn">선택 초기화</a></li>
+              </ul>
+            </div>
           </div>
           <br>
         </div>
