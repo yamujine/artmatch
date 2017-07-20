@@ -299,38 +299,28 @@
                   <a href="mailto:{{ artist_artworks[0].email }}" class="mailSendBtn">
                     <img src="{{ 'images/mail.png' | static_url }}" />
                   </a>
-                  <button name="select_all" class="allSelectBtn" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
+                  {% if selected_exhibition.is_applicable %}
+                    <button name="select_all" class="allSelectBtn" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
+                  {% endif %}
                 </div>
               </div>
               <div class="artworks" data-user="{{ artist_artworks[0].user_name }}">
                 {# 작가의 작품 loop #}
                 {% for artwork in artist_artworks %}
                   <div class="artworkItem">
-                    {% set status = artwork.apply_status %}
-                    {% if status == APPLY_STATUS_ACCEPTED %}
-                      {% set status_class = "confirmed" %}
-                      {% set status_text = "전시확정" %}
-                      {% set disabled = "disabled" %}
-                      {% set checked = "checked" %}
-                    {% else %}
-                      {% set status_class = "confirmed" %}
-                      {% set status_text = "전시확정" %}
-                      {% set disabled = "" %}
-                      {% set checked = "" %}
+                    {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}
+                      <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}" {{ disabled }} {{ checked }}/>
+                      <label for="artwork_{{ artwork.id }}">
+                        <img src="{{ artwork.image | thumb_url }}" class="crop imageThumb artworkImage" data-id="{{ artwork.id }} "/>
+                      </label>
+                      <div class="box">✔</div>
+                    {% elseif artwork.apply_status == APPLY_STATUS_REJECTED %}
+                      <div class="imgThumb">
+                        <div class="dimm"></div>
+                        <div class="label">채택되지 않음</div>
+                        <img src="{{ artwork.image | thumb_url }}" />
+                      </div>
                     {% endif %}
-
-                    <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}" {{ disabled }} {{ checked }}/>
-                    <label for="artwork_{{ artwork.id }}">
-                      <img src="{{ artwork.image | thumb_url }}" class="crop imageThumb artworkImage" data-id="{{ artwork.id }} "/>
-                    </label>
-                    <div class="box">✔</div>
-                    {# TODO: 채택되지 않은 상태인 경우 위 부분이 아닌 아래의 부분을 출력시키도록 #}
-                    {#<div class="imgThumb">#}
-                      {#<div class="dimm"></div>#}
-                      {#<div class="label">채택되지 않음</div>#}
-                      {#<img src="{{ artwork.image | thumb_url }}" />#}
-                    {#</div>#}
-
                   </div>
                 {% endfor %}
               </div>
