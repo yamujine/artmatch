@@ -24,10 +24,17 @@
         $.each(div.find("input[type=checkbox]"), function(index, checkbox) {
           $(checkbox).prop('checked', checkStatus);
         });
+        countSelectedArtworks();
       });
 
       // 작품 선택
       $("input[type=checkbox]").click(function() {
+          var parent = $(this).parent().parent().parent();
+          var selectAllBtn = parent.find('.allSelectBtn');
+          var selectedCnt = parent.find('input:checkbox:checked').length;
+          var artworkCnt = parent.find('.artworkItem').length;
+
+          selectAllBtn.toggleClass('active', (selectedCnt === artworkCnt));
           countSelectedArtworks();
       });
 
