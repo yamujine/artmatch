@@ -320,7 +320,8 @@
                 {% for artwork in artist_artworks %}
                   <div class="artworkItem">
                     {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}
-                      <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}" {{ disabled }} {{ checked }}/>
+                      <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"
+                        {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %} checked="checked" disabled="disabled" {% endif %}/>
                       <label for="artwork_{{ artwork.id }}">
                         <img src="{{ artwork.image | thumb_url }}" class="crop imageThumb artworkImage" data-id="{{ artwork.id }} "/>
                       </label>
