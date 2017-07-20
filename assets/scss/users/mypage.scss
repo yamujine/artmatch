@@ -1272,6 +1272,10 @@
               border: 0;
             }
 
+            input[type=checkbox]:disabled + label {
+              cursor: default !important;
+            }
+
             input[type=checkbox]:checked + label {
               display: inline-block;
               position: relative;
