@@ -42,6 +42,14 @@
         $("#countSelectedArtworks").text($("input:checkbox:checked").length);
       }
 
+      // 선택취소
+      $('.cancelBtn').click(function (e) {
+        checkAllArtworks(false);
+
+        e.preventDefault();
+        return false;
+      });
+
       // 작가확정
       $('.selectBtn').click(function () {
         // selected artworks
@@ -78,15 +86,20 @@
       });
 
       // 전체 선택, 전체 해제
-      $('.selectAllBtn, .resetBtn').click(function(){
+      $('.selectAllBtn, .resetBtn').click(function() {
         var checkStatus = $(this).hasClass('selectAllBtn');
+        checkAllArtworks(checkStatus);
+      });
+
+      // 작품 전체 선택/전체 해제용 함수
+      function checkAllArtworks(checkStatus) {
         $.each($('input[type=checkbox]'), function(index, checkbox) {
           $(checkbox).prop('checked', checkStatus);
         });
 
         $('button[name=select_all]').toggleClass('active', checkStatus);
         countSelectedArtworks();
-      });
+      }
     });
 
     //////// 작가 - 지원한전시
