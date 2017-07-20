@@ -76,6 +76,17 @@
 
         return false;
       });
+
+      // 전체 선택, 전체 해제
+      $('.selectAllBtn, .resetBtn').click(function(){
+        var checkStatus = $(this).hasClass('selectAllBtn');
+        $.each($('input[type=checkbox]'), function(index, checkbox) {
+          $(checkbox).prop('checked', checkStatus);
+        });
+
+        $('button[name=select_all]').toggleClass('active', checkStatus);
+        countSelectedArtworks();
+      });
     });
 
     //////// 작가 - 지원한전시
