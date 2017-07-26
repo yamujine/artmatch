@@ -36,8 +36,15 @@
         return false;
       });
 
+      var startDateDatepickerOption = {
+          onSelect: function () {
+              // 종료 datepicker의 mindate를 startdate 기준으로 자동 변경
+              $("input[name=exhibition_end_date]").datepicker('option', 'minDate', $(this).datepicker("getDate"));
+          }
+      };
+
       // datepicker
-      $("input[name=exhibition_start_date]").datepicker();
+      $("input[name=exhibition_start_date]").datepicker(startDateDatepickerOption);
       $("input[name=exhibition_end_date]").datepicker();
 
       // 전시 삭제
@@ -118,7 +125,7 @@
 
         constructValidation(clone);
 
-        $(document).find("input[name=exhibition_start_date]").removeClass('hasDatepicker').datepicker();
+        $(document).find("input[name=exhibition_start_date]").removeClass('hasDatepicker').datepicker(startDateDatepickerOption);
         $(document).find("input[name=exhibition_end_date]").removeClass('hasDatepicker').datepicker();
 
         return false;
