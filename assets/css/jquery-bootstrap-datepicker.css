@@ -9,6 +9,7 @@
     width: 240px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px !important;
+    z-index: 100 !important;
 }
 .ui-datepicker a,
 .ui-datepicker a:hover {
