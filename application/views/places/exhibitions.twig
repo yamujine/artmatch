@@ -47,8 +47,8 @@
       $("input[name=exhibition_start_date]").datepicker(startDateDatepickerOption);
       $("input[name=exhibition_end_date]").datepicker();
 
-      // 전시 삭제
-      $('.addExhibitionForm .deleteBtn').click(function () {
+      // (새로 추가하는 전시) 취소 버튼
+      $('.addExhibitionForm .deleteBtn').on("click", function () {
         var exhibitionForm = $(this).closest('.exhibitionForm');
 
         initializeExhibitionForm(exhibitionForm);
@@ -273,17 +273,21 @@
 {% endblock %}
 
 {% block buttons %}
+  <ul class="nav navbar-nav navbar-right">
+    <li class="patGnbSubmit">
+      <a class="noDivider" href="/places/{{ place.id }}">완료</a>
+    </li>
+  </ul>
 {% endblock %}
 
 {% block contents %}
-
   <div class="exhibitionMeta fullSize">
     <div class="dimm"></div>
     <div class="preview"></div>
     <div class="container">
       <div class="meta">
         <div class="title"><a href="/places/{{ place.id }}">{{ place.name }}</a></div>
-        <div class="additionalInfo">총 등록된 전시 {{ exhibitions | length }}개 | 종료된 전시 {{ closed_exhibition_count }}개</div>
+        <div class="additionalInfo">총 등록된 전시 {{ exhibitions | length }}개 <span class="bar">|</span> 종료된 전시 {{ closed_exhibition_count }}개</div>
       </div>
     </div>
   </div>
@@ -318,9 +322,11 @@
                 <div class="column_name">전시일정</div>
                 <div class="field">
                   <input type="text" class="exhibition_start_date" name="exhibition_start_date" placeholder="{{ now|date('Ymd') }}"
+                         readonly="readonly"
                          value="{% if exhibition.start_date is not null %}{{ exhibition.start_date|date('Ymd') }}{% endif %}"
                          title="전시 시작 일정"> 부터
                   <input type="text" class="exhibition_end_date" name="exhibition_end_date" placeholder="{{ now|date('Ymd') }}"
+                         readonly="readonly"
                          value="{% if exhibition.end_date is not null %}{{ exhibition.end_date|date('Ymd') }}{% endif %}"
                          title="전시 종료 일정"> 까지
                 </div>
@@ -337,23 +343,23 @@
             <!-- //== 왼쪽 패널 종료 -->
             <!-- == 오른쪽 패널 -->
             <div class="rightPane">
-              <!-- == 전시 상태 옵션 시작 -->
-              <div class="fields clear">
-                <div class="column_name">전시</div>
+              <!-- == 모집 상태 옵션 시작 -->
+              <div class="fields clear exhibitionStatus">
+                <div class="column_name">모집상태</div>
                 <div class="radio">
                   <input id="statusNeed" class="magic-radio" type="radio" name="status"
                          value="{{ EXHIBITION_APPLICABLE }}"
                          {% if exhibition.is_applicable is not defined or exhibition.is_applicable == EXHIBITION_APPLICABLE %}checked="checked"{% endif %}/>
-                  <label for="statusNeed">작품모집중</label>
+                  <label for="statusNeed">작품 모집중</label>
                   <input id="statusNotNeed" class="magic-radio" type="radio" name="status"
                          value="{{ EXHIBITION_NOT_APPLICABLE }}"
                          {% if exhibition.is_applicable is defined and exhibition.is_applicable == EXHIBITION_NOT_APPLICABLE %}checked="checked"{% endif %}/>
-                  <label for="statusNotNeed">모집완료</label>
+                  <label for="statusNotNeed">모집 완료</label>
                 </div>
               </div>
               <!-- //== 전시 상태 옵션 종료 -->
               <!-- == 전시비 옵션 시작 -->
-              <div class="fields clear">
+              <div class="fields clear exhibitionBudget">
                 <div class="column_name">전시비</div>
                 <div class="radio">
                   <input id="isFree" class="magic-radio" type="radio" name="exhibition_is_free"
@@ -372,36 +378,69 @@
           </div>
         </form>
 
-        {% for exhibition in exhibitions %}
-          <div class="exhibition" data-exhibition-value="{{ exhibition|json_encode }}"
-               data-exhibition-start="{{  exhibition.start_date|date('Ymd') }}" data-exhibition-end="{{  exhibition.end_date|date('Ymd') }}">
-            <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
-            <span class="title">{{ exhibition.title }}</span>
-            {% if exhibition.status == EXHIBITION_NOW_EXHIBITING %}
-              <span class="status now">전시중</span>
-            {% elseif exhibition.status == EXHIBITION_END %}
-              <span class="status ended">종료된 전시</span>
-            {% endif %}
-            {% if exhibition.status != EXHIBITION_END %}
-              <span class="pull-right">
-                <a href="#" class="modifyBtn">수정</a>
-              </span>
-            {% endif %}
-            <hr class="divider">
-            <div class="meta">
-              <div class="fields clear">
-                <span class="title_name">전시일정</span>
-                <div class="field noInput">
-                  {{ exhibition.start_date | date('Y.m.d') }} ~ {{ exhibition.end_date | date('Y.m.d') }}
+        {% if exhibitons.length > 0 %}
+          {% for exhibition in exhibitions %}
+            <div class="exhibition" data-exhibition-value="{{ exhibition|json_encode }}"
+                 data-exhibition-start="{{  exhibition.start_date|date('Ymd') }}" data-exhibition-end="{{  exhibition.end_date|date('Ymd') }}">
+              <input type="hidden" id="exhibitionId" value="{{ exhibition.id }}">
+              <span class="title">{{ exhibition.title }}</span>
+              {% if exhibition.status == EXHIBITION_NOW_EXHIBITING %}
+                <span class="status now">전시중</span>
+              {% elseif exhibition.status == EXHIBITION_END %}
+                <span class="status ended">종료된 전시</span>
+              {% endif %}
+              {% if exhibition.status != EXHIBITION_END %}
+                <span class="pull-right">
+                  <a href="#" class="modifyBtn">수정</a>
+                </span>
+              {% endif %}
+              <hr class="divider">
+              <div class="meta">
+                <div class="leftPane">
+                  <div class="fields clear">
+                    <span class="title_name">전시일정</span>
+                    <div class="field noInput">
+                      {{ exhibition.start_date | date('Y.m.d') }} ~ {{ exhibition.end_date | date('Y.m.d') }}
+                    </div>
+                  </div>
+                  <div class="fields clear">
+                    <span class="title_name">작품수</span>
+                    <div class="field noInput">{{ exhibition.artwork_count }}점</div>
+                  </div>
+                </div>
+                <div class="rightPane">
+                  <div class="fields clear">
+                    <span class="title_name">모집상태</span>
+                    <div class="field noInput">
+                      {% if exhibition.is_applicable == EXHIBITION_APPLICABLE %}
+                          작품 모집중
+                      {% elseif exhibition.is_applicable == EXHIBITION_NOT_APPLICABLE %}
+                          모집 완료
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="fields clear">
+                    <span class="title_name">전시비</span>
+                    <div class="field noInput">
+                      {% if exhibition.is_free == EXHIBITION_FOR_FREE %}
+                        지급 안함
+                      {% elseif exhibition.is_free == EXHIBITION_PAID %}
+                        지급
+                      {% endif %}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="fields clear">
-                <span class="title_name">작품수</span>
-                <div class="field noInput">{{ exhibition.artwork_count }}</div>
-              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="itemEmpty">
+            <div class="empty">
+              등록된 전시가 없습니다.<br>
+              새로 전시를 등록해보세요!
             </div>
           </div>
-        {% endfor %}
+        {% endif %}
       </div>
 
 
