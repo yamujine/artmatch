@@ -85,6 +85,8 @@
         clone.removeClass('addExhibitionForm');
         clone.addClass('editExhibitionForm');
 
+        clone.find('.deleteBtn').text('삭제');
+
         clone.find('input[name=exhibitionId]').val(exhibitionData.id);
         clone.find('input[name=exhibition_start_date]').val(exhibitionDiv.data('exhibition-start')).attr('id', 'exhibition_start_date_' + exhibitionData.id);
         clone.find('input[name=exhibition_end_date]').val(exhibitionDiv.data('exhibition-end')).attr('id', 'exhibition_end_date_' + exhibitionData.id);
@@ -122,7 +124,12 @@
         return false;
       });
 
+      // (기존 전시) 삭제 버튼
       $(document).on('click', '.editExhibitionForm .deleteBtn', function () {
+        if (!confirm("전시를 정말로 삭제하시겠습니까?")) {
+            return false;
+        }
+
         var form = $(this).closest('.exhibitionForm');
         deleteExhibition(form);
 
@@ -293,7 +300,7 @@
             <input type="text" name="exhibition_title" class="input" placeholder="전시명을 입력해주세요.">
           </span>
           <span class="pull-right">
-            <a href="#" class="deleteBtn">삭제</a>
+            <a href="#" class="deleteBtn">취소</a>
             <a href="#" class="confirmBtn">완료</a>
           </span>
           <hr class="divider">
