@@ -24,16 +24,31 @@
         $.each(div.find("input[type=checkbox]"), function(index, checkbox) {
           $(checkbox).prop('checked', checkStatus);
         });
+        countSelectedArtworks();
       });
 
       // 작품 선택
       $("input[type=checkbox]").click(function() {
+          var parent = $(this).parent().parent().parent();
+          var selectAllBtn = parent.find('.allSelectBtn');
+          var selectedCnt = parent.find('input:checkbox:checked').length;
+          var artworkCnt = parent.find('.artworkItem').length;
+
+          selectAllBtn.toggleClass('active', (selectedCnt === artworkCnt));
           countSelectedArtworks();
       });
 
       function countSelectedArtworks() {
         $("#countSelectedArtworks").text($("input:checkbox:checked").length);
       }
+
+      // 선택취소
+      $('.cancelBtn').click(function (e) {
+        checkAllArtworks(false);
+
+        e.preventDefault();
+        return false;
+      });
 
       // 작가확정
       $('.selectBtn').click(function () {
@@ -69,6 +84,22 @@
 
         return false;
       });
+
+      // 전체 선택, 전체 해제
+      $('.selectAllBtn, .resetBtn').click(function() {
+        var checkStatus = $(this).hasClass('selectAllBtn');
+        checkAllArtworks(checkStatus);
+      });
+
+      // 작품 전체 선택/전체 해제용 함수
+      function checkAllArtworks(checkStatus) {
+        $.each($('input[type=checkbox]'), function(index, checkbox) {
+          $(checkbox).prop('checked', checkStatus);
+        });
+
+        $('button[name=select_all]').toggleClass('active', checkStatus);
+        countSelectedArtworks();
+      }
     });
 
     //////// 작가 - 지원한전시
@@ -264,7 +295,19 @@
               {% set emails = emails|merge([artist_artworks[0].email]) %}
             {% endfor %}
             {% set emails_str = emails|join(',') %}
-            <a href="mailto:{{ emails_str }}" class="emailToAll"><img src="{{ 'images/mail.png' | static_url }}" /> 메일쓰기</a>
+            <a href="mailto:{{ emails_str }}" class="emailToAll">
+              <img src="{{ 'images/mail.png' | static_url }}" /> 메일쓰기
+            </a>
+            <div class="buttonDivider"></div>
+            <div class="dropdown">
+              <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" {% if not selected_exhibition.is_applicable %}disabled{% endif %}>
+                선택 <span class="icon"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a class="selectAllBtn">전체선택</a></li>
+                <li><a class="resetBtn">선택 초기화</a></li>
+              </ul>
+            </div>
           </div>
           <br>
         </div>
@@ -277,33 +320,32 @@
                 <div class="name">{{ artist_artworks[0].user_name }}</div>
                 <div class="reason">{{ artist_artworks[0].apply_reason }}</div>
                 <div class="rightSection">
-                  <button class="mailSendBtn"><a href="mailto:{{ artist_artworks[0].email }}"><img src="{{ 'images/mail.png' | static_url }}" /></a></button>
-                  <button name="select_all" class="allSelectBtn" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
+                  <a href="mailto:{{ artist_artworks[0].email }}" class="mailSendBtn">
+                    <img src="{{ 'images/mail.png' | static_url }}" />
+                  </a>
+                  {% if selected_exhibition.is_applicable %}
+                    <button name="select_all" class="allSelectBtn" data-user="{{ artist_artworks[0].user_name }}">이 작가 전체 작품 선택</button>
+                  {% endif %}
                 </div>
               </div>
               <div class="artworks" data-user="{{ artist_artworks[0].user_name }}">
                 {# 작가의 작품 loop #}
                 {% for artwork in artist_artworks %}
                   <div class="artworkItem">
-                    {% set status = artwork.apply_status %}
-                    {% if status == APPLY_STATUS_ACCEPTED %}
-                      {% set status_class = "confirmed" %}
-                      {% set status_text = "전시확정" %}
-                      {% set disabled = "disabled" %}
-                      {% set checked = "checked" %}
-                    {% else %}
-                      {% set status_class = "confirmed" %}
-                      {% set status_text = "전시확정" %}
-                      {% set disabled = "" %}
-                      {% set checked = "" %}
+                    {% if artwork.apply_status == APPLY_STATUS_IN_REVIEW or artwork.apply_status == APPLY_STATUS_ACCEPTED %}
+                      <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}"
+                        {% if artwork.apply_status == APPLY_STATUS_ACCEPTED %} checked="checked" disabled="disabled" {% endif %}/>
+                      <label for="artwork_{{ artwork.id }}">
+                        <img src="{{ artwork.image | thumb_url }}" class="crop imageThumb artworkImage" data-id="{{ artwork.id }} "/>
+                      </label>
+                      <div class="box">✔</div>
+                    {% elseif artwork.apply_status == APPLY_STATUS_REJECTED %}
+                      <div class="imgThumb">
+                        <div class="dimm"></div>
+                        <div class="label">채택되지 않음</div>
+                        <img src="{{ artwork.image | thumb_url }}" />
+                      </div>
                     {% endif %}
-
-                    <input type="checkbox" id="artwork_{{ artwork.id }}" name="artwork_id[]" value="{{ artwork.id }}" {{ disabled }} {{ checked }}/>
-                    <label for="artwork_{{ artwork.id }}">
-                      <img src="{{ artwork.image | thumb_url }}" class="crop imageThumb artworkImage" data-id="{{ artwork.id }} "/>
-                    </label>
-                    <div class="box">✔</div>
-
                   </div>
                 {% endfor %}
               </div>
