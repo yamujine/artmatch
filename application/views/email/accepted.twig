@@ -10,15 +10,33 @@
     <tr>
       <td height="10" style="font-size: 10px; line-height: 10px;">&nbsp;</td>
     </tr>
-    <tr>
-      <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666;" class="body-text">
-        <p style="font-family: 'Noto Sans KR', sans-serif; font-size:16px; word-break:keep-all; line-height:22px; letter-spacing: -0.2px; color:#666666; padding:0; margin:0;" class="body-text"><multiline>
-            전시에 지원한 작품이 등록되었습니다.
-            <br>
-            {% for artwork in artworks %}
-              작품명 : {{ artwork.title }}
-            {% endfor %}
-          </multiline></p>
+    <tr> 
+      <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666;" class="body-text"> 
+        <p style="font-family: 'Noto Sans KR', sans-serif; font-size:16px; word-break:keep-all; line-height:22px; letter-spacing: -0.2px; color:#666666; padding:0; margin:0;" class="body-text">
+          <multiline>  전시 '<span style="font-weight:700;">{{ exhibition.title }}</span>'에 지원한 작품이 확정되었습니다.<br> </multiline>
+        </p>
+      </td>
+    </tr>
+    <tr> 
+      <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666;" class="body-text"> 
+        <p style="font-family: 'Noto Sans KR', sans-serif; font-size:16px; word-break:keep-all; line-height:22px; letter-spacing: -0.2px; color:#666666; padding:0; margin:0;" class="body-text">
+          <multiline>  확정 작품 수 <span style="font-weight:700;">{{ artworks | length }}</span>점<br><br> </multiline>
+        </p>
+      </td>
+    </tr>
+
+    {% for artwork in artworks %}
+      <tr> 
+        <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666; align-content: center" class="body-text">  <img src="{{ base_url() }}{{ artwork.image | thumb_url }}" width="288rem" height="220rem">  <br>  {{ artwork.title }}  <br>  <br>  <br> 
+        </td>
+      </tr>
+    {% endfor %}
+
+    <tr> 
+      <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666;" class="body-text"> 
+        <p style="font-family: 'Noto Sans KR', sans-serif; font-size:16px; word-break:keep-all; line-height:22px; letter-spacing: -0.2px; color:#666666; padding:0; margin:0;" class="body-text"> 
+          <multiline>  <br>  전시될 작품에 선정되신 것을 축하드립니다! <br>  장소 담당자가 메일로 직접 연락을 드릴 예정입니다.</multiline>
+        </p>
       </td>
     </tr>
   </table>
