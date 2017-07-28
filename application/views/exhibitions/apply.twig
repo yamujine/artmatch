@@ -41,7 +41,6 @@
       });
 
       $('.registerBtn').click(function() {
-
         var exhibition_id = $(this).closest('form').find('input[name=exhibition_id]').val();
         var artwork_id = [];
         var checkedList = $(this).closest('form').find('input[type=checkbox]:checked');
@@ -64,13 +63,15 @@
               alert(data.body.message);
               return false;
             } else {
-              console.log(data.body);
               alert(data.body.message);
+              location.reload(true);
             }
           })
-          .fail(function (data) {
-            alert(data.body.message);
+          .fail(function () {
+            alert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.");
           });
+
+        return false;
       });
 
     });

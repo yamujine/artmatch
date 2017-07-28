@@ -10,6 +10,7 @@ class Applylib {
         $twig->addFilter(new Twig_SimpleFilter('thumb_url', 'UrlGenerator::generate_thumb_url'));
         $twig->addFilter(new Twig_SimpleFilter('image_url', 'UrlGenerator::generate_original_image_url'));
         $twig->addFilter(new Twig_SimpleFilter('static_url', 'UrlGenerator::generate_static_url'));
+
         $this->CI->load->model(['user_model']);
         $this->CI->load->library(['email']);
     }
