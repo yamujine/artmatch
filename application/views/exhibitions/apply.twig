@@ -59,9 +59,11 @@
     <!-- //== 작품 지원 -->
 
     <hr class="divider">
-
+    {% if applied_artwork_count > 0 %}
+      <span class="info"><i class="glyphicon glyphicon-info-sign"></i> 이미 지원한 이력이 존재합니다. 작품의 추가 지원만 가능하고 지원하는 이유는 마지막에 입력한 이유로 노출됩니다.</span>
+    {% endif %}
     <div class="reasonInput">
-      <textarea name="reason" placeholder="지원하는 이유를 작성해주세요."></textarea>
+      <textarea name="reason" placeholder="지원하는 이유를 작성해주세요.">{{ reason }}</textarea>
     </div>
 
     <br>
