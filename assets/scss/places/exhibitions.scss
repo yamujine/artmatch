@@ -48,14 +48,15 @@ body {
         .title {
           font-family: 'Noto Sans KR', sans-serif;
           font-size: 24px;
-          font-weight: 500;
+          font-weight: 400;
           letter-spacing: -0.5px;
           color: $white-two;
-          margin-bottom: 7px;
-          height: 36px;
+          margin-bottom: 2px;
 
           a {
             color: $white-two;
+            text-decoration: none;
+            cursor: pointer;
           }
         }
 
@@ -65,6 +66,15 @@ body {
           height: 24px;
           letter-spacing: -0.3px;
           color: $white-60;
+          font-weight: 300;
+
+          .bar {
+            position: relative;
+            top: -3px;
+            margin: 0 5px 2px 5px;
+            font-size: 8px;
+            vertical-align: middle;
+          }
         }
       }
     }
@@ -74,6 +84,19 @@ body {
     .container {
       margin: 0 auto;
       padding: 0;
+
+      .itemEmpty {
+        min-height: 300px;
+        text-align: center;
+        vertical-align: middle;
+
+        .empty {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 18px;
+          color: $brownish-grey;
+          margin-top: 200px;
+        }
+      }
 
       .exhibitions {
         margin-top: 20px;
@@ -102,7 +125,7 @@ body {
         .exhibition {
           background-color: $white-two;
           border: solid 1px $white-eleven;
-          padding: 26px 32px 25px 28px;
+          padding: 27px 26px 16px 26px;
           margin-bottom: 13.5px;
 
           &.active {
@@ -220,7 +243,9 @@ body {
             // -- 오른쪽 패널
 
             .fields {
-              margin: 30px 0 0 0;
+              &:not(:first-child) {
+                margin: 17px 0 0 0;
+              }
 
               &.clear {
                 clear: both;
@@ -241,7 +266,7 @@ body {
               }
               .column_name {
                 float: left;
-                width: 20%;
+                width: 70px;
                 color: $brownish-grey;
               }
               .title_name {
@@ -256,8 +281,21 @@ body {
                 }
               }
             }
+            .exhibitionStatus {
+              margin-top: 0;
+              height: 30px;
+              padding-top: 5px;
+            }
+
+            .exhibitionBudget {
+              margin-top: 11px;
+              height: 30px;
+              padding-top: 5px;
+            }
 
             .exhibitionDate {
+              margin-top: 0;
+
               .column_name {
                 padding-top: 5px;
               }
@@ -286,7 +324,7 @@ body {
             }
 
             .exhibitionNumber {
-              margin: 30px 0 0 0;
+              margin: 12px 0 0 0;
 
               .column_name {
                 padding-top: 5px;
