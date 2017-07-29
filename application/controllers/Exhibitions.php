@@ -34,16 +34,17 @@ class Exhibitions extends MY_Controller {
             alert_and_redirect('작품이 있는 창작자만 지원이 가능합니다.');
         }
 
-        $recent_artwork_id = 0;
+        $recent_apply_id = 0;
         $applied_artwork_count = 0;
         $reason = '';
         foreach ($artworks as $artwork) {
             if (strlen($artwork->apply_status) > 0) {
                 $applied_artwork_count += 1;
             }
-            if (!empty($artwork->reason) && $recent_artwork_id < $artwork->id) {
+
+            if (!empty($artwork->reason) && $recent_apply_id < $artwork->apply_id) {
                 $reason = $artwork->reason;
-                $recent_artwork_id = $artwork->id;
+                $recent_apply_id = $artwork->apply_id;
             }
         }
 
