@@ -40,6 +40,8 @@
   <![endif]-->
 </head>
 <body>
+
+{% block menubar %}
 <!-- ======================== 상단 메뉴 바 ======================== -->
 <header id="patTop" class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
@@ -89,6 +91,7 @@
     </nav>
   </div>
 </header>
+{% endblock %}
 
 <!-- ======================== 컨텐츠 영역 ======================== -->
 <div id="patContents" class="container">
@@ -96,6 +99,7 @@
   {% endblock %}
 </div>
 
+{% block footer %}
 <!-- ======================== 푸터 영역 ======================== -->
 <footer id="patFooter">
   <div class="container">
@@ -110,6 +114,7 @@
     </ul>
   </div>
 </footer>
+{% endblock %}
 
 <!-- ======================== 검색 팝업 영역 ======================== -->
 <!-- == 검색 팝업 -->

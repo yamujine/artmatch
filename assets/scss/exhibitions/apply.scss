@@ -88,6 +88,13 @@ body {
       // -- 취소, 등록 버튼
     } // .apply
 
+    .info {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
+      font-weight: normal;
+      color: #de3434;
+    }
+
     .divider {
       height: 0;
       border: solid 1px $warm-grey-five;
