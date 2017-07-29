@@ -1,1 +1,0 @@
-"use strict";$(function(){$(document).on("click",".modal-backdrop",function(){$(".patModal").modal("hide")})});
