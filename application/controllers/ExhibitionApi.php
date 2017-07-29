@@ -62,7 +62,11 @@ class ExhibitionApi extends API_Controller {
             // 같은 유저의 작품은 하나의 dept로 합침
             $to_send_list[$accepted_artwork->user->email][] = $accepted_artwork;
         }
-        $this->applylib->send_accepted_email($to_send_list);
+
+        // 전시 확정 작가에게 수락 메일 발송
+        $exhibition = $this->exhibition_model->get_by_id($exhibition_id);
+        $this->applylib->send_accepted_email($exhibition, $to_send_list);
+
         $this->return_success_response(['message' => '선정이 완료되었습니다.']);
     }
 
