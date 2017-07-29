@@ -16,7 +16,7 @@ bower install
 echo -e "\n${NC}${BOLD}>>> Running ${GREEN}gulp:build${NC}...${RESET}"
 ./node_modules/gulp/bin/gulp.js build
 
-echo -e "\n${NC}${BOLD}>>> Adding ownership to ${GREEN}www-data${NC}...${RESET}"
+echo -e "\n${NC}${BOLD}>>> Removing ${GREEN}Twig${NC} Cache...${RESET}"
 rm -r application/cache/twig
 
 echo -e "\n${NC}${BOLD}>>> Adding ownership to ${GREEN}www-data${NC}...${RESET}"
