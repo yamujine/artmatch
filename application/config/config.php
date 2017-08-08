@@ -542,5 +542,5 @@ $config['sentry_logging_level'] = 4 - $config['log_threshold'];
 $config['sentry_log_threshold'] = $config['sentry_logging_levels'][$config['sentry_logging_level']];
 $config['sentry_config'] = [];
 if (ENVIRONMENT === 'production') {
-    $config['sentry_client'] = $_ENV['CI_SENTRY_DSN'];
+    $config['sentry_client'] = $_SERVER['CI_SENTRY_DSN'];
 }
