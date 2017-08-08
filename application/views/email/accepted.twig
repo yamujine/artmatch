@@ -27,7 +27,7 @@
 
     {% for artwork in artworks %}
       <tr> 
-        <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666; align-content: center" class="body-text">  <img src="{{ base_url() }}{{ artwork.image | thumb_url }}" width="288rem" height="220rem">  <br>  {{ artwork.title }}  <br>  <br>  <br> 
+        <td align="center" style="font-family: 'Noto Sans KR', sans-serif; word-break:keep-all; font-weight:200; font-size:16px; line-height:20px; letter-spacing: -0.2px; color:#666666; align-content: center" class="body-text">  <img src="https:{{ artwork.image | thumb_url }}" width="288rem" height="220rem">  <br>  {{ artwork.title }}  <br>  <br>  <br> 
         </td>
       </tr>
     {% endfor %}
