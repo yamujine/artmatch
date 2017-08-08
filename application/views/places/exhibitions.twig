@@ -378,7 +378,7 @@
           </div>
         </form>
 
-        {% if exhibitons | length > 0 %}
+        {% if exhibitions | length > 0 %}
           {% for exhibition in exhibitions %}
             <div class="exhibition" data-exhibition-value="{{ exhibition|json_encode }}"
                  data-exhibition-start="{{  exhibition.start_date|date('Ymd') }}" data-exhibition-end="{{  exhibition.end_date|date('Ymd') }}">
